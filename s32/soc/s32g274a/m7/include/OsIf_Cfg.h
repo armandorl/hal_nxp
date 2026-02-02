@@ -109,7 +109,7 @@ extern "C"{
 
 #define OSIF_DEV_ERROR_DETECT            (STD_ON)
 
-/* #define USING_OS_ZEPHYR */
+#define USING_OS_ZEPHYR
 
 #define OSIF_USE_SYSTEM_TIMER            (STD_OFF)
 
