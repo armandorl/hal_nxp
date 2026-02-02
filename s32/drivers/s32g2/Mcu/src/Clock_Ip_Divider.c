@@ -1,11 +1,29 @@
-/*
- * Copyright 2024-2025 NXP
- *
- * SPDX-License-Identifier: BSD-3-Clause
- */
+/*==================================================================================================
+*   Project              : RTD AUTOSAR 4.4
+*   Platform             : CORTEXM
+*   Peripheral           : 
+*   Dependencies         : none
+*
+*   Autosar Version      : 4.4.0
+*   Autosar Revision     : ASR_REL_4_4_REV_0000
+*   Autosar Conf.Variant :
+*   SW Version           : 4.0.0
+*   Build Version        : S32_RTD_4_0_0_D2210_ASR_REL_4_4_REV_0000_20221031
+*
+*   (c) Copyright 2022 NXP Semiconductors
+*   All Rights Reserved.
+*
+*   NXP Confidential. This software is owned or controlled by NXP and may only be
+*   used strictly in accordance with the applicable license terms. By expressly
+*   accepting such terms or by downloading, installing, activating and/or otherwise
+*   using the software, you are agreeing that you have read, and that you agree to
+*   comply with and are bound by, such license terms. If you do not agree to be
+*   bound by the applicable license terms, then you may not retain, install,
+*   activate or otherwise use the software.
+==================================================================================================*/
 /**
 *   @file       Clock_Ip_Divider.c
-*   @version    0.8.0
+*   @version    4.0.0
 *
 *   @brief   CLOCK driver implementations.
 *   @details CLOCK driver implementations.
@@ -34,10 +52,10 @@ extern "C"{
 ==================================================================================================*/
 #define CLOCK_IP_DIVIDER_VENDOR_ID_C                      43
 #define CLOCK_IP_DIVIDER_AR_RELEASE_MAJOR_VERSION_C       4
-#define CLOCK_IP_DIVIDER_AR_RELEASE_MINOR_VERSION_C       9
+#define CLOCK_IP_DIVIDER_AR_RELEASE_MINOR_VERSION_C       4
 #define CLOCK_IP_DIVIDER_AR_RELEASE_REVISION_VERSION_C    0
-#define CLOCK_IP_DIVIDER_SW_MAJOR_VERSION_C               0
-#define CLOCK_IP_DIVIDER_SW_MINOR_VERSION_C               8
+#define CLOCK_IP_DIVIDER_SW_MAJOR_VERSION_C               4
+#define CLOCK_IP_DIVIDER_SW_MINOR_VERSION_C               0
 #define CLOCK_IP_DIVIDER_SW_PATCH_VERSION_C               0
 
 /*==================================================================================================
@@ -80,15 +98,6 @@ extern "C"{
 *                                         LOCAL VARIABLES
 ==================================================================================================*/
 
-/* Clock start initialized section data */
-#define MCU_START_SEC_VAR_INIT_UNSPECIFIED
-#include "Mcu_MemMap.h"
-
-static Clock_Ip_NameType Clock_Ip_DividerName = gated_clk;
-
-/* Clock stop initialized section data */
-#define MCU_STOP_SEC_VAR_INIT_UNSPECIFIED
-#include "Mcu_MemMap.h"
 /*==================================================================================================
 *                                        GLOBAL CONSTANTS
 ==================================================================================================*/
@@ -102,45 +111,26 @@ static Clock_Ip_NameType Clock_Ip_DividerName = gated_clk;
 ==================================================================================================*/
 /* Clock start section code */
 #define MCU_START_SEC_CODE
+
 #include "Mcu_MemMap.h"
 
 /*==================================================================================================
 *                                    LOCAL FUNCTION PROTOTYPES
 ==================================================================================================*/
 
-static void Clock_Ip_CallbackDividerEmptyName(Clock_Ip_NameType DividerName);
-static void Clock_Ip_CallbackDividerEmpty1(void);
-static uint32 Clock_Ip_CallbackDividerEmpty2(void);
-static ClockLLD_StatusReturnType Clock_Ip_CallbackDividerEmpty3(void);
-static void Clock_Ip_CallbackDividerEmpty4(ClockLLD_DividerParameterIdentifierType ParamId, uint32 Value);
-static void Clock_Ip_CallbackDividerEmpty5(uint32 DividerValue);
-#ifdef CLOCK_IP_PLLDIV_OUTPUT_DIVIDER_POSTDIV
-static void Clock_Ip_SetNamePlldivOutputDividerPostdiv(Clock_Ip_NameType DividerName);
-static void Clock_Ip_ResetPlldivOutputDividerPostdiv(void);
-static void Clock_Ip_SetOptionalParameterPlldivOutputDividerPostdiv(ClockLLD_DividerParameterIdentifierType ParamId, uint32 Value);
-static void Clock_Ip_SetPlldivOutputDividerPostdiv(uint32 DividerValue);
-static ClockLLD_StatusReturnType Clock_Ip_GetStatusPlldivOutputDividerPostdiv(void);
-static uint32 Clock_Ip_GetDividerValuePlldivOutputDividerPostdiv(void);
-static uint32 Clock_Ip_GetMinimumDividerValuePlldivOutputDividerPostdiv(void);
+static void Clock_Ip_Callback_DividerEmpty(Clock_Ip_DividerConfigType const* Config);
+#ifdef CLOCK_IP_CGM_X_DE_DIV_STAT_WITHOUT_PHASE
+static void Clock_Ip_SetCgmXDeDivStatWithoutPhase(Clock_Ip_DividerConfigType const* Config);
 #endif
-#ifdef CLOCK_IP_PLLDIV_OUTPUT_DIVIDER_DE_OUTPUT_DIV
-static void Clock_Ip_SetNamePlldivOutputDividerDeOutputDiv(Clock_Ip_NameType DividerName);
-static void Clock_Ip_ResetPlldivOutputDividerDeOutputDiv(void);
-static void Clock_Ip_SetOptionalParameterPlldivOutputDividerDeOutputDiv(ClockLLD_DividerParameterIdentifierType ParamId, uint32 Value);
-static void Clock_Ip_SetPlldivOutputDividerDeOutputDiv(uint32 DividerValue);
-static ClockLLD_StatusReturnType Clock_Ip_GetStatusPlldivOutputDividerDeOutputDiv(void);
-static uint32 Clock_Ip_GetDividerValuePlldivOutputDividerDeOutputDiv(void);
-static uint32 Clock_Ip_GetMinimumDividerValuePlldivOutputDividerDeOutputDiv(void);
+#ifdef CLOCK_IP_CGM_X_DE_DIV_WITHOUT_PHASE
+static void Clock_Ip_SetCgmXDeDivWithoutPhase(Clock_Ip_DividerConfigType const* Config);
 #endif
-#ifdef CLOCK_IP_CGM_X_SLC_Y_DC_DE_DIV_UPD_STAT
-static void Clock_Ip_SetNameCgmXSlcYDcDeDivUpdStat(Clock_Ip_NameType DividerName);
-static void Clock_Ip_ResetCgmXSlcYDcDeDivUpdStat(void);
-static void Clock_Ip_SetOptionalParameterCgmXSlcYDcDeDivUpdStat(ClockLLD_DividerParameterIdentifierType ParamId, uint32 Value);
-static void Clock_Ip_SetCgmXSlcYDcDeDivUpdStat(uint32 DividerValue);
-static ClockLLD_StatusReturnType Clock_Ip_GetStatusCgmXSlcYDcDeDivUpdStat(void);
-static uint32 Clock_Ip_GetDividerValueCgmXSlcYDcDeDivUpdStat(void);
-static uint32 Clock_Ip_GetMinimumDividerValueCgmXSlcYDcDeDivUpdStat(void);
+#ifdef CLOCK_IP_PLLDIG_PLL0DIV_DE_DIV_OUTPUT
+static void Clock_Ip_SetPlldigPll0divDeDivOutput(Clock_Ip_DividerConfigType const* Config);
 #endif
+ 
+
+
 
 /* Clock stop section code */
 #define MCU_STOP_SEC_CODE
@@ -154,427 +144,21 @@ static uint32 Clock_Ip_GetMinimumDividerValueCgmXSlcYDcDeDivUpdStat(void);
 
 #include "Mcu_MemMap.h"
 
-static void Clock_Ip_CallbackDividerEmptyName(Clock_Ip_NameType DividerName)
+static void Clock_Ip_Callback_DividerEmpty(Clock_Ip_DividerConfigType const* Config)
 {
-    (void)DividerName;
+    (void)Config;
     /* No implementation */
-}
-static void Clock_Ip_CallbackDividerEmpty1(void)
-{
-    /* No implementation */
-}
-static uint32 Clock_Ip_CallbackDividerEmpty2(void)
-{
-    /* No implementation */
-    return 0U;
-}
-static ClockLLD_StatusReturnType Clock_Ip_CallbackDividerEmpty3(void)
-{
-    /* No implementation */
-    return CLOCK_LLD_STATUS_SUCCESS;
-}
-static void Clock_Ip_CallbackDividerEmpty4(ClockLLD_DividerParameterIdentifierType ParamId, uint32 Value)
-{
-    (void)ParamId;
-    (void)Value;
-    /* No implementation */
-}
-static void Clock_Ip_CallbackDividerEmpty5(uint32 DividerValue)
-{
-    (void)DividerValue;
 }
 
-#ifdef CLOCK_IP_PLLDIV_OUTPUT_DIVIDER_POSTDIV
-static void Clock_Ip_SetNamePlldivOutputDividerPostdiv(Clock_Ip_NameType DividerName)
+#ifdef CLOCK_IP_CGM_X_DE_DIV_STAT_WITHOUT_PHASE
+static void Clock_Ip_SetCgmXDeDivStatWithoutPhase(Clock_Ip_DividerConfigType const* Config)
 {
-    Clock_Ip_DividerName = DividerName;
-}
-static void Clock_Ip_ResetPlldivOutputDividerPostdiv(void)
-{
-    /* No implementation */
-}
-static void Clock_Ip_SetOptionalParameterPlldivOutputDividerPostdiv(ClockLLD_DividerParameterIdentifierType ParamId, uint32 Value)
-{
-    (void)ParamId;
-    (void)Value;
-    /* No implementation */
-}
-static void Clock_Ip_SetPlldivOutputDividerPostdiv(uint32 DividerValue)
-{
-    (void)DividerValue;
-    /* No implementation */
-}
-static ClockLLD_StatusReturnType Clock_Ip_GetStatusPlldivOutputDividerPostdiv(void)
-{
-    /* No implementation */
-    return CLOCK_LLD_STATUS_SUCCESS;
-}
-static uint32 Clock_Ip_GetDividerValuePlldivOutputDividerPostdiv(void)
-{
-    return 0U;
-}
-static uint32 Clock_Ip_GetMinimumDividerValuePlldivOutputDividerPostdiv(void)
-{
-    return 0U;
-}
-#endif
-#ifdef CLOCK_IP_PLLDIV_OUTPUT_DIVIDER_DE_OUTPUT_DIV
-static void Clock_Ip_SetNamePlldivOutputDividerDeOutputDiv(Clock_Ip_NameType DividerName)
-{
-    Clock_Ip_DividerName = DividerName;
-}
-static void Clock_Ip_ResetPlldivOutputDividerDeOutputDiv(void)
-{
-    /* No implementation */
-}
-static void Clock_Ip_SetOptionalParameterPlldivOutputDividerDeOutputDiv(ClockLLD_DividerParameterIdentifierType ParamId, uint32 Value)
-{
-    (void)ParamId;
-    (void)Value;
-    /* No implementation */
-}
-static void Clock_Ip_SetPlldivOutputDividerDeOutputDiv(uint32 DividerValue)
-{
-    (void)DividerValue;
-    /* No implementation */
+    uint32 Instance      = Clock_Ip_au8ClockFeatures[Config->Name][CLOCK_IP_MODULE_INSTANCE];
+    uint32 SelectorIndex = Clock_Ip_au8ClockFeatures[Config->Name][CLOCK_IP_SELECTOR_INDEX];
+    uint32 DividerIndex  = Clock_Ip_au8ClockFeatures[Config->Name][CLOCK_IP_DIVIDER_INDEX];
 
-    switch (Clock_Ip_DividerName)
-    {
-#if defined(CLOCK_IP_HAS_COREPLL_CLKOUT0_CLK)
-        case COREPLL_CLKOUT0_CLK:
-        {
-            if (DividerValue > 0U)
-            {
-                IP_CORE_PLL->PLL_OUTPUT_DIVIDER_0 = PLL_PLL_OUTPUT_DIVIDER_0_DE(1U) | PLL_PLL_OUTPUT_DIVIDER_0_OUTPUT_DIV(DividerValue - 1U);
-            }
-            else
-            {
-                IP_CORE_PLL->PLL_OUTPUT_DIVIDER_0 = PLL_PLL_OUTPUT_DIVIDER_0_DE(0U);
-            }
-        }
-        break;
-#endif
-#if defined(CLOCK_IP_HAS_COREPLL_CLKOUT1_CLK)
-        case COREPLL_CLKOUT1_CLK:
-        {
-            if (DividerValue > 0U)
-            {
-                IP_CORE_PLL->PLL_OUTPUT_DIVIDER_1 = PLL_PLL_OUTPUT_DIVIDER_0_DE(1U) | PLL_PLL_OUTPUT_DIVIDER_0_OUTPUT_DIV(DividerValue - 1U);
-            }
-            else
-            {
-                IP_CORE_PLL->PLL_OUTPUT_DIVIDER_1 = PLL_PLL_OUTPUT_DIVIDER_0_DE(0U);
-            }
-        }
-        break;
-#endif
-#if defined(CLOCK_IP_HAS_COREPLL_CLKOUT2_CLK)
-        case COREPLL_CLKOUT2_CLK:
-        {
-            if (DividerValue > 0U)
-            {
-                IP_CORE_PLL->PLL_OUTPUT_DIVIDER_2 = PLL_PLL_OUTPUT_DIVIDER_0_DE(1U) | PLL_PLL_OUTPUT_DIVIDER_0_OUTPUT_DIV(DividerValue - 1U);
-            }
-            else
-            {
-                IP_CORE_PLL->PLL_OUTPUT_DIVIDER_2 = PLL_PLL_OUTPUT_DIVIDER_0_DE(0U);
-            }
-        }
-        break;
-#endif
-#if defined(CLOCK_IP_HAS_COREPLL_CLKOUT3_CLK)
-        case COREPLL_CLKOUT3_CLK:
-        {
-            if (DividerValue > 0U)
-            {
-                IP_CORE_PLL->PLL_OUTPUT_DIVIDER_3 = PLL_PLL_OUTPUT_DIVIDER_0_DE(1U) | PLL_PLL_OUTPUT_DIVIDER_0_OUTPUT_DIV(DividerValue - 1U);
-            }
-            else
-            {
-                IP_CORE_PLL->PLL_OUTPUT_DIVIDER_3 = PLL_PLL_OUTPUT_DIVIDER_0_DE(0U);
-            }
-        }
-        break;
-#endif
-#if defined(CLOCK_IP_HAS_PERIPHPLL_CLKOUT0_CLK)
-        case PERIPHPLL_CLKOUT0_CLK:
-        {
-            if (DividerValue > 0U)
-            {
-                IP_PERIPH_PLL->PLL_OUTPUT_DIVIDER_0 = PERIPH_PLL_PLL_OUTPUT_DIVIDER_0_DE(1U) | PERIPH_PLL_PLL_OUTPUT_DIVIDER_0_OUTPUT_DIV(DividerValue - 1U);
-            }
-            else
-            {
-                IP_PERIPH_PLL->PLL_OUTPUT_DIVIDER_0 = PERIPH_PLL_PLL_OUTPUT_DIVIDER_0_DE(0U);
-            }
-        }
-        break;
-#endif
-#if defined(CLOCK_IP_HAS_PERIPHPLL_CLKOUT1_CLK)
-        case PERIPHPLL_CLKOUT1_CLK:
-        {
-            if (DividerValue > 0U)
-            {
-                IP_PERIPH_PLL->PLL_OUTPUT_DIVIDER_1 = PERIPH_PLL_PLL_OUTPUT_DIVIDER_0_DE(1U) | PERIPH_PLL_PLL_OUTPUT_DIVIDER_0_OUTPUT_DIV(DividerValue - 1U);
-            }
-            else
-            {
-                IP_PERIPH_PLL->PLL_OUTPUT_DIVIDER_1 = PERIPH_PLL_PLL_OUTPUT_DIVIDER_0_DE(0U);
-            }
-        }
-        break;
-#endif
-#if defined(CLOCK_IP_HAS_PERIPHPLL_CLKOUT2_CLK)
-        case PERIPHPLL_CLKOUT2_CLK:
-        {
-            if (DividerValue > 0U)
-            {
-                IP_PERIPH_PLL->PLL_OUTPUT_DIVIDER_2 = PERIPH_PLL_PLL_OUTPUT_DIVIDER_0_DE(1U) | PERIPH_PLL_PLL_OUTPUT_DIVIDER_0_OUTPUT_DIV(DividerValue - 1U);
-            }
-            else
-            {
-                IP_PERIPH_PLL->PLL_OUTPUT_DIVIDER_2 = PERIPH_PLL_PLL_OUTPUT_DIVIDER_0_DE(0U);
-            }
-        }
-        break;
-#endif
-#if defined(CLOCK_IP_HAS_PERIPHPLL_CLKOUT3_CLK)
-        case PERIPHPLL_CLKOUT3_CLK:
-        {
-            if (DividerValue > 0U)
-            {
-                IP_PERIPH_PLL->PLL_OUTPUT_DIVIDER_3 = PERIPH_PLL_PLL_OUTPUT_DIVIDER_0_DE(1U) | PERIPH_PLL_PLL_OUTPUT_DIVIDER_0_OUTPUT_DIV(DividerValue - 1U);
-            }
-            else
-            {
-                IP_PERIPH_PLL->PLL_OUTPUT_DIVIDER_3 = PERIPH_PLL_PLL_OUTPUT_DIVIDER_0_DE(0U);
-            }
-        }
-        break;
-#endif
-#if defined(CLOCK_IP_HAS_PERIPHPLL_CLKOUT4_CLK)
-        case PERIPHPLL_CLKOUT4_CLK:
-        {
-            if (DividerValue > 0U)
-            {
-                IP_PERIPH_PLL->PLL_OUTPUT_DIVIDER_4 = PERIPH_PLL_PLL_OUTPUT_DIVIDER_0_DE(1U) | PERIPH_PLL_PLL_OUTPUT_DIVIDER_0_OUTPUT_DIV(DividerValue - 1U);
-            }
-            else
-            {
-                IP_PERIPH_PLL->PLL_OUTPUT_DIVIDER_4 = PERIPH_PLL_PLL_OUTPUT_DIVIDER_0_DE(0U);
-            }
-        }
-        break;
-#endif
-#if defined(CLOCK_IP_HAS_PLL0_DIV0_CLK)
-        case PLL0_DIV0_CLK:
-        {
-            if (DividerValue > 0U)
-            {
-                IP_PLL_0->PLL_OUTPUT_DIVIDER_0 = PLL_PLL_OUTPUT_DIVIDER_0_DE(1U) | PLL_PLL_OUTPUT_DIVIDER_0_OUTPUT_DIV(DividerValue - 1U);
-            }
-            else
-            {
-                IP_PLL_0->PLL_OUTPUT_DIVIDER_0 = PLL_PLL_OUTPUT_DIVIDER_0_DE(0U);
-            }
-        }
-        break;
-#endif
-#if defined(CLOCK_IP_HAS_PLL0_DIV1_CLK)
-        case PLL0_DIV1_CLK:
-        {
-            if (DividerValue > 0U)
-            {
-                IP_PLL_0->PLL_OUTPUT_DIVIDER_1 = PLL_PLL_OUTPUT_DIVIDER_0_DE(1U) | PLL_PLL_OUTPUT_DIVIDER_0_OUTPUT_DIV(DividerValue - 1U);
-            }
-            else
-            {
-                IP_PLL_0->PLL_OUTPUT_DIVIDER_1 = PLL_PLL_OUTPUT_DIVIDER_0_DE(0U);
-            }
-        }
-        break;
-#endif
-#if defined(CLOCK_IP_HAS_PLL0_DIV2_CLK)
-        case PLL0_DIV2_CLK:
-        {
-            if (DividerValue > 0U)
-            {
-                IP_PLL_0->PLL_OUTPUT_DIVIDER_2 = PLL_PLL_OUTPUT_DIVIDER_0_DE(1U) | PLL_PLL_OUTPUT_DIVIDER_0_OUTPUT_DIV(DividerValue - 1U);
-            }
-            else
-            {
-                IP_PLL_0->PLL_OUTPUT_DIVIDER_2 = PLL_PLL_OUTPUT_DIVIDER_0_DE(0U);
-            }
-        }
-        break;
-#endif
-#if defined(CLOCK_IP_HAS_PLL0_DIV3_CLK)
-        case PLL0_DIV3_CLK:
-        {
-            if (DividerValue > 0U)
-            {
-                IP_PLL_0->PLL_OUTPUT_DIVIDER_3 = PLL_PLL_OUTPUT_DIVIDER_0_DE(1U) | PLL_PLL_OUTPUT_DIVIDER_0_OUTPUT_DIV(DividerValue - 1U);
-            }
-            else
-            {
-                IP_PLL_0->PLL_OUTPUT_DIVIDER_3 = PLL_PLL_OUTPUT_DIVIDER_0_DE(0U);
-            }
-        }
-        break;
-#endif
-#if defined(CLOCK_IP_HAS_PLL1_DIV0_CLK)
-        case PLL1_DIV0_CLK:
-        {
-            if (DividerValue > 0U)
-            {
-                IP_PLL_1->PLL_OUTPUT_DIVIDER_0 = PLL_PLL_OUTPUT_DIVIDER_0_DE(1U) | PLL_PLL_OUTPUT_DIVIDER_0_OUTPUT_DIV(DividerValue - 1U);
-            }
-            else
-            {
-                IP_PLL_1->PLL_OUTPUT_DIVIDER_0 = PLL_PLL_OUTPUT_DIVIDER_0_DE(0U);
-            }
-        }
-        break;
-#endif
-#if defined(CLOCK_IP_HAS_PLL1_DIV1_CLK)
-        case PLL1_DIV1_CLK:
-        {
-            if (DividerValue > 0U)
-            {
-                IP_PLL_1->PLL_OUTPUT_DIVIDER_1 = PLL_PLL_OUTPUT_DIVIDER_0_DE(1U) | PLL_PLL_OUTPUT_DIVIDER_0_OUTPUT_DIV(DividerValue - 1U);
-            }
-            else
-            {
-                IP_PLL_1->PLL_OUTPUT_DIVIDER_1 = PLL_PLL_OUTPUT_DIVIDER_0_DE(0U);
-            }
-        }
-        break;
-#endif
-#if defined(CLOCK_IP_HAS_PLL1_DIV2_CLK)
-        case PLL1_DIV2_CLK:
-        {
-            if (DividerValue > 0U)
-            {
-                IP_PLL_1->PLL_OUTPUT_DIVIDER_2 = PLL_PLL_OUTPUT_DIVIDER_0_DE(1U) | PLL_PLL_OUTPUT_DIVIDER_0_OUTPUT_DIV(DividerValue - 1U);
-            }
-            else
-            {
-                IP_PLL_1->PLL_OUTPUT_DIVIDER_2 = PLL_PLL_OUTPUT_DIVIDER_0_DE(0U);
-            }
-        }
-        break;
-#endif
-#if defined(CLOCK_IP_HAS_PLL1_DIV3_CLK)
-        case PLL1_DIV3_CLK:
-        {
-            if (DividerValue > 0U)
-            {
-                IP_PLL_1->PLL_OUTPUT_DIVIDER_3 = PLL_PLL_OUTPUT_DIVIDER_0_DE(1U) | PLL_PLL_OUTPUT_DIVIDER_0_OUTPUT_DIV(DividerValue - 1U);
-            }
-            else
-            {
-                IP_PLL_1->PLL_OUTPUT_DIVIDER_3 = PLL_PLL_OUTPUT_DIVIDER_0_DE(0U);
-            }
-        }
-        break;
-#endif
-#if defined(CLOCK_IP_HAS_CPE_DIV0_CLK)
-        case CPE_DIV0_CLK:
-        {
-            if (DividerValue > 0U)
-            {
-                IP_CPE_PLL->PLL_OUTPUT_DIVIDER_0 = PLL_PLL_OUTPUT_DIVIDER_0_DE(1U) | PLL_PLL_OUTPUT_DIVIDER_0_OUTPUT_DIV(DividerValue - 1U);
-            }
-            else
-            {
-                IP_CPE_PLL->PLL_OUTPUT_DIVIDER_0 = PLL_PLL_OUTPUT_DIVIDER_0_DE(0U);
-            }
-        }
-        break;
-#endif
-#if defined(CLOCK_IP_HAS_CPE_PLL_DIV1_CLK)
-        case CPE_PLL_DIV1_CLK:
-        {
-            if (DividerValue > 0U)
-            {
-                IP_PLL_CPE->PLL_OUTPUT_DIVIDER_1 = PLL_PLL_OUTPUT_DIVIDER_0_DE(1U) | PLL_PLL_OUTPUT_DIVIDER_0_OUTPUT_DIV(DividerValue - 1U);
-            }
-            else
-            {
-                IP_PLL_CPE->PLL_OUTPUT_DIVIDER_1 = PLL_PLL_OUTPUT_DIVIDER_0_DE(0U);
-            }
-        }
-        break;
-#endif
-#if defined(CLOCK_IP_HAS_CPE_PLL_DIV2_CLK)
-        case CPE_PLL_DIV2_CLK:
-        {
-            if (DividerValue > 0U)
-            {
-                IP_PLL_CPE->PLL_OUTPUT_DIVIDER_2 = PLL_PLL_OUTPUT_DIVIDER_0_DE(1U) | PLL_PLL_OUTPUT_DIVIDER_0_OUTPUT_DIV(DividerValue - 1U);
-            }
-            else
-            {
-                IP_PLL_CPE->PLL_OUTPUT_DIVIDER_2 = PLL_PLL_OUTPUT_DIVIDER_0_DE(0U);
-            }
-        }
-        break;
-#endif
-#if defined(CLOCK_IP_HAS_CPE_PLL_DIV3_CLK)
-        case CPE_PLL_DIV3_CLK:
-        {
-            if (DividerValue > 0U)
-            {
-                IP_PLL_CPE->PLL_OUTPUT_DIVIDER_3 = PLL_PLL_OUTPUT_DIVIDER_0_DE(1U) | PLL_PLL_OUTPUT_DIVIDER_0_OUTPUT_DIV(DividerValue - 1U);
-            }
-            else
-            {
-                IP_PLL_CPE->PLL_OUTPUT_DIVIDER_3 = PLL_PLL_OUTPUT_DIVIDER_0_DE(0U);
-            }
-        }
-        break;
-#endif
-        default:
-        {
-            /* Not supported */
-        }
-    }
-}
-static ClockLLD_StatusReturnType Clock_Ip_GetStatusPlldivOutputDividerDeOutputDiv(void)
-{
-    /* No implementation */
-    return CLOCK_LLD_STATUS_SUCCESS;
-}
-static uint32 Clock_Ip_GetDividerValuePlldivOutputDividerDeOutputDiv(void)
-{
-    return 0U;
-}
-static uint32 Clock_Ip_GetMinimumDividerValuePlldivOutputDividerDeOutputDiv(void)
-{
-    return 0U;
-}
-#endif
-#ifdef CLOCK_IP_CGM_X_SLC_Y_DC_DE_DIV_UPD_STAT
-static void Clock_Ip_SetNameCgmXSlcYDcDeDivUpdStat(Clock_Ip_NameType DividerName)
-{
-    Clock_Ip_DividerName = DividerName;
-}
-static void Clock_Ip_ResetCgmXSlcYDcDeDivUpdStat(void)
-{
-    /* No implementation */
-}
-static void Clock_Ip_SetOptionalParameterCgmXSlcYDcDeDivUpdStat(ClockLLD_DividerParameterIdentifierType ParamId, uint32 Value)
-{
-    (void)ParamId;
-    (void)Value;
-    /* No implementation */
-}
-static void Clock_Ip_SetCgmXSlcYDcDeDivUpdStat(uint32 DividerValue)
-{
-    uint32 DividerEntry;
-    uint32 DividerIndex;
-    uint32 DividerMask;
-    uint32 DividerShift;
+    uint32 DividerMask  = Clock_Ip_axFeatureExtensions[Clock_Ip_au8ClockFeatures[Config->Name][CLOCK_IP_EXTENSION_INDEX]].DividerValueMask;
+    uint32 DividerShift = Clock_Ip_axFeatureExtensions[Clock_Ip_au8ClockFeatures[Config->Name][CLOCK_IP_EXTENSION_INDEX]].DividerValueShift;
 
     uint32 RegValue;
     boolean TimeoutOccurred = FALSE;
@@ -583,69 +167,105 @@ static void Clock_Ip_SetCgmXSlcYDcDeDivUpdStat(uint32 DividerValue)
     uint32 TimeoutTicks;
     uint32 DividerStatus;
 
-    Clock_Ip_HwSelectorType *HwAddr;
-
-    DividerEntry      =  Clock_Ip_au16ClockFeatures[Clock_Ip_DividerName][CLOCK_LLD_DIVIDER_ENTRY];
-
-    DividerIndex      =  Clock_Ip_axSelectorsDividersTable[DividerEntry].DivIndex;
-    DividerMask       =  Clock_Ip_axSelectorsDividersTable[DividerEntry].DivMask;
-    DividerShift      =  Clock_Ip_axSelectorsDividersTable[DividerEntry].DivShift;
-
-    HwAddr            =  Clock_Ip_axSelectorsDividersTable[DividerEntry].Address;
-
-    RegValue = HwAddr->Dividers[DividerIndex];
-
     /* Program divider value */
-    if (DividerValue != 0U)
+    if (Config->Value != 0U)
     {
+        RegValue = Clock_Ip_apxCgm[Instance][SelectorIndex]->Divider[DividerIndex];
         RegValue &= ~DividerMask;
-        RegValue |= (((DividerValue-1U) << DividerShift) & DividerMask);
-
-        /* Enable divider */
-        RegValue |= MC_CGM_MUX_DC_DE_MASK;
+        RegValue |= (((Config->Value-1U) << DividerShift) & DividerMask);
+        Clock_Ip_apxCgm[Instance][SelectorIndex]->Divider[DividerIndex] = RegValue;
     }
-    else
-    {
-        RegValue &= ~MC_CGM_MUX_DC_DE_MASK;
-    }
-
-    HwAddr->Dividers[DividerIndex] = RegValue;
 
     Clock_Ip_StartTimeout(&StartTime, &ElapsedTime, &TimeoutTicks, CLOCK_IP_TIMEOUT_VALUE_US);
     /* Wait for acknowledge to be cleared. */
     do
     {
-        DividerStatus = (HwAddr->DividerStatus & MC_CGM_MUX_DIV_UPD_STAT_DIV_STAT_MASK);
+        DividerStatus = (Clock_Ip_apxCgm[Instance][SelectorIndex]->MUX_DIV_UPD_STAT & MC_CGM_MUX_DIV_UPD_STAT_DIV_STAT_MASK);
         TimeoutOccurred = Clock_Ip_TimeoutExpired(&StartTime, &ElapsedTime, TimeoutTicks);
     }
     while ((MC_CGM_MUX_DIV_UPD_STAT_DIV_STAT_PENDING == DividerStatus) && (FALSE == TimeoutOccurred));
 
-    if (TRUE == TimeoutOccurred)
+    if (FALSE == TimeoutOccurred)
+    {
+        /* Enable or Disable the Clock Divider */
+        if (Config->Value != 0U)
+        {
+            /* Enable divider */
+            Clock_Ip_apxCgm[Instance][SelectorIndex]->Divider[DividerIndex] |= MC_CGM_MUX_DC_DE_MASK;
+        }
+        else
+        {
+            Clock_Ip_apxCgm[Instance][SelectorIndex]->Divider[DividerIndex] &= ~MC_CGM_MUX_DC_DE_MASK;
+        }
+    }
+    else
     {
         /* Report timeout error */
-        Clock_Ip_ReportClockErrors(CLOCK_IP_REPORT_TIMEOUT_ERROR, Clock_Ip_DividerName);
+        Clock_Ip_ReportClockErrors(CLOCK_IP_REPORT_TIMEOUT_ERROR, Config->Name);
     }
 }
-static ClockLLD_StatusReturnType Clock_Ip_GetStatusCgmXSlcYDcDeDivUpdStat(void)
+#endif
+
+#ifdef CLOCK_IP_CGM_X_DE_DIV_WITHOUT_PHASE
+static void Clock_Ip_SetCgmXDeDivWithoutPhase(Clock_Ip_DividerConfigType const* Config)
 {
-    /* No implementation */
-    return CLOCK_LLD_STATUS_SUCCESS;
+
+    uint32 Instance      = Clock_Ip_au8ClockFeatures[Config->Name][CLOCK_IP_MODULE_INSTANCE];
+    uint32 SelectorIndex = Clock_Ip_au8ClockFeatures[Config->Name][CLOCK_IP_SELECTOR_INDEX];
+    uint32 DividerIndex  = Clock_Ip_au8ClockFeatures[Config->Name][CLOCK_IP_DIVIDER_INDEX];
+
+    uint32 DividerMask  = Clock_Ip_axFeatureExtensions[Clock_Ip_au8ClockFeatures[Config->Name][CLOCK_IP_EXTENSION_INDEX]].DividerValueMask;
+    uint32 DividerShift = Clock_Ip_axFeatureExtensions[Clock_Ip_au8ClockFeatures[Config->Name][CLOCK_IP_EXTENSION_INDEX]].DividerValueShift;
+
+    uint32 RegValue;
+
+    /* Program divider value */
+    if (Config->Value != 0U)
+    {
+        RegValue = Clock_Ip_apxCgm[Instance][SelectorIndex]->Divider[DividerIndex];
+        RegValue &= ~DividerMask;
+        RegValue |= ((Config->Value-1U) << DividerShift) & DividerMask;
+        Clock_Ip_apxCgm[Instance][SelectorIndex]->Divider[DividerIndex] = RegValue;
+    }
+
+    /* Enable or Disable the Clock Divider */
+    if (Config->Value != 0U)
+    {
+        /* Enable divider */
+        Clock_Ip_apxCgm[Instance][SelectorIndex]->Divider[DividerIndex] |= MC_CGM_MUX_DC_DE_MASK;
+    }
+    else
+    {
+        Clock_Ip_apxCgm[Instance][SelectorIndex]->Divider[DividerIndex] &= ~MC_CGM_MUX_DC_DE_MASK;
+    }
 }
-static uint32 Clock_Ip_GetDividerValueCgmXSlcYDcDeDivUpdStat(void)
+#endif
+
+#ifdef CLOCK_IP_PLLDIG_PLL0DIV_DE_DIV_OUTPUT
+static void Clock_Ip_SetPlldigPll0divDeDivOutput(Clock_Ip_DividerConfigType const* Config)
 {
-    return 0U;
-}
-static uint32 Clock_Ip_GetMinimumDividerValueCgmXSlcYDcDeDivUpdStat(void)
-{
-    return 0U;
+
+    uint32 Instance      = Clock_Ip_au8ClockFeatures[Config->Name][CLOCK_IP_MODULE_INSTANCE];
+    uint32 DividerIndex  = Clock_Ip_au8ClockFeatures[Config->Name][CLOCK_IP_DIVIDER_INDEX];
+    uint32 RegValue;
+
+    /* Disable divider */
+    Clock_Ip_pxPll[Instance]->PLLODIV[DividerIndex] &= ~PLLDIG_PLLODIV_DE_MASK;
+    /* Check if divider is enabled */
+    if (Config->Value != 0U)
+    {
+        RegValue = Clock_Ip_pxPll[Instance]->PLLODIV[DividerIndex];
+        RegValue |= PLLDIG_PLLODIV_DE_MASK;
+        RegValue &= ~PLLDIG_PLLODIV_DIV_MASK;
+        RegValue |= PLLDIG_PLLODIV_DIV(Config->Value - 1U);
+        Clock_Ip_pxPll[Instance]->PLLODIV[DividerIndex] = RegValue;
+    }
 }
 #endif
 
 /*==================================================================================================
 *                                        GLOBAL FUNCTIONS
 ==================================================================================================*/
-
-
 /* Clock stop section code */
 #define MCU_STOP_SEC_CODE
 
@@ -663,48 +283,23 @@ static uint32 Clock_Ip_GetMinimumDividerValueCgmXSlcYDcDeDivUpdStat(void)
 const Clock_Ip_DividerCallbackType Clock_Ip_axDividerCallbacks[CLOCK_IP_DIVIDER_CALLBACKS_COUNT] =
 {
     {
-        &Clock_Ip_CallbackDividerEmptyName,                     /* SetName */
-        &Clock_Ip_CallbackDividerEmpty1,                        /* Reset */
-        &Clock_Ip_CallbackDividerEmpty4,                        /* SetOptionalParameter */
-        &Clock_Ip_CallbackDividerEmpty5,                        /* Set */
-        &Clock_Ip_CallbackDividerEmpty3,                        /* GetStatus */
-        &Clock_Ip_CallbackDividerEmpty2,                        /* GetDividerValue */
-        &Clock_Ip_CallbackDividerEmpty2,                        /* GetMinimumDividerValue */
+        Clock_Ip_Callback_DividerEmpty,                  /* Set */
     },
-#ifdef CLOCK_IP_PLLDIV_OUTPUT_DIVIDER_POSTDIV
+#ifdef CLOCK_IP_CGM_X_DE_DIV_STAT_WITHOUT_PHASE
     {
-        &Clock_Ip_SetNamePlldivOutputDividerPostdiv,                            /* SetName */
-        &Clock_Ip_ResetPlldivOutputDividerPostdiv,                              /* Reset */
-        &Clock_Ip_SetOptionalParameterPlldivOutputDividerPostdiv,               /* SetOptionalParameter */
-        &Clock_Ip_SetPlldivOutputDividerPostdiv,                                /* Set */
-        &Clock_Ip_GetStatusPlldivOutputDividerPostdiv,                          /* GetStatus */
-        &Clock_Ip_GetDividerValuePlldivOutputDividerPostdiv,                    /* GetDividerValue */
-        &Clock_Ip_GetMinimumDividerValuePlldivOutputDividerPostdiv,             /* GetMinimumDividerValue */
+        Clock_Ip_SetCgmXDeDivStatWithoutPhase,           /* Set */
     },
 #endif
-#ifdef CLOCK_IP_PLLDIV_OUTPUT_DIVIDER_DE_OUTPUT_DIV
+#ifdef CLOCK_IP_CGM_X_DE_DIV_WITHOUT_PHASE
     {
-        &Clock_Ip_SetNamePlldivOutputDividerDeOutputDiv,                            /* SetName */
-        &Clock_Ip_ResetPlldivOutputDividerDeOutputDiv,                              /* Reset */
-        &Clock_Ip_SetOptionalParameterPlldivOutputDividerDeOutputDiv,               /* SetOptionalParameter */
-        &Clock_Ip_SetPlldivOutputDividerDeOutputDiv,                                /* Set */
-        &Clock_Ip_GetStatusPlldivOutputDividerDeOutputDiv,                          /* GetStatus */
-        &Clock_Ip_GetDividerValuePlldivOutputDividerDeOutputDiv,                    /* GetDividerValue */
-        &Clock_Ip_GetMinimumDividerValuePlldivOutputDividerDeOutputDiv,             /* GetMinimumDividerValue */
+        Clock_Ip_SetCgmXDeDivWithoutPhase,               /* Set */
     },
 #endif
-#ifdef CLOCK_IP_CGM_X_SLC_Y_DC_DE_DIV_UPD_STAT
+#ifdef CLOCK_IP_PLLDIG_PLL0DIV_DE_DIV_OUTPUT
     {
-        &Clock_Ip_SetNameCgmXSlcYDcDeDivUpdStat,                            /* SetName */
-        &Clock_Ip_ResetCgmXSlcYDcDeDivUpdStat,                              /* Reset */
-        &Clock_Ip_SetOptionalParameterCgmXSlcYDcDeDivUpdStat,               /* SetOptionalParameter */
-        &Clock_Ip_SetCgmXSlcYDcDeDivUpdStat,                                /* Set */
-        &Clock_Ip_GetStatusCgmXSlcYDcDeDivUpdStat,                          /* GetStatus */
-        &Clock_Ip_GetDividerValueCgmXSlcYDcDeDivUpdStat,                    /* GetDividerValue */
-        &Clock_Ip_GetMinimumDividerValueCgmXSlcYDcDeDivUpdStat,             /* GetMinimumDividerValue */
+        Clock_Ip_SetPlldigPll0divDeDivOutput,            /* Set */
     },
 #endif
-
 };
 
 /* Clock stop constant section data */
@@ -718,4 +313,3 @@ const Clock_Ip_DividerCallbackType Clock_Ip_axDividerCallbacks[CLOCK_IP_DIVIDER_
 #endif
 
 /** @} */
-

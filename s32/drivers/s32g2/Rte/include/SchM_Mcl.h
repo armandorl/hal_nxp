@@ -1,23 +1,36 @@
-/*
- * Copyright 2024-2025 NXP
- *
- * SPDX-License-Identifier: BSD-3-Clause
- */
+/*==================================================================================================
+*   Project              : RTD AUTOSAR 4.4
+*   Platform             : CORTEXM
+*   Peripheral           : 
+*   Dependencies         : none
+*
+*   Autosar Version      : 4.4.0
+*   Autosar Revision     : ASR_REL_4_4_REV_0000
+*   Autosar Conf.Variant :
+*   SW Version           : 4.0.0
+*   Build Version        : S32_RTD_4_0_0_D2210_ASR_REL_4_4_REV_0000_20221031
+*
+*   (c) Copyright 2022 NXP Semiconductors
+*   All Rights Reserved.
+*
+*   NXP Confidential. This software is owned or controlled by NXP and may only be
+*   used strictly in accordance with the applicable license terms. By expressly
+*   accepting such terms or by downloading, installing, activating and/or otherwise
+*   using the software, you are agreeing that you have read, and that you agree to
+*   comply with and are bound by, such license terms. If you do not agree to be
+*   bound by the applicable license terms, then you may not retain, install,
+*   activate or otherwise use the software.
+==================================================================================================*/
+
+#ifndef SCHM_MCL_H
+#define SCHM_MCL_H
 
 /**
-*   @file    SchM_Mcl.h
-*   @version 0.8.0
-*
-*   @brief   AUTOSAR Rte - module interface
-*   @details This file contains the functions prototypes and data types of the AUTOSAR Rte.
-*            This file contains sample code only. It is not part of the production code deliverables.
+*   @file
 *
 *   @addtogroup RTE_MODULE
 *   @{
 */
-
-#ifndef SCHM_MCL_H
-#define SCHM_MCL_H
 
 #ifdef __cplusplus
 extern "C" {
@@ -33,10 +46,10 @@ extern "C" {
 *                               SOURCE FILE VERSION INFORMATION
 ==================================================================================================*/
 #define SCHM_MCL_AR_RELEASE_MAJOR_VERSION     4
-#define SCHM_MCL_AR_RELEASE_MINOR_VERSION     9
+#define SCHM_MCL_AR_RELEASE_MINOR_VERSION     4
 #define SCHM_MCL_AR_RELEASE_REVISION_VERSION  0
-#define SCHM_MCL_SW_MAJOR_VERSION             0
-#define SCHM_MCL_SW_MINOR_VERSION             8
+#define SCHM_MCL_SW_MAJOR_VERSION             4
+#define SCHM_MCL_SW_MINOR_VERSION             0
 #define SCHM_MCL_SW_PATCH_VERSION             0
 
 /*==================================================================================================
@@ -51,7 +64,7 @@ extern "C" {
 /*==================================================================================================
 *                                       DEFINES AND MACROS
 ==================================================================================================*/
-#define NUMBER_OF_CORES         (uint8)(8U)
+#define NUMBER_OF_CORES         (uint8)(7U)
 
 /*==================================================================================================
 *                                             ENUMS
@@ -72,20 +85,20 @@ extern "C" {
 #include "Rte_MemMap.h"
 
 #ifdef MCAL_TESTING_ENVIRONMENT
-/**
-@brief   This function checks that all entered exclusive areas were also exited.
+/** 
+@brief   This function checks that all entered exclusive areas were also exited. 
 @details This function checks that all entered exclusive areas were also exited. The check
          is done by verifying that all reentry_guard_* static variables are back to the
          zero value.
-
+    
 @param[in]     void       No input parameters
-@return        void       This function does not return a value. Test asserts are used instead.
+@return        void       This function does not return a value. Test asserts are used instead. 
 
 @pre  None
 @post None
 
-@remarks Covers
-@remarks Implements
+@remarks Covers 
+@remarks Implements 
 */
 void SchM_Check_mcl(void);
 #endif /*MCAL_TESTING_ENVIRONMENT*/
@@ -231,8 +244,6 @@ extern void SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_45(void);
 extern void SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_46(void);
 extern void SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_46(void);
 
-extern void SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_47(void);
-extern void SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_47(void);
 
 
 

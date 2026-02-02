@@ -1,25 +1,28 @@
-/*
- * Copyright 2024-2025 NXP
- *
- * SPDX-License-Identifier: BSD-3-Clause
- */
-/**
-*   @file OsIf_DeviceRegisters.h
-*   @version 0.8.0
+/*==================================================================================================
+* Project : RTD AUTOSAR 4.4
+* Platform : CORTEXM
+* Peripheral : S32G2XXM7
+* Dependencies : none
 *
-*   @brief   BaseNXP - Driver header file.
-*   @details Specific driver header file
+* Autosar Version : 4.4.0
+* Autosar Revision : ASR_REL_4_4_REV_0000
+* Autosar Conf.Variant :
+* SW Version : 4.0.0
+* Build Version : S32_RTD_4_0_0_D2210_ASR_REL_4_4_REV_0000_20221031
 *
-*   @addtogroup osif_drv
-*   @{
-*/
-
+* (c) Copyright 2022 NXP Semiconductors
+* All Rights Reserved.
+*
+* NXP Confidential. This software is owned or controlled by NXP and may only be
+* used strictly in accordance with the applicable license terms. By expressly
+* accepting such terms or by downloading, installing, activating and/or otherwise
+* using the software, you are agreeing that you have read, and that you agree to
+* comply with and are bound by, such license terms. If you do not agree to be
+* bound by the applicable license terms, then you may not retain, install,
+* activate or otherwise use the software.
+==================================================================================================*/
 #ifndef OSIF_DEVICE_REGISTERS_H
 #define OSIF_DEVICE_REGISTERS_H
-
-#ifdef __cplusplus
-extern "C"{
-#endif
 
 /*==================================================================================================
 *                                          INCLUDE FILES
@@ -34,10 +37,10 @@ extern "C"{
 ==================================================================================================*/
 #define OSIF_DEVICE_REGISTERS_VENDOR_ID                    43
 #define OSIF_DEVICE_REGISTERS_AR_RELEASE_MAJOR_VERSION     4
-#define OSIF_DEVICE_REGISTERS_AR_RELEASE_MINOR_VERSION     9
+#define OSIF_DEVICE_REGISTERS_AR_RELEASE_MINOR_VERSION     4
 #define OSIF_DEVICE_REGISTERS_AR_RELEASE_REVISION_VERSION  0
-#define OSIF_DEVICE_REGISTERS_SW_MAJOR_VERSION             0
-#define OSIF_DEVICE_REGISTERS_SW_MINOR_VERSION             8
+#define OSIF_DEVICE_REGISTERS_SW_MAJOR_VERSION             4
+#define OSIF_DEVICE_REGISTERS_SW_MINOR_VERSION             0
 #define OSIF_DEVICE_REGISTERS_SW_PATCH_VERSION             0
 
 /*==================================================================================================
@@ -67,10 +70,5 @@ extern "C"{
 /*==================================================================================================
 *                                       FUNCTION PROTOTYPES
 ==================================================================================================*/
-#ifdef __cplusplus
-}
-#endif
 
 #endif /* OSIF_DEVICE_REGISTERS_H */
-
-/** @} */

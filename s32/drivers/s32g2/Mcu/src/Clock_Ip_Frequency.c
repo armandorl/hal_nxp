@@ -1,11 +1,29 @@
-/*
- * Copyright 2024-2025 NXP
- *
- * SPDX-License-Identifier: BSD-3-Clause
- */
+/*==================================================================================================
+*   Project              : RTD AUTOSAR 4.4
+*   Platform             : CORTEXM
+*   Peripheral           : 
+*   Dependencies         : none
+*
+*   Autosar Version      : 4.4.0
+*   Autosar Revision     : ASR_REL_4_4_REV_0000
+*   Autosar Conf.Variant :
+*   SW Version           : 4.0.0
+*   Build Version        : S32_RTD_4_0_0_D2210_ASR_REL_4_4_REV_0000_20221031
+*
+*   (c) Copyright 2022 NXP Semiconductors
+*   All Rights Reserved.
+*
+*   NXP Confidential. This software is owned or controlled by NXP and may only be
+*   used strictly in accordance with the applicable license terms. By expressly
+*   accepting such terms or by downloading, installing, activating and/or otherwise
+*   using the software, you are agreeing that you have read, and that you agree to
+*   comply with and are bound by, such license terms. If you do not agree to be
+*   bound by the applicable license terms, then you may not retain, install,
+*   activate or otherwise use the software.
+==================================================================================================*/
 /**
 *   @file       Clock_Ip_Frequency.c
-*   @version    0.8.0
+*   @version    4.0.0
 *
 *   @brief   CLOCK driver implementations.
 *   @details CLOCK driver implementations.
@@ -26,23 +44,23 @@ extern "C"{
 * 2) needed interfaces from external units
 * 3) internal and external interfaces from this unit
 ==================================================================================================*/
-
 #include "Clock_Ip_Private.h"
 
+#if defined(CLOCK_IP_PLATFORM_SPECIFIC)
 
-
-#if (defined(CLOCK_IP_GET_FREQUENCY_API) && (CLOCK_IP_GET_FREQUENCY_API == STD_ON))
+#ifdef CLOCK_IP_GET_FREQUENCY_API
+#if (CLOCK_IP_GET_FREQUENCY_API == STD_ON)
 
 
 /*==================================================================================================
-                                     SOURCE FILE VERSION INFORMATION
+*                                     SOURCE FILE VERSION INFORMATION
 ==================================================================================================*/
 #define CLOCK_IP_FREQUENCY_VENDOR_ID_C                      43
 #define CLOCK_IP_FREQUENCY_AR_RELEASE_MAJOR_VERSION_C       4
-#define CLOCK_IP_FREQUENCY_AR_RELEASE_MINOR_VERSION_C       9
+#define CLOCK_IP_FREQUENCY_AR_RELEASE_MINOR_VERSION_C       4
 #define CLOCK_IP_FREQUENCY_AR_RELEASE_REVISION_VERSION_C    0
-#define CLOCK_IP_FREQUENCY_SW_MAJOR_VERSION_C               0
-#define CLOCK_IP_FREQUENCY_SW_MINOR_VERSION_C               8
+#define CLOCK_IP_FREQUENCY_SW_MAJOR_VERSION_C               4
+#define CLOCK_IP_FREQUENCY_SW_MINOR_VERSION_C               0
 #define CLOCK_IP_FREQUENCY_SW_PATCH_VERSION_C               0
 
 /*==================================================================================================
@@ -75,7 +93,7 @@ extern "C"{
 typedef struct{
 
     Clock_Ip_NameType Name;
-    uint64 Frequency;
+    uint32 Frequency;
 
 }extSignalFreq;
 
@@ -83,178 +101,245 @@ typedef struct{
 *                                       LOCAL MACROS
 ==================================================================================================*/
 
+#define CLOCK_IP_SELECTOR_SOURCE_NO  64U
+#define CLOCK_IP_EXT_SIGNALS_NO      24U
+#define CLOCK_IP_RTC_SELECTOR_SOURCE_NO  4U
+#define CLOCK_IP_DFS_MASK_0_CHANNEL  1U
+#define CLOCK_IP_DFS_MASK_1_CHANNEL  2U
+#define CLOCK_IP_DFS_MASK_2_CHANNEL  4U
+#define CLOCK_IP_DFS_MASK_3_CHANNEL  8U
+#define CLOCK_IP_DFS_MASK_4_CHANNEL  16U
+#define CLOCK_IP_DFS_MASK_5_CHANNEL  32U
+#define CLOCK_IP_MUL_BY_16384        14U
+#define CLOCK_IP_MUL_BY_2048         11U
+#define CLOCK_IP_MUL_BY_32           5U
+#define CLOCK_IP_MUL_BY_16           4U
+#define CLOCK_IP_MUL_BY_4            2U
+#define CLOCK_IP_MUL_BY_2            1U
+#define CLOCK_IP_DISABLED            0U
+#define CLOCK_IP_ENABLED             0xFFFFFFFFU
 
-#define CLOCK_IP_SELECTOR_SOURCE_NO                        64U
-#define CLOCK_IP_DFS_MASK_0_CHANNEL                        1U
-#define CLOCK_IP_DFS_MASK_1_CHANNEL                        2U
-#define CLOCK_IP_DFS_MASK_2_CHANNEL                        4U
-#define CLOCK_IP_DFS_MASK_3_CHANNEL                        8U
-#define CLOCK_IP_DFS_MASK_4_CHANNEL                        16U
-#define CLOCK_IP_DFS_MASK_5_CHANNEL                        32U
-#define CLOCK_IP_MUL_BY_16384                              14U
-#define CLOCK_IP_MUL_BY_2048                               11U
-#define CLOCK_IP_MUL_BY_32                                 5U
-#define CLOCK_IP_MUL_BY_16                                 4U
-#define CLOCK_IP_MUL_BY_4                                  2U
-#define CLOCK_IP_MUL_BY_2                                  1U
-#define CLOCK_IP_DISABLED                                  0U
-#define CLOCK_IP_ENABLED                                   0xFFFFFFFFFFFFFFFFU
-#define CLOCK_IP_gated_clk_INDEX_ENTRY                     0U
-#define CLOCK_IP_fast_crystal_oscillator_INDEX_ENTRY       1U
-#define CLOCK_IP_slow_crystal_oscillator_INDEX_ENTRY       2U
-#define CLOCK_IP_eth0_mii_rx_ext_clk_INDEX_ENTRY           3U
-#define CLOCK_IP_eth0_mii_tx_ext_clk_INDEX_ENTRY           4U
-#define CLOCK_IP_eth0_rgmii_rx_ext_clk_INDEX_ENTRY         5U
-#define CLOCK_IP_eth0_rgmii_tx_ext_clk_INDEX_ENTRY         6U
-#define CLOCK_IP_eth0_rmii_ref_ext_clk_INDEX_ENTRY         7U
-#define CLOCK_IP_eth1_mii_rx_ext_clk_INDEX_ENTRY           8U
-#define CLOCK_IP_eth1_mii_tx_ext_clk_INDEX_ENTRY           9U
-#define CLOCK_IP_eth1_rgmii_rx_ext_clk_INDEX_ENTRY         10U
-#define CLOCK_IP_eth1_rgmii_tx_ext_clk_INDEX_ENTRY         11U
-#define CLOCK_IP_eth1_rmii_ref_ext_clk_INDEX_ENTRY         12U
-#define CLOCK_IP_eth2_mii_rx_ext_clk_INDEX_ENTRY           13U
-#define CLOCK_IP_eth2_mii_tx_ext_clk_INDEX_ENTRY           14U
-#define CLOCK_IP_eth2_rgmii_rx_ext_clk_INDEX_ENTRY         15U
-#define CLOCK_IP_eth2_rgmii_tx_ext_clk_INDEX_ENTRY         16U
-#define CLOCK_IP_eth2_rmii_ref_ext_clk_INDEX_ENTRY         17U
-#define CLOCK_IP_ts_1588_clk_INDEX_ENTRY                   18U
-#define CLOCK_IP_EXT_SIGNALS_NO                            19U
+#define CLOCK_IP_RTC_EXT_REF_CLK_INDEX_ENTRY         0U
+#define CLOCK_IP_FTM_0_EXT_REF_CLK_INDEX_ENTRY       1U
+#define CLOCK_IP_FTM_1_EXT_REF_CLK_INDEX_ENTRY       2U
+#define CLOCK_IP_GMAC_0_EXT_REF_CLK_INDEX_ENTRY      3U
+#define CLOCK_IP_GMAC_0_EXT_RX_CLK_INDEX_ENTRY       4U
+#define CLOCK_IP_GMAC_0_EXT_TX_CLK_INDEX_ENTRY       5U
+#define CLOCK_IP_GMAC_EXT_TS_CLK_INDEX_ENTRY         6U
+#define CLOCK_IP_PFE_MAC_0_EXT_REF_CLK_INDEX_ENTRY   7U
+#define CLOCK_IP_PFE_MAC_0_EXT_RX_CLK_INDEX_ENTRY    8U
+#define CLOCK_IP_PFE_MAC_0_EXT_TX_CLK_INDEX_ENTRY    9U
+#define CLOCK_IP_PFE_MAC_1_EXT_REF_CLK_INDEX_ENTRY   10U
+#define CLOCK_IP_PFE_MAC_1_EXT_RX_CLK_INDEX_ENTRY    11U
+#define CLOCK_IP_PFE_MAC_1_EXT_TX_CLK_INDEX_ENTRY    12U
+#define CLOCK_IP_PFE_MAC_2_EXT_REF_CLK_INDEX_ENTRY   13U
+#define CLOCK_IP_PFE_MAC_2_EXT_RX_CLK_INDEX_ENTRY    14U
+#define CLOCK_IP_PFE_MAC_2_EXT_TX_CLK_INDEX_ENTRY    15U
+#define CLOCK_IP_SERDES_0_XPCS_0_TX_INDEX_ENTRY      16U
+#define CLOCK_IP_SERDES_0_XPCS_0_CDR_INDEX_ENTRY     17U
+#define CLOCK_IP_SERDES_0_XPCS_1_TX_INDEX_ENTRY      18U
+#define CLOCK_IP_SERDES_0_XPCS_1_CDR_INDEX_ENTRY     19U
+#define CLOCK_IP_SERDES_1_XPCS_0_TX_INDEX_ENTRY      20U
+#define CLOCK_IP_SERDES_1_XPCS_0_CDR_INDEX_ENTRY     21U
+#define CLOCK_IP_SERDES_1_XPCS_1_TX_INDEX_ENTRY      22U
+#define CLOCK_IP_SERDES_1_XPCS_1_CDR_INDEX_ENTRY     23U
+
+#define CLOCK_IP_COREPLL_FREQ                        2000000000U
+#define CLOCK_IP_COREPLL_CHECKSUM                    4147U
+#define CLOCK_IP_PERIPHPLL_FREQ                      2000000000U
+#define CLOCK_IP_PERIPHPLL_CHECKSUM                  4147U
+#define CLOCK_IP_DDRPLL_FREQ                         1600000000U
+#define CLOCK_IP_DDRPLL_CHECKSUM                     4137U
+#define CLOCK_IP_ACCELPLL_FREQ                       2400000000U
+#define CLOCK_IP_ACCELPLL_CHECKSUM                   0U
+#define CLOCK_IP_COREDFS1_FREQ                       800000000U
+#define CLOCK_IP_COREDFS1_CHECKSUM                   5694U
+#define CLOCK_IP_COREDFS2_FREQ                       800000000U
+#define CLOCK_IP_COREDFS2_CHECKSUM                   5694U
+#define CLOCK_IP_COREDFS3_FREQ                       0U
+#define CLOCK_IP_COREDFS3_CHECKSUM                   5943U
+#define CLOCK_IP_COREDFS4_FREQ                       0U
+#define CLOCK_IP_COREDFS4_CHECKSUM                   5943U
+#define CLOCK_IP_COREDFS5_FREQ                       0U
+#define CLOCK_IP_COREDFS5_CHECKSUM                   5943U
+#define CLOCK_IP_COREDFS6_FREQ                       0U
+#define CLOCK_IP_COREDFS6_CHECKSUM                   5943U
+#define CLOCK_IP_PERIPHDFS1_FREQ                     800000000U
+#define CLOCK_IP_PERIPHDFS1_CHECKSUM                 5694U
+#define CLOCK_IP_PERIPHDFS2_FREQ                     631578947U
+#define CLOCK_IP_PERIPHDFS2_CHECKSUM                 5666U
+#define CLOCK_IP_PERIPHDFS3_FREQ                     0U
+#define CLOCK_IP_PERIPHDFS3_CHECKSUM                 5943U
+#define CLOCK_IP_PERIPHDFS4_FREQ                     1000000000U
+#define CLOCK_IP_PERIPHDFS4_CHECKSUM                 5687U
+#define CLOCK_IP_PERIPHDFS5_FREQ                     1000000000U
+#define CLOCK_IP_PERIPHDFS5_CHECKSUM                 5687U
+#define CLOCK_IP_PERIPHDFS6_FREQ                     1000000000U
+#define CLOCK_IP_PERIPHDFS6_CHECKSUM                 5687U
 
 /*==================================================================================================
                                    GLOBAL FUNCTION PROTOTYPES
 ==================================================================================================*/
-
-/*==================================================================================================
-                                   LOCAL FUNCTION PROTOTYPES
-==================================================================================================*/
-
 /* Clock start section code */
 #define MCU_START_SEC_CODE
 #include "Mcu_MemMap.h"
 
-static uint64 Clock_Ip_PLL_VCO(const PLL_Type *Base);
-static uint64 DFS_OUTPUT(const PLL_Type *Base, uint32 Channel, uint64 Fin);
-static uint64 Clock_Ip_Get_Zero_Frequency(void);
-static uint64 Clock_Ip_Get_FIRC_CLK_Frequency(void);
-static uint64 Clock_Ip_Get_FIRCDIV2_CLK_Frequency(void);
-static uint64 Clock_Ip_Get_SAFE_CLK_Frequency(void);
-static uint64 Clock_Ip_Get_SIRC_CLK_Frequency(void);
-static uint64 Clock_Ip_Get_FXOSC_CLK_Frequency(void);
-static uint64 Clock_Ip_Get_SXOSC_CLK_Frequency(void);
-static uint64 Clock_Ip_Get_gated_clk_Frequency(void);
-static uint64 Clock_Ip_Get_fast_crystal_oscillator_Frequency(void);
-static uint64 Clock_Ip_Get_slow_crystal_oscillator_Frequency(void);
-static uint64 Clock_Ip_Get_eth0_mii_rx_ext_clk_Frequency(void);
-static uint64 Clock_Ip_Get_eth0_mii_tx_ext_clk_Frequency(void);
-static uint64 Clock_Ip_Get_eth0_rgmii_rx_ext_clk_Frequency(void);
-static uint64 Clock_Ip_Get_eth0_rgmii_tx_ext_clk_Frequency(void);
-static uint64 Clock_Ip_Get_eth0_rmii_ref_ext_clk_Frequency(void);
-static uint64 Clock_Ip_Get_eth1_mii_rx_ext_clk_Frequency(void);
-static uint64 Clock_Ip_Get_eth1_mii_tx_ext_clk_Frequency(void);
-static uint64 Clock_Ip_Get_eth1_rgmii_rx_ext_clk_Frequency(void);
-static uint64 Clock_Ip_Get_eth1_rgmii_tx_ext_clk_Frequency(void);
-static uint64 Clock_Ip_Get_eth1_rmii_ref_ext_clk_Frequency(void);
-static uint64 Clock_Ip_Get_eth2_mii_rx_ext_clk_Frequency(void);
-static uint64 Clock_Ip_Get_eth2_mii_tx_ext_clk_Frequency(void);
-static uint64 Clock_Ip_Get_eth2_rgmii_rx_ext_clk_Frequency(void);
-static uint64 Clock_Ip_Get_eth2_rgmii_tx_ext_clk_Frequency(void);
-static uint64 Clock_Ip_Get_eth2_rmii_ref_ext_clk_Frequency(void);
-static uint64 Clock_Ip_Get_ts_1588_clk_Frequency(void);
-static uint64 Clock_Ip_Get_PLL0_CLK_Frequency(void);
-static uint64 Clock_Ip_Get_PLL0_DIV_CLK_Frequency(void);
-static uint64 Clock_Ip_Get_PLL0_DIV0_CLK_Frequency(void);
-static uint64 Clock_Ip_Get_PLL0_DIV4_CLK_Frequency(void);
-static uint64 Clock_Ip_Get_PLL0_DFS0_CLK_Frequency(void);
-#if defined(CLOCK_IP_HAS_PLL0_DFS1_CLK)
-static uint64 Clock_Ip_Get_PLL0_DFS1_CLK_Frequency(void);
+uint32 Get_GENCTRL1_CTRL(void);
+uint32 get_RTC_CLK_Frequency_TrustedCall(void);
+/*==================================================================================================
+                                   LOCAL FUNCTION PROTOTYPES
+==================================================================================================*/
+
+#if (defined(CLOCK_IP_ENABLE_USER_MODE_SUPPORT))
+  #if (STD_ON == CLOCK_IP_ENABLE_USER_MODE_SUPPORT)
+
+    #define  Call_Get_GENCTRL1_CTRL() \
+    OsIf_Trusted_Call_Return(Get_GENCTRL1_CTRL)
+  #else
+    #define  Call_Get_GENCTRL1_CTRL() \
+    Get_GENCTRL1_CTRL()
+  #endif
+#else
+    #define  Call_Get_GENCTRL1_CTRL() \
+    Get_GENCTRL1_CTRL()
 #endif
-#if defined(CLOCK_IP_HAS_PLL0_DFS2_CLK)
-static uint64 Clock_Ip_Get_PLL0_DFS2_CLK_Frequency(void);
-#endif
-#if defined(CLOCK_IP_HAS_PLL0_DFS3_CLK)
-static uint64 Clock_Ip_Get_PLL0_DFS3_CLK_Frequency(void);
-#endif
-static uint64 Clock_Ip_Get_PLL1_CLK_Frequency(void);
-static uint64 Clock_Ip_Get_PLL1_DIV_CLK_Frequency(void);
-static uint64 Clock_Ip_Get_PLL1_DIV0_CLK_Frequency(void);
-static uint64 Clock_Ip_Get_CPE_PLL_CLK_Frequency(void);
-static uint64 Clock_Ip_Get_CPE_DIV_CLK_Frequency(void);
-static uint64 Clock_Ip_Get_CPE_DIV0_CLK_Frequency(void);
-static uint64 Clock_Ip_Get_LPE_CLK_Frequency(void);
-#if defined(CLOCK_IP_HAS_LPE_DIV1_CLK)
-static uint64 Clock_Ip_Get_LPE_DIV1_CLK_Frequency(void);
-#endif
-#if defined(CLOCK_IP_HAS_LPE_DIV2_CLK)
-static uint64 Clock_Ip_Get_LPE_DIV2_CLK_Frequency(void);
-#endif
-#if defined(CLOCK_IP_HAS_LPE_DIV4_CLK)
-static uint64 Clock_Ip_Get_LPE_DIV4_CLK_Frequency(void);
-#endif
-#if defined(CLOCK_IP_HAS_LPE_DIV8_CLK)
-static uint64 Clock_Ip_Get_LPE_DIV8_CLK_Frequency(void);
-#endif
-static uint64 Clock_Ip_Get_PLT_CLK_Frequency(void);
-#if defined(CLOCK_IP_HAS_PLTCORE_CLK)
-static uint64 Clock_Ip_Get_PLTCORE_CLK_Frequency(void);
-#endif
-#if defined(CLOCK_IP_HAS_PLTDIV1_CLK)
-static uint64 Clock_Ip_Get_PLTDIV1_CLK_Frequency(void);
-#endif
-#if defined(CLOCK_IP_HAS_PLTDIV2_CLK)
-static uint64 Clock_Ip_Get_PLTDIV2_CLK_Frequency(void);
-#endif
-#if defined(CLOCK_IP_HAS_PLTDIV4_CLK)
-static uint64 Clock_Ip_Get_PLTDIV4_CLK_Frequency(void);
-#endif
-static uint64 Clock_Ip_Get_CAN_PE_CLK_Frequency(void);
-static uint64 Clock_Ip_Get_DFT_CLK_Frequency(void);
-static uint64 Clock_Ip_Get_DSPI_CLK_Frequency(void);
-static uint64 Clock_Ip_Get_ETH_TS_CLK_Frequency(void);
-static uint64 Clock_Ip_Get_ETH0_RX_CLK_Frequency(void);
-static uint64 Clock_Ip_Get_ETH0_TX_CLK_Frequency(void);
-static uint64 Clock_Ip_Get_ETH1_RX_CLK_Frequency(void);
-static uint64 Clock_Ip_Get_ETH1_TX_CLK_Frequency(void);
-static uint64 Clock_Ip_Get_ETH2_RX_CLK_Frequency(void);
-static uint64 Clock_Ip_Get_ETH2_TX_CLK_Frequency(void);
-static uint64 Clock_Ip_Get_ETH3_RX_CLK_Frequency(void);
-static uint64 Clock_Ip_Get_ETH3_TX_CLK_Frequency(void);
-static uint64 Clock_Ip_Get_ETH4_RX_CLK_Frequency(void);
-static uint64 Clock_Ip_Get_ETH4_TX_CLK_Frequency(void);
-static uint64 Clock_Ip_Get_FLEXCAN_0to7_PE_CLK_Frequency(void);
-static uint64 Clock_Ip_Get_FLEXCAN_8to10_PE_CLK_Frequency(void);
-static uint64 Clock_Ip_Get_FLEXCAN_11to16_PE_CLK_Frequency(void);
-static uint64 Clock_Ip_Get_FLEXIO_CLK_Frequency(void);
-static uint64 Clock_Ip_Get_LPE_CXPI_PE_CLK_Frequency(void);
-static uint64 Clock_Ip_Get_LPE_DIV1_UNGATED_CLK_Frequency(void);
-static uint64 Clock_Ip_Get_LPE_DIV2_UNGATED_CLK_Frequency(void);
-static uint64 Clock_Ip_Get_LPE_DIV3_UNGATED_CLK_Frequency(void);
-static uint64 Clock_Ip_Get_LPE_DIV4_UNGATED_CLK_Frequency(void);
-static uint64 Clock_Ip_Get_LPE_FLEXCAN_PE_CLK_Frequency(void);
-static uint64 Clock_Ip_Get_LPE_LPI2C_MOD_CLK_Frequency(void);
-static uint64 Clock_Ip_Get_LPE_LPSPI_MOD_CLK_Frequency(void);
-static uint64 Clock_Ip_Get_LPE_LPUART_MOD_CLK_Frequency(void);
-static uint64 Clock_Ip_Get_LPE_STM_CLK_Frequency(void);
-static uint64 Clock_Ip_Get_LPE_UNGATED_CLK_Frequency(void);
-static uint64 Clock_Ip_Get_PERI_HIGH_SPEED_REST_USDHC_CLK_Frequency(void);
-static uint64 Clock_Ip_Get_PERI_HIGH_SPEED_REST_XSPI_CLK_Frequency(void);
-static uint64 Clock_Ip_Get_PERI_HIGH_SPEED_TRACE_CLK_Frequency(void);
-static uint64 Clock_Ip_Get_PHY_ETH_CLK_Frequency(void);
-static uint64 Clock_Ip_Get_RR_RTC_CLK_Frequency(void);
-uint64 Clock_Ip_Get_RR_RTC_CLK_Frequency_TrustedCall(void);
-static uint64 Clock_Ip_Get_SAI0_MCLK_Frequency(void);
-static uint64 Clock_Ip_Get_SAI1_MCLK_Frequency(void);
-static uint64 Clock_Ip_Get_SERDES_AUX_CLK_Frequency(void);
-static uint64 Clock_Ip_Get_SERDES_REF_CLK_Frequency(void);
-static uint64 Clock_Ip_Get_STM0_CLK_Frequency(void);
-static uint64 Clock_Ip_Get_STM1_CLK_Frequency(void);
-static uint64 Clock_Ip_Get_STM2_CLK_Frequency(void);
-static uint64 Clock_Ip_Get_STM3_CLK_Frequency(void);
-static uint64 Clock_Ip_Get_TRACE_CLK_Frequency(void);
+
+static uint32 PLL_VCO(const PLLDIG_Type *Base);
+static uint32 DFS_OUTPUT(const DFS_Type *Base, uint32 Channel, uint32 Fin);
+static uint32 get_Zero_Frequency(void);
+static uint32 get_FIRC_CLK_Frequency(void);
+static uint32 get_FXOSC_CLK_Frequency(void);
+static uint32 get_SIRC_CLK_Frequency(void);
+static uint32 get_COREPLL_CLK_Frequency(void);
+static uint32 get_PERIPHPLL_CLK_Frequency(void);
+static uint32 get_DDRPLL_CLK_Frequency(void);
+static uint32 get_ACCELPLL_CLK_Frequency(void);
+static uint32 get_COREPLL_PHI0_Frequency(void);
+static uint32 get_COREPLL_PHI1_Frequency(void);
+static uint32 get_COREPLL_DFS1_Frequency(void);
+static uint32 get_COREPLL_DFS2_Frequency(void);
+static uint32 get_COREPLL_DFS3_Frequency(void);
+static uint32 get_COREPLL_DFS4_Frequency(void);
+static uint32 get_COREPLL_DFS5_Frequency(void);
+static uint32 get_COREPLL_DFS6_Frequency(void);
+static uint32 get_PERIPHPLL_PHI0_Frequency(void);
+static uint32 get_PERIPHPLL_PHI1_Frequency(void);
+static uint32 get_PERIPHPLL_PHI2_Frequency(void);
+static uint32 get_PERIPHPLL_PHI3_Frequency(void);
+static uint32 get_PERIPHPLL_PHI4_Frequency(void);
+static uint32 get_PERIPHPLL_PHI5_Frequency(void);
+static uint32 get_PERIPHPLL_PHI6_Frequency(void);
+static uint32 get_PERIPHPLL_PHI7_Frequency(void);
+static uint32 get_PERIPHPLL_DFS1_Frequency(void);
+static uint32 get_PERIPHPLL_DFS2_Frequency(void);
+static uint32 get_PERIPHPLL_DFS3_Frequency(void);
+static uint32 get_PERIPHPLL_DFS4_Frequency(void);
+static uint32 get_PERIPHPLL_DFS5_Frequency(void);
+static uint32 get_PERIPHPLL_DFS6_Frequency(void);
+static uint32 get_DDRPLL_PHI0_Frequency(void);
+static uint32 get_ACCELPLL_PHI0_Frequency(void);
+static uint32 get_ACCELPLL_PHI1_Frequency(void);
+static uint32 get_rtc_ext_ref_Frequency(void);
+static uint32 get_ftm_0_ext_ref_Frequency(void);
+static uint32 get_ftm_1_ext_ref_Frequency(void);
+static uint32 get_gmac_0_ext_ref_Frequency(void);
+static uint32 get_gmac_0_ext_rx_Frequency(void);
+static uint32 get_gmac_0_ext_tx_Frequency(void);
+static uint32 get_gmac_ext_ts_Frequency(void);
+static uint32 get_pfe_mac_0_ext_ref_Frequency(void);
+static uint32 get_pfe_mac_0_ext_rx_Frequency(void);
+static uint32 get_pfe_mac_0_ext_tx_Frequency(void);
+static uint32 get_pfe_mac_1_ext_ref_Frequency(void);
+static uint32 get_pfe_mac_1_ext_rx_Frequency(void);
+static uint32 get_pfe_mac_1_ext_tx_Frequency(void);
+static uint32 get_pfe_mac_2_ext_ref_Frequency(void);
+static uint32 get_pfe_mac_2_ext_rx_Frequency(void);
+static uint32 get_pfe_mac_2_ext_tx_Frequency(void);
+static uint32 get_SERDES_0_XPCS_0_TX_Frequency(void);
+static uint32 get_SERDES_0_XPCS_0_CDR_Frequency(void);
+static uint32 get_SERDES_0_XPCS_1_TX_Frequency(void);
+static uint32 get_SERDES_0_XPCS_1_CDR_Frequency(void);
+static uint32 get_SERDES_1_XPCS_0_TX_Frequency(void);
+static uint32 get_SERDES_1_XPCS_0_CDR_Frequency(void);
+static uint32 get_SERDES_1_XPCS_1_TX_Frequency(void);
+static uint32 get_SERDES_1_XPCS_1_CDR_Frequency(void);
+static uint32 get_XBAR_2X_CLK_Frequency(void);
+static uint32 get_XBAR_CLK_Frequency(void);
+static uint32 get_XBAR_DIV2_CLK_Frequency(void);
+static uint32 get_XBAR_DIV3_CLK_Frequency(void);
+static uint32 get_XBAR_DIV4_CLK_Frequency(void);
+static uint32 get_XBAR_DIV6_CLK_Frequency(void);
+static uint32 get_A53_CORE_CLK_Frequency(void);
+static uint32 get_A53_CORE_DIV2_CLK_Frequency(void);
+static uint32 get_A53_CORE_DIV10_CLK_Frequency(void);
+static uint32 get_DDR_CLK_Frequency(void);
+static uint32 get_PFE_PE_CLK_Frequency(void);
+static uint32 get_PFE_SYS_CLK_Frequency(void);
+static uint32 get_PER_CLK_Frequency(void);
+static uint32 get_GMAC0_REF_CLK_Frequency(void);
+static uint32 get_GMAC0_REF_DIV_CLK_Frequency(void);
+static uint32 get_PFEMAC0_REF_DIV_CLK_Frequency(void);
+static uint32 get_PFEMAC1_REF_DIV_CLK_Frequency(void);
+static uint32 get_PFEMAC2_REF_DIV_CLK_Frequency(void);
+static uint32 get_PERIPHPLL_PHI0_Frequency(void);
+static uint32 get_CLKOUT0_CLK_Frequency(void);
+static uint32 get_CLKOUT1_CLK_Frequency(void);
+static uint32 get_DAPB_CLK_Frequency(void);
+static uint32 get_A53_CORE_DIV10_CLK_Frequency(void);
+static uint32 get_FLEXCAN_CLK_Frequency(void);
+static uint32 get_FLEXCAN0_CLK_Frequency(void);
+static uint32 get_FLEXCAN1_CLK_Frequency(void);
+static uint32 get_FLEXCAN2_CLK_Frequency(void);
+static uint32 get_FLEXCAN3_CLK_Frequency(void);
+static uint32 get_FLEXRAY_CLK_Frequency(void);
+static uint32 get_FRAY0_CLK_Frequency(void);
+static uint32 get_FLEXTIMERA_CLK_Frequency(void);
+static uint32 get_FTIMER0_CLK_Frequency(void);
+static uint32 get_FLEXTIMERB_CLK_Frequency(void);
+static uint32 get_FTIMER1_CLK_Frequency(void);
+static uint32 get_GMAC_TS_CLK_Frequency(void);
+static uint32 get_GMAC0_RX_CLK_Frequency(void);
+static uint32 get_GMAC0_TX_CLK_Frequency(void);
+static uint32 get_GMAC0_TS_CLK_Frequency(void);
+static uint32 get_LBIST_CLK_Frequency(void);
+static uint32 get_LBIST0_CLK_Frequency(void);
+static uint32 get_LBIST1_CLK_Frequency(void);
+static uint32 get_LBIST2_CLK_Frequency(void);
+static uint32 get_LBIST3_CLK_Frequency(void);
+static uint32 get_LBIST4_CLK_Frequency(void);
+static uint32 get_LBIST5_CLK_Frequency(void);
+static uint32 get_LBIST6_CLK_Frequency(void);
+static uint32 get_LBIST7_CLK_Frequency(void);
+static uint32 get_LIN_BAUD_CLK_Frequency(void);
+static uint32 get_LINFLEX_CLK_Frequency(void);
+static uint32 get_LIN0_CLK_Frequency(void);
+static uint32 get_LIN1_CLK_Frequency(void);
+static uint32 get_LIN2_CLK_Frequency(void);
+static uint32 get_PFEMAC0_RX_CLK_Frequency(void);
+static uint32 get_PFEMAC0_TX_DIV_CLK_Frequency(void);
+static uint32 get_PFEMAC0_TX_CLK_Frequency(void);
+static uint32 get_PFEMAC1_RX_CLK_Frequency(void);
+static uint32 get_PFEMAC1_TX_CLK_Frequency(void);
+static uint32 get_PFEMAC2_RX_CLK_Frequency(void);
+static uint32 get_PFEMAC2_TX_CLK_Frequency(void);
+static uint32 get_QSPI_2X_CLK_Frequency(void);
+static uint32 get_QSPI_1X_CLK_Frequency(void);
+static uint32 get_QSPI0_CLK_Frequency(void);
+static uint32 get_RTC_CLK_Frequency(void);
+static uint32 get_SPI_CLK_Frequency(void);
+static uint32 get_SPI0_CLK_Frequency(void);
+static uint32 get_SPI1_CLK_Frequency(void);
+static uint32 get_SPI2_CLK_Frequency(void);
+static uint32 get_SPI3_CLK_Frequency(void);
+static uint32 get_SPI4_CLK_Frequency(void);
+static uint32 get_SPI5_CLK_Frequency(void);
+static uint32 get_USDHC_CLK_Frequency(void);
+static uint32 get_USDHC0_CLK_Frequency(void);
 
 /* Clock stop section code */
 #define MCU_STOP_SEC_CODE
 #include "Mcu_MemMap.h"
-
+     
 /*==================================================================================================
                                        LOCAL CONSTANTS
 ==================================================================================================*/
@@ -263,759 +348,347 @@ static uint64 Clock_Ip_Get_TRACE_CLK_Frequency(void);
 #define MCU_START_SEC_CONST_UNSPECIFIED
 #include "Mcu_MemMap.h"
 
+static const uint32 Clock_Ip_au32EnableDivider[2U] = {CLOCK_IP_DISABLED,CLOCK_IP_ENABLED};
 
+typedef uint32 (*getFreqType)(void);
 
-/* static const uint64 Clock_Ip_au32EnableClock[2U] = {CLOCK_IP_DISABLED,CLOCK_IP_ENABLED}; */
-static const uint64 Clock_Ip_au32EnableDivider[2U] = {CLOCK_IP_DISABLED,CLOCK_IP_ENABLED};
-/* static const uint64 Clock_Ip_u32EnableGate[2U] = {CLOCK_IP_DISABLED,CLOCK_IP_ENABLED}; */
-
-typedef uint64 (*getFreqType)(void);
-
-
-
-
-static const getFreqType Clock_Ip_apfFreqSrcTable[3U][64U] =
+static const getFreqType Clock_Ip_apfFreqTableClkSrc[CLOCK_IP_SELECTOR_SOURCE_NO] =
 {
-   /* ALL    */
-   {
-    Clock_Ip_Get_SAFE_CLK_Frequency,                      /* clock name for 0  hardware value */
-    Clock_Ip_Get_FIRCDIV2_CLK_Frequency,                  /* clock name for 1  hardware value */
-    Clock_Ip_Get_SIRC_CLK_Frequency,                      /* clock name for 2  hardware value */
-    Clock_Ip_Get_FXOSC_CLK_Frequency,                     /* clock name for 3  hardware value */
-    Clock_Ip_Get_SXOSC_CLK_Frequency,                     /* clock name for 4  hardware value */
-    Clock_Ip_Get_FIRC_CLK_Frequency,                      /* clock name for 5  hardware value */
-    Clock_Ip_Get_Zero_Frequency,                          /* clock name for 6  hardware value */
-    Clock_Ip_Get_PLL1_CLK_Frequency,                      /* clock name for 7  hardware value */
-    Clock_Ip_Get_PLL0_DIV4_CLK_Frequency,                 /* clock name for 8  hardware value */
-    Clock_Ip_Get_PLL0_CLK_Frequency,                      /* clock name for 9  hardware value */
-    Clock_Ip_Get_Zero_Frequency,                          /* clock name for 10 hardware value */
-#if defined(CLOCK_IP_HAS_LPE_DIV2_CLK)
-    Clock_Ip_Get_LPE_DIV2_CLK_Frequency,                  /* clock name for 11 hardware value */
-#else
-    Clock_Ip_Get_Zero_Frequency,
-#endif
-    Clock_Ip_Get_Zero_Frequency,                          /* clock name for 12 hardware value */
-    Clock_Ip_Get_PLL0_DFS0_CLK_Frequency,                 /* clock name for 13 hardware value */
-#if defined(CLOCK_IP_HAS_PLL0_DFS1_CLK)
-    Clock_Ip_Get_PLL0_DFS1_CLK_Frequency,                 /* clock name for 14 hardware value */
-#else
-    Clock_Ip_Get_Zero_Frequency,
-#endif
-#if defined(CLOCK_IP_HAS_PLL0_DFS2_CLK)
-    Clock_Ip_Get_PLL0_DFS2_CLK_Frequency,                 /* clock name for 15 hardware value */
-#else
-    Clock_Ip_Get_Zero_Frequency,
-#endif
-#if defined(CLOCK_IP_HAS_PLL0_DFS3_CLK)
-    Clock_Ip_Get_PLL0_DFS3_CLK_Frequency,                 /* clock name for 16 hardware value */
-#else
-    Clock_Ip_Get_Zero_Frequency,
-#endif
-#if defined(CLOCK_IP_HAS_PLTDIV1_CLK)
-    Clock_Ip_Get_PLTDIV1_CLK_Frequency,                   /* clock name for 17 hardware value */
-#else
-    Clock_Ip_Get_Zero_Frequency,
-#endif
-#if defined(CLOCK_IP_HAS_PLTDIV2_CLK)
-    Clock_Ip_Get_PLTDIV2_CLK_Frequency,                   /* clock name for 18 hardware value */
-#else
-    Clock_Ip_Get_Zero_Frequency,
-#endif
-    Clock_Ip_Get_Zero_Frequency,                          /* clock name for 19 hardware value */
-    Clock_Ip_Get_ts_1588_clk_Frequency,                   /* clock name for 20 hardware value */
-    Clock_Ip_Get_eth0_rmii_ref_ext_clk_Frequency,         /* clock name for 21 hardware value */
-    Clock_Ip_Get_eth0_mii_rx_ext_clk_Frequency,           /* clock name for 22 hardware value */
-    Clock_Ip_Get_eth0_mii_tx_ext_clk_Frequency,           /* clock name for 23 hardware value */
-    Clock_Ip_Get_eth0_rgmii_rx_ext_clk_Frequency,         /* clock name for 24 hardware value */
-    Clock_Ip_Get_eth0_rgmii_tx_ext_clk_Frequency,         /* clock name for 25 hardware value */
-    Clock_Ip_Get_eth1_rmii_ref_ext_clk_Frequency,         /* clock name for 26 hardware value */
-    Clock_Ip_Get_eth1_mii_rx_ext_clk_Frequency,           /* clock name for 27 hardware value */
-    Clock_Ip_Get_eth1_mii_tx_ext_clk_Frequency,           /* clock name for 28 hardware value */
-    Clock_Ip_Get_eth1_rgmii_rx_ext_clk_Frequency,         /* clock name for 29 hardware value */
-    Clock_Ip_Get_eth1_rgmii_tx_ext_clk_Frequency,         /* clock name for 30 hardware value */
-    Clock_Ip_Get_eth2_rmii_ref_ext_clk_Frequency,         /* clock name for 31 hardware value */
-    Clock_Ip_Get_eth2_mii_rx_ext_clk_Frequency,           /* clock name for 32 hardware value */
-    Clock_Ip_Get_eth2_mii_tx_ext_clk_Frequency,           /* clock name for 33 hardware value */
-    Clock_Ip_Get_eth2_rgmii_rx_ext_clk_Frequency,         /* clock name for 34 hardware value */
-    Clock_Ip_Get_eth2_rgmii_tx_ext_clk_Frequency,         /* clock name for 35 hardware value */
-    Clock_Ip_Get_Zero_Frequency,                          /* clock name for 36 hardware value */
-    Clock_Ip_Get_Zero_Frequency,                          /* clock name for 37 hardware value */
-    Clock_Ip_Get_Zero_Frequency,                          /* clock name for 38 hardware value */
-    Clock_Ip_Get_eth1_rgmii_rx_ext_clk_Frequency,         /* clock name for 39 hardware value */
-    Clock_Ip_Get_eth1_rgmii_rx_ext_clk_Frequency,         /* clock name for 40 hardware value */
-    Clock_Ip_Get_eth1_rgmii_rx_ext_clk_Frequency,         /* clock name for 41 hardware value */
-    Clock_Ip_Get_eth1_rgmii_rx_ext_clk_Frequency,         /* clock name for 42 hardware value */
-    Clock_Ip_Get_eth1_rgmii_rx_ext_clk_Frequency,         /* clock name for 43 hardware value */
-    Clock_Ip_Get_eth1_rgmii_rx_ext_clk_Frequency,         /* clock name for 44 hardware value */
-    Clock_Ip_Get_eth1_rgmii_rx_ext_clk_Frequency,         /* clock name for 45 hardware value */
-    Clock_Ip_Get_eth1_rgmii_rx_ext_clk_Frequency,         /* clock name for 46 hardware value */
-    Clock_Ip_Get_Zero_Frequency,                          /* clock name for 47 hardware value */
-    Clock_Ip_Get_Zero_Frequency,                          /* clock name for 48 hardware value */
-    Clock_Ip_Get_Zero_Frequency,                          /* clock name for 49 hardware value */
-    Clock_Ip_Get_Zero_Frequency,                          /* clock name for 50 hardware value */
-    Clock_Ip_Get_Zero_Frequency,                          /* clock name for 51 hardware value */
-    Clock_Ip_Get_Zero_Frequency,                          /* clock name for 52 hardware value */
-    Clock_Ip_Get_Zero_Frequency,                          /* clock name for 53 hardware value */
-    Clock_Ip_Get_Zero_Frequency,                          /* clock name for 54 hardware value */
-    Clock_Ip_Get_Zero_Frequency,                          /* clock name for 55 hardware value */
-    Clock_Ip_Get_Zero_Frequency,                          /* clock name for 56 hardware value */
-    Clock_Ip_Get_Zero_Frequency,                          /* clock name for 57 hardware value */
-    Clock_Ip_Get_Zero_Frequency,                          /* clock name for 58 hardware value */
-    Clock_Ip_Get_Zero_Frequency,                          /* clock name for 59 hardware value */
-    Clock_Ip_Get_Zero_Frequency,                          /* clock name for 60 hardware value */
-    Clock_Ip_Get_Zero_Frequency,                          /* clock name for 61 hardware value */
-    Clock_Ip_Get_Zero_Frequency,                          /* clock name for 62 hardware value */
-    Clock_Ip_Get_Zero_Frequency,                          /* clock name for 63 hardware value */
-    },
-   /* LPE    */
-   {
-    Clock_Ip_Get_SAFE_CLK_Frequency,                      /* clock name for 0  hardware value */
-    Clock_Ip_Get_FIRCDIV2_CLK_Frequency,                  /* clock name for 1  hardware value */
-    Clock_Ip_Get_SIRC_CLK_Frequency,                      /* clock name for 2  hardware value */
-    Clock_Ip_Get_FXOSC_CLK_Frequency,                     /* clock name for 3  hardware value */
-    Clock_Ip_Get_SXOSC_CLK_Frequency,                     /* clock name for 4  hardware value */
-    Clock_Ip_Get_Zero_Frequency,                          /* clock name for 5  hardware value */
-    Clock_Ip_Get_Zero_Frequency,                          /* clock name for 6  hardware value */
-    Clock_Ip_Get_Zero_Frequency,                          /* clock name for 7  hardware value */
-    Clock_Ip_Get_PLL0_DIV4_CLK_Frequency,                 /* clock name for 8  hardware value */
-    Clock_Ip_Get_Zero_Frequency,                          /* clock name for 9  hardware value */
-    Clock_Ip_Get_Zero_Frequency,                          /* clock name for 10 hardware value */
-#if defined(CLOCK_IP_HAS_LPE_DIV2_CLK)
-    Clock_Ip_Get_LPE_DIV2_CLK_Frequency,                  /* clock name for 11 hardware value */
-#else
-    Clock_Ip_Get_Zero_Frequency,
-#endif
-    Clock_Ip_Get_Zero_Frequency,                          /* clock name for 12 hardware value */
-    Clock_Ip_Get_Zero_Frequency,                          /* clock name for 13 hardware value */
-    Clock_Ip_Get_Zero_Frequency,                          /* clock name for 14 hardware value */
-    Clock_Ip_Get_Zero_Frequency,                          /* clock name for 15 hardware value */
-    Clock_Ip_Get_Zero_Frequency,                          /* clock name for 16 hardware value */
-    Clock_Ip_Get_Zero_Frequency,                          /* clock name for 17 hardware value */
-    Clock_Ip_Get_Zero_Frequency,                          /* clock name for 18 hardware value */
-    Clock_Ip_Get_Zero_Frequency,                          /* clock name for 19 hardware value */
-    Clock_Ip_Get_Zero_Frequency,                          /* clock name for 20 hardware value */
-    Clock_Ip_Get_Zero_Frequency,                          /* clock name for 21 hardware value */
-    Clock_Ip_Get_Zero_Frequency,                          /* clock name for 22 hardware value */
-    Clock_Ip_Get_Zero_Frequency,                          /* clock name for 23 hardware value */
-    Clock_Ip_Get_Zero_Frequency,                          /* clock name for 24 hardware value */
-    Clock_Ip_Get_Zero_Frequency,                          /* clock name for 25 hardware value */
-    Clock_Ip_Get_Zero_Frequency,                          /* clock name for 26 hardware value */
-    Clock_Ip_Get_Zero_Frequency,                          /* clock name for 27 hardware value */
-    Clock_Ip_Get_Zero_Frequency,                          /* clock name for 28 hardware value */
-    Clock_Ip_Get_Zero_Frequency,                          /* clock name for 29 hardware value */
-    Clock_Ip_Get_Zero_Frequency,                          /* clock name for 30 hardware value */
-    Clock_Ip_Get_Zero_Frequency,                          /* clock name for 31 hardware value */
-    Clock_Ip_Get_Zero_Frequency,                          /* clock name for 32 hardware value */
-    Clock_Ip_Get_Zero_Frequency,                          /* clock name for 33 hardware value */
-    Clock_Ip_Get_Zero_Frequency,                          /* clock name for 34 hardware value */
-    Clock_Ip_Get_Zero_Frequency,                          /* clock name for 35 hardware value */
-    Clock_Ip_Get_Zero_Frequency,                          /* clock name for 36 hardware value */
-    Clock_Ip_Get_Zero_Frequency,                          /* clock name for 37 hardware value */
-    Clock_Ip_Get_Zero_Frequency,                          /* clock name for 38 hardware value */
-    Clock_Ip_Get_Zero_Frequency,                          /* clock name for 39 hardware value */
-    Clock_Ip_Get_Zero_Frequency,                          /* clock name for 40 hardware value */
-    Clock_Ip_Get_Zero_Frequency,                          /* clock name for 41 hardware value */
-    Clock_Ip_Get_Zero_Frequency,                          /* clock name for 42 hardware value */
-    Clock_Ip_Get_Zero_Frequency,                          /* clock name for 43 hardware value */
-    Clock_Ip_Get_Zero_Frequency,                          /* clock name for 44 hardware value */
-    Clock_Ip_Get_Zero_Frequency,                          /* clock name for 45 hardware value */
-    Clock_Ip_Get_Zero_Frequency,                          /* clock name for 46 hardware value */
-    Clock_Ip_Get_Zero_Frequency,                          /* clock name for 47 hardware value */
-    Clock_Ip_Get_Zero_Frequency,                          /* clock name for 48 hardware value */
-    Clock_Ip_Get_Zero_Frequency,                          /* clock name for 49 hardware value */
-    Clock_Ip_Get_Zero_Frequency,                          /* clock name for 50 hardware value */
-    Clock_Ip_Get_Zero_Frequency,                          /* clock name for 51 hardware value */
-    Clock_Ip_Get_Zero_Frequency,                          /* clock name for 52 hardware value */
-    Clock_Ip_Get_Zero_Frequency,                          /* clock name for 53 hardware value */
-    Clock_Ip_Get_Zero_Frequency,                          /* clock name for 54 hardware value */
-    Clock_Ip_Get_Zero_Frequency,                          /* clock name for 55 hardware value */
-    Clock_Ip_Get_Zero_Frequency,                          /* clock name for 56 hardware value */
-    Clock_Ip_Get_Zero_Frequency,                          /* clock name for 57 hardware value */
-    Clock_Ip_Get_Zero_Frequency,                          /* clock name for 58 hardware value */
-    Clock_Ip_Get_Zero_Frequency,                          /* clock name for 59 hardware value */
-    Clock_Ip_Get_Zero_Frequency,                          /* clock name for 60 hardware value */
-    Clock_Ip_Get_Zero_Frequency,                          /* clock name for 61 hardware value */
-    Clock_Ip_Get_Zero_Frequency,                          /* clock name for 62 hardware value */
-    Clock_Ip_Get_Zero_Frequency,                          /* clock name for 63 hardware value */
-    },
-   /* CPE    */
-   {
-    Clock_Ip_Get_Zero_Frequency,                          /* clock name for 0  hardware value */
-    Clock_Ip_Get_Zero_Frequency,                          /* clock name for 1  hardware value */
-    Clock_Ip_Get_Zero_Frequency,                          /* clock name for 2  hardware value */
-    Clock_Ip_Get_Zero_Frequency,                          /* clock name for 3  hardware value */
-    Clock_Ip_Get_Zero_Frequency,                          /* clock name for 4  hardware value */
-    Clock_Ip_Get_Zero_Frequency,                          /* clock name for 5  hardware value */
-    Clock_Ip_Get_Zero_Frequency,                          /* clock name for 6  hardware value */
-    Clock_Ip_Get_Zero_Frequency,                          /* clock name for 7  hardware value */
-    Clock_Ip_Get_Zero_Frequency,                          /* clock name for 8  hardware value */
-    Clock_Ip_Get_Zero_Frequency,                          /* clock name for 9  hardware value */
-    Clock_Ip_Get_Zero_Frequency,                          /* clock name for 10 hardware value */
-    Clock_Ip_Get_Zero_Frequency,                          /* clock name for 11 hardware value */
-    Clock_Ip_Get_Zero_Frequency,                          /* clock name for 12 hardware value */
-    Clock_Ip_Get_Zero_Frequency,                          /* clock name for 13 hardware value */
-    Clock_Ip_Get_Zero_Frequency,                          /* clock name for 14 hardware value */
-    Clock_Ip_Get_Zero_Frequency,                          /* clock name for 15 hardware value */
-    Clock_Ip_Get_Zero_Frequency,                          /* clock name for 16 hardware value */
-    Clock_Ip_Get_Zero_Frequency,                          /* clock name for 17 hardware value */
-    Clock_Ip_Get_Zero_Frequency,                          /* clock name for 18 hardware value */
-    Clock_Ip_Get_Zero_Frequency,                          /* clock name for 19 hardware value */
-    Clock_Ip_Get_Zero_Frequency,                          /* clock name for 20 hardware value */
-    Clock_Ip_Get_Zero_Frequency,                          /* clock name for 21 hardware value */
-    Clock_Ip_Get_Zero_Frequency,                          /* clock name for 22 hardware value */
-    Clock_Ip_Get_Zero_Frequency,                          /* clock name for 23 hardware value */
-    Clock_Ip_Get_Zero_Frequency,                          /* clock name for 24 hardware value */
-    Clock_Ip_Get_Zero_Frequency,                          /* clock name for 25 hardware value */
-    Clock_Ip_Get_Zero_Frequency,                          /* clock name for 26 hardware value */
-    Clock_Ip_Get_Zero_Frequency,                          /* clock name for 27 hardware value */
-    Clock_Ip_Get_Zero_Frequency,                          /* clock name for 28 hardware value */
-    Clock_Ip_Get_Zero_Frequency,                          /* clock name for 29 hardware value */
-    Clock_Ip_Get_Zero_Frequency,                          /* clock name for 30 hardware value */
-    Clock_Ip_Get_Zero_Frequency,                          /* clock name for 31 hardware value */
-    Clock_Ip_Get_Zero_Frequency,                          /* clock name for 32 hardware value */
-    Clock_Ip_Get_Zero_Frequency,                          /* clock name for 33 hardware value */
-    Clock_Ip_Get_Zero_Frequency,                          /* clock name for 34 hardware value */
-    Clock_Ip_Get_Zero_Frequency,                          /* clock name for 35 hardware value */
-    Clock_Ip_Get_Zero_Frequency,                          /* clock name for 36 hardware value */
-    Clock_Ip_Get_Zero_Frequency,                          /* clock name for 37 hardware value */
-    Clock_Ip_Get_Zero_Frequency,                          /* clock name for 38 hardware value */
-    Clock_Ip_Get_Zero_Frequency,                          /* clock name for 39 hardware value */
-    Clock_Ip_Get_Zero_Frequency,                          /* clock name for 40 hardware value */
-    Clock_Ip_Get_Zero_Frequency,                          /* clock name for 41 hardware value */
-    Clock_Ip_Get_Zero_Frequency,                          /* clock name for 42 hardware value */
-    Clock_Ip_Get_Zero_Frequency,                          /* clock name for 43 hardware value */
-    Clock_Ip_Get_Zero_Frequency,                          /* clock name for 44 hardware value */
-    Clock_Ip_Get_Zero_Frequency,                          /* clock name for 45 hardware value */
-    Clock_Ip_Get_Zero_Frequency,                          /* clock name for 46 hardware value */
-    Clock_Ip_Get_Zero_Frequency,                          /* clock name for 47 hardware value */
-    Clock_Ip_Get_Zero_Frequency,                          /* clock name for 48 hardware value */
-    Clock_Ip_Get_Zero_Frequency,                          /* clock name for 49 hardware value */
-    Clock_Ip_Get_Zero_Frequency,                          /* clock name for 50 hardware value */
-    Clock_Ip_Get_Zero_Frequency,                          /* clock name for 51 hardware value */
-    Clock_Ip_Get_Zero_Frequency,                          /* clock name for 52 hardware value */
-    Clock_Ip_Get_Zero_Frequency,                          /* clock name for 53 hardware value */
-    Clock_Ip_Get_Zero_Frequency,                          /* clock name for 54 hardware value */
-    Clock_Ip_Get_Zero_Frequency,                          /* clock name for 55 hardware value */
-    Clock_Ip_Get_Zero_Frequency,                          /* clock name for 56 hardware value */
-    Clock_Ip_Get_Zero_Frequency,                          /* clock name for 57 hardware value */
-    Clock_Ip_Get_Zero_Frequency,                          /* clock name for 58 hardware value */
-    Clock_Ip_Get_Zero_Frequency,                          /* clock name for 59 hardware value */
-    Clock_Ip_Get_Zero_Frequency,                          /* clock name for 60 hardware value */
-    Clock_Ip_Get_Zero_Frequency,                          /* clock name for 61 hardware value */
-    Clock_Ip_Get_Zero_Frequency,                          /* clock name for 62 hardware value */
-    Clock_Ip_Get_Zero_Frequency,                          /* clock name for 63 hardware value */
-    },
+   get_FIRC_CLK_Frequency,                  /* clock name for 0  hardware value */
+   get_SIRC_CLK_Frequency,                  /* clock name for 1  hardware value */
+   get_FXOSC_CLK_Frequency,                 /* clock name for 2  hardware value */
+   get_Zero_Frequency,                      /* clock name for 3  hardware value */
+   get_COREPLL_PHI0_Frequency,              /* clock name for 4  hardware value */
+   get_COREPLL_PHI1_Frequency,              /* clock name for 5  hardware value */
+   get_Zero_Frequency,                      /* clock name for 6  hardware value */
+   get_Zero_Frequency,                      /* clock name for 7  hardware value */
+   get_Zero_Frequency,                      /* clock name for 8  hardware value */
+   get_Zero_Frequency,                      /* clock name for 9  hardware value */
+   get_Zero_Frequency,                      /* clock name for 10 hardware value */
+   get_Zero_Frequency,                      /* clock name for 11 hardware value */
+   get_COREPLL_DFS1_Frequency,              /* clock name for 12 hardware value */
+   get_COREPLL_DFS2_Frequency,              /* clock name for 13 hardware value */
+   get_COREPLL_DFS3_Frequency,              /* clock name for 14 hardware value */
+   get_COREPLL_DFS4_Frequency,              /* clock name for 15 hardware value */
+   get_COREPLL_DFS5_Frequency,              /* clock name for 16 hardware value */
+   get_COREPLL_DFS6_Frequency,              /* clock name for 17 hardware value */
+   get_PERIPHPLL_PHI0_Frequency,            /* clock name for 18 hardware value */
+   get_PERIPHPLL_PHI1_Frequency,            /* clock name for 19 hardware value */
+   get_PERIPHPLL_PHI2_Frequency,            /* clock name for 20 hardware value */
+   get_PERIPHPLL_PHI3_Frequency,            /* clock name for 21 hardware value */
+   get_PERIPHPLL_PHI4_Frequency,            /* clock name for 22 hardware value */
+   get_PERIPHPLL_PHI5_Frequency,            /* clock name for 23 hardware value */
+   get_PERIPHPLL_PHI6_Frequency,            /* clock name for 24 hardware value */
+   get_PERIPHPLL_PHI7_Frequency,            /* clock name for 25 hardware value */
+   get_PERIPHPLL_DFS1_Frequency,            /* clock name for 26 hardware value */
+   get_PERIPHPLL_DFS2_Frequency,            /* clock name for 27 hardware value */
+   get_PERIPHPLL_DFS3_Frequency,            /* clock name for 28 hardware value */
+   get_PERIPHPLL_DFS4_Frequency,            /* clock name for 29 hardware value */
+   get_PERIPHPLL_DFS5_Frequency,            /* clock name for 30 hardware value */
+   get_PERIPHPLL_DFS6_Frequency,            /* clock name for 31 hardware value */
+   get_ACCELPLL_PHI0_Frequency,             /* clock name for 32 hardware value */
+   get_ACCELPLL_PHI1_Frequency,             /* clock name for 33 hardware value */
+   get_ftm_0_ext_ref_Frequency,             /* clock name for 34 hardware value */
+   get_ftm_1_ext_ref_Frequency,             /* clock name for 35 hardware value */
+   get_DDRPLL_PHI0_Frequency,               /* clock name for 36 hardware value */
+   get_gmac_0_ext_tx_Frequency,             /* clock name for 37 hardware value */
+   get_gmac_0_ext_rx_Frequency,             /* clock name for 38 hardware value */
+   get_gmac_0_ext_ref_Frequency,            /* clock name for 39 hardware value */
+   get_SERDES_0_XPCS_0_TX_Frequency,        /* clock name for 40 hardware value */
+   get_SERDES_0_XPCS_0_CDR_Frequency,       /* clock name for 41 hardware value */
+   get_Zero_Frequency,                      /* clock name for 42 hardware value */
+   get_Zero_Frequency,                      /* clock name for 43 hardware value */
+   get_gmac_ext_ts_Frequency,               /* clock name for 44 hardware value */
+   get_GMAC0_REF_DIV_CLK_Frequency,         /* clock name for 45 hardware value */
+   get_SERDES_0_XPCS_1_TX_Frequency,        /* clock name for 46 hardware value */
+   get_SERDES_0_XPCS_1_CDR_Frequency,       /* clock name for 47 hardware value */
+   get_pfe_mac_0_ext_tx_Frequency,          /* clock name for 48 hardware value */
+   get_pfe_mac_0_ext_rx_Frequency,          /* clock name for 49 hardware value */
+   get_pfe_mac_0_ext_ref_Frequency,         /* clock name for 50 hardware value */
+   get_pfe_mac_1_ext_tx_Frequency,          /* clock name for 51 hardware value */
+   get_pfe_mac_1_ext_rx_Frequency,          /* clock name for 52 hardware value */
+   get_pfe_mac_1_ext_ref_Frequency,         /* clock name for 53 hardware value */
+   get_pfe_mac_2_ext_tx_Frequency,          /* clock name for 54 hardware value */
+   get_pfe_mac_2_ext_rx_Frequency,          /* clock name for 55 hardware value */
+   get_pfe_mac_2_ext_ref_Frequency,         /* clock name for 56 hardware value */
+   get_SERDES_1_XPCS_0_TX_Frequency,        /* clock name for 57 hardware value */
+   get_SERDES_1_XPCS_0_CDR_Frequency,       /* clock name for 58 hardware value */
+   get_PFEMAC0_REF_DIV_CLK_Frequency,       /* clock name for 59 hardware value */
+   get_PFEMAC1_REF_DIV_CLK_Frequency,       /* clock name for 60 hardware value */
+   get_PFEMAC2_REF_DIV_CLK_Frequency,       /* clock name for 61 hardware value */
+   get_SERDES_1_XPCS_1_TX_Frequency,        /* clock name for 62 hardware value */
+   get_SERDES_1_XPCS_1_CDR_Frequency,       /* clock name for 63 hardware value */
 };
 
-static const getFreqType Clock_Ip_apfFreqSrcRtcTable[4U] =
+static const getFreqType Clock_Ip_apfFreqTableClkSrc_1[CLOCK_IP_SELECTOR_SOURCE_NO] =
 {
-    Clock_Ip_Get_SXOSC_CLK_Frequency,                     /* clock name for 0  hardware value */
-    Clock_Ip_Get_SIRC_CLK_Frequency,                      /* clock name for 1  hardware value */
-    Clock_Ip_Get_SAFE_CLK_Frequency,                      /* clock name for 2  hardware value */
-    Clock_Ip_Get_FXOSC_CLK_Frequency,                     /* clock name for 3  hardware value */
+   get_FIRC_CLK_Frequency,              /* clock name for 0  hardware value */
+   get_Zero_Frequency,                  /* clock name for 1  hardware value */
+   get_Zero_Frequency,                  /* clock name for 2  hardware value */
+   get_Zero_Frequency,                  /* clock name for 3  hardware value */
+   get_Zero_Frequency,                  /* clock name for 4  hardware value */
+   get_Zero_Frequency,                  /* clock name for 5  hardware value */
+   get_Zero_Frequency,                  /* clock name for 6  hardware value */
+   get_Zero_Frequency,                  /* clock name for 7  hardware value */
+   get_Zero_Frequency,                  /* clock name for 8  hardware value */
+   get_Zero_Frequency,                  /* clock name for 9  hardware value */
+   get_Zero_Frequency,                  /* clock name for 10 hardware value */
+   get_Zero_Frequency,                  /* clock name for 11 hardware value */
+   get_Zero_Frequency,                  /* clock name for 12 hardware value */
+   get_Zero_Frequency,                  /* clock name for 13 hardware value */
+   get_Zero_Frequency,                  /* clock name for 14 hardware value */
+   get_Zero_Frequency,                  /* clock name for 15 hardware value */
+   get_Zero_Frequency,                  /* clock name for 16 hardware value */
+   get_Zero_Frequency,                  /* clock name for 17 hardware value */
+   get_Zero_Frequency,                  /* clock name for 18 hardware value */
+   get_Zero_Frequency,                  /* clock name for 19 hardware value */
+   get_Zero_Frequency,                  /* clock name for 20 hardware value */
+   get_Zero_Frequency,                  /* clock name for 21 hardware value */
+   get_Zero_Frequency,                  /* clock name for 22 hardware value */
+   get_PERIPHPLL_PHI5_Frequency,        /* clock name for 23 hardware value */
+   get_Zero_Frequency,                  /* clock name for 24 hardware value */
+   get_Zero_Frequency,                  /* clock name for 25 hardware value */
+   get_Zero_Frequency,                  /* clock name for 26 hardware value */
+   get_Zero_Frequency,                  /* clock name for 27 hardware value */
+   get_Zero_Frequency,                  /* clock name for 28 hardware value */
+   get_Zero_Frequency,                  /* clock name for 29 hardware value */
+   get_Zero_Frequency,                  /* clock name for 30 hardware value */
+   get_Zero_Frequency,                  /* clock name for 31 hardware value */
+   get_Zero_Frequency,                  /* clock name for 32 hardware value */
+   get_Zero_Frequency,                  /* clock name for 33 hardware value */
+   get_Zero_Frequency,                  /* clock name for 34 hardware value */
+   get_Zero_Frequency,                  /* clock name for 35 hardware value */
+   get_Zero_Frequency,                  /* clock name for 36 hardware value */
+   get_Zero_Frequency,                  /* clock name for 37 hardware value */
+   get_Zero_Frequency,                  /* clock name for 38 hardware value */
+   get_gmac_0_ext_ref_Frequency,        /* clock name for 39 hardware value */
+   get_Zero_Frequency,                  /* clock name for 40 hardware value */
+   get_Zero_Frequency,                  /* clock name for 41 hardware value */
+   get_Zero_Frequency,                  /* clock name for 42 hardware value */
+   get_Zero_Frequency,                  /* clock name for 43 hardware value */
+   get_Zero_Frequency,                  /* clock name for 44 hardware value */
+   get_Zero_Frequency,                  /* clock name for 45 hardware value */
+   get_Zero_Frequency,                  /* clock name for 46 hardware value */
+   get_Zero_Frequency,                  /* clock name for 47 hardware value */
+   get_Zero_Frequency,                  /* clock name for 48 hardware value */
+   get_Zero_Frequency,                  /* clock name for 49 hardware value */
+   get_pfe_mac_0_ext_ref_Frequency,     /* clock name for 50 hardware value */
+   get_pfe_mac_1_ext_tx_Frequency,      /* clock name for 51 hardware value */
+   get_Zero_Frequency,                  /* clock name for 52 hardware value */
+   get_pfe_mac_1_ext_ref_Frequency,     /* clock name for 53 hardware value */
+   get_Zero_Frequency,                  /* clock name for 54 hardware value */
+   get_Zero_Frequency,                  /* clock name for 55 hardware value */
+   get_pfe_mac_2_ext_ref_Frequency,     /* clock name for 56 hardware value */
+   get_Zero_Frequency,                  /* clock name for 57 hardware value */
+   get_Zero_Frequency,                  /* clock name for 58 hardware value */
+   get_Zero_Frequency,                  /* clock name for 59 hardware value */
+   get_Zero_Frequency,                  /* clock name for 60 hardware value */
+   get_Zero_Frequency,                  /* clock name for 61 hardware value */
+   get_SERDES_1_XPCS_1_TX_Frequency,    /* clock name for 62 hardware value */
+   get_Zero_Frequency,                  /* clock name for 63 hardware value */
 };
 
 static const getFreqType Clock_Ip_apfFreqTable[CLOCK_IP_NAMES_NO] =
+
 {
-    &Clock_Ip_Get_FIRC_CLK_Frequency,                                                    /* FIRC_CLK                                         */
-    &Clock_Ip_Get_FIRCDIV2_CLK_Frequency,                                                /* FIRCDIV2_CLK                                     */
-    &Clock_Ip_Get_SAFE_CLK_Frequency,                                                    /* SAFE_CLK                                         */
-    &Clock_Ip_Get_SIRC_CLK_Frequency,                                                    /* SIRC_CLK                                         */
-    &Clock_Ip_Get_FXOSC_CLK_Frequency,                                                   /* FXOSC_CLK                                        */
-    &Clock_Ip_Get_SXOSC_CLK_Frequency,                                                   /* SXOSC_CLK                                        */
-    &Clock_Ip_Get_gated_clk_Frequency,                                                   /* gated_clk                                        */
-    &Clock_Ip_Get_fast_crystal_oscillator_Frequency,                                     /* fast_crystal_oscillator                          */
-    &Clock_Ip_Get_slow_crystal_oscillator_Frequency,                                     /* slow_crystal_oscillator                          */
-    &Clock_Ip_Get_eth0_mii_rx_ext_clk_Frequency,                                         /* eth0_mii_rx_ext_clk                              */
-    &Clock_Ip_Get_eth0_mii_tx_ext_clk_Frequency,                                         /* eth0_mii_tx_ext_clk                              */
-    &Clock_Ip_Get_eth0_rgmii_rx_ext_clk_Frequency,                                       /* eth0_rgmii_rx_ext_clk                            */
-    &Clock_Ip_Get_eth0_rgmii_tx_ext_clk_Frequency,                                       /* eth0_rgmii_tx_ext_clk                            */
-    &Clock_Ip_Get_eth0_rmii_ref_ext_clk_Frequency,                                       /* eth0_rmii_ref_ext_clk                            */
-    &Clock_Ip_Get_eth1_mii_rx_ext_clk_Frequency,                                         /* eth1_mii_rx_ext_clk                              */
-    &Clock_Ip_Get_eth1_mii_tx_ext_clk_Frequency,                                         /* eth1_mii_tx_ext_clk                              */
-    &Clock_Ip_Get_eth1_rgmii_rx_ext_clk_Frequency,                                       /* eth1_rgmii_rx_ext_clk                            */
-    &Clock_Ip_Get_eth1_rgmii_tx_ext_clk_Frequency,                                       /* eth1_rgmii_tx_ext_clk                            */
-    &Clock_Ip_Get_eth1_rmii_ref_ext_clk_Frequency,                                       /* eth1_rmii_ref_ext_clk                            */
-    &Clock_Ip_Get_eth2_mii_rx_ext_clk_Frequency,                                         /* eth2_mii_rx_ext_clk                              */
-    &Clock_Ip_Get_eth2_mii_tx_ext_clk_Frequency,                                         /* eth2_mii_tx_ext_clk                              */
-    &Clock_Ip_Get_eth2_rgmii_rx_ext_clk_Frequency,                                       /* eth2_rgmii_rx_ext_clk                            */
-    &Clock_Ip_Get_eth2_rgmii_tx_ext_clk_Frequency,                                       /* eth2_rgmii_tx_ext_clk                            */
-    &Clock_Ip_Get_eth2_rmii_ref_ext_clk_Frequency,                                       /* eth2_rmii_ref_ext_clk                            */
-    &Clock_Ip_Get_ts_1588_clk_Frequency,                                                 /* ts_1588_clk                                      */
-    &Clock_Ip_Get_PLL0_CLK_Frequency,                                                    /* PLL0_CLK                                         */
-    &Clock_Ip_Get_PLL0_DIV_CLK_Frequency,                                                /* PLL0_DIV_CLK                                     */
-    &Clock_Ip_Get_PLL0_DIV0_CLK_Frequency,                                               /* PLL0_DIV0_CLK                                    */
-    &Clock_Ip_Get_PLL0_DIV4_CLK_Frequency,                                               /* PLL0_DIV4_CLK                                    */
-    &Clock_Ip_Get_PLL0_DFS0_CLK_Frequency,                                               /* PLL0_DFS0_CLK                                    */
-#if defined(CLOCK_IP_HAS_PLL0_DFS1_CLK)
-    &Clock_Ip_Get_PLL0_DFS1_CLK_Frequency,                                               /* PLL0_DFS1_CLK                                    */
-#else
-    Clock_Ip_Get_Zero_Frequency,
-#endif
-#if defined(CLOCK_IP_HAS_PLL0_DFS2_CLK)
-    &Clock_Ip_Get_PLL0_DFS2_CLK_Frequency,                                               /* PLL0_DFS2_CLK                                    */
-#else
-    Clock_Ip_Get_Zero_Frequency,
-#endif
-#if defined(CLOCK_IP_HAS_PLL0_DFS3_CLK)
-    &Clock_Ip_Get_PLL0_DFS3_CLK_Frequency,                                               /* PLL0_DFS3_CLK                                    */
-#else
-    Clock_Ip_Get_Zero_Frequency,
-#endif
-    &Clock_Ip_Get_PLL1_CLK_Frequency,                                                    /* PLL1_CLK                                         */
-    &Clock_Ip_Get_PLL1_DIV_CLK_Frequency,                                                /* PLL1_DIV_CLK                                     */
-    &Clock_Ip_Get_PLL1_DIV0_CLK_Frequency,                                               /* PLL1_DIV0_CLK                                    */
-    &Clock_Ip_Get_CPE_PLL_CLK_Frequency,                                                 /* CPE_PLL_CLK                                      */
-    &Clock_Ip_Get_CPE_DIV_CLK_Frequency,                                                 /* CPE_DIV_CLK                                      */
-    &Clock_Ip_Get_CPE_DIV0_CLK_Frequency,                                                /* CPE_DIV0_CLK                                     */
-    &Clock_Ip_Get_LPE_CLK_Frequency,                                                     /* LPE_CLK                                          */
-#if defined(CLOCK_IP_HAS_LPE_DIV1_CLK)
-    &Clock_Ip_Get_LPE_DIV1_CLK_Frequency,                                                /* LPE_DIV1_CLK                                     */
-#else
-    Clock_Ip_Get_Zero_Frequency,
-#endif
-#if defined(CLOCK_IP_HAS_LPE_DIV2_CLK)
-    &Clock_Ip_Get_LPE_DIV2_CLK_Frequency,                                                /* LPE_DIV2_CLK                                     */
-#else
-    Clock_Ip_Get_Zero_Frequency,
-#endif
-#if defined(CLOCK_IP_HAS_LPE_DIV4_CLK)
-    &Clock_Ip_Get_LPE_DIV4_CLK_Frequency,                                                /* LPE_DIV4_CLK                                     */
-#else
-    Clock_Ip_Get_Zero_Frequency,
-#endif
-#if defined(CLOCK_IP_HAS_LPE_DIV8_CLK)
-    &Clock_Ip_Get_LPE_DIV8_CLK_Frequency,                                                /* LPE_DIV8_CLK                                     */
-#else
-    Clock_Ip_Get_Zero_Frequency,
-#endif
-    &Clock_Ip_Get_PLT_CLK_Frequency,                                                     /* PLT_CLK                                          */
-#if defined(CLOCK_IP_HAS_PLTCORE_CLK)
-    &Clock_Ip_Get_PLTCORE_CLK_Frequency,                                                 /* PLTCORE_CLK                                      */
-#else
-    Clock_Ip_Get_Zero_Frequency,
-#endif
-#if defined(CLOCK_IP_HAS_PLTDIV1_CLK)
-    &Clock_Ip_Get_PLTDIV1_CLK_Frequency,                                                 /* PLTDIV1_CLK                                      */
-#else
-    Clock_Ip_Get_Zero_Frequency,
-#endif
-#if defined(CLOCK_IP_HAS_PLTDIV2_CLK)
-    &Clock_Ip_Get_PLTDIV2_CLK_Frequency,                                                 /* PLTDIV2_CLK                                      */
-#else
-    Clock_Ip_Get_Zero_Frequency,
-#endif
-#if defined(CLOCK_IP_HAS_PLTDIV4_CLK)
-    &Clock_Ip_Get_PLTDIV4_CLK_Frequency,                                                 /* PLTDIV4_CLK                                      */
-#else
-    Clock_Ip_Get_Zero_Frequency,
-#endif
-                       &Clock_Ip_Get_Zero_Frequency,                                     /* THE_LAST_PRODUCER_CLK                            */
-    &Clock_Ip_Get_LPE_DIV1_CLK_Frequency,                                                /* ACP_DMA3_H_CLK                                   */
-    &Clock_Ip_Get_LPE_DIV2_CLK_Frequency,                                                /* ACP_DMA3_IPG_CLK                                 */
-    &Clock_Ip_Get_PLTDIV2_CLK_Frequency,                                                 /* ADC0_IPG_CLK                                     */
-    &Clock_Ip_Get_PLTDIV2_CLK_Frequency,                                                 /* ADC1_IPG_CLK                                     */
-    &Clock_Ip_Get_PLTDIV2_CLK_Frequency,                                                 /* BCTU_IPG_CLK                                     */
-    &Clock_Ip_Get_PLTDIV2_CLK_Frequency,                                                 /* BCTU_IPS_CLK                                     */
-    &Clock_Ip_Get_PLTDIV4_CLK_Frequency,                                                 /* CAN_HUB_IPG_CLK                                  */
-    &Clock_Ip_Get_CAN_PE_CLK_Frequency,                                                  /* CAN_PE_CLK                                       */
-    &Clock_Ip_Get_PLTDIV4_CLK_Frequency,                                                 /* CLKBIST_IPG_CLK                                  */
-    &Clock_Ip_Get_PLTDIV1_CLK_Frequency,                                                 /* CRC0_IPG_CLK                                     */
-    &Clock_Ip_Get_PLTDIV1_CLK_Frequency,                                                 /* CRC1_IPG_CLK                                     */
-    &Clock_Ip_Get_PLTDIV4_CLK_Frequency,                                                 /* CSTCU_IPG_CLK                                    */
-    &Clock_Ip_Get_PHY_ETH_CLK_Frequency,                                                 /* DIG_PHY0_CLK                                     */
-    &Clock_Ip_Get_PHY_ETH_CLK_Frequency,                                                 /* DIG_PHY1_CLK                                     */
-    &Clock_Ip_Get_PHY_ETH_CLK_Frequency,                                                 /* DIG_PHY2_CLK                                     */
-    &Clock_Ip_Get_PHY_ETH_CLK_Frequency,                                                 /* DIG_PHY3_CLK                                     */
-    &Clock_Ip_Get_PLTDIV1_CLK_Frequency,                                                 /* DMA_CH_MUX0_IPG_CLK                              */
-    &Clock_Ip_Get_PLTDIV1_CLK_Frequency,                                                 /* DMA_CH_MUX1_IPG_CLK                              */
-    &Clock_Ip_Get_PLTDIV1_CLK_Frequency,                                                 /* DMA4_AXI_CLK                                     */
-    &Clock_Ip_Get_PLTDIV2_CLK_Frequency,                                                 /* DMA4_IPG_S_CLK                                   */
-    &Clock_Ip_Get_DFT_CLK_Frequency,                                                     /* DFT_CLK                                          */
-    &Clock_Ip_Get_DSPI_CLK_Frequency,                                                    /* DSPI_CLK                                         */
-    &Clock_Ip_Get_DSPI_CLK_Frequency,                                                    /* DSPI0_IPG_CLK                                    */
-    &Clock_Ip_Get_DSPI_CLK_Frequency,                                                    /* DSPI1_IPG_CLK                                    */
-    &Clock_Ip_Get_PLTDIV1_CLK_Frequency,                                                 /* EDMA_TCD_CLK                                     */
-    &Clock_Ip_Get_PLTDIV4_CLK_Frequency,                                                 /* EIM0_IPG_CLK                                     */
-    &Clock_Ip_Get_PLTDIV4_CLK_Frequency,                                                 /* EIM1_IPG_CLK                                     */
-    &Clock_Ip_Get_PLTDIV4_CLK_Frequency,                                                 /* EIM2_IPG_CLK                                     */
-    &Clock_Ip_Get_PLTDIV4_CLK_Frequency,                                                 /* EIM3_IPG_CLK                                     */
-    &Clock_Ip_Get_PLTDIV2_CLK_Frequency,                                                 /* EMIOS0_IPG_CLK                                   */
-    &Clock_Ip_Get_PLTDIV2_CLK_Frequency,                                                 /* EMIOS1_IPG_CLK                                   */
-    &Clock_Ip_Get_PLTDIV2_CLK_Frequency,                                                 /* EMIOS2_IPG_CLK                                   */
-    &Clock_Ip_Get_PLTDIV4_CLK_Frequency,                                                 /* ERM0_IPG_CLK                                     */
-    &Clock_Ip_Get_PLTDIV4_CLK_Frequency,                                                 /* ERM1_IPG_CLK                                     */
-    &Clock_Ip_Get_PLTDIV4_CLK_Frequency,                                                 /* ERM2_IPG_CLK                                     */
-    &Clock_Ip_Get_PLTDIV4_CLK_Frequency,                                                 /* ERM3_IPG_CLK                                     */
-    &Clock_Ip_Get_ETH_TS_CLK_Frequency,                                                  /* ETH_TS_CLK                                       */
-    &Clock_Ip_Get_ETH0_RX_CLK_Frequency,                                                 /* ETH0_RX_CLK                                      */
-    &Clock_Ip_Get_ETH0_TX_CLK_Frequency,                                                 /* ETH0_TX_CLK                                      */
-    &Clock_Ip_Get_ETH1_RX_CLK_Frequency,                                                 /* ETH1_RX_CLK                                      */
-    &Clock_Ip_Get_ETH1_TX_CLK_Frequency,                                                 /* ETH1_TX_CLK                                      */
-    &Clock_Ip_Get_ETH2_RX_CLK_Frequency,                                                 /* ETH2_RX_CLK                                      */
-    &Clock_Ip_Get_ETH2_TX_CLK_Frequency,                                                 /* ETH2_TX_CLK                                      */
-    &Clock_Ip_Get_ETH3_RX_CLK_Frequency,                                                 /* ETH3_RX_CLK                                      */
-    &Clock_Ip_Get_ETH3_TX_CLK_Frequency,                                                 /* ETH3_TX_CLK                                      */
-    &Clock_Ip_Get_ETH4_RX_CLK_Frequency,                                                 /* ETH4_RX_CLK                                      */
-    &Clock_Ip_Get_ETH4_TX_CLK_Frequency,                                                 /* ETH4_TX_CLK                                      */
-    &Clock_Ip_Get_FLEXCAN_0to7_PE_CLK_Frequency,                                         /* FLEXCAN_0to7_PE_CLK                              */
-    &Clock_Ip_Get_FLEXCAN_8to10_PE_CLK_Frequency,                                        /* FLEXCAN_8to10_PE_CLK                             */
-    &Clock_Ip_Get_FLEXCAN_11to16_PE_CLK_Frequency,                                       /* FLEXCAN_11to16_PE_CLK                            */
-    &Clock_Ip_Get_PLTDIV2_CLK_Frequency,                                                 /* FLEXCAN0_IPG_CLK                                 */
-    &Clock_Ip_Get_FLEXCAN_0to7_PE_CLK_Frequency,                                         /* FLEXCAN0_PE_NOGATE_CLK                           */
-    &Clock_Ip_Get_ETH_TS_CLK_Frequency,                                                  /* FLEXCAN0_TS_CLK                                  */
-    &Clock_Ip_Get_PLTDIV2_CLK_Frequency,                                                 /* FLEXCAN1_IPG_CLK                                 */
-    &Clock_Ip_Get_FLEXCAN_0to7_PE_CLK_Frequency,                                         /* FLEXCAN1_PE_NOGATE_CLK                           */
-    &Clock_Ip_Get_ETH_TS_CLK_Frequency,                                                  /* FLEXCAN1_TS_CLK                                  */
-    &Clock_Ip_Get_PLTDIV2_CLK_Frequency,                                                 /* FLEXCAN2_IPG_CLK                                 */
-    &Clock_Ip_Get_FLEXCAN_0to7_PE_CLK_Frequency,                                         /* FLEXCAN2_PE_NOGATE_CLK                           */
-    &Clock_Ip_Get_ETH_TS_CLK_Frequency,                                                  /* FLEXCAN2_TS_CLK                                  */
-    &Clock_Ip_Get_PLTDIV2_CLK_Frequency,                                                 /* FLEXCAN3_IPG_CLK                                 */
-    &Clock_Ip_Get_FLEXCAN_0to7_PE_CLK_Frequency,                                         /* FLEXCAN3_PE_NOGATE_CLK                           */
-    &Clock_Ip_Get_ETH_TS_CLK_Frequency,                                                  /* FLEXCAN3_TS_CLK                                  */
-    &Clock_Ip_Get_PLTDIV2_CLK_Frequency,                                                 /* FLEXCAN4_IPG_CLK                                 */
-    &Clock_Ip_Get_FLEXCAN_0to7_PE_CLK_Frequency,                                         /* FLEXCAN4_PE_NOGATE_CLK                           */
-    &Clock_Ip_Get_ETH_TS_CLK_Frequency,                                                  /* FLEXCAN4_TS_CLK                                  */
-    &Clock_Ip_Get_PLTDIV2_CLK_Frequency,                                                 /* FLEXCAN5_IPG_CLK                                 */
-    &Clock_Ip_Get_FLEXCAN_0to7_PE_CLK_Frequency,                                         /* FLEXCAN5_PE_NOGATE_CLK                           */
-    &Clock_Ip_Get_ETH_TS_CLK_Frequency,                                                  /* FLEXCAN5_TS_CLK                                  */
-    &Clock_Ip_Get_PLTDIV2_CLK_Frequency,                                                 /* FLEXCAN6_IPG_CLK                                 */
-    &Clock_Ip_Get_FLEXCAN_0to7_PE_CLK_Frequency,                                         /* FLEXCAN6_PE_NOGATE_CLK                           */
-    &Clock_Ip_Get_ETH_TS_CLK_Frequency,                                                  /* FLEXCAN6_TS_CLK                                  */
-    &Clock_Ip_Get_PLTDIV2_CLK_Frequency,                                                 /* FLEXCAN7_IPG_CLK                                 */
-    &Clock_Ip_Get_FLEXCAN_0to7_PE_CLK_Frequency,                                         /* FLEXCAN7_PE_NOGATE_CLK                           */
-    &Clock_Ip_Get_ETH_TS_CLK_Frequency,                                                  /* FLEXCAN7_TS_CLK                                  */
-    &Clock_Ip_Get_PLTDIV2_CLK_Frequency,                                                 /* FLEXCAN8_IPG_CLK                                 */
-    &Clock_Ip_Get_FLEXCAN_8to10_PE_CLK_Frequency,                                        /* FLEXCAN8_PE_NOGATE_CLK                           */
-    &Clock_Ip_Get_ETH_TS_CLK_Frequency,                                                  /* FLEXCAN8_TS_CLK                                  */
-    &Clock_Ip_Get_PLTDIV2_CLK_Frequency,                                                 /* FLEXCAN9_IPG_CLK                                 */
-    &Clock_Ip_Get_FLEXCAN_8to10_PE_CLK_Frequency,                                        /* FLEXCAN9_PE_NOGATE_CLK                           */
-    &Clock_Ip_Get_ETH_TS_CLK_Frequency,                                                  /* FLEXCAN9_TS_CLK                                  */
-    &Clock_Ip_Get_PLTDIV2_CLK_Frequency,                                                 /* FLEXCAN10_IPG_CLK                                */
-    &Clock_Ip_Get_FLEXCAN_8to10_PE_CLK_Frequency,                                        /* FLEXCAN10_PE_NOGATE_CLK                          */
-    &Clock_Ip_Get_ETH_TS_CLK_Frequency,                                                  /* FLEXCAN10_TS_CLK                                 */
-    &Clock_Ip_Get_PLTDIV2_CLK_Frequency,                                                 /* FLEXCAN11_IPG_CLK                                */
-    &Clock_Ip_Get_FLEXCAN_11to16_PE_CLK_Frequency,                                       /* FLEXCAN11_PE_NOGATE_CLK                          */
-    &Clock_Ip_Get_ETH_TS_CLK_Frequency,                                                  /* FLEXCAN11_TS_CLK                                 */
-    &Clock_Ip_Get_PLTDIV2_CLK_Frequency,                                                 /* FLEXCAN12_IPG_CLK                                */
-    &Clock_Ip_Get_FLEXCAN_11to16_PE_CLK_Frequency,                                       /* FLEXCAN12_PE_NOGATE_CLK                          */
-    &Clock_Ip_Get_ETH_TS_CLK_Frequency,                                                  /* FLEXCAN12_TS_CLK                                 */
-    &Clock_Ip_Get_PLTDIV2_CLK_Frequency,                                                 /* FLEXCAN13_IPG_CLK                                */
-    &Clock_Ip_Get_FLEXCAN_11to16_PE_CLK_Frequency,                                       /* FLEXCAN13_PE_NOGATE_CLK                          */
-    &Clock_Ip_Get_ETH_TS_CLK_Frequency,                                                  /* FLEXCAN13_TS_CLK                                 */
-    &Clock_Ip_Get_PLTDIV2_CLK_Frequency,                                                 /* FLEXCAN14_IPG_CLK                                */
-    &Clock_Ip_Get_FLEXCAN_11to16_PE_CLK_Frequency,                                       /* FLEXCAN14_PE_NOGATE_CLK                          */
-    &Clock_Ip_Get_ETH_TS_CLK_Frequency,                                                  /* FLEXCAN14_TS_CLK                                 */
-    &Clock_Ip_Get_PLTDIV2_CLK_Frequency,                                                 /* FLEXCAN15_IPG_CLK                                */
-    &Clock_Ip_Get_FLEXCAN_11to16_PE_CLK_Frequency,                                       /* FLEXCAN15_PE_NOGATE_CLK                          */
-    &Clock_Ip_Get_ETH_TS_CLK_Frequency,                                                  /* FLEXCAN15_TS_CLK                                 */
-    &Clock_Ip_Get_PLTDIV2_CLK_Frequency,                                                 /* FLEXCAN16_IPG_CLK                                */
-    &Clock_Ip_Get_FLEXCAN_11to16_PE_CLK_Frequency,                                       /* FLEXCAN16_PE_NOGATE_CLK                          */
-    &Clock_Ip_Get_ETH_TS_CLK_Frequency,                                                  /* FLEXCAN16_TS_CLK                                 */
-    &Clock_Ip_Get_FLEXIO_CLK_Frequency,                                                  /* FLEXIO_CLK                                       */
-    &Clock_Ip_Get_PLTDIV2_CLK_Frequency,                                                 /* FLEXIO0_IPG_CLK                                  */
-    &Clock_Ip_Get_FLEXIO_CLK_Frequency,                                                  /* FLEXIO0_PE_CLK                                   */
-    &Clock_Ip_Get_PLTDIV2_CLK_Frequency,                                                 /* FLEXIO1_IPG_CLK                                  */
-    &Clock_Ip_Get_FLEXIO_CLK_Frequency,                                                  /* FLEXIO1_PE_CLK                                   */
-    &Clock_Ip_Get_PLTDIV4_CLK_Frequency,                                                 /* GPR0_IPG_CLK                                     */
-    &Clock_Ip_Get_PLTDIV4_CLK_Frequency,                                                 /* GPR1_IPG_CLK                                     */
-    &Clock_Ip_Get_PLTDIV4_CLK_Frequency,                                                 /* INTM_IPG_CLK                                     */
-    &Clock_Ip_Get_PLTDIV4_CLK_Frequency,                                                 /* IPSYNC_CSSI_MC_CGM_MASTER_CLK                    */
-    &Clock_Ip_Get_FIRC_CLK_Frequency,                                                    /* IPSYNC_CSSI_MC_CGM_SLAVE_CLK                     */
-    &Clock_Ip_Get_PLTDIV4_CLK_Frequency,                                                 /* IPSYNC_CVFCCU_MASTER_CLK                         */
-    &Clock_Ip_Get_FIRC_CLK_Frequency,                                                    /* IPSYNC_CVFCCU_SLAVE_CLK                          */
-    &Clock_Ip_Get_PLTDIV2_CLK_Frequency,                                                 /* IPSYNC_DSPI_IPI_0_MASTER_CLK                     */
-    &Clock_Ip_Get_PLTDIV2_CLK_Frequency,                                                 /* IPSYNC_DSPI_IPI_1_MASTER_CLK                     */
-    &Clock_Ip_Get_LPE_DIV2_CLK_Frequency,                                                /* IPSYNC_LPE_D_IP_FLEXCAN3_SYN_MASTER_CLK          */
-    &Clock_Ip_Get_LPE_FLEXCAN_PE_CLK_Frequency,                                          /* IPSYNC_LPE_D_IP_FLEXCAN3_SYN_SLAVE_CLK           */
-    &Clock_Ip_Get_LPE_DIV4_CLK_Frequency,                                                /* IPSYNC_LPE_D_IP_LOGIC_UNIT_SYN_MASTER_CLK         */
-    &Clock_Ip_Get_FIRC_CLK_Frequency,                                                    /* IPSYNC_LPE_D_IP_LOGIC_UNIT_SYN_SLAVE_CLK         */
-    &Clock_Ip_Get_LPE_DIV2_CLK_Frequency,                                                /* IPSYNC_LPE_DA_IP_TEMPSENSE_C16FFC_MASTER_CLK         */
-    &Clock_Ip_Get_FIRCDIV2_CLK_Frequency,                                                /* IPSYNC_LPE_DA_IP_TEMPSENSE_C16FFC_SLAVE_CLK         */
-    &Clock_Ip_Get_LPE_DIV4_CLK_Frequency,                                                /* IPSYNC_LPE_LVFCCU_MASTER_CLK                     */
-    &Clock_Ip_Get_FIRC_CLK_Frequency,                                                    /* IPSYNC_LPE_LVFCCU_SLAVE_CLK                      */
-    &Clock_Ip_Get_LPE_DIV4_CLK_Frequency,                                                /* IPSYNC_LPE_MC_CGM_MASTER_CLK                     */
-    &Clock_Ip_Get_FIRC_CLK_Frequency,                                                    /* IPSYNC_LPE_MC_CGM_SLAVE_CLK                      */
-    &Clock_Ip_Get_LPE_DIV4_CLK_Frequency,                                                /* IPSYNC_LPE_MC_RGM_MASTER_CLK                     */
-    &Clock_Ip_Get_FIRC_CLK_Frequency,                                                    /* IPSYNC_LPE_MC_RGM_SLAVE_CLK                      */
-    &Clock_Ip_Get_LPE_DIV2_CLK_Frequency,                                                /* IPSYNC_LPE_STM_MASTER_CLK                        */
-    &Clock_Ip_Get_LPE_STM_CLK_Frequency,                                                 /* IPSYNC_LPE_STM_SLAVE_CLK                         */
-    &Clock_Ip_Get_PLTDIV4_CLK_Frequency,                                                 /* IPSYNC_LVFCCU0_MASTER_CLK                        */
-    &Clock_Ip_Get_FIRC_CLK_Frequency,                                                    /* IPSYNC_LVFCCU0_SLAVE_CLK                         */
-    &Clock_Ip_Get_PLTDIV4_CLK_Frequency,                                                 /* IPSYNC_LVFCCU1_MASTER_CLK                        */
-    &Clock_Ip_Get_FIRC_CLK_Frequency,                                                    /* IPSYNC_LVFCCU1_SLAVE_CLK                         */
-    &Clock_Ip_Get_PLTDIV4_CLK_Frequency,                                                 /* IPSYNC_LVFCCU2_MASTER_CLK                        */
-    &Clock_Ip_Get_FIRC_CLK_Frequency,                                                    /* IPSYNC_LVFCCU2_SLAVE_CLK                         */
-    &Clock_Ip_Get_PLTDIV4_CLK_Frequency,                                                 /* IPSYNC_MC_CGM_MASTER_CLK                         */
-    &Clock_Ip_Get_FIRC_CLK_Frequency,                                                    /* IPSYNC_MC_CGM_SLAVE_CLK                          */
-    &Clock_Ip_Get_PLTDIV4_CLK_Frequency,                                                 /* IPSYNC_NETC_MC_CGM_MASTER_CLK                    */
-    &Clock_Ip_Get_FIRC_CLK_Frequency,                                                    /* IPSYNC_NETC_MC_CGM_SLAVE_CLK                     */
-    &Clock_Ip_Get_PLTDIV4_CLK_Frequency,                                                 /* IPSYNC_PERI_MC_CGM_MASTER_CLK                    */
-    &Clock_Ip_Get_FIRC_CLK_Frequency,                                                    /* IPSYNC_PERI_MC_CGM_SLAVE_CLK                     */
-    &Clock_Ip_Get_PLTDIV4_CLK_Frequency,                                                 /* IPSYNC_SAI0_MC_CGM_MASTER_CLK                    */
-    &Clock_Ip_Get_FIRC_CLK_Frequency,                                                    /* IPSYNC_SAI0_MC_CGM_SLAVE_CLK                     */
-    &Clock_Ip_Get_PLTDIV4_CLK_Frequency,                                                 /* IPSYNC_SAI1_MC_CGM_MASTER_CLK                    */
-    &Clock_Ip_Get_FIRC_CLK_Frequency,                                                    /* IPSYNC_SAI1_MC_CGM_SLAVE_CLK                     */
-    &Clock_Ip_Get_PLTDIV2_CLK_Frequency,                                                 /* IPSYNC_STM0_MASTER_CLK                           */
-    &Clock_Ip_Get_STM0_CLK_Frequency,                                                    /* IPSYNC_STM0_SLAVE_CLK                            */
-    &Clock_Ip_Get_PLTDIV2_CLK_Frequency,                                                 /* IPSYNC_STM1_MASTER_CLK                           */
-    &Clock_Ip_Get_STM1_CLK_Frequency,                                                    /* IPSYNC_STM1_SLAVE_CLK                            */
-    &Clock_Ip_Get_PLTDIV2_CLK_Frequency,                                                 /* IPSYNC_STM2_MASTER_CLK                           */
-    &Clock_Ip_Get_STM2_CLK_Frequency,                                                    /* IPSYNC_STM2_SLAVE_CLK                            */
-    &Clock_Ip_Get_PLTDIV2_CLK_Frequency,                                                 /* IPSYNC_STM3_MASTER_CLK                           */
-    &Clock_Ip_Get_STM3_CLK_Frequency,                                                    /* IPSYNC_STM3_SLAVE_CLK                            */
-    &Clock_Ip_Get_PLTDIV2_CLK_Frequency,                                                 /* IPSYNC_XSPI_MASTER_CLK                           */
-    &Clock_Ip_Get_PLTDIV2_CLK_Frequency,                                                 /* IPSYNC_XSPI_SLAVE_CLK                            */
-    &Clock_Ip_Get_PLTDIV2_CLK_Frequency,                                                 /* LCU0_IPG_CLK                                     */
-    &Clock_Ip_Get_PLTDIV2_CLK_Frequency,                                                 /* LCU1_IPG_CLK                                     */
-    &Clock_Ip_Get_LPE_DIV1_CLK_Frequency,                                                /* LMEM_HCLK_CLK                                    */
-    &Clock_Ip_Get_LPE_DIV2_CLK_Frequency,                                                /* LPE_ADC_IPG_CLK                                  */
-    &Clock_Ip_Get_LPE_DIV2_CLK_Frequency,                                                /* LPE_BCTU_IPG_CLK                                 */
-    &Clock_Ip_Get_LPE_DIV2_CLK_Frequency,                                                /* LPE_BCTU_IPG_CLK_S                               */
-    &Clock_Ip_Get_LPE_DIV4_CLK_Frequency,                                                /* LPE_CMU_IPG_CLK                                  */
-    &Clock_Ip_Get_LPE_DIV1_CLK_Frequency,                                                /* LPE_CRC_IPG_CLK                                  */
-    &Clock_Ip_Get_LPE_CXPI_PE_CLK_Frequency,                                             /* LPE_CXPI_PE_CLK                                  */
-    &Clock_Ip_Get_LPE_DIV4_CLK_Frequency,                                                /* LPE_CXPI0_IPG_CLK                                */
-    &Clock_Ip_Get_LPE_CXPI_PE_CLK_Frequency,                                             /* LPE_CXPI0_PE_CLK                                 */
-    &Clock_Ip_Get_LPE_DIV4_CLK_Frequency,                                                /* LPE_CXPI1_IPG_CLK                                */
-    &Clock_Ip_Get_LPE_CXPI_PE_CLK_Frequency,                                             /* LPE_CXPI1_PE_CLK                                 */
-    &Clock_Ip_Get_LPE_DIV1_UNGATED_CLK_Frequency,                                        /* LPE_DIV1_UNGATED_CLK                             */
-    &Clock_Ip_Get_LPE_DIV2_UNGATED_CLK_Frequency,                                        /* LPE_DIV2_UNGATED_CLK                             */
-    &Clock_Ip_Get_LPE_DIV3_UNGATED_CLK_Frequency,                                        /* LPE_DIV3_UNGATED_CLK                             */
-    &Clock_Ip_Get_LPE_DIV4_UNGATED_CLK_Frequency,                                        /* LPE_DIV4_UNGATED_CLK                             */
-    &Clock_Ip_Get_LPE_DIV1_CLK_Frequency,                                                /* LPE_DMA_CH_MUX_IPG_CLK                           */
-    &Clock_Ip_Get_LPE_DIV4_CLK_Frequency,                                                /* LPE_EIM_IPG_CLK                                  */
-    &Clock_Ip_Get_LPE_DIV4_CLK_Frequency,                                                /* LPE_FIRC_IPG_CLK                                 */
-    &Clock_Ip_Get_LPE_FLEXCAN_PE_CLK_Frequency,                                          /* LPE_FLEXCAN_MOD_CLK                              */
-    &Clock_Ip_Get_LPE_FLEXCAN_PE_CLK_Frequency,                                          /* LPE_FLEXCAN_PE_CLK                               */
-    &Clock_Ip_Get_LPE_DIV2_CLK_Frequency,                                                /* LPE_FTM_IPG_CLK                                  */
-    &Clock_Ip_Get_LPE_DIV4_CLK_Frequency,                                                /* LPE_FXOSC_IPG_CLK                                */
-    &Clock_Ip_Get_LPE_DIV4_CLK_Frequency,                                                /* LPE_GPR0_IPG_CLK                                 */
-    &Clock_Ip_Get_LPE_DIV4_CLK_Frequency,                                                /* LPE_GPR1_IPG_CLK                                 */
-    &Clock_Ip_Get_FIRC_CLK_Frequency,                                                    /* LPE_LCU_IPG_CLK                                  */
-    &Clock_Ip_Get_LPE_DIV4_CLK_Frequency,                                                /* LPE_LPCMP0_IPG_CLK                               */
-    &Clock_Ip_Get_FIRC_CLK_Frequency,                                                    /* LPE_LPCMP0_RR_CLK                                */
-    &Clock_Ip_Get_FIRC_CLK_Frequency,                                                    /* LPE_LPCMP0_SAMPLE_GATED_CLK                      */
-    &Clock_Ip_Get_LPE_DIV4_CLK_Frequency,                                                /* LPE_LPCMP1_IPG_CLK                               */
-    &Clock_Ip_Get_FIRC_CLK_Frequency,                                                    /* LPE_LPCMP1_RR_CLK                                */
-    &Clock_Ip_Get_FIRC_CLK_Frequency,                                                    /* LPE_LPCMP1_SAMPLE_GATED_CLK                      */
-    &Clock_Ip_Get_LPE_DIV4_CLK_Frequency,                                                /* LPE_LPCMP2_IPG_CLK                               */
-    &Clock_Ip_Get_FIRC_CLK_Frequency,                                                    /* LPE_LPCMP2_RR_CLK                                */
-    &Clock_Ip_Get_FIRC_CLK_Frequency,                                                    /* LPE_LPCMP2_SAMPLE_GATED_CLK                      */
-    &Clock_Ip_Get_LPE_LPI2C_MOD_CLK_Frequency,                                           /* LPE_LPI2C_CLK                                    */
-    &Clock_Ip_Get_LPE_DIV2_CLK_Frequency,                                                /* LPE_LPI2C_IPG_CLK                                */
-    &Clock_Ip_Get_LPE_LPI2C_MOD_CLK_Frequency,                                           /* LPE_LPI2C_MOD_CLK                                */
-    &Clock_Ip_Get_LPE_LPSPI_MOD_CLK_Frequency,                                           /* LPE_LPSPI_MOD_CLK                                */
-    &Clock_Ip_Get_LPE_LPSPI_MOD_CLK_Frequency,                                           /* LPE_LPSPI0_CLK                                   */
-    &Clock_Ip_Get_LPE_DIV2_CLK_Frequency,                                                /* LPE_LPSPI0_IPG_CLK                               */
-    &Clock_Ip_Get_LPE_LPSPI_MOD_CLK_Frequency,                                           /* LPE_LPSPI1_CLK                                   */
-    &Clock_Ip_Get_LPE_DIV2_CLK_Frequency,                                                /* LPE_LPSPI1_IPG_CLK                               */
-    &Clock_Ip_Get_LPE_LPUART_MOD_CLK_Frequency,                                          /* LPE_LPUART_MOD_CLK                               */
-    &Clock_Ip_Get_LPE_LPUART_MOD_CLK_Frequency,                                          /* LPE_LPUART0_CLK                                  */
-    &Clock_Ip_Get_LPE_DIV2_CLK_Frequency,                                                /* LPE_LPUART0_pCLK                                 */
-    &Clock_Ip_Get_LPE_LPUART_MOD_CLK_Frequency,                                          /* LPE_LPUART1_CLK                                  */
-    &Clock_Ip_Get_LPE_DIV2_CLK_Frequency,                                                /* LPE_LPUART1_pCLK                                 */
-    &Clock_Ip_Get_LPE_LPUART_MOD_CLK_Frequency,                                          /* LPE_LPUART2_CLK                                  */
-    &Clock_Ip_Get_LPE_DIV2_CLK_Frequency,                                                /* LPE_LPUART2_pCLK                                 */
-    &Clock_Ip_Get_LPE_DIV4_CLK_Frequency,                                                /* LPE_LSTCU_IPG_CLK                                */
-    &Clock_Ip_Get_SIRC_CLK_Frequency,                                                    /* LPE_PIT_RTI_IPG_CLK_OSC_RTI                      */
-    &Clock_Ip_Get_LPE_DIV4_CLK_Frequency,                                                /* LPE_PIT_RTI_IPG_CLK_SYNC                         */
-    &Clock_Ip_Get_FIRC_CLK_Frequency,                                                    /* LPE_RTC_API_FIRC_CLK                             */
-    &Clock_Ip_Get_FXOSC_CLK_Frequency,                                                   /* LPE_RTC_API_FXOSC_CLK                            */
-    &Clock_Ip_Get_LPE_DIV4_CLK_Frequency,                                                /* LPE_RTC_API_IPG_CLK                              */
-    &Clock_Ip_Get_SIRC_CLK_Frequency,                                                    /* LPE_RTC_API_SIRC_CLK                             */
-    &Clock_Ip_Get_SXOSC_CLK_Frequency,                                                   /* LPE_RTC_API_SXOSC_CLK                            */
-    &Clock_Ip_Get_LPE_DIV1_CLK_Frequency,                                                /* LPE_SEMA42_CLK                                   */
-    &Clock_Ip_Get_LPE_STM_CLK_Frequency,                                                 /* LPE_STM_CLK                                      */
-    &Clock_Ip_Get_LPE_STM_CLK_Frequency,                                                 /* LPE_STM_IPG_CLK                                  */
-    &Clock_Ip_Get_FIRC_CLK_Frequency,                                                    /* LPE_SWT_COUNTER_IP_CLK                           */
-    &Clock_Ip_Get_LPE_DIV4_CLK_Frequency,                                                /* LPE_SWT_IPG_CLK                                  */
-    &Clock_Ip_Get_LPE_DIV4_CLK_Frequency,                                                /* LPE_SXOSC_IPG_CLK                                */
-    &Clock_Ip_Get_LPE_DIV4_CLK_Frequency,                                                /* LPE_TRGMUX_IPG_CLK                               */
-    &Clock_Ip_Get_LPE_DIV4_CLK_Frequency,                                                /* LPE_TSPC_IPG_CLK                                 */
-    &Clock_Ip_Get_FIRCDIV2_CLK_Frequency,                                                /* LPE_TSU_NS_IPG_CLK                               */
-    &Clock_Ip_Get_LPE_UNGATED_CLK_Frequency,                                             /* LPE_UNGATED_CLK                                  */
-    &Clock_Ip_Get_LPE_DIV2_CLK_Frequency,                                                /* LPE_VIRT_IPG_CLK                                 */
-    &Clock_Ip_Get_LPE_DIV4_CLK_Frequency,                                                /* LPE_WKPU_IPG_CLK                                 */
-    &Clock_Ip_Get_LPE_DIV4_CLK_Frequency,                                                /* LPE_WKPU_IPG_CLK_S                               */
-    &Clock_Ip_Get_PLTDIV4_CLK_Frequency,                                                 /* LPI2C0_CLK                                       */
-    &Clock_Ip_Get_PLTDIV4_CLK_Frequency,                                                 /* LPI2C1_CLK                                       */
-    &Clock_Ip_Get_PLTDIV4_CLK_Frequency,                                                 /* LPI2C2_CLK                                       */
-    &Clock_Ip_Get_PLTDIV4_CLK_Frequency,                                                 /* LPI2C3_CLK                                       */
-    &Clock_Ip_Get_PLTDIV2_CLK_Frequency,                                                 /* LPSPI0_CLK                                       */
-    &Clock_Ip_Get_PLTDIV2_CLK_Frequency,                                                 /* LPSPI1_CLK                                       */
-    &Clock_Ip_Get_PLTDIV2_CLK_Frequency,                                                 /* LPSPI2_CLK                                       */
-    &Clock_Ip_Get_PLTDIV2_CLK_Frequency,                                                 /* LPSPI3_CLK                                       */
-    &Clock_Ip_Get_PLTDIV2_CLK_Frequency,                                                 /* LPSPI4_CLK                                       */
-    &Clock_Ip_Get_PLTDIV2_CLK_Frequency,                                                 /* LPSPI5_CLK                                       */
-    &Clock_Ip_Get_PLTDIV2_CLK_Frequency,                                                 /* LPSPI6_CLK                                       */
-    &Clock_Ip_Get_PLTDIV2_CLK_Frequency,                                                 /* LPSPI7_CLK                                       */
-    &Clock_Ip_Get_PLTDIV4_CLK_Frequency,                                                 /* LPUART_MSC_CLK                                   */
-    &Clock_Ip_Get_PLTDIV2_CLK_Frequency,                                                 /* LPUART_MSC_pCLK                                  */
-    &Clock_Ip_Get_PLTDIV4_CLK_Frequency,                                                 /* LPUART0_CLK                                      */
-    &Clock_Ip_Get_PLTDIV2_CLK_Frequency,                                                 /* LPUART0_pCLK                                     */
-    &Clock_Ip_Get_PLTDIV4_CLK_Frequency,                                                 /* LPUART1_CLK                                      */
-    &Clock_Ip_Get_PLTDIV2_CLK_Frequency,                                                 /* LPUART1_pCLK                                     */
-    &Clock_Ip_Get_PLTDIV4_CLK_Frequency,                                                 /* LPUART2_CLK                                      */
-    &Clock_Ip_Get_PLTDIV2_CLK_Frequency,                                                 /* LPUART2_pCLK                                     */
-    &Clock_Ip_Get_PLTDIV4_CLK_Frequency,                                                 /* LPUART3_CLK                                      */
-    &Clock_Ip_Get_PLTDIV2_CLK_Frequency,                                                 /* LPUART3_pCLK                                     */
-    &Clock_Ip_Get_PLTDIV4_CLK_Frequency,                                                 /* LPUART4_CLK                                      */
-    &Clock_Ip_Get_PLTDIV2_CLK_Frequency,                                                 /* LPUART4_pCLK                                     */
-    &Clock_Ip_Get_PLTDIV4_CLK_Frequency,                                                 /* LPUART5_CLK                                      */
-    &Clock_Ip_Get_PLTDIV2_CLK_Frequency,                                                 /* LPUART5_pCLK                                     */
-    &Clock_Ip_Get_PLTDIV4_CLK_Frequency,                                                 /* LPUART6_CLK                                      */
-    &Clock_Ip_Get_PLTDIV2_CLK_Frequency,                                                 /* LPUART6_pCLK                                     */
-    &Clock_Ip_Get_PLTDIV4_CLK_Frequency,                                                 /* LPUART7_CLK                                      */
-    &Clock_Ip_Get_PLTDIV2_CLK_Frequency,                                                 /* LPUART7_pCLK                                     */
-    &Clock_Ip_Get_PLTDIV4_CLK_Frequency,                                                 /* LPUART8_CLK                                      */
-    &Clock_Ip_Get_PLTDIV2_CLK_Frequency,                                                 /* LPUART8_pCLK                                     */
-    &Clock_Ip_Get_PLTDIV4_CLK_Frequency,                                                 /* LPUART9_CLK                                      */
-    &Clock_Ip_Get_PLTDIV2_CLK_Frequency,                                                 /* LPUART9_pCLK                                     */
-    &Clock_Ip_Get_PLTDIV4_CLK_Frequency,                                                 /* LPUART10_CLK                                     */
-    &Clock_Ip_Get_PLTDIV2_CLK_Frequency,                                                 /* LPUART10_pCLK                                    */
-    &Clock_Ip_Get_PLTDIV4_CLK_Frequency,                                                 /* LPUART11_CLK                                     */
-    &Clock_Ip_Get_PLTDIV2_CLK_Frequency,                                                 /* LPUART11_pCLK                                    */
-    &Clock_Ip_Get_PLTDIV4_CLK_Frequency,                                                 /* LPUART12_CLK                                     */
-    &Clock_Ip_Get_PLTDIV4_CLK_Frequency,                                                 /* LPUART12_pCLK                                    */
-    &Clock_Ip_Get_PLTDIV4_CLK_Frequency,                                                 /* LPUART13_CLK                                     */
-    &Clock_Ip_Get_PLTDIV4_CLK_Frequency,                                                 /* LPUART13_pCLK                                    */
-    &Clock_Ip_Get_PLTDIV4_CLK_Frequency,                                                 /* LPUART14_CLK                                     */
-    &Clock_Ip_Get_PLTDIV4_CLK_Frequency,                                                 /* LPUART14_pCLK                                    */
-    &Clock_Ip_Get_PLTDIV4_CLK_Frequency,                                                 /* LPUART15_CLK                                     */
-    &Clock_Ip_Get_PLTDIV4_CLK_Frequency,                                                 /* LPUART15_pCLK                                    */
-    &Clock_Ip_Get_PLTDIV4_CLK_Frequency,                                                 /* LPUART16_CLK                                     */
-    &Clock_Ip_Get_PLTDIV4_CLK_Frequency,                                                 /* LPUART16_pCLK                                    */
-    &Clock_Ip_Get_PLTDIV4_CLK_Frequency,                                                 /* LPUART17_CLK                                     */
-    &Clock_Ip_Get_PLTDIV4_CLK_Frequency,                                                 /* LPUART17_pCLK                                    */
-    &Clock_Ip_Get_PLTDIV4_CLK_Frequency,                                                 /* LPUART18_CLK                                     */
-    &Clock_Ip_Get_PLTDIV4_CLK_Frequency,                                                 /* LPUART18_pCLK                                    */
-    &Clock_Ip_Get_PLTDIV4_CLK_Frequency,                                                 /* LPUART19_CLK                                     */
-    &Clock_Ip_Get_PLTDIV4_CLK_Frequency,                                                 /* LPUART19_pCLK                                    */
-    &Clock_Ip_Get_PLTDIV4_CLK_Frequency,                                                 /* LPUART20_CLK                                     */
-    &Clock_Ip_Get_PLTDIV4_CLK_Frequency,                                                 /* LPUART20_pCLK                                    */
-    &Clock_Ip_Get_PLTDIV4_CLK_Frequency,                                                 /* LSTCU_ACCEL_IPG_CLK                              */
-    &Clock_Ip_Get_PLTDIV4_CLK_Frequency,                                                 /* LSTCU_CORE0_IPG_CLK                              */
-    &Clock_Ip_Get_PLTDIV4_CLK_Frequency,                                                 /* LSTCU_CORE12_IPG_CLK                             */
-    &Clock_Ip_Get_PLTCORE_CLK_Frequency,                                                 /* LSTCU_CORE3_IPG_CLK                              */
-    &Clock_Ip_Get_PLTDIV4_CLK_Frequency,                                                 /* LSTCU_HSPI_IPG_CLK                               */
-    &Clock_Ip_Get_PLTDIV4_CLK_Frequency,                                                 /* LSTCU_NETC_IPG_CLK                               */
-    &Clock_Ip_Get_PLTDIV4_CLK_Frequency,                                                 /* LSTCU_PBRIDGE1_IPG_CLK                           */
-    &Clock_Ip_Get_PLTDIV4_CLK_Frequency,                                                 /* LSTCU_PBRIDGE3_IPG_CLK                           */
-    &Clock_Ip_Get_PLTDIV4_CLK_Frequency,                                                 /* LSTCU_PBRIDGE4_IPG_CLK                           */
-    &Clock_Ip_Get_PLTDIV4_CLK_Frequency,                                                 /* LSTCU_REST_IPG_CLK                               */
-    &Clock_Ip_Get_PLTDIV4_CLK_Frequency,                                                 /* MRAM_IPG_CLK                                     */
-    &Clock_Ip_Get_PLTDIV1_CLK_Frequency,                                                 /* MRAMC_IPG_CLK                                    */
-    &Clock_Ip_Get_PLTDIV4_CLK_Frequency,                                                 /* MRAMC_IPG_CLK_S                                  */
-    &Clock_Ip_Get_PLTDIV2_CLK_Frequency,                                                 /* MSCM_IPG_CLK                                     */
-    &Clock_Ip_Get_PLTDIV1_CLK_Frequency,                                                 /* MSGINTR0_APB_CLK                                 */
-    &Clock_Ip_Get_PLTDIV1_CLK_Frequency,                                                 /* MSGINTR1_APB_CLK                                 */
-    &Clock_Ip_Get_PLTDIV1_CLK_Frequency,                                                 /* MSGINTR2_APB_CLK                                 */
-    &Clock_Ip_Get_PLTDIV1_CLK_Frequency,                                                 /* MSGINTR3_APB_CLK                                 */
-    &Clock_Ip_Get_PLTDIV1_CLK_Frequency,                                                 /* MSGINTR4_APB_CLK                                 */
-    &Clock_Ip_Get_PLTDIV1_CLK_Frequency,                                                 /* MSGINTR5_APB_CLK                                 */
-    &Clock_Ip_Get_PLTDIV1_CLK_Frequency,                                                 /* MSGINTR6_APB_CLK                                 */
-    &Clock_Ip_Get_PLTDIV1_CLK_Frequency,                                                 /* MSGINTR7_APB_CLK                                 */
-    &Clock_Ip_Get_PERI_HIGH_SPEED_REST_USDHC_CLK_Frequency,                              /* PERI_HIGH_SPEED_REST_USDHC_CLK                   */
-    &Clock_Ip_Get_PERI_HIGH_SPEED_REST_XSPI_CLK_Frequency,                               /* PERI_HIGH_SPEED_REST_XSPI_CLK                    */
-    &Clock_Ip_Get_PERI_HIGH_SPEED_TRACE_CLK_Frequency,                                   /* PERI_HIGH_SPEED_TRACE_CLK                        */
-    &Clock_Ip_Get_PHY_ETH_CLK_Frequency,                                                 /* PHY_ETH_CLK                                      */
-    &Clock_Ip_Get_SIRC_CLK_Frequency,                                                    /* PIT0_IPG_CLK_OSC                                 */
-    &Clock_Ip_Get_PLTDIV2_CLK_Frequency,                                                 /* PIT0_IPG_CLK_SYNC                                */
-    &Clock_Ip_Get_SIRC_CLK_Frequency,                                                    /* PIT1_IPG_CLK_OSC                                 */
-    &Clock_Ip_Get_PLTDIV2_CLK_Frequency,                                                 /* PIT1_IPG_CLK_SYNC                                */
-    &Clock_Ip_Get_SIRC_CLK_Frequency,                                                    /* PIT2_IPG_CLK_OSC                                 */
-    &Clock_Ip_Get_PLTDIV2_CLK_Frequency,                                                 /* PIT2_IPG_CLK_SYNC                                */
-    &Clock_Ip_Get_SIRC_CLK_Frequency,                                                    /* PIT3_IPG_CLK_OSC                                 */
-    &Clock_Ip_Get_PLTDIV2_CLK_Frequency,                                                 /* PIT3_IPG_CLK_SYNC                                */
-    &Clock_Ip_Get_LPE_DIV4_CLK_Frequency,                                                /* POST_IPG_CLK                                     */
-    &Clock_Ip_Get_RR_RTC_CLK_Frequency,                                                  /* RR_RTC_CLK                                       */
-    &Clock_Ip_Get_PLTDIV1_CLK_Frequency,                                                 /* RXLUT_ERM_CLK                                    */
-    &Clock_Ip_Get_PLTDIV1_CLK_Frequency,                                                 /* RXLUT_IPG_CLK                                    */
-    &Clock_Ip_Get_SAI0_MCLK_Frequency,                                                   /* SAI0_MCLK                                        */
-    &Clock_Ip_Get_SAI0_MCLK_Frequency,                                                   /* SAI0_IO_MCLK                                     */
-    &Clock_Ip_Get_PLTDIV2_CLK_Frequency,                                                 /* SAI0_IPG_CLK                                     */
-    &Clock_Ip_Get_SAI1_MCLK_Frequency,                                                   /* SAI1_IO_MCLK                                     */
-    &Clock_Ip_Get_PLTDIV2_CLK_Frequency,                                                 /* SAI1_IPG_CLK                                     */
-    &Clock_Ip_Get_SAI1_MCLK_Frequency,                                                   /* SAI1_MCLK                                        */
-    &Clock_Ip_Get_PLTDIV2_CLK_Frequency,                                                 /* SDHC_IPG_CLK                                     */
-    &Clock_Ip_Get_PERI_HIGH_SPEED_REST_USDHC_CLK_Frequency,                              /* SDHC_PER_CLK                                     */
-    &Clock_Ip_Get_PLTDIV1_CLK_Frequency,                                                 /* SEMA42_IPG_CLK                                   */
-    &Clock_Ip_Get_SERDES_REF_CLK_Frequency,                                              /* SERDES_ALT_REF_CLK                               */
-    &Clock_Ip_Get_SERDES_AUX_CLK_Frequency,                                              /* SERDES_AUX_CLK                                   */
-    &Clock_Ip_Get_SERDES_REF_CLK_Frequency,                                              /* SERDES_REF_CLK                                   */
-    &Clock_Ip_Get_PLTDIV2_CLK_Frequency,                                                 /* SINC_IPG_CLK                                     */
-    &Clock_Ip_Get_PLTDIV4_CLK_Frequency,                                                 /* SOG_REST_CMU_IPG_CLK                             */
-    &Clock_Ip_Get_FIRC_CLK_Frequency,                                                    /* SRC_FIRC_CLK                                     */
-    &Clock_Ip_Get_FIRCDIV2_CLK_Frequency,                                                /* SRC_FIRCDIV2_CLK                                 */
-    &Clock_Ip_Get_FXOSC_CLK_Frequency,                                                   /* SRC_FXOSC_CLK                                    */
-    &Clock_Ip_Get_LPE_CLK_Frequency,                                                     /* SRC_LPE_CLK                                      */
-    &Clock_Ip_Get_LPE_DIV1_CLK_Frequency,                                                /* SRC_LPE_DIV1_CLK                                 */
-    &Clock_Ip_Get_LPE_DIV2_CLK_Frequency,                                                /* SRC_LPE_DIV2_CLK                                 */
-    &Clock_Ip_Get_LPE_DIV4_CLK_Frequency,                                                /* SRC_LPE_DIV4_CLK                                 */
-    &Clock_Ip_Get_LPE_DIV8_CLK_Frequency,                                                /* SRC_LPE_DIV8_CLK                                 */
-    &Clock_Ip_Get_PLT_CLK_Frequency,                                                     /* SRC_PLT_CLK                                      */
-    &Clock_Ip_Get_PLTCORE_CLK_Frequency,                                                 /* SRC_PLTCORE_CLK                                  */
-    &Clock_Ip_Get_PLTDIV1_CLK_Frequency,                                                 /* SRC_PLTDIV1_CLK                                  */
-    &Clock_Ip_Get_PLTDIV2_CLK_Frequency,                                                 /* SRC_PLTDIV2_CLK                                  */
-    &Clock_Ip_Get_PLTDIV4_CLK_Frequency,                                                 /* SRC_PLTDIV4_CLK                                  */
-    &Clock_Ip_Get_SIRC_CLK_Frequency,                                                    /* SRC_SIRC_CLK                                     */
-    &Clock_Ip_Get_SXOSC_CLK_Frequency,                                                   /* SRC_SXOSC_CLK                                    */
-    &Clock_Ip_Get_PLTDIV4_CLK_Frequency,                                                 /* SRAM0_CONTROLLER_IPS_CLK                         */
-    &Clock_Ip_Get_PLTDIV4_CLK_Frequency,                                                 /* SRAM1_CONTROLLER_IPS_CLK                         */
-    &Clock_Ip_Get_PLTDIV1_CLK_Frequency,                                                 /* SRAM2_CONTROLLER_IPS_CLK                         */
-    &Clock_Ip_Get_PLTDIV2_CLK_Frequency,                                                 /* STAM_CLK                                         */
-    &Clock_Ip_Get_STM0_CLK_Frequency,                                                    /* STM0_CLK                                         */
-    &Clock_Ip_Get_STM0_CLK_Frequency,                                                    /* STM0_IPG_CLK                                     */
-    &Clock_Ip_Get_STM1_CLK_Frequency,                                                    /* STM1_CLK                                         */
-    &Clock_Ip_Get_STM1_CLK_Frequency,                                                    /* STM1_IPG_CLK                                     */
-    &Clock_Ip_Get_STM2_CLK_Frequency,                                                    /* STM2_CLK                                         */
-    &Clock_Ip_Get_STM2_CLK_Frequency,                                                    /* STM2_IPG_CLK                                     */
-    &Clock_Ip_Get_STM3_CLK_Frequency,                                                    /* STM3_CLK                                         */
-    &Clock_Ip_Get_STM3_CLK_Frequency,                                                    /* STM3_IPG_CLK                                     */
-    &Clock_Ip_Get_PLTDIV4_CLK_Frequency,                                                 /* SWT_STARTUP_IPG_CLK                              */
-    &Clock_Ip_Get_PLTDIV4_CLK_Frequency,                                                 /* SWT_STARTUP_IPG_COUNTER_CLK                      */
-    &Clock_Ip_Get_PLTDIV4_CLK_Frequency,                                                 /* SWT0_IPG_CLK                                     */
-    &Clock_Ip_Get_PLTDIV4_CLK_Frequency,                                                 /* SWT0_IPG_COUNTER_CLK                             */
-    &Clock_Ip_Get_PLTDIV4_CLK_Frequency,                                                 /* SWT1_IPG_CLK                                     */
-    &Clock_Ip_Get_PLTDIV4_CLK_Frequency,                                                 /* SWT1_IPG_COUNTER_CLK                             */
-    &Clock_Ip_Get_PLTDIV4_CLK_Frequency,                                                 /* SWT2_IPG_CLK                                     */
-    &Clock_Ip_Get_PLTDIV4_CLK_Frequency,                                                 /* SWT2_IPG_COUNTER_CLK                             */
-    &Clock_Ip_Get_PLTDIV4_CLK_Frequency,                                                 /* SWT3_IPG_CLK                                     */
-    &Clock_Ip_Get_PLTDIV4_CLK_Frequency,                                                 /* SWT3_IPG_COUNTER_CLK                             */
-    &Clock_Ip_Get_TRACE_CLK_Frequency,                                                   /* TRACE_CLK                                        */
-    &Clock_Ip_Get_PLTDIV4_CLK_Frequency,                                                 /* TRGMUX_IPG_CLK_S                                 */
-    &Clock_Ip_Get_PLTDIV4_CLK_Frequency,                                                 /* TRGMUX_MSC_IPG_CLK_S                             */
-    &Clock_Ip_Get_PLTDIV2_CLK_Frequency,                                                 /* VWRAP0_IPG_CLK                                   */
-    &Clock_Ip_Get_PLTDIV2_CLK_Frequency,                                                 /* VWRAP1_IPG_CLK                                   */
-    &Clock_Ip_Get_PLTDIV2_CLK_Frequency,                                                 /* VWRAP2_IPG_CLK                                   */
-    &Clock_Ip_Get_PLTDIV2_CLK_Frequency,                                                 /* VWRAP3_IPG_CLK                                   */
-    &Clock_Ip_Get_PLTDIV2_CLK_Frequency,                                                 /* XSPI_IPG_CLK                                     */
-    &Clock_Ip_Get_PERI_HIGH_SPEED_REST_XSPI_CLK_Frequency,                               /* XSPI_UNGATED_2XSFIF_CLK                          */
+    get_FIRC_CLK_Frequency,                       /* FIRC_CLK             */                    
+    get_FXOSC_CLK_Frequency,                      /* FXOSC_CLK            */                    
+    get_SIRC_CLK_Frequency,                       /* SIRC_CLK             */                    
+    get_COREPLL_CLK_Frequency,                    /* COREPLL_CLK          */                    
+    get_PERIPHPLL_CLK_Frequency,                  /* PERIPHPLL_CLK        */                    
+    get_DDRPLL_CLK_Frequency,                     /* DDRPLL_CLK           */                    
+    get_ACCELPLL_CLK_Frequency,                   /* ACCELPLL_CLK         */                    
+    get_COREPLL_PHI0_Frequency,                   /* COREPLL_PHI0         */                    
+    get_COREPLL_PHI1_Frequency,                   /* COREPLL_PHI1         */                    
+    get_COREPLL_DFS1_Frequency,                   /* COREPLL_DFS1         */                    
+    get_COREPLL_DFS2_Frequency,                   /* COREPLL_DFS2         */                    
+    get_COREPLL_DFS3_Frequency,                   /* COREPLL_DFS3         */                    
+    get_COREPLL_DFS4_Frequency,                   /* COREPLL_DFS4         */                    
+    get_COREPLL_DFS5_Frequency,                   /* COREPLL_DFS5         */                    
+    get_COREPLL_DFS6_Frequency,                   /* COREPLL_DFS6         */                    
+    get_PERIPHPLL_PHI0_Frequency,                 /* PERIPHPLL_PHI0       */                    
+    get_PERIPHPLL_PHI1_Frequency,                 /* PERIPHPLL_PHI1       */                    
+    get_PERIPHPLL_PHI2_Frequency,                 /* PERIPHPLL_PHI2       */                    
+    get_PERIPHPLL_PHI3_Frequency,                 /* PERIPHPLL_PHI3       */                    
+    get_PERIPHPLL_PHI4_Frequency,                 /* PERIPHPLL_PHI4       */                    
+    get_PERIPHPLL_PHI5_Frequency,                 /* PERIPHPLL_PHI5       */                    
+    get_PERIPHPLL_PHI6_Frequency,                 /* PERIPHPLL_PHI6       */                    
+    get_PERIPHPLL_PHI7_Frequency,                 /* PERIPHPLL_PHI7       */                    
+    get_PERIPHPLL_DFS1_Frequency,                 /* PERIPHPLL_DFS1       */                    
+    get_PERIPHPLL_DFS2_Frequency,                 /* PERIPHPLL_DFS2       */                    
+    get_PERIPHPLL_DFS3_Frequency,                 /* PERIPHPLL_DFS3       */                    
+    get_PERIPHPLL_DFS4_Frequency,                 /* PERIPHPLL_DFS4       */                    
+    get_PERIPHPLL_DFS5_Frequency,                 /* PERIPHPLL_DFS5       */                    
+    get_PERIPHPLL_DFS6_Frequency,                 /* PERIPHPLL_DFS6       */                    
+    get_DDRPLL_PHI0_Frequency,                    /* DDRPLL_PHI0          */                    
+    get_ACCELPLL_PHI0_Frequency,                  /* ACCELPLL_PHI0        */                    
+    get_ACCELPLL_PHI1_Frequency,                  /* ACCELPLL_PHI1        */                    
+    get_rtc_ext_ref_Frequency,                    /* rtc_ext_ref          */ 
+    get_ftm_0_ext_ref_Frequency,                  /* ftm_0_ext_ref        */                    
+    get_ftm_1_ext_ref_Frequency,                  /* ftm_1_ext_ref        */                    
+    get_gmac_0_ext_ref_Frequency,                 /* gmac_0_ext_ref       */                    
+    get_gmac_0_ext_rx_Frequency,                  /* gmac_0_ext_rx        */                    
+    get_gmac_0_ext_tx_Frequency,                  /* gmac_0_ext_tx        */                    
+    get_gmac_ext_ts_Frequency,                    /* gmac_ext_ts          */                    
+    get_pfe_mac_0_ext_ref_Frequency,              /* pfe_mac_0_ext_ref    */                    
+    get_pfe_mac_0_ext_rx_Frequency,               /* pfe_mac_0_ext_rx     */                    
+    get_pfe_mac_0_ext_tx_Frequency,               /* pfe_mac_0_ext_tx     */                    
+    get_pfe_mac_1_ext_ref_Frequency,              /* pfe_mac_1_ext_ref    */                    
+    get_pfe_mac_1_ext_rx_Frequency,               /* pfe_mac_1_ext_rx     */                    
+    get_pfe_mac_1_ext_tx_Frequency,               /* pfe_mac_1_ext_tx     */                    
+    get_pfe_mac_2_ext_ref_Frequency,              /* pfe_mac_2_ext_ref    */                    
+    get_pfe_mac_2_ext_rx_Frequency,               /* pfe_mac_2_ext_rx     */                    
+    get_pfe_mac_2_ext_tx_Frequency,               /* pfe_mac_2_ext_tx     */                    
+    get_SERDES_0_XPCS_0_TX_Frequency,             /* SERDES_0_XPCS_0_TX   */                    
+    get_SERDES_0_XPCS_0_CDR_Frequency,            /* SERDES_0_XPCS_0_CDR  */                    
+    get_SERDES_0_XPCS_1_TX_Frequency,             /* SERDES_0_XPCS_1_TX   */                    
+    get_SERDES_0_XPCS_1_CDR_Frequency,            /* SERDES_0_XPCS_1_CDR  */                    
+    get_SERDES_1_XPCS_0_TX_Frequency,             /* SERDES_1_XPCS_0_TX   */                    
+    get_SERDES_1_XPCS_0_CDR_Frequency,            /* SERDES_1_XPCS_0_CDR  */                    
+    get_SERDES_1_XPCS_1_TX_Frequency,             /* SERDES_1_XPCS_1_TX   */                    
+    get_SERDES_1_XPCS_1_CDR_Frequency,            /* SERDES_1_XPCS_1_CDR  */                    
+    get_XBAR_2X_CLK_Frequency,                    /* XBAR_2X_CLK          */                    
+    get_XBAR_CLK_Frequency,                       /* XBAR_CLK             */                    
+    get_XBAR_DIV2_CLK_Frequency,                  /* XBAR_DIV2_CLK        */                    
+    get_XBAR_DIV3_CLK_Frequency,                  /* XBAR_DIV3_CLK        */                    
+    get_XBAR_DIV4_CLK_Frequency,                  /* XBAR_DIV4_CLK        */                    
+    get_XBAR_DIV6_CLK_Frequency,                  /* XBAR_DIV6_CLK        */                    
+    get_A53_CORE_CLK_Frequency,                   /* A53_CORE_CLK         */                    
+    get_A53_CORE_DIV2_CLK_Frequency,              /* A53_CORE_DIV2_CLK    */                    
+    get_A53_CORE_DIV10_CLK_Frequency,             /* A53_CORE_DIV10_CLK   */                    
+    get_DDR_CLK_Frequency,                        /* DDR_CLK              */                    
+    get_PFE_PE_CLK_Frequency,                     /* PFE_PE_CLK           */                    
+    get_PFE_SYS_CLK_Frequency,                    /* PFE_SYS_CLK          */                   
+    get_PER_CLK_Frequency,                        /* PER_CLK              */
+    get_GMAC0_REF_CLK_Frequency,                  /* GMAC0_REF_CLK       */    
+    get_GMAC0_REF_DIV_CLK_Frequency,              /* GMAC0_REF_DIV_CLK    */                    
+    get_PFEMAC0_REF_DIV_CLK_Frequency,            /* PFEMAC0_REF_DIV_CLK  */                    
+    get_PFEMAC1_REF_DIV_CLK_Frequency,            /* PFEMAC1_REF_DIV_CLK  */                    
+    get_PFEMAC2_REF_DIV_CLK_Frequency,            /* PFEMAC2_REF_DIV_CLK  */                    
+    get_PERIPHPLL_PHI0_Frequency,                 /* SERDES_REF_CLK clock */                   
+    NULL_PTR,                                      /* THE_LAST_PRODUCER_CLK*/                   
+    get_PER_CLK_Frequency,                        /* ADC0_CLK */                                
+    get_PER_CLK_Frequency,                        /* ADC1_CLK */                                
+    get_CLKOUT0_CLK_Frequency,                    /* CLKOUT0_CLK */                             
+    get_CLKOUT1_CLK_Frequency,                    /* CLKOUT1_CLK */                             
+    get_A53_CORE_CLK_Frequency,                   /* CORE_A53_CLUSTER_0_CLK */                  
+    get_A53_CORE_CLK_Frequency,                   /* CORE_A53_CLUSTER_1_CLK */                  
+    get_XBAR_CLK_Frequency,                       /* CORE_M7_0_CLK */                           
+    get_XBAR_CLK_Frequency,                       /* CORE_M7_1_CLK */                           
+    get_XBAR_CLK_Frequency,                       /* CORE_M7_2_CLK */                           
+    get_XBAR_DIV3_CLK_Frequency,                  /* CRC0_CLK */                                
+    get_PER_CLK_Frequency,                        /* CTU0_CLK */                                
+    get_PER_CLK_Frequency,                        /* CTU1_CLK */                                
+    get_DAPB_CLK_Frequency,                       /* DAPB_CLK */
+    get_DDR_CLK_Frequency,                        /* DDR0_CLK */    
+    get_XBAR_CLK_Frequency,                       /* DMA0_CLK */                                
+    get_XBAR_CLK_Frequency,                       /* DMA1_CLK */                                
+    get_XBAR_DIV3_CLK_Frequency,                  /* DMAMUX0_CLK */                             
+    get_XBAR_DIV3_CLK_Frequency,                  /* DMAMUX1_CLK */                             
+    get_XBAR_DIV3_CLK_Frequency,                  /* DMAMUX2_CLK */                             
+    get_XBAR_DIV3_CLK_Frequency,                  /* DMAMUX3_CLK */                             
+    get_XBAR_CLK_Frequency,                       /* DMA_CRC0_CLK */                            
+    get_XBAR_CLK_Frequency,                       /* DMA_CRC1_CLK */                            
+    get_A53_CORE_DIV10_CLK_Frequency,             /* EIM0_CLK */                                
+    get_XBAR_DIV6_CLK_Frequency,                  /* EIM1_CLK */                                
+    get_XBAR_DIV6_CLK_Frequency,                  /* EIM2_CLK */                                
+    get_XBAR_DIV6_CLK_Frequency,                  /* EIM3_CLK */                                
+    get_XBAR_DIV6_CLK_Frequency,                  /* EIM_CLK */                                 
+    get_XBAR_DIV6_CLK_Frequency,                  /* ERM0_CLK */                                
+    get_FLEXCAN_CLK_Frequency,                    /* FLEXCAN_CLK */                             
+    get_FLEXCAN0_CLK_Frequency,                   /* FLEXCAN0_CLK */                            
+    get_FLEXCAN1_CLK_Frequency,                   /* FLEXCAN1_CLK */                            
+    get_FLEXCAN2_CLK_Frequency,                   /* FLEXCAN2_CLK */                            
+    get_FLEXCAN3_CLK_Frequency,                   /* FLEXCAN3_CLK */                            
+    get_FLEXRAY_CLK_Frequency,                    /* FLEXRAY_CLK */                             
+    get_FRAY0_CLK_Frequency,                      /* FRAY0_CLK */                               
+    get_FLEXTIMERA_CLK_Frequency,                 /* FLEXTIMERA_CLK */                          
+    get_FTIMER0_CLK_Frequency,                    /* FTIMER0_CLK */                             
+    get_FLEXTIMERB_CLK_Frequency,                 /* FLEXTIMERB_CLK */                          
+    get_FTIMER1_CLK_Frequency,                    /* FTIMER1_CLK */                             
+    get_GMAC_TS_CLK_Frequency,                    /* GMAC_TS_CLK */
+    get_GMAC0_TS_CLK_Frequency,                   /* GMAC0_TS_CLK */    
+    get_GMAC0_RX_CLK_Frequency,                   /* GMAC0_RX_CLK */                            
+    get_GMAC0_TX_CLK_Frequency,                   /* GMAC0_TX_CLK */                         
+    get_XBAR_DIV3_CLK_Frequency,                  /* IIC0_CLK */                                
+    get_XBAR_DIV3_CLK_Frequency,                  /* IIC1_CLK */                                
+    get_XBAR_DIV3_CLK_Frequency,                  /* IIC2_CLK */                                
+    get_XBAR_DIV3_CLK_Frequency,                  /* IIC3_CLK */                                
+    get_XBAR_DIV3_CLK_Frequency,                  /* IIC4_CLK */                                
+    get_LBIST_CLK_Frequency,                      /* LBIST_CLK */                               
+    get_LBIST0_CLK_Frequency,                     /* LBIST0_CLK */                              
+    get_LBIST1_CLK_Frequency,                     /* LBIST1_CLK */                              
+    get_LBIST2_CLK_Frequency,                     /* LBIST2_CLK */                              
+    get_LBIST3_CLK_Frequency,                     /* LBIST3_CLK */                              
+    get_LBIST4_CLK_Frequency,                     /* LBIST4_CLK */                              
+    get_LBIST5_CLK_Frequency,                     /* LBIST5_CLK */                              
+    get_LBIST6_CLK_Frequency,                     /* LBIST6_CLK */                              
+    get_LBIST7_CLK_Frequency,                     /* LBIST7_CLK */                              
+    get_LIN_BAUD_CLK_Frequency,                   /* LIN_BAUD_CLK clock */                      
+    get_LINFLEX_CLK_Frequency,                    /* LINFLEX_CLK */                             
+    get_LIN0_CLK_Frequency,                       /* LIN0_CLK */                                
+    get_LIN1_CLK_Frequency,                       /* LIN1_CLK */                                
+    get_LIN2_CLK_Frequency,                       /* LIN2_CLK */                                
+    get_FIRC_CLK_Frequency,                       /* OCOTP0_CLK */                              
+    get_PFEMAC0_RX_CLK_Frequency,                 /* PFEMAC0_RX_CLK */                          
+    get_PFEMAC0_TX_CLK_Frequency,                 /* PFEMAC0_TX_CLK */
+    get_PFEMAC0_TX_DIV_CLK_Frequency,             /* PFEMAC0_TX_DIV_CLK */                 
+    get_PFEMAC1_RX_CLK_Frequency,                 /* PFEMAC1_RX_CLK */                          
+    get_PFEMAC1_TX_CLK_Frequency,                 /* PFEMAC1_TX_CLK */                          
+    get_PFEMAC2_RX_CLK_Frequency,                 /* PFEMAC2_RX_CLK */                          
+    get_PFEMAC2_TX_CLK_Frequency,                 /* PFEMAC2_TX_CLK */                          
+    get_XBAR_DIV3_CLK_Frequency,                  /* PIT0_CLK */                                
+    get_XBAR_DIV3_CLK_Frequency,                  /* PIT1_CLK */                                
+    get_QSPI_2X_CLK_Frequency,                    /* QSPI_2X_CLK */                             
+    get_QSPI_1X_CLK_Frequency,                    /* QSPI_1X_CLK */                             
+    get_QSPI0_CLK_Frequency,                      /* QSPI0_CLK */  
+    get_RTC_CLK_Frequency,                        /* RTC_CLK */                               
+    get_RTC_CLK_Frequency,                        /* RTC0_CLK */                                
+    get_FIRC_CLK_Frequency,                       /* SIUL0_CLK */                               
+    get_FIRC_CLK_Frequency,                       /* SIUL1_CLK */                               
+    get_SPI_CLK_Frequency,                        /* SPI_CLK */                                 
+    get_SPI0_CLK_Frequency,                       /* SPI0_CLK */                                
+    get_SPI1_CLK_Frequency,                       /* SPI1_CLK */                                
+    get_SPI2_CLK_Frequency,                       /* SPI2_CLK */                                
+    get_SPI3_CLK_Frequency,                       /* SPI3_CLK */                                
+    get_SPI4_CLK_Frequency,                       /* SPI4_CLK */                                
+    get_SPI5_CLK_Frequency,                       /* SPI5_CLK */                                
+    get_XBAR_DIV3_CLK_Frequency,                  /* STM0_CLK */                                
+    get_XBAR_DIV3_CLK_Frequency,                  /* STM1_CLK */                                
+    get_XBAR_DIV3_CLK_Frequency,                  /* STM2_CLK */                                
+    get_XBAR_DIV3_CLK_Frequency,                  /* STM3_CLK */                                
+    get_XBAR_DIV3_CLK_Frequency,                  /* STM4_CLK */                                
+    get_XBAR_DIV3_CLK_Frequency,                  /* STM5_CLK */                                
+    get_XBAR_DIV3_CLK_Frequency,                  /* STM6_CLK */                                
+    get_XBAR_DIV3_CLK_Frequency,                  /* STM7_CLK */                                
+    get_FIRC_CLK_Frequency,                       /* SWT0_CLK */                                
+    get_FIRC_CLK_Frequency,                       /* SWT1_CLK */                                
+    get_FIRC_CLK_Frequency,                       /* SWT2_CLK */                                
+    get_FIRC_CLK_Frequency,                       /* SWT3_CLK */                                
+    get_FIRC_CLK_Frequency,                       /* SWT4_CLK */                                
+    get_FIRC_CLK_Frequency,                       /* SWT5_CLK */                                
+    get_FIRC_CLK_Frequency,                       /* SWT6_CLK */                                
+    get_USDHC_CLK_Frequency,                      /* USDHC_CLK */                               
+    get_USDHC0_CLK_Frequency,                     /* USDHC0_CLK */                              
+    get_XBAR_DIV6_CLK_Frequency,                  /* WKPU0_CLK */                               
+    get_XBAR_DIV3_CLK_Frequency,                  /* XBAR_DIV3_FAIL_CLK */                      
+};                                                                                           
+                                                                                            
+static const getFreqType Clock_Ip_apfFreqTableRtcClkSrc[CLOCK_IP_RTC_SELECTOR_SOURCE_NO] =
+{
+    get_SIRC_CLK_Frequency,             /* clock name for 0  hardware value */
+    get_Zero_Frequency,                 /* clock name for 1  hardware value */
+    get_FIRC_CLK_Frequency,             /* clock name for 2  hardware value */
+    get_rtc_ext_ref_Frequency,          /* clock name for 3  hardware value */
 };
-
-
 
 /* Clock stop constant section data */
 #define MCU_STOP_SEC_CONST_UNSPECIFIED
 #include "Mcu_MemMap.h"
 
-#endif
-
 /*==================================================================================================
                                        LOCAL VARIABLES
 ==================================================================================================*/
-
-/* Clock start initialized section data */
-#define MCU_START_SEC_VAR_INIT_32
-#include "Mcu_MemMap.h"
-
-/* External oscillators */
-static uint64 Clock_Ip_u32fxosc = CLOCK_IP_DEFAULT_FXOSC_FREQUENCY;
-
-/* Clock stop initialized section data */
-#define MCU_STOP_SEC_VAR_INIT_32
-#include "Mcu_MemMap.h"
 
 /*==================================================================================================
                                        GLOBAL CONSTANTS
@@ -1025,63 +698,49 @@ static uint64 Clock_Ip_u32fxosc = CLOCK_IP_DEFAULT_FXOSC_FREQUENCY;
                                        GLOBAL VARIABLES
 ==================================================================================================*/
 
-#if (defined(CLOCK_IP_GET_FREQUENCY_API) && (CLOCK_IP_GET_FREQUENCY_API == STD_ON))
-
-
 /* Clock start initialized section data */
 #define MCU_START_SEC_VAR_INIT_UNSPECIFIED
 #include "Mcu_MemMap.h"
 
-static extSignalFreq Clock_Ip_axExtSignalFreqEntries[CLOCK_IP_EXT_SIGNALS_NO] =  {
-{gated_clk,0U},
-{fast_crystal_oscillator,0U},
-{slow_crystal_oscillator,0U},
-{eth0_mii_rx_ext_clk,0U},
-{eth0_mii_tx_ext_clk,0U},
-{eth0_rgmii_rx_ext_clk,0U},
-{eth0_rgmii_tx_ext_clk,0U},
-{eth0_rmii_ref_ext_clk,0U},
-{eth1_mii_rx_ext_clk,0U},
-{eth1_mii_tx_ext_clk,0U},
-{eth1_rgmii_rx_ext_clk,0U},
-{eth1_rgmii_tx_ext_clk,0U},
-{eth1_rmii_ref_ext_clk,0U},
-{eth2_mii_rx_ext_clk,0U},
-{eth2_mii_tx_ext_clk,0U},
-{eth2_rgmii_rx_ext_clk,0U},
-{eth2_rgmii_tx_ext_clk,0U},
-{eth2_rmii_ref_ext_clk,0U},
-{ts_1588_clk,0U},
-};
+/* External oscillators */
+static uint32 Clock_Ip_u32Fxosc = CLOCK_IP_DEFAULT_FXOSC_FREQUENCY;
+static extSignalFreq Clock_Ip_axExtSignalFreqEntries[CLOCK_IP_EXT_SIGNALS_NO] =  {{RTC_EXT_REF_CLK,0U},{FTM_0_EXT_REF_CLK,0U},{FTM_1_EXT_REF_CLK,0U},{GMAC_0_EXT_REF_CLK,0U},{GMAC_0_EXT_RX_CLK,0U},{GMAC_0_EXT_TX_CLK,0U},{GMAC_EXT_TS_CLK,0U},{PFE_MAC_0_EXT_REF_CLK,0U},{PFE_MAC_0_EXT_RX_CLK,0U},{PFE_MAC_0_EXT_TX_CLK,0U},{PFE_MAC_1_EXT_REF_CLK,0U},{PFE_MAC_1_EXT_RX_CLK,0U},{PFE_MAC_1_EXT_TX_CLK,0U},{PFE_MAC_2_EXT_REF_CLK,0U},{PFE_MAC_2_EXT_RX_CLK,0U},{PFE_MAC_2_EXT_TX_CLK,0U},{SERDES_0_XPCS_0_TX,0U},{SERDES_0_XPCS_0_CDR,0U},{SERDES_0_XPCS_1_TX,0U},{SERDES_0_XPCS_1_CDR,0U},{SERDES_1_XPCS_0_TX,0U},{SERDES_1_XPCS_0_CDR,0U},{SERDES_1_XPCS_1_TX,0U},{SERDES_1_XPCS_1_CDR,0U}};
+static uint32 Clock_Ip_u32CorePllFreq        = CLOCK_IP_COREPLL_FREQ;
+static uint32 Clock_Ip_u32CorePllChecksum    = CLOCK_IP_COREPLL_CHECKSUM;
+static uint32 Clock_Ip_u32PeriphPllFreq      = CLOCK_IP_PERIPHPLL_FREQ;
+static uint32 Clock_Ip_u32PeriphPllChecksum  = CLOCK_IP_PERIPHPLL_CHECKSUM;
+static uint32 Clock_Ip_u32DdrPllFreq         = CLOCK_IP_DDRPLL_FREQ;
+static uint32 Clock_Ip_u32DdrPllChecksum     = CLOCK_IP_DDRPLL_CHECKSUM;
+static uint32 Clock_Ip_u32AccelPllFreq       = CLOCK_IP_ACCELPLL_FREQ;
+static uint32 Clock_Ip_u32AccelPllChecksum   = CLOCK_IP_ACCELPLL_CHECKSUM;
+static uint32 Clock_Ip_u32CoreDfs1Freq       = CLOCK_IP_COREDFS1_FREQ;
+static uint32 Clock_Ip_u32CoreDfs1Checksum   = CLOCK_IP_COREDFS1_CHECKSUM;
+static uint32 Clock_Ip_u32CoreDfs2Freq       = CLOCK_IP_COREDFS2_FREQ;
+static uint32 Clock_Ip_u32CoreDfs2Checksum   = CLOCK_IP_COREDFS2_CHECKSUM;
+static uint32 Clock_Ip_u32CoreDfs3Freq       = CLOCK_IP_COREDFS3_FREQ;
+static uint32 Clock_Ip_u32CoreDfs3Checksum   = CLOCK_IP_COREDFS3_CHECKSUM;
+static uint32 Clock_Ip_u32CoreDfs4Freq       = CLOCK_IP_COREDFS4_FREQ;
+static uint32 Clock_Ip_u32CoreDfs4Checksum   = CLOCK_IP_COREDFS4_CHECKSUM;
+static uint32 Clock_Ip_u32CoreDfs5Freq       = CLOCK_IP_COREDFS5_FREQ;
+static uint32 Clock_Ip_u32CoreDfs5Checksum   = CLOCK_IP_COREDFS5_CHECKSUM;
+static uint32 Clock_Ip_u32CoreDfs6Freq       = CLOCK_IP_COREDFS6_FREQ;
+static uint32 Clock_Ip_u32CoreDfs6Checksum   = CLOCK_IP_COREDFS6_CHECKSUM;
+static uint32 Clock_Ip_u32PeriphDfs1Freq     = CLOCK_IP_PERIPHDFS1_FREQ;
+static uint32 Clock_Ip_u32PeriphDfs1Checksum = CLOCK_IP_PERIPHDFS1_CHECKSUM;
+static uint32 Clock_Ip_u32PeriphDfs2Freq     = CLOCK_IP_PERIPHDFS2_FREQ;
+static uint32 Clock_Ip_u32PeriphDfs2Checksum = CLOCK_IP_PERIPHDFS2_CHECKSUM;
+static uint32 Clock_Ip_u32PeriphDfs3Freq     = CLOCK_IP_PERIPHDFS3_FREQ;
+static uint32 Clock_Ip_u32PeriphDfs3Checksum = CLOCK_IP_PERIPHDFS3_CHECKSUM;
+static uint32 Clock_Ip_u32PeriphDfs4Freq     = CLOCK_IP_PERIPHDFS4_FREQ;
+static uint32 Clock_Ip_u32PeriphDfs4Checksum = CLOCK_IP_PERIPHDFS4_CHECKSUM;
+static uint32 Clock_Ip_u32PeriphDfs5Freq     = CLOCK_IP_PERIPHDFS5_FREQ;
+static uint32 Clock_Ip_u32PeriphDfs5Checksum = CLOCK_IP_PERIPHDFS5_CHECKSUM;
+static uint32 Clock_Ip_u32PeriphDfs6Freq     = CLOCK_IP_PERIPHDFS6_FREQ;
+static uint32 Clock_Ip_u32PeriphDfsChecksum = CLOCK_IP_PERIPHDFS6_CHECKSUM;
 
 /* Clock stop initialized section data */
 #define MCU_STOP_SEC_VAR_INIT_UNSPECIFIED
 #include "Mcu_MemMap.h"
-
-/* Clock start initialized section data */
-#define MCU_START_SEC_VAR_INIT_32
-#include "Mcu_MemMap.h"
-
-uint32 Clock_Ip_u32PLL0_CLKChecksum = 0U;
-uint32 Clock_Ip_u32PLL1_CLKChecksum = 0U;
-uint32 Clock_Ip_u32CPE_PLL_CLKChecksum = 0U;
-uint32 Clock_Ip_u32PLL0_DFS0_CLKChecksum = 0U;
-uint32 Clock_Ip_u32PLL0_DFS1_CLKChecksum = 0U;
-uint32 Clock_Ip_u32PLL0_DFS2_CLKChecksum = 0U;
-uint32 Clock_Ip_u32PLL0_DFS3_CLKChecksum = 0U;
-
-uint32 Clock_Ip_u32PLL0_DFS0_CLKFreq = 0U;
-uint32 Clock_Ip_u32PLL0_DFS1_CLKFreq = 0U;
-uint32 Clock_Ip_u32PLL0_DFS2_CLKFreq = 0U;
-uint32 Clock_Ip_u32PLL0_DFS3_CLKFreq = 0U;
-uint32 Clock_Ip_u32PLL0_CLKFreq = 0U;
-uint32 Clock_Ip_u32PLL1_CLKFreq = 0U;
-uint32 Clock_Ip_u32CPE_PLL_CLKFreq = 0U;
-
-/* Clock stop initialized section data */
-#define MCU_STOP_SEC_VAR_INIT_32
-#include "Mcu_MemMap.h"
-
 
 
 
@@ -1092,764 +751,931 @@ uint32 Clock_Ip_u32CPE_PLL_CLKFreq = 0U;
 #define MCU_START_SEC_CODE
 #include "Mcu_MemMap.h"
 
-
-
 /* Return zero frequency */
-static uint64 Clock_Ip_Get_Zero_Frequency(void)
+static uint32 get_Zero_Frequency(void)
 {
     return 0U;
 }
-
 /* Return FIRC_CLK frequency */
-static uint64 Clock_Ip_Get_FIRC_CLK_Frequency(void) {
-    return CLOCK_IP_FIRC_FREQUENCY;
-}
-/* Return FIRCDIV2_CLK frequency */
-static uint64 Clock_Ip_Get_FIRCDIV2_CLK_Frequency(void) {
-    return CLOCK_IP_FIRC_FREQUENCY / 2;
-}
-static uint64 Clock_Ip_Get_SAFE_CLK_Frequency(void) {
-    return CLOCK_IP_SAFE_FREQUENCY;
-}
-/* Return SIRC_CLK frequency */
-static uint64 Clock_Ip_Get_SIRC_CLK_Frequency(void) {
-    return CLOCK_IP_FIRC_FREQUENCY;
-}
-/* Return FXOSC_CLK frequency */
-static uint64 Clock_Ip_Get_FXOSC_CLK_Frequency(void) {
-    return CLOCK_IP_DEFAULT_FXOSC_FREQUENCY;
-}
-/* Return SXOSC_CLK frequency */
-static uint64 Clock_Ip_Get_SXOSC_CLK_Frequency(void) {
-    return 0U;
-}
-/* Return gated_clk frequency */
-static uint64 Clock_Ip_Get_gated_clk_Frequency(void) {
-    return 0U;
-}
-/* Return fast_crystal_oscillator frequency */
-static uint64 Clock_Ip_Get_fast_crystal_oscillator_Frequency(void) {
-    return 0U;
-}
-/* Return slow_crystal_oscillator frequency */
-static uint64 Clock_Ip_Get_slow_crystal_oscillator_Frequency(void) {
-    return 0U;
-}
-/* Return eth0_mii_rx_ext_clk frequency */
-static uint64 Clock_Ip_Get_eth0_mii_rx_ext_clk_Frequency(void) {
-    return 0U;
-}
-/* Return eth0_mii_tx_ext_clk frequency */
-static uint64 Clock_Ip_Get_eth0_mii_tx_ext_clk_Frequency(void) {
-    return 0U;
-}
-/* Return eth0_rgmii_rx_ext_clk frequency */
-static uint64 Clock_Ip_Get_eth0_rgmii_rx_ext_clk_Frequency(void) {
-    return 0U;
-}
-/* Return eth0_rgmii_tx_ext_clk frequency */
-static uint64 Clock_Ip_Get_eth0_rgmii_tx_ext_clk_Frequency(void) {
-    return 0U;
-}
-/* Return eth0_rmii_ref_ext_clk frequency */
-static uint64 Clock_Ip_Get_eth0_rmii_ref_ext_clk_Frequency(void) {
-    return 0U;
-}
-/* Return eth1_mii_rx_ext_clk frequency */
-static uint64 Clock_Ip_Get_eth1_mii_rx_ext_clk_Frequency(void) {
-    return 0U;
-}
-/* Return eth1_mii_tx_ext_clk frequency */
-static uint64 Clock_Ip_Get_eth1_mii_tx_ext_clk_Frequency(void) {
-    return 0U;
-}
-/* Return eth1_rgmii_rx_ext_clk frequency */
-static uint64 Clock_Ip_Get_eth1_rgmii_rx_ext_clk_Frequency(void) {
-    return 0U;
-}
-/* Return eth1_rgmii_tx_ext_clk frequency */
-static uint64 Clock_Ip_Get_eth1_rgmii_tx_ext_clk_Frequency(void) {
-    return 0U;
-}
-/* Return eth1_rmii_ref_ext_clk frequency */
-static uint64 Clock_Ip_Get_eth1_rmii_ref_ext_clk_Frequency(void) {
-    return 0U;
-}
-/* Return eth2_mii_rx_ext_clk frequency */
-static uint64 Clock_Ip_Get_eth2_mii_rx_ext_clk_Frequency(void) {
-    return 0U;
-}
-/* Return eth2_mii_tx_ext_clk frequency */
-static uint64 Clock_Ip_Get_eth2_mii_tx_ext_clk_Frequency(void) {
-    return 0U;
-}
-/* Return eth2_rgmii_rx_ext_clk frequency */
-static uint64 Clock_Ip_Get_eth2_rgmii_rx_ext_clk_Frequency(void) {
-    return 0U;
-}
-/* Return eth2_rgmii_tx_ext_clk frequency */
-static uint64 Clock_Ip_Get_eth2_rgmii_tx_ext_clk_Frequency(void) {
-    return 0U;
-}
-/* Return eth2_rmii_ref_ext_clk frequency */
-static uint64 Clock_Ip_Get_eth2_rmii_ref_ext_clk_Frequency(void) {
-    return 0U;
-}
-/* Return ts_1588_clk frequency */
-static uint64 Clock_Ip_Get_ts_1588_clk_Frequency(void) {
-    return 0U;
-}
-/* Return PLL0_CLK frequency */
-static uint64 Clock_Ip_Get_PLL0_CLK_Frequency(void) {
-    if (Clock_Ip_u32PLL0_CLKChecksum != (IP_PLL_0->CTRL.RW ^ IP_PLL_0->SPREAD_SPECTRUM.RW ^ IP_PLL_0->DIV.RW ^ IP_PLL_0->DENOMINATOR.RW ^IP_PLL_0->NUMERATOR.RW))
-    {
-        Clock_Ip_u32PLL0_CLKChecksum = (IP_PLL_0->CTRL.RW ^ IP_PLL_0->SPREAD_SPECTRUM.RW ^ IP_PLL_0->DIV.RW ^ IP_PLL_0->DENOMINATOR.RW ^ IP_PLL_0->NUMERATOR.RW);
-        Clock_Ip_u32PLL0_CLKFreq = Clock_Ip_PLL_VCO(IP_PLL_0);
-    }
-    return (((IP_PLL_0->PLL_STATUS & PLL_PLL_STATUS_PLL_LOCK_MASK) >> PLL_PLL_STATUS_PLL_LOCK_SHIFT) != 0U) ? Clock_Ip_u32PLL0_CLKFreq : 0U;
-}
-/* Return PLL0_DIV_CLK frequency */
-static uint64 Clock_Ip_Get_PLL0_DIV_CLK_Frequency(void) {
-    uint64 Frequency = Clock_Ip_Get_PLL0_CLK_Frequency();
-    Frequency >>= 2U;                                                                                                                                 /*  Apply divider value */
-    return Frequency;
-}
-/* Return PLL0_DIV0_CLK frequency */
-static uint64 Clock_Ip_Get_PLL0_DIV0_CLK_Frequency(void) {
-    uint64 Frequency = Clock_Ip_Get_PLL0_DIV_CLK_Frequency();
-    Frequency &= Clock_Ip_au32EnableDivider[((IP_PLL_0->PLL_OUTPUT_DIVIDER_0 & PLL_PLL_OUTPUT_DIVIDER_0_DE_MASK) >> PLL_PLL_OUTPUT_DIVIDER_0_DE_SHIFT)];/*  Divider enable/disable */
-    Frequency /= (((IP_PLL_0->PLL_OUTPUT_DIVIDER_0 & PLL_PLL_OUTPUT_DIVIDER_0_OUTPUT_DIV_MASK) >> PLL_PLL_OUTPUT_DIVIDER_0_OUTPUT_DIV_SHIFT) + 1U);   /*  Apply divider value */
-    return Frequency;
-}
-/* Return PLL0_DIV4_CLK frequency */
-static uint64 Clock_Ip_Get_PLL0_DIV4_CLK_Frequency(void) {
-    uint64 Frequency = Clock_Ip_Get_PLL0_DIV_CLK_Frequency();
-    Frequency &= Clock_Ip_au32EnableDivider[((IP_PLL_0->PLL_OUTPUT_DIVIDER_0 & PLL_PLL_OUTPUT_DIVIDER_0_DE_MASK) >> PLL_PLL_OUTPUT_DIVIDER_0_DE_SHIFT)];/*  Divider enable/disable */
-    Frequency /= (((IP_PLL_0->PLL_OUTPUT_DIVIDER_0 & PLL_PLL_OUTPUT_DIVIDER_0_OUTPUT_DIV_MASK) >> PLL_PLL_OUTPUT_DIVIDER_0_OUTPUT_DIV_SHIFT) + 1U);   /*  Apply divider value */
-    return Frequency;
-}
-/* Return PLL0_DFS0_CLK frequency */
-static uint64 Clock_Ip_Get_PLL0_DFS0_CLK_Frequency(void) {
-    if (Clock_Ip_u32PLL0_DFS0_CLKChecksum != (IP_PLL_0->DFS_CTRL_0.RW ^ IP_PLL_0->DFS_DIV_0.RW ^ IP_PLL_0->DFS_STATUS))
-    {
-        Clock_Ip_u32PLL0_DFS0_CLKChecksum = (IP_PLL_0->DFS_CTRL_0.RW ^ IP_PLL_0->DFS_DIV_0.RW ^ IP_PLL_0->DFS_STATUS);
-        Clock_Ip_u32PLL0_DFS0_CLKFreq = DFS_OUTPUT(IP_PLL_0,0U,Clock_Ip_Get_PLL0_CLK_Frequency());
-    }
-    return ((((IP_PLL_0->DFS_STATUS & PLL_DFS_STATUS_DFS_OK_MASK) >> PLL_DFS_STATUS_DFS_OK_SHIFT) & (1UL << 0U)) != 0U) ? Clock_Ip_u32PLL0_DFS0_CLKFreq : 0U;
-}
-#if defined(CLOCK_IP_HAS_PLL0_DFS1_CLK)
-/* Return PLL0_DFS1_CLK frequency */
-static uint64 Clock_Ip_Get_PLL0_DFS1_CLK_Frequency(void) {
-    if (Clock_Ip_u32PLL0_DFS1_CLKChecksum != (IP_PLL_0->DFS_CTRL_1.RW ^ IP_PLL_0->DFS_DIV_1.RW ^ IP_PLL_0->DFS_STATUS))
-    {
-        Clock_Ip_u32PLL0_DFS1_CLKChecksum = (IP_PLL_0->DFS_CTRL_1.RW ^ IP_PLL_0->DFS_DIV_1.RW ^ IP_PLL_0->DFS_STATUS);
-        Clock_Ip_u32PLL0_DFS1_CLKFreq = DFS_OUTPUT(IP_PLL_0,1U,Clock_Ip_Get_PLL0_CLK_Frequency());
-    }
-    return ((((IP_PLL_0->DFS_STATUS & PLL_DFS_STATUS_DFS_OK_MASK) >> PLL_DFS_STATUS_DFS_OK_SHIFT) & (1UL << 1U)) != 0U) ? Clock_Ip_u32PLL0_DFS1_CLKFreq : 0U;
-}
-#endif
-#if defined(CLOCK_IP_HAS_PLL0_DFS2_CLK)
-/* Return PLL0_DFS2_CLK frequency */
-static uint64 Clock_Ip_Get_PLL0_DFS2_CLK_Frequency(void) {
-    if (Clock_Ip_u32PLL0_DFS2_CLKChecksum != (IP_PLL_0->DFS_CTRL_2.RW ^ IP_PLL_0->DFS_DIV_2.RW ^ IP_PLL_0->DFS_STATUS))
-    {
-        Clock_Ip_u32PLL0_DFS2_CLKChecksum = (IP_PLL_0->DFS_CTRL_2.RW ^ IP_PLL_0->DFS_DIV_2.RW ^ IP_PLL_0->DFS_STATUS);
-        Clock_Ip_u32PLL0_DFS2_CLKFreq = DFS_OUTPUT(IP_PLL_0,2U,Clock_Ip_Get_PLL0_CLK_Frequency());
-    }
-    return ((((IP_PLL_0->DFS_STATUS & PLL_DFS_STATUS_DFS_OK_MASK) >> PLL_DFS_STATUS_DFS_OK_SHIFT) & (1UL << 2U)) != 0U) ? Clock_Ip_u32PLL0_DFS2_CLKFreq : 0U;
-}
-#endif
-#if defined(CLOCK_IP_HAS_PLL0_DFS3_CLK)
-/* Return PLL0_DFS3_CLK frequency */
-static uint64 Clock_Ip_Get_PLL0_DFS3_CLK_Frequency(void) {
-    if (Clock_Ip_u32PLL0_DFS3_CLKChecksum != (IP_PLL_0->DFS_CTRL_3.RW ^ IP_PLL_0->DFS_DIV_3.RW ^ IP_PLL_0->DFS_STATUS))
-    {
-        Clock_Ip_u32PLL0_DFS3_CLKChecksum = (IP_PLL_0->DFS_CTRL_3.RW ^ IP_PLL_0->DFS_DIV_3.RW ^ IP_PLL_0->DFS_STATUS);
-        Clock_Ip_u32PLL0_DFS3_CLKFreq = DFS_OUTPUT(IP_PLL_0,3U,Clock_Ip_Get_PLL0_CLK_Frequency());
-    }
-    return ((((IP_PLL_0->DFS_STATUS & PLL_DFS_STATUS_DFS_OK_MASK) >> PLL_DFS_STATUS_DFS_OK_SHIFT) & (1UL << 3U)) != 0U) ? Clock_Ip_u32PLL0_DFS3_CLKFreq : 0U;
-}
-#endif
-/* Return PLL1_CLK frequency */
-static uint64 Clock_Ip_Get_PLL1_CLK_Frequency(void) {
-    if (Clock_Ip_u32PLL1_CLKChecksum != (IP_PLL_1->CTRL.RW ^ IP_PLL_1->SPREAD_SPECTRUM.RW ^ IP_PLL_1->DIV.RW ^ IP_PLL_1->DENOMINATOR.RW ^IP_PLL_1->NUMERATOR.RW))
-    {
-        Clock_Ip_u32PLL1_CLKChecksum = (IP_PLL_1->CTRL.RW ^ IP_PLL_1->SPREAD_SPECTRUM.RW ^ IP_PLL_1->DIV.RW ^ IP_PLL_1->DENOMINATOR.RW ^ IP_PLL_1->NUMERATOR.RW);
-        Clock_Ip_u32PLL1_CLKFreq = Clock_Ip_PLL_VCO(IP_PLL_1);
-    }
-    return (((IP_PLL_1->PLL_STATUS & PLL_PLL_STATUS_PLL_LOCK_MASK) >> PLL_PLL_STATUS_PLL_LOCK_SHIFT) != 0U) ? Clock_Ip_u32PLL1_CLKFreq : 0U;
-}
-/* Return PLL1_DIV_CLK frequency */
-static uint64 Clock_Ip_Get_PLL1_DIV_CLK_Frequency(void) {
-    uint64 Frequency = Clock_Ip_Get_PLL1_CLK_Frequency();
-    Frequency >>= 2U;                                                                                                                                 /*  Apply divider value */
-    return Frequency;
-}
-/* Return PLL1_DIV0_CLK frequency */
-static uint64 Clock_Ip_Get_PLL1_DIV0_CLK_Frequency(void) {
-    uint64 Frequency = Clock_Ip_Get_PLL1_DIV_CLK_Frequency();
-    Frequency &= Clock_Ip_au32EnableDivider[((IP_PLL_1->PLL_OUTPUT_DIVIDER_0 & PLL_PLL_OUTPUT_DIVIDER_0_DE_MASK) >> PLL_PLL_OUTPUT_DIVIDER_0_DE_SHIFT)];/*  Divider enable/disable */
-    Frequency /= (((IP_PLL_1->PLL_OUTPUT_DIVIDER_0 & PLL_PLL_OUTPUT_DIVIDER_0_OUTPUT_DIV_MASK) >> PLL_PLL_OUTPUT_DIVIDER_0_OUTPUT_DIV_SHIFT) + 1U);   /*  Apply divider value */
-    return Frequency;
-}
-/* Return CPE_PLL_CLK frequency */
-static uint64 Clock_Ip_Get_CPE_PLL_CLK_Frequency(void) {
-    if (Clock_Ip_u32CPE_PLL_CLKChecksum != (IP_CPE_PLL->CTRL.RW ^ IP_CPE_PLL->SPREAD_SPECTRUM.RW ^ IP_CPE_PLL->DIV.RW ^ IP_CPE_PLL->DENOMINATOR.RW ^IP_CPE_PLL->NUMERATOR.RW))
-    {
-        Clock_Ip_u32CPE_PLL_CLKChecksum = (IP_CPE_PLL->CTRL.RW ^ IP_CPE_PLL->SPREAD_SPECTRUM.RW ^ IP_CPE_PLL->DIV.RW ^ IP_CPE_PLL->DENOMINATOR.RW ^ IP_CPE_PLL->NUMERATOR.RW);
-        Clock_Ip_u32CPE_PLL_CLKFreq = Clock_Ip_PLL_VCO(IP_CPE_PLL);
-    }
-    return (((IP_CPE_PLL->PLL_STATUS & PLL_PLL_STATUS_PLL_LOCK_MASK) >> PLL_PLL_STATUS_PLL_LOCK_SHIFT) != 0U) ? Clock_Ip_u32CPE_PLL_CLKFreq : 0U;
-}
-/* Return CPE_DIV_CLK frequency */
-static uint64 Clock_Ip_Get_CPE_DIV_CLK_Frequency(void) {
-    uint64 Frequency = Clock_Ip_Get_CPE_PLL_CLK_Frequency();
-    Frequency >>= 2U;                                                                                                                                 /*  Apply divider value */
-    return Frequency;
-}
-/* Return CPE_DIV0_CLK frequency */
-static uint64 Clock_Ip_Get_CPE_DIV0_CLK_Frequency(void) {
-    uint64 Frequency = Clock_Ip_Get_CPE_DIV_CLK_Frequency();
-    Frequency &= Clock_Ip_au32EnableDivider[((IP_CPE_PLL->PLL_OUTPUT_DIVIDER_0 & PLL_PLL_OUTPUT_DIVIDER_0_DE_MASK) >> PLL_PLL_OUTPUT_DIVIDER_0_DE_SHIFT)];/*  Divider enable/disable */
-    Frequency /= (((IP_CPE_PLL->PLL_OUTPUT_DIVIDER_0 & PLL_PLL_OUTPUT_DIVIDER_0_OUTPUT_DIV_MASK) >> PLL_PLL_OUTPUT_DIVIDER_0_OUTPUT_DIV_SHIFT) + 1U); /*  Apply divider value */
-    return Frequency;
-}
-/* Return LPE_CLK frequency */
-static uint64 Clock_Ip_Get_LPE_CLK_Frequency(void) {
-    return Clock_Ip_apfFreqSrcTable[0U][((IP_LPE_MC_CGM->SLC_0_CSS & MC_CGM_SLC_0_CSS_SELSTAT_MASK) >> MC_CGM_SLC_0_CSS_SELSTAT_SHIFT)]();       /*  Selector value */
-}
-#if defined(CLOCK_IP_HAS_LPE_DIV1_CLK)
-/* Return LPE_DIV1_CLK frequency */
-static uint64 Clock_Ip_Get_LPE_DIV1_CLK_Frequency(void) {
-    uint64 Frequency = Clock_Ip_Get_LPE_CLK_Frequency();
-    Frequency &= Clock_Ip_au32EnableDivider[((IP_LPE_MC_CGM->SLC_0_DC_0 & MC_CGM_SLC_0_DC_0_DE_MASK) >> MC_CGM_SLC_0_DC_0_DE_SHIFT)];                 /*  Divider enable/disable */
-    Frequency /= (((IP_LPE_MC_CGM->SLC_0_DC_0 & MC_CGM_SLC_0_DC_0_DIV_MASK) >> MC_CGM_SLC_0_DC_0_DIV_SHIFT) + 1U);                                    /*  Apply divider value */
-    return Frequency;                                                                                                                                 /*  Return frequency value */
-}
-#endif
-#if defined(CLOCK_IP_HAS_LPE_DIV2_CLK)
-/* Return LPE_DIV2_CLK frequency */
-static uint64 Clock_Ip_Get_LPE_DIV2_CLK_Frequency(void) {
-    uint64 Frequency = Clock_Ip_Get_LPE_CLK_Frequency();
-    Frequency &= Clock_Ip_au32EnableDivider[((IP_LPE_MC_CGM->SLC_0_DC_0 & MC_CGM_SLC_0_DC_0_DE_MASK) >> MC_CGM_SLC_0_DC_0_DE_SHIFT)];                 /*  Divider enable/disable */
-    Frequency /= (((IP_LPE_MC_CGM->SLC_0_DC_0 & MC_CGM_SLC_0_DC_0_DIV_MASK) >> MC_CGM_SLC_0_DC_0_DIV_SHIFT) + 1U);                                    /*  Apply divider value */
-    return Frequency;                                                                                                                                 /*  Return frequency value */
-}
-#endif
-#if defined(CLOCK_IP_HAS_LPE_DIV4_CLK)
-/* Return LPE_DIV4_CLK frequency */
-static uint64 Clock_Ip_Get_LPE_DIV4_CLK_Frequency(void) {
-    uint64 Frequency = Clock_Ip_Get_LPE_CLK_Frequency();
-    Frequency &= Clock_Ip_au32EnableDivider[((IP_LPE_MC_CGM->SLC_0_DC_0 & MC_CGM_SLC_0_DC_0_DE_MASK) >> MC_CGM_SLC_0_DC_0_DE_SHIFT)];                 /*  Divider enable/disable */
-    Frequency /= (((IP_LPE_MC_CGM->SLC_0_DC_0 & MC_CGM_SLC_0_DC_0_DIV_MASK) >> MC_CGM_SLC_0_DC_0_DIV_SHIFT) + 1U);                                    /*  Apply divider value */
-    return Frequency;                                                                                                                                 /*  Return frequency value */
-}
-#endif
-#if defined(CLOCK_IP_HAS_LPE_DIV8_CLK)
-/* Return LPE_DIV8_CLK frequency */
-static uint64 Clock_Ip_Get_LPE_DIV8_CLK_Frequency(void) {
-    uint64 Frequency = Clock_Ip_Get_LPE_CLK_Frequency();
-    Frequency &= Clock_Ip_au32EnableDivider[((IP_LPE_MC_CGM->SLC_0_DC_0 & MC_CGM_SLC_0_DC_0_DE_MASK) >> MC_CGM_SLC_0_DC_0_DE_SHIFT)];                 /*  Divider enable/disable */
-    Frequency /= (((IP_LPE_MC_CGM->SLC_0_DC_0 & MC_CGM_SLC_0_DC_0_DIV_MASK) >> MC_CGM_SLC_0_DC_0_DIV_SHIFT) + 1U);                                    /*  Apply divider value */
-    return Frequency;                                                                                                                                 /*  Return frequency value */
-}
-#endif
-/* Return PLT_CLK frequency */
-static uint64 Clock_Ip_Get_PLT_CLK_Frequency(void) {
-    return Clock_Ip_apfFreqSrcTable[0U][((IP_MC_CGM_3->SLC_0_CSS & MC_CGM_SLC_0_CSS_SELSTAT_MASK) >> MC_CGM_SLC_0_CSS_SELSTAT_SHIFT)]();         /*  Selector value */
-}
-#if defined(CLOCK_IP_HAS_PLTCORE_CLK)
-/* Return PLTCORE_CLK frequency */
-static uint64 Clock_Ip_Get_PLTCORE_CLK_Frequency(void) {
-    uint64 Frequency = Clock_Ip_Get_PLT_CLK_Frequency();
-    Frequency &= Clock_Ip_au32EnableDivider[((IP_MC_CGM_3->SLC_0_DC_0 & MC_CGM_SLC_0_DC_0_DE_MASK) >> MC_CGM_SLC_0_DC_0_DE_SHIFT)];                   /*  Divider enable/disable */
-    Frequency /= (((IP_MC_CGM_3->SLC_0_DC_0 & MC_CGM_SLC_0_DC_0_DIV_MASK) >> MC_CGM_SLC_0_DC_0_DIV_SHIFT) + 1U);                                      /*  Apply divider value */
-    return Frequency;                                                                                                                                 /*  Return frequency value */
-}
-#endif
-#if defined(CLOCK_IP_HAS_PLTDIV1_CLK)
-/* Return PLTDIV1_CLK frequency */
-static uint64 Clock_Ip_Get_PLTDIV1_CLK_Frequency(void) {
-    uint64 Frequency = Clock_Ip_Get_PLT_CLK_Frequency();
-    Frequency &= Clock_Ip_au32EnableDivider[((IP_MC_CGM_3->SLC_0_DC_1 & MC_CGM_SLC_0_DC_1_DE_MASK) >> MC_CGM_SLC_0_DC_1_DE_SHIFT)];                   /*  Divider enable/disable */
-    Frequency /= (((IP_MC_CGM_3->SLC_0_DC_1 & MC_CGM_SLC_0_DC_1_DIV_MASK) >> MC_CGM_SLC_0_DC_1_DIV_SHIFT) + 1U);                                      /*  Apply divider value */
-    return Frequency;                                                                                                                                 /*  Return frequency value */
-}
-#endif
-#if defined(CLOCK_IP_HAS_PLTDIV2_CLK)
-/* Return PLTDIV2_CLK frequency */
-static uint64 Clock_Ip_Get_PLTDIV2_CLK_Frequency(void) {
-    uint64 Frequency = Clock_Ip_Get_PLT_CLK_Frequency();
-    Frequency &= Clock_Ip_au32EnableDivider[((IP_MC_CGM_3->SLC_0_DC_2 & MC_CGM_SLC_0_DC_2_DE_MASK) >> MC_CGM_SLC_0_DC_2_DE_SHIFT)];                   /*  Divider enable/disable */
-    Frequency /= (((IP_MC_CGM_3->SLC_0_DC_2 & MC_CGM_SLC_0_DC_2_DIV_MASK) >> MC_CGM_SLC_0_DC_2_DIV_SHIFT) + 1U);                                      /*  Apply divider value */
-    return Frequency;                                                                                                                                 /*  Return frequency value */
-}
-#endif
-#if defined(CLOCK_IP_HAS_PLTDIV4_CLK)
-/* Return PLTDIV4_CLK frequency */
-static uint64 Clock_Ip_Get_PLTDIV4_CLK_Frequency(void) {
-    uint64 Frequency = Clock_Ip_Get_PLT_CLK_Frequency();
-    Frequency &= Clock_Ip_au32EnableDivider[((IP_MC_CGM_3->SLC_0_DC_3 & MC_CGM_SLC_0_DC_3_DE_MASK) >> MC_CGM_SLC_0_DC_3_DE_SHIFT)];                   /*  Divider enable/disable */
-    Frequency /= (((IP_MC_CGM_3->SLC_0_DC_3 & MC_CGM_SLC_0_DC_3_DIV_MASK) >> MC_CGM_SLC_0_DC_3_DIV_SHIFT) + 1U);                                      /*  Apply divider value */
-    return Frequency;                                                                                                                                 /*  Return frequency value */
-}
-#endif
-/* Return CAN_PE_CLK frequency */
-static uint64 Clock_Ip_Get_CAN_PE_CLK_Frequency(void) {
-    uint64 Frequency = 0U;
-    Frequency = Clock_Ip_apfFreqSrcTable[0U][((IP_MC_CGM_1->SLC_3_CSS & MC_CGM_SLC_3_CSS_SELSTAT_MASK) >> MC_CGM_SLC_3_CSS_SELSTAT_SHIFT)]();         /*  Selector value */
-    Frequency &= Clock_Ip_au32EnableDivider[((IP_MC_CGM_1->SLC_3_DC_0 & MC_CGM_SLC_3_DC_0_DE_MASK) >> MC_CGM_SLC_3_DC_0_DE_SHIFT)];                   /*  Divider enable/disable */
-    Frequency /= (((IP_MC_CGM_1->SLC_3_DC_0 & MC_CGM_SLC_3_DC_0_DIV_MASK) >> MC_CGM_SLC_3_DC_0_DIV_SHIFT) + 1U);                                      /*  Apply divider value */
-    return Frequency;                                                                                                                                 /*  Return frequency value */
-}
-/* Return DFT_CLK frequency */
-static uint64 Clock_Ip_Get_DFT_CLK_Frequency(void) {
-    uint64 Frequency = 0U;
-    Frequency = Clock_Ip_apfFreqSrcTable[0U][((IP_MC_CGM_3->SLC_10_CSS & MC_CGM_SLC_10_CSS_SELSTAT_MASK) >> MC_CGM_SLC_10_CSS_SELSTAT_SHIFT)]();      /*  Selector value */
-    Frequency &= Clock_Ip_au32EnableDivider[((IP_MC_CGM_3->SLC_10_DC_0 & MC_CGM_SLC_10_DC_0_DE_MASK) >> MC_CGM_SLC_10_DC_0_DE_SHIFT)];                /*  Divider enable/disable */
-    Frequency /= (((IP_MC_CGM_3->SLC_10_DC_0 & MC_CGM_SLC_10_DC_0_DIV_MASK) >> MC_CGM_SLC_10_DC_0_DIV_SHIFT) + 1U);                                   /*  Apply divider value */
-    return Frequency;                                                                                                                                 /*  Return frequency value */
-}
-/* Return DSPI_CLK frequency */
-static uint64 Clock_Ip_Get_DSPI_CLK_Frequency(void) {
-    uint64 Frequency = 0U;
-    Frequency = Clock_Ip_apfFreqSrcTable[0U][((IP_MC_CGM_3->SLC_5_CSS & MC_CGM_SLC_5_CSS_SELSTAT_MASK) >> MC_CGM_SLC_5_CSS_SELSTAT_SHIFT)]();         /*  Selector value */
-    Frequency &= Clock_Ip_au32EnableDivider[((IP_MC_CGM_3->SLC_5_DC_0 & MC_CGM_SLC_5_DC_0_DE_MASK) >> MC_CGM_SLC_5_DC_0_DE_SHIFT)];                   /*  Divider enable/disable */
-    Frequency /= (((IP_MC_CGM_3->SLC_5_DC_0 & MC_CGM_SLC_5_DC_0_DIV_MASK) >> MC_CGM_SLC_5_DC_0_DIV_SHIFT) + 1U);                                      /*  Apply divider value */
-    return Frequency;                                                                                                                                 /*  Return frequency value */
-}
-/* Return ETH_TS_CLK frequency */
-static uint64 Clock_Ip_Get_ETH_TS_CLK_Frequency(void) {
-    uint64 Frequency = 0U;
-    Frequency = Clock_Ip_apfFreqSrcTable[0U][((IP_MC_CGM_3->SLC_13_CSS & MC_CGM_SLC_13_CSS_SELSTAT_MASK) >> MC_CGM_SLC_13_CSS_SELSTAT_SHIFT)]();      /*  Selector value */
-    Frequency &= Clock_Ip_au32EnableDivider[((IP_MC_CGM_3->SLC_13_DC_0 & MC_CGM_SLC_13_DC_0_DE_MASK) >> MC_CGM_SLC_13_DC_0_DE_SHIFT)];                /*  Divider enable/disable */
-    Frequency /= (((IP_MC_CGM_3->SLC_13_DC_0 & MC_CGM_SLC_13_DC_0_DIV_MASK) >> MC_CGM_SLC_13_DC_0_DIV_SHIFT) + 1U);                                   /*  Apply divider value */
-    return Frequency;                                                                                                                                 /*  Return frequency value */
-}
-/* Return ETH0_RX_CLK frequency */
-static uint64 Clock_Ip_Get_ETH0_RX_CLK_Frequency(void) {
-    uint64 Frequency = 0U;
-    Frequency = Clock_Ip_apfFreqSrcTable[0U][((IP_MC_CGM_0->SLC_3_CSS & MC_CGM_SLC_3_CSS_SELSTAT_MASK) >> MC_CGM_SLC_3_CSS_SELSTAT_SHIFT)]();         /*  Selector value */
-    Frequency &= Clock_Ip_au32EnableDivider[((IP_MC_CGM_0->SLC_3_DC_0 & MC_CGM_SLC_3_DC_0_DE_MASK) >> MC_CGM_SLC_3_DC_0_DE_SHIFT)];                   /*  Divider enable/disable */
-    Frequency /= (((IP_MC_CGM_0->SLC_3_DC_0 & MC_CGM_SLC_3_DC_0_DIV_MASK) >> MC_CGM_SLC_3_DC_0_DIV_SHIFT) + 1U);                                      /*  Apply divider value */
-    return Frequency;                                                                                                                                 /*  Return frequency value */
-}
-/* Return ETH0_TX_CLK frequency */
-static uint64 Clock_Ip_Get_ETH0_TX_CLK_Frequency(void) {
-    uint64 Frequency = 0U;
-    Frequency = Clock_Ip_apfFreqSrcTable[0U][((IP_MC_CGM_0->SLC_4_CSS & MC_CGM_SLC_4_CSS_SELSTAT_MASK) >> MC_CGM_SLC_4_CSS_SELSTAT_SHIFT)]();         /*  Selector value */
-    Frequency &= Clock_Ip_au32EnableDivider[((IP_MC_CGM_0->SLC_4_DC_0 & MC_CGM_SLC_4_DC_0_DE_MASK) >> MC_CGM_SLC_4_DC_0_DE_SHIFT)];                   /*  Divider enable/disable */
-    Frequency /= (((IP_MC_CGM_0->SLC_4_DC_0 & MC_CGM_SLC_4_DC_0_DIV_MASK) >> MC_CGM_SLC_4_DC_0_DIV_SHIFT) + 1U);                                      /*  Apply divider value */
-    return Frequency;                                                                                                                                 /*  Return frequency value */
-}
-/* Return ETH1_RX_CLK frequency */
-static uint64 Clock_Ip_Get_ETH1_RX_CLK_Frequency(void) {
-    uint64 Frequency = 0U;
-    Frequency = Clock_Ip_apfFreqSrcTable[0U][((IP_MC_CGM_0->SLC_5_CSS & MC_CGM_SLC_5_CSS_SELSTAT_MASK) >> MC_CGM_SLC_5_CSS_SELSTAT_SHIFT)]();         /*  Selector value */
-    Frequency &= Clock_Ip_au32EnableDivider[((IP_MC_CGM_0->SLC_5_DC_0 & MC_CGM_SLC_5_DC_0_DE_MASK) >> MC_CGM_SLC_5_DC_0_DE_SHIFT)];                   /*  Divider enable/disable */
-    Frequency /= (((IP_MC_CGM_0->SLC_5_DC_0 & MC_CGM_SLC_5_DC_0_DIV_MASK) >> MC_CGM_SLC_5_DC_0_DIV_SHIFT) + 1U);                                      /*  Apply divider value */
-    return Frequency;                                                                                                                                 /*  Return frequency value */
-}
-/* Return ETH1_TX_CLK frequency */
-static uint64 Clock_Ip_Get_ETH1_TX_CLK_Frequency(void) {
-    uint64 Frequency = 0U;
-    Frequency = Clock_Ip_apfFreqSrcTable[0U][((IP_MC_CGM_0->SLC_6_CSS & MC_CGM_SLC_6_CSS_SELSTAT_MASK) >> MC_CGM_SLC_6_CSS_SELSTAT_SHIFT)]();         /*  Selector value */
-    Frequency &= Clock_Ip_au32EnableDivider[((IP_MC_CGM_0->SLC_6_DC_0 & MC_CGM_SLC_6_DC_0_DE_MASK) >> MC_CGM_SLC_6_DC_0_DE_SHIFT)];                   /*  Divider enable/disable */
-    Frequency /= (((IP_MC_CGM_0->SLC_6_DC_0 & MC_CGM_SLC_6_DC_0_DIV_MASK) >> MC_CGM_SLC_6_DC_0_DIV_SHIFT) + 1U);                                      /*  Apply divider value */
-    return Frequency;                                                                                                                                 /*  Return frequency value */
-}
-/* Return ETH2_RX_CLK frequency */
-static uint64 Clock_Ip_Get_ETH2_RX_CLK_Frequency(void) {
-    uint64 Frequency = 0U;
-    Frequency = Clock_Ip_apfFreqSrcTable[0U][((IP_MC_CGM_0->SLC_7_CSS & MC_CGM_SLC_7_CSS_SELSTAT_MASK) >> MC_CGM_SLC_7_CSS_SELSTAT_SHIFT)]();         /*  Selector value */
-    Frequency &= Clock_Ip_au32EnableDivider[((IP_MC_CGM_0->SLC_7_DC_0 & MC_CGM_SLC_7_DC_0_DE_MASK) >> MC_CGM_SLC_7_DC_0_DE_SHIFT)];                   /*  Divider enable/disable */
-    Frequency /= (((IP_MC_CGM_0->SLC_7_DC_0 & MC_CGM_SLC_7_DC_0_DIV_MASK) >> MC_CGM_SLC_7_DC_0_DIV_SHIFT) + 1U);                                      /*  Apply divider value */
-    return Frequency;                                                                                                                                 /*  Return frequency value */
-}
-/* Return ETH2_TX_CLK frequency */
-static uint64 Clock_Ip_Get_ETH2_TX_CLK_Frequency(void) {
-    uint64 Frequency = 0U;
-    Frequency = Clock_Ip_apfFreqSrcTable[0U][((IP_MC_CGM_0->SLC_8_CSS & MC_CGM_SLC_8_CSS_SELSTAT_MASK) >> MC_CGM_SLC_8_CSS_SELSTAT_SHIFT)]();         /*  Selector value */
-    Frequency &= Clock_Ip_au32EnableDivider[((IP_MC_CGM_0->SLC_8_DC_0 & MC_CGM_SLC_8_DC_0_DE_MASK) >> MC_CGM_SLC_8_DC_0_DE_SHIFT)];                   /*  Divider enable/disable */
-    Frequency /= (((IP_MC_CGM_0->SLC_8_DC_0 & MC_CGM_SLC_8_DC_0_DIV_MASK) >> MC_CGM_SLC_8_DC_0_DIV_SHIFT) + 1U);                                      /*  Apply divider value */
-    return Frequency;                                                                                                                                 /*  Return frequency value */
-}
-/* Return ETH3_RX_CLK frequency */
-static uint64 Clock_Ip_Get_ETH3_RX_CLK_Frequency(void) {
-    uint64 Frequency = 0U;
-    Frequency = Clock_Ip_apfFreqSrcTable[0U][((IP_MC_CGM_0->SLC_11_CSS & MC_CGM_SLC_11_CSS_SELSTAT_MASK) >> MC_CGM_SLC_11_CSS_SELSTAT_SHIFT)]();      /*  Selector value */
-    Frequency &= Clock_Ip_au32EnableDivider[((IP_MC_CGM_0->SLC_11_DC_0 & MC_CGM_SLC_11_DC_0_DE_MASK) >> MC_CGM_SLC_11_DC_0_DE_SHIFT)];                /*  Divider enable/disable */
-    Frequency /= (((IP_MC_CGM_0->SLC_11_DC_0 & MC_CGM_SLC_11_DC_0_DIV_MASK) >> MC_CGM_SLC_11_DC_0_DIV_SHIFT) + 1U);                                   /*  Apply divider value */
-    return Frequency;                                                                                                                                 /*  Return frequency value */
-}
-/* Return ETH3_TX_CLK frequency */
-static uint64 Clock_Ip_Get_ETH3_TX_CLK_Frequency(void) {
-    uint64 Frequency = 0U;
-    Frequency = Clock_Ip_apfFreqSrcTable[0U][((IP_MC_CGM_0->SLC_12_CSS & MC_CGM_SLC_12_CSS_SELSTAT_MASK) >> MC_CGM_SLC_12_CSS_SELSTAT_SHIFT)]();      /*  Selector value */
-    Frequency &= Clock_Ip_au32EnableDivider[((IP_MC_CGM_0->SLC_12_DC_0 & MC_CGM_SLC_12_DC_0_DE_MASK) >> MC_CGM_SLC_12_DC_0_DE_SHIFT)];                /*  Divider enable/disable */
-    Frequency /= (((IP_MC_CGM_0->SLC_12_DC_0 & MC_CGM_SLC_12_DC_0_DIV_MASK) >> MC_CGM_SLC_12_DC_0_DIV_SHIFT) + 1U);                                   /*  Apply divider value */
-    return Frequency;                                                                                                                                 /*  Return frequency value */
-}
-/* Return ETH4_RX_CLK frequency */
-static uint64 Clock_Ip_Get_ETH4_RX_CLK_Frequency(void) {
-    uint64 Frequency = 0U;
-    Frequency = Clock_Ip_apfFreqSrcTable[0U][((IP_MC_CGM_0->SLC_13_CSS & MC_CGM_SLC_13_CSS_SELSTAT_MASK) >> MC_CGM_SLC_13_CSS_SELSTAT_SHIFT)]();      /*  Selector value */
-    Frequency &= Clock_Ip_au32EnableDivider[((IP_MC_CGM_0->SLC_13_DC_0 & MC_CGM_SLC_13_DC_0_DE_MASK) >> MC_CGM_SLC_13_DC_0_DE_SHIFT)];                /*  Divider enable/disable */
-    Frequency /= (((IP_MC_CGM_0->SLC_13_DC_0 & MC_CGM_SLC_13_DC_0_DIV_MASK) >> MC_CGM_SLC_13_DC_0_DIV_SHIFT) + 1U);                                   /*  Apply divider value */
-    return Frequency;                                                                                                                                 /*  Return frequency value */
-}
-/* Return ETH4_TX_CLK frequency */
-static uint64 Clock_Ip_Get_ETH4_TX_CLK_Frequency(void) {
-    uint64 Frequency = 0U;
-    Frequency = Clock_Ip_apfFreqSrcTable[0U][((IP_MC_CGM_0->SLC_14_CSS & MC_CGM_SLC_14_CSS_SELSTAT_MASK) >> MC_CGM_SLC_14_CSS_SELSTAT_SHIFT)]();      /*  Selector value */
-    Frequency &= Clock_Ip_au32EnableDivider[((IP_MC_CGM_0->SLC_14_DC_0 & MC_CGM_SLC_14_DC_0_DE_MASK) >> MC_CGM_SLC_14_DC_0_DE_SHIFT)];                /*  Divider enable/disable */
-    Frequency /= (((IP_MC_CGM_0->SLC_14_DC_0 & MC_CGM_SLC_14_DC_0_DIV_MASK) >> MC_CGM_SLC_14_DC_0_DIV_SHIFT) + 1U);                                   /*  Apply divider value */
-    return Frequency;                                                                                                                                 /*  Return frequency value */
-}
-/* Return FLEXCAN_0to7_PE_CLK frequency */
-static uint64 Clock_Ip_Get_FLEXCAN_0to7_PE_CLK_Frequency(void) {
-    uint64 Frequency = 0U;
-    Frequency = Clock_Ip_apfFreqSrcTable[0U][((IP_MC_CGM_3->SLC_2_CSS & MC_CGM_SLC_2_CSS_SELSTAT_MASK) >> MC_CGM_SLC_2_CSS_SELSTAT_SHIFT)]();         /*  Selector value */
-    Frequency &= Clock_Ip_au32EnableDivider[((IP_MC_CGM_3->SLC_2_DC_0 & MC_CGM_SLC_2_DC_0_DE_MASK) >> MC_CGM_SLC_2_DC_0_DE_SHIFT)];                   /*  Divider enable/disable */
-    Frequency /= (((IP_MC_CGM_3->SLC_2_DC_0 & MC_CGM_SLC_2_DC_0_DIV_MASK) >> MC_CGM_SLC_2_DC_0_DIV_SHIFT) + 1U);                                      /*  Apply divider value */
-    return Frequency;                                                                                                                                 /*  Return frequency value */
-}
-/* Return FLEXCAN_8to10_PE_CLK frequency */
-static uint64 Clock_Ip_Get_FLEXCAN_8to10_PE_CLK_Frequency(void) {
-    uint64 Frequency = 0U;
-    Frequency = Clock_Ip_apfFreqSrcTable[0U][((IP_MC_CGM_3->SLC_3_CSS & MC_CGM_SLC_3_CSS_SELSTAT_MASK) >> MC_CGM_SLC_3_CSS_SELSTAT_SHIFT)]();         /*  Selector value */
-    Frequency &= Clock_Ip_au32EnableDivider[((IP_MC_CGM_3->SLC_3_DC_0 & MC_CGM_SLC_3_DC_0_DE_MASK) >> MC_CGM_SLC_3_DC_0_DE_SHIFT)];                   /*  Divider enable/disable */
-    Frequency /= (((IP_MC_CGM_3->SLC_3_DC_0 & MC_CGM_SLC_3_DC_0_DIV_MASK) >> MC_CGM_SLC_3_DC_0_DIV_SHIFT) + 1U);                                      /*  Apply divider value */
-    return Frequency;                                                                                                                                 /*  Return frequency value */
-}
-/* Return FLEXCAN_11to16_PE_CLK frequency */
-static uint64 Clock_Ip_Get_FLEXCAN_11to16_PE_CLK_Frequency(void) {
-    uint64 Frequency = 0U;
-    Frequency = Clock_Ip_apfFreqSrcTable[0U][((IP_MC_CGM_3->SLC_4_CSS & MC_CGM_SLC_4_CSS_SELSTAT_MASK) >> MC_CGM_SLC_4_CSS_SELSTAT_SHIFT)]();         /*  Selector value */
-    Frequency &= Clock_Ip_au32EnableDivider[((IP_MC_CGM_3->SLC_4_DC_0 & MC_CGM_SLC_4_DC_0_DE_MASK) >> MC_CGM_SLC_4_DC_0_DE_SHIFT)];                   /*  Divider enable/disable */
-    Frequency /= (((IP_MC_CGM_3->SLC_4_DC_0 & MC_CGM_SLC_4_DC_0_DIV_MASK) >> MC_CGM_SLC_4_DC_0_DIV_SHIFT) + 1U);                                      /*  Apply divider value */
-    return Frequency;                                                                                                                                 /*  Return frequency value */
-}
-/* Return FLEXIO_CLK frequency */
-static uint64 Clock_Ip_Get_FLEXIO_CLK_Frequency(void) {
-    uint64 Frequency = 0U;
-    Frequency = Clock_Ip_apfFreqSrcTable[0U][((IP_MC_CGM_3->SLC_1_CSS & MC_CGM_SLC_1_CSS_SELSTAT_MASK) >> MC_CGM_SLC_1_CSS_SELSTAT_SHIFT)]();         /*  Selector value */
-    Frequency &= Clock_Ip_au32EnableDivider[((IP_MC_CGM_3->SLC_1_DC_0 & MC_CGM_SLC_1_DC_0_DE_MASK) >> MC_CGM_SLC_1_DC_0_DE_SHIFT)];                   /*  Divider enable/disable */
-    Frequency /= (((IP_MC_CGM_3->SLC_1_DC_0 & MC_CGM_SLC_1_DC_0_DIV_MASK) >> MC_CGM_SLC_1_DC_0_DIV_SHIFT) + 1U);                                      /*  Apply divider value */
-    return Frequency;                                                                                                                                 /*  Return frequency value */
-}
-/* Return LPE_CXPI_PE_CLK frequency */
-static uint64 Clock_Ip_Get_LPE_CXPI_PE_CLK_Frequency(void) {
-    uint64 Frequency = 0U;
-    Frequency = Clock_Ip_apfFreqSrcTable[0U][((IP_LPE_MC_CGM->SLC_6_CSS & MC_CGM_SLC_6_CSS_SELSTAT_MASK) >> MC_CGM_SLC_6_CSS_SELSTAT_SHIFT)]();       /*  Selector value */
-    Frequency &= Clock_Ip_au32EnableDivider[((IP_LPE_MC_CGM->SLC_6_DC_0 & MC_CGM_SLC_6_DC_0_DE_MASK) >> MC_CGM_SLC_6_DC_0_DE_SHIFT)];                 /*  Divider enable/disable */
-    Frequency /= (((IP_LPE_MC_CGM->SLC_6_DC_0 & MC_CGM_SLC_6_DC_0_DIV_MASK) >> MC_CGM_SLC_6_DC_0_DIV_SHIFT) + 1U);                                    /*  Apply divider value */
-    return Frequency;                                                                                                                                 /*  Return frequency value */
-}
-/* Return LPE_DIV1_UNGATED_CLK frequency */
-static uint64 Clock_Ip_Get_LPE_DIV1_UNGATED_CLK_Frequency(void) {
-    uint64 Frequency = Clock_Ip_Get_LPE_UNGATED_CLK_Frequency();
-    Frequency &= Clock_Ip_au32EnableDivider[((IP_LPE_MC_CGM->SLC_4_DC_0 & MC_CGM_SLC_4_DC_0_DE_MASK) >> MC_CGM_SLC_4_DC_0_DE_SHIFT)];                 /*  Divider enable/disable */
-    Frequency /= (((IP_LPE_MC_CGM->SLC_4_DC_0 & MC_CGM_SLC_4_DC_0_DIV_MASK) >> MC_CGM_SLC_4_DC_0_DIV_SHIFT) + 1U);                                    /*  Apply divider value */
-    return Frequency;                                                                                                                                 /*  Return frequency value */
-}
-/* Return LPE_DIV2_UNGATED_CLK frequency */
-static uint64 Clock_Ip_Get_LPE_DIV2_UNGATED_CLK_Frequency(void) {
-    uint64 Frequency = Clock_Ip_Get_LPE_UNGATED_CLK_Frequency();
-    Frequency &= Clock_Ip_au32EnableDivider[((IP_LPE_MC_CGM->SLC_4_DC_0 & MC_CGM_SLC_4_DC_0_DE_MASK) >> MC_CGM_SLC_4_DC_0_DE_SHIFT)];                 /*  Divider enable/disable */
-    Frequency /= (((IP_LPE_MC_CGM->SLC_4_DC_0 & MC_CGM_SLC_4_DC_0_DIV_MASK) >> MC_CGM_SLC_4_DC_0_DIV_SHIFT) + 1U);                                    /*  Apply divider value */
-    return Frequency;                                                                                                                                 /*  Return frequency value */
-}
-/* Return LPE_DIV3_UNGATED_CLK frequency */
-static uint64 Clock_Ip_Get_LPE_DIV3_UNGATED_CLK_Frequency(void) {
-    uint64 Frequency = Clock_Ip_Get_LPE_UNGATED_CLK_Frequency();
-    Frequency &= Clock_Ip_au32EnableDivider[((IP_LPE_MC_CGM->SLC_4_DC_0 & MC_CGM_SLC_4_DC_0_DE_MASK) >> MC_CGM_SLC_4_DC_0_DE_SHIFT)];                 /*  Divider enable/disable */
-    Frequency /= (((IP_LPE_MC_CGM->SLC_4_DC_0 & MC_CGM_SLC_4_DC_0_DIV_MASK) >> MC_CGM_SLC_4_DC_0_DIV_SHIFT) + 1U);                                    /*  Apply divider value */
-    return Frequency;                                                                                                                                 /*  Return frequency value */
-}
-/* Return LPE_DIV4_UNGATED_CLK frequency */
-static uint64 Clock_Ip_Get_LPE_DIV4_UNGATED_CLK_Frequency(void) {
-    uint64 Frequency = Clock_Ip_Get_LPE_UNGATED_CLK_Frequency();
-    Frequency &= Clock_Ip_au32EnableDivider[((IP_LPE_MC_CGM->SLC_4_DC_0 & MC_CGM_SLC_4_DC_0_DE_MASK) >> MC_CGM_SLC_4_DC_0_DE_SHIFT)];                 /*  Divider enable/disable */
-    Frequency /= (((IP_LPE_MC_CGM->SLC_4_DC_0 & MC_CGM_SLC_4_DC_0_DIV_MASK) >> MC_CGM_SLC_4_DC_0_DIV_SHIFT) + 1U);                                    /*  Apply divider value */
-    return Frequency;                                                                                                                                 /*  Return frequency value */
-}
-/* Return LPE_FLEXCAN_PE_CLK frequency */
-static uint64 Clock_Ip_Get_LPE_FLEXCAN_PE_CLK_Frequency(void) {
-    uint64 Frequency = 0U;
-    Frequency = Clock_Ip_apfFreqSrcTable[0U][((IP_LPE_MC_CGM->SLC_4_CSS & MC_CGM_SLC_4_CSS_SELSTAT_MASK) >> MC_CGM_SLC_4_CSS_SELSTAT_SHIFT)]();       /*  Selector value */
-    Frequency &= Clock_Ip_au32EnableDivider[((IP_LPE_MC_CGM->SLC_4_DC_0 & MC_CGM_SLC_4_DC_0_DE_MASK) >> MC_CGM_SLC_4_DC_0_DE_SHIFT)];                 /*  Divider enable/disable */
-    Frequency /= (((IP_LPE_MC_CGM->SLC_4_DC_0 & MC_CGM_SLC_4_DC_0_DIV_MASK) >> MC_CGM_SLC_4_DC_0_DIV_SHIFT) + 1U);                                    /*  Apply divider value */
-    return Frequency;                                                                                                                                 /*  Return frequency value */
-}
-/* Return LPE_LPI2C_MOD_CLK frequency */
-static uint64 Clock_Ip_Get_LPE_LPI2C_MOD_CLK_Frequency(void) {
-    uint64 Frequency = 0U;
-    Frequency = Clock_Ip_apfFreqSrcTable[0U][((IP_LPE_MC_CGM->SLC_3_CSS & MC_CGM_SLC_3_CSS_SELSTAT_MASK) >> MC_CGM_SLC_3_CSS_SELSTAT_SHIFT)]();       /*  Selector value */
-    Frequency &= Clock_Ip_au32EnableDivider[((IP_LPE_MC_CGM->SLC_3_DC_0 & MC_CGM_SLC_3_DC_0_DE_MASK) >> MC_CGM_SLC_3_DC_0_DE_SHIFT)];                 /*  Divider enable/disable */
-    Frequency /= (((IP_LPE_MC_CGM->SLC_3_DC_0 & MC_CGM_SLC_3_DC_0_DIV_MASK) >> MC_CGM_SLC_3_DC_0_DIV_SHIFT) + 1U);                                    /*  Apply divider value */
-    return Frequency;                                                                                                                                 /*  Return frequency value */
-}
-/* Return LPE_LPSPI_MOD_CLK frequency */
-static uint64 Clock_Ip_Get_LPE_LPSPI_MOD_CLK_Frequency(void) {
-    uint64 Frequency = 0U;
-    Frequency = Clock_Ip_apfFreqSrcTable[0U][((IP_LPE_MC_CGM->SLC_1_CSS & MC_CGM_SLC_1_CSS_SELSTAT_MASK) >> MC_CGM_SLC_1_CSS_SELSTAT_SHIFT)]();       /*  Selector value */
-    Frequency &= Clock_Ip_au32EnableDivider[((IP_LPE_MC_CGM->SLC_1_DC_0 & MC_CGM_SLC_1_DC_0_DE_MASK) >> MC_CGM_SLC_1_DC_0_DE_SHIFT)];                 /*  Divider enable/disable */
-    Frequency /= (((IP_LPE_MC_CGM->SLC_1_DC_0 & MC_CGM_SLC_1_DC_0_DIV_MASK) >> MC_CGM_SLC_1_DC_0_DIV_SHIFT) + 1U);                                    /*  Apply divider value */
-    return Frequency;                                                                                                                                 /*  Return frequency value */
-}
-/* Return LPE_LPUART_MOD_CLK frequency */
-static uint64 Clock_Ip_Get_LPE_LPUART_MOD_CLK_Frequency(void) {
-    uint64 Frequency = 0U;
-    Frequency = Clock_Ip_apfFreqSrcTable[0U][((IP_LPE_MC_CGM->SLC_2_CSS & MC_CGM_SLC_2_CSS_SELSTAT_MASK) >> MC_CGM_SLC_2_CSS_SELSTAT_SHIFT)]();       /*  Selector value */
-    Frequency &= Clock_Ip_au32EnableDivider[((IP_LPE_MC_CGM->SLC_2_DC_0 & MC_CGM_SLC_2_DC_0_DE_MASK) >> MC_CGM_SLC_2_DC_0_DE_SHIFT)];                 /*  Divider enable/disable */
-    Frequency /= (((IP_LPE_MC_CGM->SLC_2_DC_0 & MC_CGM_SLC_2_DC_0_DIV_MASK) >> MC_CGM_SLC_2_DC_0_DIV_SHIFT) + 1U);                                    /*  Apply divider value */
-    return Frequency;                                                                                                                                 /*  Return frequency value */
-}
-/* Return LPE_STM_CLK frequency */
-static uint64 Clock_Ip_Get_LPE_STM_CLK_Frequency(void) {
-    uint64 Frequency = 0U;
-    Frequency = Clock_Ip_apfFreqSrcTable[0U][((IP_LPE_MC_CGM->SLC_5_CSS & MC_CGM_SLC_5_CSS_SELSTAT_MASK) >> MC_CGM_SLC_5_CSS_SELSTAT_SHIFT)]();       /*  Selector value */
-    Frequency &= Clock_Ip_au32EnableDivider[((IP_LPE_MC_CGM->SLC_5_DC_0 & MC_CGM_SLC_5_DC_0_DE_MASK) >> MC_CGM_SLC_5_DC_0_DE_SHIFT)];                 /*  Divider enable/disable */
-    Frequency /= (((IP_LPE_MC_CGM->SLC_5_DC_0 & MC_CGM_SLC_5_DC_0_DIV_MASK) >> MC_CGM_SLC_5_DC_0_DIV_SHIFT) + 1U);                                    /*  Apply divider value */
-    return Frequency;                                                                                                                                 /*  Return frequency value */
-}
-/* Return LPE_UNGATED_CLK frequency */
-static uint64 Clock_Ip_Get_LPE_UNGATED_CLK_Frequency(void) {
-    return Clock_Ip_apfFreqSrcTable[0U][((IP_LPE_MC_CGM->SLC_6_CSS & MC_CGM_SLC_6_CSS_SELSTAT_MASK) >> MC_CGM_SLC_6_CSS_SELSTAT_SHIFT)]();       /*  Selector value */
-}
-/* Return PERI_HIGH_SPEED_REST_USDHC_CLK frequency */
-static uint64 Clock_Ip_Get_PERI_HIGH_SPEED_REST_USDHC_CLK_Frequency(void) {
-    uint64 Frequency = 0U;
-    Frequency = Clock_Ip_apfFreqSrcTable[0U][((IP_MC_CGM_1->SLC_1_CSS & MC_CGM_SLC_1_CSS_SELSTAT_MASK) >> MC_CGM_SLC_1_CSS_SELSTAT_SHIFT)]();         /*  Selector value */
-    Frequency &= Clock_Ip_au32EnableDivider[((IP_MC_CGM_1->SLC_1_DC_0 & MC_CGM_SLC_1_DC_0_DE_MASK) >> MC_CGM_SLC_1_DC_0_DE_SHIFT)];                   /*  Divider enable/disable */
-    Frequency /= (((IP_MC_CGM_1->SLC_1_DC_0 & MC_CGM_SLC_1_DC_0_DIV_MASK) >> MC_CGM_SLC_1_DC_0_DIV_SHIFT) + 1U);                                      /*  Apply divider value */
-    return Frequency;                                                                                                                                 /*  Return frequency value */
-}
-/* Return PERI_HIGH_SPEED_REST_XSPI_CLK frequency */
-static uint64 Clock_Ip_Get_PERI_HIGH_SPEED_REST_XSPI_CLK_Frequency(void) {
-    uint64 Frequency = 0U;
-    Frequency = Clock_Ip_apfFreqSrcTable[0U][((IP_MC_CGM_1->SLC_2_CSS & MC_CGM_SLC_2_CSS_SELSTAT_MASK) >> MC_CGM_SLC_2_CSS_SELSTAT_SHIFT)]();         /*  Selector value */
-    Frequency &= Clock_Ip_au32EnableDivider[((IP_MC_CGM_1->SLC_2_DC_0 & MC_CGM_SLC_2_DC_0_DE_MASK) >> MC_CGM_SLC_2_DC_0_DE_SHIFT)];                   /*  Divider enable/disable */
-    Frequency /= (((IP_MC_CGM_1->SLC_2_DC_0 & MC_CGM_SLC_2_DC_0_DIV_MASK) >> MC_CGM_SLC_2_DC_0_DIV_SHIFT) + 1U);                                      /*  Apply divider value */
-    return Frequency;                                                                                                                                 /*  Return frequency value */
-}
-/* Return PERI_HIGH_SPEED_TRACE_CLK frequency */
-static uint64 Clock_Ip_Get_PERI_HIGH_SPEED_TRACE_CLK_Frequency(void) {
-    uint64 Frequency = 0U;
-    Frequency = Clock_Ip_apfFreqSrcTable[0U][((IP_MC_CGM_1->SLC_4_CSS & MC_CGM_SLC_4_CSS_SELSTAT_MASK) >> MC_CGM_SLC_4_CSS_SELSTAT_SHIFT)]();         /*  Selector value */
-    Frequency &= Clock_Ip_au32EnableDivider[((IP_MC_CGM_1->SLC_4_DC_0 & MC_CGM_SLC_4_DC_0_DE_MASK) >> MC_CGM_SLC_4_DC_0_DE_SHIFT)];                   /*  Divider enable/disable */
-    Frequency /= (((IP_MC_CGM_1->SLC_4_DC_0 & MC_CGM_SLC_4_DC_0_DIV_MASK) >> MC_CGM_SLC_4_DC_0_DIV_SHIFT) + 1U);                                      /*  Apply divider value */
-    return Frequency;                                                                                                                                 /*  Return frequency value */
-}
-/* Return PHY_ETH_CLK frequency */
-static uint64 Clock_Ip_Get_PHY_ETH_CLK_Frequency(void) {
-    uint64 Frequency = 0U;
-    Frequency = Clock_Ip_apfFreqSrcTable[0U][((IP_MC_CGM_0->SLC_1_CSS & MC_CGM_SLC_1_CSS_SELSTAT_MASK) >> MC_CGM_SLC_1_CSS_SELSTAT_SHIFT)]();         /*  Selector value */
-    Frequency &= Clock_Ip_au32EnableDivider[((IP_MC_CGM_0->SLC_1_DC_0 & MC_CGM_SLC_1_DC_0_DE_MASK) >> MC_CGM_SLC_1_DC_0_DE_SHIFT)];                   /*  Divider enable/disable */
-    Frequency /= (((IP_MC_CGM_0->SLC_1_DC_0 & MC_CGM_SLC_1_DC_0_DIV_MASK) >> MC_CGM_SLC_1_DC_0_DIV_SHIFT) + 1U);                                      /*  Apply divider value */
-    return Frequency;                                                                                                                                 /*  Return frequency value */
-}
-/* Return RR_RTC_CLK frequency */
-static uint64 Clock_Ip_Get_RR_RTC_CLK_Frequency(void) {
-    uint64 Frequency;
+static uint32 get_FIRC_CLK_Frequency(void) {
 
+    return CLOCK_IP_FIRC_FREQUENCY;
+} 
+/* Return FXOSC_CLK frequency */ 
+static uint32 get_FXOSC_CLK_Frequency(void) {
+
+    return Clock_Ip_u32Fxosc;
+} 
+/* Return SIRC_CLK frequency */ 
+static uint32 get_SIRC_CLK_Frequency(void) {
+
+    return CLOCK_IP_SIRC_FREQUENCY;
+} 
+/* Return COREPLL_CLK frequency */ 
+static uint32 get_COREPLL_CLK_Frequency(void) {
+
+    if (Clock_Ip_u32CorePllChecksum != (IP_CORE_PLL->PLLCLKMUX ^ IP_CORE_PLL->PLLDV ^ IP_CORE_PLL->PLLFD))
+    {
+        Clock_Ip_u32CorePllChecksum = (IP_CORE_PLL->PLLCLKMUX ^ IP_CORE_PLL->PLLDV ^ IP_CORE_PLL->PLLFD);
+        Clock_Ip_u32CorePllFreq = PLL_VCO(IP_CORE_PLL);
+    }
+    return (((IP_CORE_PLL->PLLSR & PLLDIG_PLLSR_LOCK_MASK) >> PLLDIG_PLLSR_LOCK_SHIFT) != 0U) ? Clock_Ip_u32CorePllFreq : 0U;
+} 
+/* Return PERIPHPLL_CLK frequency */ 
+static uint32 get_PERIPHPLL_CLK_Frequency(void) {
+
+    if (Clock_Ip_u32PeriphPllChecksum != (IP_PERIPH_PLL->PLLCLKMUX ^ IP_PERIPH_PLL->PLLDV ^ IP_PERIPH_PLL->PLLFD))
+    {
+        Clock_Ip_u32PeriphPllChecksum = (IP_PERIPH_PLL->PLLCLKMUX ^ IP_PERIPH_PLL->PLLDV ^ IP_PERIPH_PLL->PLLFD);
+        Clock_Ip_u32PeriphPllFreq = PLL_VCO(IP_PERIPH_PLL);
+    }
+    return (((IP_PERIPH_PLL->PLLSR & PLLDIG_PLLSR_LOCK_MASK) >> PLLDIG_PLLSR_LOCK_SHIFT) != 0U) ? Clock_Ip_u32PeriphPllFreq : 0U;
+} 
+/* Return DDRPLL_CLK frequency */ 
+static uint32 get_DDRPLL_CLK_Frequency(void) {
+
+    if (Clock_Ip_u32DdrPllChecksum != (IP_DDR_PLL->PLLCLKMUX ^ IP_DDR_PLL->PLLDV ^ IP_DDR_PLL->PLLFD))
+    {
+        Clock_Ip_u32DdrPllChecksum = (IP_DDR_PLL->PLLCLKMUX ^ IP_DDR_PLL->PLLDV ^ IP_DDR_PLL->PLLFD);
+        Clock_Ip_u32DdrPllFreq = PLL_VCO(IP_DDR_PLL);
+    }
+    return (((IP_DDR_PLL->PLLSR & PLLDIG_PLLSR_LOCK_MASK) >> PLLDIG_PLLSR_LOCK_SHIFT) != 0U) ? Clock_Ip_u32DdrPllFreq : 0U;
+} 
+/* Return ACCELPLL_CLK frequency */ 
+static uint32 get_ACCELPLL_CLK_Frequency(void) {
+
+    if (Clock_Ip_u32AccelPllChecksum != (IP_ACCEL_PLL->PLLCLKMUX ^ IP_ACCEL_PLL->PLLDV ^ IP_ACCEL_PLL->PLLFD))
+    {
+        Clock_Ip_u32AccelPllChecksum = (IP_ACCEL_PLL->PLLCLKMUX ^ IP_ACCEL_PLL->PLLDV ^ IP_ACCEL_PLL->PLLFD);
+        Clock_Ip_u32AccelPllFreq = PLL_VCO(IP_ACCEL_PLL);
+    }
+    return (((IP_ACCEL_PLL->PLLSR & PLLDIG_PLLSR_LOCK_MASK) >> PLLDIG_PLLSR_LOCK_SHIFT) != 0U) ? Clock_Ip_u32AccelPllFreq : 0U;
+} 
+/* Return COREPLL_PHI0 frequency */ 
+static uint32 get_COREPLL_PHI0_Frequency(void) {
+
+    uint32 Frequency = get_COREPLL_CLK_Frequency();
+    Frequency &= Clock_Ip_au32EnableDivider[((IP_CORE_PLL->PLLODIV[0U] & PLLDIG_PLLODIV_DE_MASK) >> PLLDIG_PLLODIV_DE_SHIFT)];                                    /*  Divider enable/disable */
+    Frequency /= (((IP_CORE_PLL->PLLODIV[0U] & PLLDIG_PLLODIV_DIV_MASK) >> PLLDIG_PLLODIV_DIV_SHIFT) + 1U);                                          /*  Apply divider value */
+    return Frequency;
+} 
+/* Return COREPLL_PHI1 frequency */ 
+static uint32 get_COREPLL_PHI1_Frequency(void) {
+
+    uint32 Frequency = get_COREPLL_CLK_Frequency();
+    Frequency &= Clock_Ip_au32EnableDivider[((IP_CORE_PLL->PLLODIV[1U] & PLLDIG_PLLODIV_DE_MASK) >> PLLDIG_PLLODIV_DE_SHIFT)];                                    /*  Divider enable/disable */
+    Frequency /= (((IP_CORE_PLL->PLLODIV[1U] & PLLDIG_PLLODIV_DIV_MASK) >> PLLDIG_PLLODIV_DIV_SHIFT) + 1U);                                          /*  Apply divider value */
+    return Frequency;
+} 
+/* Return COREPLL_DFS1 frequency */ 
+static uint32 get_COREPLL_DFS1_Frequency(void) {
+
+    if (Clock_Ip_u32CoreDfs1Checksum != (IP_CORE_PLL->PLLCLKMUX ^ IP_CORE_PLL->PLLDV ^ IP_CORE_PLL->PLLFD ^ IP_CORE_PLL->PLLSR ^ IP_CORE_DFS->DVPORT[0U]))
+    {
+        Clock_Ip_u32CoreDfs1Checksum = (IP_CORE_PLL->PLLCLKMUX ^ IP_CORE_PLL->PLLDV ^ IP_CORE_PLL->PLLFD ^ IP_CORE_PLL->PLLSR ^ IP_CORE_DFS->DVPORT[0U]);
+        Clock_Ip_u32CoreDfs1Freq = DFS_OUTPUT(IP_CORE_DFS,0U,get_COREPLL_CLK_Frequency());
+    }
+    return ((((IP_CORE_DFS->PORTSR >> DFS_PORTSR_PORTSTAT_SHIFT) & DFS_PORTSR_PORTSTAT_MASK) & CLOCK_IP_DFS_MASK_0_CHANNEL) != 0U) ? Clock_Ip_u32CoreDfs1Freq : 0U;
+} 
+/* Return COREPLL_DFS2 frequency */ 
+static uint32 get_COREPLL_DFS2_Frequency(void) {
+
+    if (Clock_Ip_u32CoreDfs2Checksum != (IP_CORE_PLL->PLLCLKMUX ^ IP_CORE_PLL->PLLDV ^ IP_CORE_PLL->PLLFD ^ IP_CORE_PLL->PLLSR ^ IP_CORE_DFS->DVPORT[1U]))
+    {
+        Clock_Ip_u32CoreDfs2Checksum = (IP_CORE_PLL->PLLCLKMUX ^ IP_CORE_PLL->PLLDV ^ IP_CORE_PLL->PLLFD ^ IP_CORE_PLL->PLLSR ^ IP_CORE_DFS->DVPORT[1U]);
+        Clock_Ip_u32CoreDfs2Freq = DFS_OUTPUT(IP_CORE_DFS,1U,get_COREPLL_CLK_Frequency());
+    }
+    return ((((IP_CORE_DFS->PORTSR >> DFS_PORTSR_PORTSTAT_SHIFT) & DFS_PORTSR_PORTSTAT_MASK) & CLOCK_IP_DFS_MASK_1_CHANNEL) != 0U) ? Clock_Ip_u32CoreDfs2Freq : 0U;
+} 
+/* Return COREPLL_DFS3 frequency */ 
+static uint32 get_COREPLL_DFS3_Frequency(void) {
+
+    if (Clock_Ip_u32CoreDfs3Checksum != (IP_CORE_PLL->PLLCLKMUX ^ IP_CORE_PLL->PLLDV ^ IP_CORE_PLL->PLLFD ^ IP_CORE_PLL->PLLSR ^ IP_CORE_DFS->DVPORT[2U]))
+    {
+        Clock_Ip_u32CoreDfs3Checksum = (IP_CORE_PLL->PLLCLKMUX ^ IP_CORE_PLL->PLLDV ^ IP_CORE_PLL->PLLFD ^ IP_CORE_PLL->PLLSR ^ IP_CORE_DFS->DVPORT[2U]);
+        Clock_Ip_u32CoreDfs3Freq = DFS_OUTPUT(IP_CORE_DFS,2U,get_COREPLL_CLK_Frequency());
+    }
+    return ((((IP_CORE_DFS->PORTSR >> DFS_PORTSR_PORTSTAT_SHIFT) & DFS_PORTSR_PORTSTAT_MASK) & CLOCK_IP_DFS_MASK_2_CHANNEL) != 0U) ? Clock_Ip_u32CoreDfs3Freq : 0U;
+} 
+/* Return COREPLL_DFS4 frequency */ 
+static uint32 get_COREPLL_DFS4_Frequency(void) {
+
+    if (Clock_Ip_u32CoreDfs4Checksum != (IP_CORE_PLL->PLLCLKMUX ^ IP_CORE_PLL->PLLDV ^ IP_CORE_PLL->PLLFD ^ IP_CORE_PLL->PLLSR ^ IP_CORE_DFS->DVPORT[3U]))
+    {
+        Clock_Ip_u32CoreDfs4Checksum = (IP_CORE_PLL->PLLCLKMUX ^ IP_CORE_PLL->PLLDV ^ IP_CORE_PLL->PLLFD ^ IP_CORE_PLL->PLLSR ^ IP_CORE_DFS->DVPORT[3U]);
+        Clock_Ip_u32CoreDfs4Freq = DFS_OUTPUT(IP_CORE_DFS,3U,get_COREPLL_CLK_Frequency());
+    }
+    return ((((IP_CORE_DFS->PORTSR >> DFS_PORTSR_PORTSTAT_SHIFT) & DFS_PORTSR_PORTSTAT_MASK) & CLOCK_IP_DFS_MASK_3_CHANNEL) != 0U) ? Clock_Ip_u32CoreDfs4Freq : 0U;
+} 
+/* Return COREPLL_DFS5 frequency */ 
+static uint32 get_COREPLL_DFS5_Frequency(void) {
+
+    if (Clock_Ip_u32CoreDfs5Checksum != (IP_CORE_PLL->PLLCLKMUX ^ IP_CORE_PLL->PLLDV ^ IP_CORE_PLL->PLLFD ^ IP_CORE_PLL->PLLSR ^ IP_CORE_DFS->DVPORT[4U]))
+    {
+        Clock_Ip_u32CoreDfs5Checksum = (IP_CORE_PLL->PLLCLKMUX ^ IP_CORE_PLL->PLLDV ^ IP_CORE_PLL->PLLFD ^ IP_CORE_PLL->PLLSR ^ IP_CORE_DFS->DVPORT[4U]);
+        Clock_Ip_u32CoreDfs5Freq = DFS_OUTPUT(IP_CORE_DFS,4U,get_COREPLL_CLK_Frequency());
+    }
+    return ((((IP_CORE_DFS->PORTSR >> DFS_PORTSR_PORTSTAT_SHIFT) & DFS_PORTSR_PORTSTAT_MASK) & CLOCK_IP_DFS_MASK_4_CHANNEL) != 0U) ? Clock_Ip_u32CoreDfs5Freq : 0U;
+} 
+/* Return COREPLL_DFS6 frequency */ 
+static uint32 get_COREPLL_DFS6_Frequency(void) {
+
+    if (Clock_Ip_u32CoreDfs6Checksum != (IP_CORE_PLL->PLLCLKMUX ^ IP_CORE_PLL->PLLDV ^ IP_CORE_PLL->PLLFD ^ IP_CORE_PLL->PLLSR ^ IP_CORE_DFS->DVPORT[5U]))
+    {
+        Clock_Ip_u32CoreDfs6Checksum = (IP_CORE_PLL->PLLCLKMUX ^ IP_CORE_PLL->PLLDV ^ IP_CORE_PLL->PLLFD ^ IP_CORE_PLL->PLLSR ^ IP_CORE_DFS->DVPORT[5U]);
+        Clock_Ip_u32CoreDfs6Freq = DFS_OUTPUT(IP_CORE_DFS,5U,get_COREPLL_CLK_Frequency());
+    }
+    return ((((IP_CORE_DFS->PORTSR >> DFS_PORTSR_PORTSTAT_SHIFT) & DFS_PORTSR_PORTSTAT_MASK) & CLOCK_IP_DFS_MASK_5_CHANNEL) != 0U) ? Clock_Ip_u32CoreDfs6Freq : 0U;
+} 
+/* Return PERIPHPLL_PHI0 frequency */ 
+static uint32 get_PERIPHPLL_PHI0_Frequency(void) {
+
+    uint32 Frequency = get_PERIPHPLL_CLK_Frequency();
+    Frequency &= Clock_Ip_au32EnableDivider[((IP_PERIPH_PLL->PLLODIV[0U] & PLLDIG_PLLODIV_DE_MASK) >> PLLDIG_PLLODIV_DE_SHIFT)];                                    /*  Divider enable/disable */
+    Frequency /= (((IP_PERIPH_PLL->PLLODIV[0U] & PLLDIG_PLLODIV_DIV_MASK) >> PLLDIG_PLLODIV_DIV_SHIFT) + 1U);                                          /*  Apply divider value */
+    return Frequency;
+} 
+/* Return PERIPHPLL_PHI1 frequency */ 
+static uint32 get_PERIPHPLL_PHI1_Frequency(void) {
+
+    uint32 Frequency = get_PERIPHPLL_CLK_Frequency();
+    Frequency &= Clock_Ip_au32EnableDivider[((IP_PERIPH_PLL->PLLODIV[1U] & PLLDIG_PLLODIV_DE_MASK) >> PLLDIG_PLLODIV_DE_SHIFT)];                                    /*  Divider enable/disable */
+    Frequency /= (((IP_PERIPH_PLL->PLLODIV[1U] & PLLDIG_PLLODIV_DIV_MASK) >> PLLDIG_PLLODIV_DIV_SHIFT) + 1U);                                          /*  Apply divider value */
+    return Frequency;
+} 
+/* Return PERIPHPLL_PHI2 frequency */ 
+static uint32 get_PERIPHPLL_PHI2_Frequency(void) {
+
+    uint32 Frequency = get_PERIPHPLL_CLK_Frequency();
+    Frequency &= Clock_Ip_au32EnableDivider[((IP_PERIPH_PLL->PLLODIV[2U] & PLLDIG_PLLODIV_DE_MASK) >> PLLDIG_PLLODIV_DE_SHIFT)];                                    /*  Divider enable/disable */
+    Frequency /= (((IP_PERIPH_PLL->PLLODIV[2U] & PLLDIG_PLLODIV_DIV_MASK) >> PLLDIG_PLLODIV_DIV_SHIFT) + 1U);                                          /*  Apply divider value */
+    return Frequency;
+} 
+/* Return PERIPHPLL_PHI3 frequency */ 
+static uint32 get_PERIPHPLL_PHI3_Frequency(void) {
+
+    uint32 Frequency = get_PERIPHPLL_CLK_Frequency();
+    Frequency &= Clock_Ip_au32EnableDivider[((IP_PERIPH_PLL->PLLODIV[3U] & PLLDIG_PLLODIV_DE_MASK) >> PLLDIG_PLLODIV_DE_SHIFT)];                                    /*  Divider enable/disable */
+    Frequency /= (((IP_PERIPH_PLL->PLLODIV[3U] & PLLDIG_PLLODIV_DIV_MASK) >> PLLDIG_PLLODIV_DIV_SHIFT) + 1U);                                          /*  Apply divider value */
+    return Frequency;
+} 
+/* Return PERIPHPLL_PHI4 frequency */ 
+static uint32 get_PERIPHPLL_PHI4_Frequency(void) {
+
+    uint32 Frequency = get_PERIPHPLL_CLK_Frequency();
+    Frequency &= Clock_Ip_au32EnableDivider[((IP_PERIPH_PLL->PLLODIV[4U] & PLLDIG_PLLODIV_DE_MASK) >> PLLDIG_PLLODIV_DE_SHIFT)];                                    /*  Divider enable/disable */
+    Frequency /= (((IP_PERIPH_PLL->PLLODIV[4U] & PLLDIG_PLLODIV_DIV_MASK) >> PLLDIG_PLLODIV_DIV_SHIFT) + 1U);                                          /*  Apply divider value */
+    return Frequency;
+} 
+/* Return PERIPHPLL_PHI5 frequency */ 
+static uint32 get_PERIPHPLL_PHI5_Frequency(void) {
+
+    uint32 Frequency = get_PERIPHPLL_CLK_Frequency();
+    Frequency &= Clock_Ip_au32EnableDivider[((IP_PERIPH_PLL->PLLODIV[5U] & PLLDIG_PLLODIV_DE_MASK) >> PLLDIG_PLLODIV_DE_SHIFT)];                                    /*  Divider enable/disable */
+    Frequency /= (((IP_PERIPH_PLL->PLLODIV[5U] & PLLDIG_PLLODIV_DIV_MASK) >> PLLDIG_PLLODIV_DIV_SHIFT) + 1U);                                          /*  Apply divider value */
+    return Frequency;
+} 
+/* Return PERIPHPLL_PHI6 frequency */ 
+static uint32 get_PERIPHPLL_PHI6_Frequency(void) {
+
+    uint32 Frequency = get_PERIPHPLL_CLK_Frequency();
+    Frequency &= Clock_Ip_au32EnableDivider[((IP_PERIPH_PLL->PLLODIV[6U] & PLLDIG_PLLODIV_DE_MASK) >> PLLDIG_PLLODIV_DE_SHIFT)];                                    /*  Divider enable/disable */
+    Frequency /= (((IP_PERIPH_PLL->PLLODIV[6U] & PLLDIG_PLLODIV_DIV_MASK) >> PLLDIG_PLLODIV_DIV_SHIFT) + 1U);                                          /*  Apply divider value */
+    return Frequency;
+} 
+/* Return PERIPHPLL_PHI7 frequency */ 
+static uint32 get_PERIPHPLL_PHI7_Frequency(void) {
+
+    uint32 Frequency = get_PERIPHPLL_CLK_Frequency();
+    Frequency &= Clock_Ip_au32EnableDivider[((IP_PERIPH_PLL->PLLODIV[7U] & PLLDIG_PLLODIV_DE_MASK) >> PLLDIG_PLLODIV_DE_SHIFT)];                                    /*  Divider enable/disable */
+    Frequency /= (((IP_PERIPH_PLL->PLLODIV[7U] & PLLDIG_PLLODIV_DIV_MASK) >> PLLDIG_PLLODIV_DIV_SHIFT) + 1U);                                          /*  Apply divider value */
+    return Frequency;
+} 
+/* Return PERIPHPLL_DFS1 frequency */ 
+static uint32 get_PERIPHPLL_DFS1_Frequency(void) {
+
+    if (Clock_Ip_u32PeriphDfs1Checksum != (IP_PERIPH_PLL->PLLCLKMUX ^ IP_PERIPH_PLL->PLLDV ^ IP_PERIPH_PLL->PLLFD ^ IP_PERIPH_PLL->PLLSR ^ IP_PERIPH_DFS->DVPORT[0U]))
+    {
+        Clock_Ip_u32PeriphDfs1Checksum = (IP_PERIPH_PLL->PLLCLKMUX ^ IP_PERIPH_PLL->PLLDV ^ IP_PERIPH_PLL->PLLFD ^ IP_PERIPH_PLL->PLLSR ^ IP_PERIPH_DFS->DVPORT[0U]);
+        Clock_Ip_u32PeriphDfs1Freq = DFS_OUTPUT(IP_PERIPH_DFS,0U,get_PERIPHPLL_CLK_Frequency());
+    }
+    return ((((IP_PERIPH_DFS->PORTSR >> DFS_PORTSR_PORTSTAT_SHIFT) & DFS_PORTSR_PORTSTAT_MASK) & CLOCK_IP_DFS_MASK_0_CHANNEL) != 0U) ? Clock_Ip_u32PeriphDfs1Freq : 0U;
+} 
+/* Return PERIPHPLL_DFS2 frequency */ 
+static uint32 get_PERIPHPLL_DFS2_Frequency(void) {
+
+    if (Clock_Ip_u32PeriphDfs2Checksum != (IP_PERIPH_PLL->PLLCLKMUX ^ IP_PERIPH_PLL->PLLDV ^ IP_PERIPH_PLL->PLLFD ^ IP_PERIPH_PLL->PLLSR ^ IP_PERIPH_DFS->DVPORT[1U]))
+    {
+        Clock_Ip_u32PeriphDfs2Checksum = (IP_PERIPH_PLL->PLLCLKMUX ^ IP_PERIPH_PLL->PLLDV ^ IP_PERIPH_PLL->PLLFD ^ IP_PERIPH_PLL->PLLSR ^ IP_PERIPH_DFS->DVPORT[1U]);
+        Clock_Ip_u32PeriphDfs2Freq = DFS_OUTPUT(IP_PERIPH_DFS,1U,get_PERIPHPLL_CLK_Frequency());
+    }
+    return ((((IP_PERIPH_DFS->PORTSR >> DFS_PORTSR_PORTSTAT_SHIFT) & DFS_PORTSR_PORTSTAT_MASK) & CLOCK_IP_DFS_MASK_1_CHANNEL) != 0U) ? Clock_Ip_u32PeriphDfs2Freq : 0U;
+} 
+/* Return PERIPHPLL_DFS3 frequency */ 
+static uint32 get_PERIPHPLL_DFS3_Frequency(void) {
+
+    if (Clock_Ip_u32PeriphDfs3Checksum != (IP_PERIPH_PLL->PLLCLKMUX ^ IP_PERIPH_PLL->PLLDV ^ IP_PERIPH_PLL->PLLFD ^ IP_PERIPH_PLL->PLLSR ^ IP_PERIPH_DFS->DVPORT[2U]))
+    {
+        Clock_Ip_u32PeriphDfs3Checksum = (IP_PERIPH_PLL->PLLCLKMUX ^ IP_PERIPH_PLL->PLLDV ^ IP_PERIPH_PLL->PLLFD ^ IP_PERIPH_PLL->PLLSR ^ IP_PERIPH_DFS->DVPORT[2U]);
+        Clock_Ip_u32PeriphDfs3Freq = DFS_OUTPUT(IP_PERIPH_DFS,2U,get_PERIPHPLL_CLK_Frequency());
+    }
+    return ((((IP_PERIPH_DFS->PORTSR >> DFS_PORTSR_PORTSTAT_SHIFT) & DFS_PORTSR_PORTSTAT_MASK) & CLOCK_IP_DFS_MASK_2_CHANNEL) != 0U) ? Clock_Ip_u32PeriphDfs3Freq : 0U;
+} 
+/* Return PERIPHPLL_DFS4 frequency */ 
+static uint32 get_PERIPHPLL_DFS4_Frequency(void) {
+
+    if (Clock_Ip_u32PeriphDfs4Checksum != (IP_PERIPH_PLL->PLLCLKMUX ^ IP_PERIPH_PLL->PLLDV ^ IP_PERIPH_PLL->PLLFD ^ IP_PERIPH_PLL->PLLSR ^ IP_PERIPH_DFS->DVPORT[3U]))
+    {
+        Clock_Ip_u32PeriphDfs4Checksum = (IP_PERIPH_PLL->PLLCLKMUX ^ IP_PERIPH_PLL->PLLDV ^ IP_PERIPH_PLL->PLLFD ^ IP_PERIPH_PLL->PLLSR ^ IP_PERIPH_DFS->DVPORT[3U]);
+        Clock_Ip_u32PeriphDfs4Freq = DFS_OUTPUT(IP_PERIPH_DFS,3U,get_PERIPHPLL_CLK_Frequency());
+    }
+    return ((((IP_PERIPH_DFS->PORTSR >> DFS_PORTSR_PORTSTAT_SHIFT) & DFS_PORTSR_PORTSTAT_MASK) & CLOCK_IP_DFS_MASK_3_CHANNEL) != 0U) ? Clock_Ip_u32PeriphDfs4Freq : 0U;
+} 
+/* Return PERIPHPLL_DFS5 frequency */ 
+static uint32 get_PERIPHPLL_DFS5_Frequency(void) {
+
+    if (Clock_Ip_u32PeriphDfs5Checksum != (IP_PERIPH_PLL->PLLCLKMUX ^ IP_PERIPH_PLL->PLLDV ^ IP_PERIPH_PLL->PLLFD ^ IP_PERIPH_PLL->PLLSR ^ IP_PERIPH_DFS->DVPORT[4U]))
+    {
+        Clock_Ip_u32PeriphDfs5Checksum = (IP_PERIPH_PLL->PLLCLKMUX ^ IP_PERIPH_PLL->PLLDV ^ IP_PERIPH_PLL->PLLFD ^ IP_PERIPH_PLL->PLLSR ^ IP_PERIPH_DFS->DVPORT[4U]);
+        Clock_Ip_u32PeriphDfs5Freq = DFS_OUTPUT(IP_PERIPH_DFS,4U,get_PERIPHPLL_CLK_Frequency());
+    }
+    return ((((IP_PERIPH_DFS->PORTSR >> DFS_PORTSR_PORTSTAT_SHIFT) & DFS_PORTSR_PORTSTAT_MASK) & CLOCK_IP_DFS_MASK_4_CHANNEL) != 0U) ? Clock_Ip_u32PeriphDfs5Freq : 0U;
+} 
+/* Return PERIPHPLL_DFS6 frequency */ 
+static uint32 get_PERIPHPLL_DFS6_Frequency(void) {
+
+    if (Clock_Ip_u32PeriphDfsChecksum != (IP_PERIPH_PLL->PLLCLKMUX ^ IP_PERIPH_PLL->PLLDV ^ IP_PERIPH_PLL->PLLFD ^ IP_PERIPH_PLL->PLLSR ^ IP_PERIPH_DFS->DVPORT[5U]))
+    {
+        Clock_Ip_u32PeriphDfsChecksum = (IP_PERIPH_PLL->PLLCLKMUX ^ IP_PERIPH_PLL->PLLDV ^ IP_PERIPH_PLL->PLLFD ^ IP_PERIPH_PLL->PLLSR ^ IP_PERIPH_DFS->DVPORT[5U]);
+        Clock_Ip_u32PeriphDfs6Freq = DFS_OUTPUT(IP_PERIPH_DFS,5U,get_PERIPHPLL_CLK_Frequency());
+    }
+    return ((((IP_PERIPH_DFS->PORTSR >> DFS_PORTSR_PORTSTAT_SHIFT) & DFS_PORTSR_PORTSTAT_MASK) & CLOCK_IP_DFS_MASK_5_CHANNEL) != 0U) ? Clock_Ip_u32PeriphDfs6Freq : 0U;
+} 
+/* Return DDRPLL_PHI0 frequency */ 
+static uint32 get_DDRPLL_PHI0_Frequency(void) {
+
+    uint32 Frequency = get_DDRPLL_CLK_Frequency();
+    Frequency &= Clock_Ip_au32EnableDivider[((IP_DDR_PLL->PLLODIV[0U] & PLLDIG_PLLODIV_DE_MASK) >> PLLDIG_PLLODIV_DE_SHIFT)];                                    /*  Divider enable/disable */
+    Frequency /= (((IP_DDR_PLL->PLLODIV[0U] & PLLDIG_PLLODIV_DIV_MASK) >> PLLDIG_PLLODIV_DIV_SHIFT) + 1U);                                          /*  Apply divider value */
+    return Frequency;    
+} 
+/* Return ACCELPLL_PHI0 frequency */ 
+static uint32 get_ACCELPLL_PHI0_Frequency(void) {
+
+    uint32 Frequency = get_ACCELPLL_CLK_Frequency();
+    Frequency &= Clock_Ip_au32EnableDivider[((IP_ACCEL_PLL->PLLODIV[0U] & PLLDIG_PLLODIV_DE_MASK) >> PLLDIG_PLLODIV_DE_SHIFT)];                                    /*  Divider enable/disable */
+    Frequency /= (((IP_ACCEL_PLL->PLLODIV[0U] & PLLDIG_PLLODIV_DIV_MASK) >> PLLDIG_PLLODIV_DIV_SHIFT) + 1U);                                          /*  Apply divider value */
+    return Frequency;
+} 
+/* Return ACCELPLL_PHI1 frequency */ 
+static uint32 get_ACCELPLL_PHI1_Frequency(void) {
+
+    uint32 Frequency = get_ACCELPLL_CLK_Frequency();
+    Frequency &= Clock_Ip_au32EnableDivider[((IP_ACCEL_PLL->PLLODIV[1U] & PLLDIG_PLLODIV_DE_MASK) >> PLLDIG_PLLODIV_DE_SHIFT)];                                    /*  Divider enable/disable */
+    Frequency /= (((IP_ACCEL_PLL->PLLODIV[1U] & PLLDIG_PLLODIV_DIV_MASK) >> PLLDIG_PLLODIV_DIV_SHIFT) + 1U);                                          /*  Apply divider value */
+    return Frequency;
+} 
+/* Return rtc_ext_ref frequency */ 
+static uint32 get_rtc_ext_ref_Frequency(void) {
+
+    return Clock_Ip_axExtSignalFreqEntries[CLOCK_IP_RTC_EXT_REF_CLK_INDEX_ENTRY].Frequency; 
+} 
+/* Return ftm_0_ext_ref frequency */ 
+static uint32 get_ftm_0_ext_ref_Frequency(void) {
+
+    return Clock_Ip_axExtSignalFreqEntries[CLOCK_IP_FTM_0_EXT_REF_CLK_INDEX_ENTRY].Frequency; 
+} 
+/* Return ftm_1_ext_ref frequency */ 
+static uint32 get_ftm_1_ext_ref_Frequency(void) {
+
+    return Clock_Ip_axExtSignalFreqEntries[CLOCK_IP_FTM_1_EXT_REF_CLK_INDEX_ENTRY].Frequency;
+} 
+/* Return gmac_0_ext_ref frequency */ 
+static uint32 get_gmac_0_ext_ref_Frequency(void) {
+
+    return Clock_Ip_axExtSignalFreqEntries[CLOCK_IP_GMAC_0_EXT_REF_CLK_INDEX_ENTRY].Frequency;
+} 
+/* Return gmac_0_ext_rx frequency */ 
+static uint32 get_gmac_0_ext_rx_Frequency(void) {
+
+    return Clock_Ip_axExtSignalFreqEntries[CLOCK_IP_GMAC_0_EXT_RX_CLK_INDEX_ENTRY].Frequency;
+} 
+/* Return gmac_0_ext_tx frequency */ 
+static uint32 get_gmac_0_ext_tx_Frequency(void) {
+
+    return Clock_Ip_axExtSignalFreqEntries[CLOCK_IP_GMAC_0_EXT_TX_CLK_INDEX_ENTRY].Frequency;
+} 
+/* Return gmac_ext_ts frequency */ 
+static uint32 get_gmac_ext_ts_Frequency(void) {
+
+    return Clock_Ip_axExtSignalFreqEntries[CLOCK_IP_GMAC_EXT_TS_CLK_INDEX_ENTRY].Frequency;
+} 
+/* Return pfe_mac_0_ext_ref frequency */ 
+static uint32 get_pfe_mac_0_ext_ref_Frequency(void) {
+
+    return Clock_Ip_axExtSignalFreqEntries[CLOCK_IP_PFE_MAC_0_EXT_REF_CLK_INDEX_ENTRY].Frequency;
+} 
+/* Return pfe_mac_0_ext_rx frequency */ 
+static uint32 get_pfe_mac_0_ext_rx_Frequency(void) {
+
+    return Clock_Ip_axExtSignalFreqEntries[CLOCK_IP_PFE_MAC_0_EXT_RX_CLK_INDEX_ENTRY].Frequency;
+} 
+/* Return pfe_mac_0_ext_tx frequency */ 
+static uint32 get_pfe_mac_0_ext_tx_Frequency(void) {
+
+    return Clock_Ip_axExtSignalFreqEntries[CLOCK_IP_PFE_MAC_0_EXT_TX_CLK_INDEX_ENTRY].Frequency;
+} 
+/* Return pfe_mac_1_ext_ref frequency */ 
+static uint32 get_pfe_mac_1_ext_ref_Frequency(void) {
+
+    return Clock_Ip_axExtSignalFreqEntries[CLOCK_IP_PFE_MAC_1_EXT_REF_CLK_INDEX_ENTRY].Frequency;
+} 
+/* Return pfe_mac_1_ext_rx frequency */ 
+static uint32 get_pfe_mac_1_ext_rx_Frequency(void) {
+
+    return Clock_Ip_axExtSignalFreqEntries[CLOCK_IP_PFE_MAC_1_EXT_RX_CLK_INDEX_ENTRY].Frequency;
+} 
+/* Return pfe_mac_1_ext_tx frequency */ 
+static uint32 get_pfe_mac_1_ext_tx_Frequency(void) {
+
+    return Clock_Ip_axExtSignalFreqEntries[CLOCK_IP_PFE_MAC_1_EXT_TX_CLK_INDEX_ENTRY].Frequency;
+} 
+/* Return pfe_mac_2_ext_ref frequency */ 
+static uint32 get_pfe_mac_2_ext_ref_Frequency(void) {
+
+    return Clock_Ip_axExtSignalFreqEntries[CLOCK_IP_PFE_MAC_2_EXT_REF_CLK_INDEX_ENTRY].Frequency;
+} 
+/* Return pfe_mac_2_ext_rx frequency */ 
+static uint32 get_pfe_mac_2_ext_rx_Frequency(void) {
+
+    return Clock_Ip_axExtSignalFreqEntries[CLOCK_IP_PFE_MAC_2_EXT_RX_CLK_INDEX_ENTRY].Frequency;
+} 
+/* Return pfe_mac_2_ext_tx frequency */ 
+static uint32 get_pfe_mac_2_ext_tx_Frequency(void) {
+
+    return Clock_Ip_axExtSignalFreqEntries[CLOCK_IP_PFE_MAC_2_EXT_TX_CLK_INDEX_ENTRY].Frequency;
+} 
+/* Return SERDES_0_XPCS_0_TX frequency */ 
+static uint32 get_SERDES_0_XPCS_0_TX_Frequency(void) {
+
+    return Clock_Ip_axExtSignalFreqEntries[CLOCK_IP_SERDES_0_XPCS_0_TX_INDEX_ENTRY].Frequency;
+} 
+/* Return SERDES_0_XPCS_0_CDR frequency */ 
+static uint32 get_SERDES_0_XPCS_0_CDR_Frequency(void) {
+
+    return Clock_Ip_axExtSignalFreqEntries[CLOCK_IP_SERDES_0_XPCS_0_CDR_INDEX_ENTRY].Frequency;
+} 
+/* Return SERDES_0_XPCS_1_TX frequency */ 
+static uint32 get_SERDES_0_XPCS_1_TX_Frequency(void) {
+
+    return Clock_Ip_axExtSignalFreqEntries[CLOCK_IP_SERDES_0_XPCS_1_TX_INDEX_ENTRY].Frequency;
+} 
+/* Return SERDES_0_XPCS_1_CDR frequency */ 
+static uint32 get_SERDES_0_XPCS_1_CDR_Frequency(void) {
+
+    return Clock_Ip_axExtSignalFreqEntries[CLOCK_IP_SERDES_0_XPCS_1_CDR_INDEX_ENTRY].Frequency;
+} 
+/* Return SERDES_1_XPCS_0_TX frequency */ 
+static uint32 get_SERDES_1_XPCS_0_TX_Frequency(void) {
+
+    return Clock_Ip_axExtSignalFreqEntries[CLOCK_IP_SERDES_1_XPCS_0_TX_INDEX_ENTRY].Frequency;
+} 
+/* Return SERDES_1_XPCS_0_CDR frequency */ 
+static uint32 get_SERDES_1_XPCS_0_CDR_Frequency(void) {
+
+    return Clock_Ip_axExtSignalFreqEntries[CLOCK_IP_SERDES_1_XPCS_0_CDR_INDEX_ENTRY].Frequency;
+} 
+/* Return SERDES_1_XPCS_1_TX frequency */ 
+static uint32 get_SERDES_1_XPCS_1_TX_Frequency(void) {
+
+    return Clock_Ip_axExtSignalFreqEntries[CLOCK_IP_SERDES_1_XPCS_1_TX_INDEX_ENTRY].Frequency;
+} 
+/* Return SERDES_1_XPCS_1_CDR frequency */ 
+static uint32 get_SERDES_1_XPCS_1_CDR_Frequency(void) {
+
+    return Clock_Ip_axExtSignalFreqEntries[CLOCK_IP_SERDES_1_XPCS_1_CDR_INDEX_ENTRY].Frequency;
+} 
+/* Return XBAR_2X_CLK frequency */ 
+static uint32 get_XBAR_2X_CLK_Frequency(void) {
+    uint32 Frequency;
+    Frequency  = Clock_Ip_apfFreqTableClkSrc[((IP_MC_CGM_0->MUX_0_CSS & MC_CGM_MUX_0_CSS_SELSTAT_MASK) >> MC_CGM_MUX_0_CSS_SELSTAT_SHIFT)]();                 /*  Selector value */
+    return Frequency;
+} 
+/* Return XBAR_CLK frequency */ 
+static uint32 get_XBAR_CLK_Frequency(void) {
+
+    return get_XBAR_2X_CLK_Frequency() >> 1U;
+} 
+/* Return XBAR_DIV2_CLK frequency */ 
+static uint32 get_XBAR_DIV2_CLK_Frequency(void) {
+
+    return get_XBAR_2X_CLK_Frequency() >> 2U;
+} 
+/* Return XBAR_DIV3_CLK frequency */ 
+static uint32 get_XBAR_DIV3_CLK_Frequency(void) {
+
+    return get_XBAR_2X_CLK_Frequency() / 6U;
+} 
+/* Return XBAR_DIV4_CLK frequency */ 
+static uint32 get_XBAR_DIV4_CLK_Frequency(void) {
+
+    return get_XBAR_2X_CLK_Frequency() >> 3U;
+} 
+/* Return XBAR_DIV6_CLK frequency */ 
+static uint32 get_XBAR_DIV6_CLK_Frequency(void) {
+
+    return get_XBAR_2X_CLK_Frequency() / 12U;
+} 
+/* Return A53_CORE_CLK frequency */ 
+static uint32 get_A53_CORE_CLK_Frequency(void) {
+    uint32 Frequency;
+    Frequency  = Clock_Ip_apfFreqTableClkSrc[((IP_MC_CGM_1->MUX_0_CSS & MC_CGM_1_MUX_0_CSS_SELSTAT_MASK) >> MC_CGM_1_MUX_0_CSS_SELSTAT_SHIFT)]();                 /*  Selector value */
+    return Frequency;
+} 
+/* Return A53_CORE_DIV2_CLK frequency */ 
+static uint32 get_A53_CORE_DIV2_CLK_Frequency(void) {
+
+    return get_A53_CORE_CLK_Frequency() >> 1U;
+} 
+/* Return A53_CORE_DIV10_CLK frequency */ 
+static uint32 get_A53_CORE_DIV10_CLK_Frequency(void) {
+
+    return get_A53_CORE_CLK_Frequency() / 10U;
+} 
+/* Return DDR_CLK frequency */ 
+static uint32 get_DDR_CLK_Frequency(void) {
+    uint32 Frequency;
+    Frequency  = Clock_Ip_apfFreqTableClkSrc[((IP_MC_CGM_5->MUX_0_CSS & MC_CGM_MUX_0_CSS_SELSTAT_MASK) >> MC_CGM_MUX_0_CSS_SELSTAT_SHIFT)]();                    /*  Selector value */
+    return Frequency;
+} 
+/* Return PFE_PE_CLK frequency */ 
+static uint32 get_PFE_PE_CLK_Frequency(void) {
+
+    uint32 Frequency = Clock_Ip_apfFreqTableClkSrc[((IP_MC_CGM_2->MUX_0_CSS & MC_CGM_2_MUX_0_CSS_SELSTAT_MASK) >> MC_CGM_2_MUX_0_CSS_SELSTAT_SHIFT)]();                    /*  Selector value */
+    Frequency &= Clock_Ip_au32EnableDivider[((IP_MC_CGM_2->MUX_0_DC_0 & MC_CGM_2_MUX_0_DC_0_DE_MASK) >> MC_CGM_2_MUX_0_DC_0_DE_SHIFT)];                           /*  Divider enable/disable */
+    Frequency /= (((IP_MC_CGM_2->MUX_0_DC_0 & MC_CGM_2_MUX_0_DC_0_DIV_MASK) >> MC_CGM_2_MUX_0_DC_0_DIV_SHIFT) + 1U);                                 /*  Apply divider value */
+    return Frequency;
+} 
+/* Return PFE_SYS_CLK frequency */ 
+static uint32 get_PFE_SYS_CLK_Frequency(void) {
+
+    return get_PFE_PE_CLK_Frequency() >> 1U;
+}
+/* Return PER_CLK frequency */
+static uint32 get_PER_CLK_Frequency(void) {
+
+    uint32 Frequency = Clock_Ip_apfFreqTableClkSrc[((IP_MC_CGM_0->MUX_3_CSS & MC_CGM_MUX_3_CSS_SELSTAT_MASK) >> MC_CGM_MUX_3_CSS_SELSTAT_SHIFT)]();                    /*  Selector value */
+    Frequency &= Clock_Ip_au32EnableDivider[((IP_MC_CGM_0->MUX_3_DC_0 & MC_CGM_MUX_3_DC_0_DE_MASK) >> MC_CGM_MUX_3_DC_0_DE_SHIFT)];                           /*  Divider enable/disable */
+    Frequency /= (((IP_MC_CGM_0->MUX_3_DC_0 & MC_CGM_MUX_3_DC_0_DIV_MASK) >> MC_CGM_MUX_3_DC_0_DIV_SHIFT) + 1U);                                 /*  Apply divider value */
+    return Frequency;
+} 
+/* Return GMAC0_REF_CLK frequency */ 
+static uint32 get_GMAC0_REF_CLK_Frequency(void) {
+
+    uint32 Frequency = Clock_Ip_apfFreqTableClkSrc[((IP_MC_CGM_0->MUX_15_CSS & MC_CGM_MUX_15_CSS_SELSTAT_MASK) >> MC_CGM_MUX_15_CSS_SELSTAT_SHIFT)]();      /*  Selector value */
+    return Frequency;
+} 
+/* Return GMAC0_REF_DIV_CLK frequency */ 
+static uint32 get_GMAC0_REF_DIV_CLK_Frequency(void) {
+
+    uint32 Frequency = Clock_Ip_apfFreqTableClkSrc_1[((IP_MC_CGM_0->MUX_15_CSS & MC_CGM_MUX_15_CSS_SELSTAT_MASK) >> MC_CGM_MUX_15_CSS_SELSTAT_SHIFT)]();      /*  Selector value */
+    Frequency &= Clock_Ip_au32EnableDivider[((IP_MC_CGM_0->MUX_15_DC_0 & MC_CGM_MUX_15_DC_0_DE_MASK) >> MC_CGM_MUX_15_DC_0_DE_SHIFT)];                           /*  Divider enable/disable */
+    Frequency /= (((IP_MC_CGM_0->MUX_15_DC_0 & MC_CGM_MUX_15_DC_0_DIV_MASK) >> MC_CGM_MUX_15_DC_0_DIV_SHIFT) + 1U);                                 /*  Apply divider value */
+    return Frequency;
+} 
+/* Return PFEMAC0_REF_DIV_CLK frequency */ 
+static uint32 get_PFEMAC0_REF_DIV_CLK_Frequency(void) {
+
+    uint32 Frequency = Clock_Ip_apfFreqTableClkSrc_1[((IP_MC_CGM_2->MUX_7_CSS & MC_CGM_2_MUX_7_CSS_SELSTAT_MASK) >> MC_CGM_2_MUX_7_CSS_SELSTAT_SHIFT)]();    /*  Selector value */
+    Frequency &= Clock_Ip_au32EnableDivider[((IP_MC_CGM_2->MUX_7_DC_0 & MC_CGM_2_MUX_7_DC_0_DE_MASK) >> MC_CGM_2_MUX_7_DC_0_DE_SHIFT)];                           /*  Divider enable/disable */
+    Frequency /= (((IP_MC_CGM_2->MUX_7_DC_0 & MC_CGM_2_MUX_7_DC_0_DIV_MASK) >> MC_CGM_2_MUX_7_DC_0_DIV_SHIFT) + 1U);                                   /*  Apply divider value */
+    return Frequency;
+} 
+/* Return PFEMAC1_REF_DIV_CLK frequency */ 
+static uint32 get_PFEMAC1_REF_DIV_CLK_Frequency(void) {
+
+    uint32 Frequency = Clock_Ip_apfFreqTableClkSrc_1[((IP_MC_CGM_2->MUX_8_CSS & MC_CGM_2_MUX_8_CSS_SELSTAT_MASK) >> MC_CGM_2_MUX_8_CSS_SELSTAT_SHIFT)]();    /*  Selector value */
+    Frequency &= Clock_Ip_au32EnableDivider[((IP_MC_CGM_2->MUX_8_DC_0 & MC_CGM_2_MUX_8_DC_0_DE_MASK) >> MC_CGM_2_MUX_8_DC_0_DE_SHIFT)];                           /*  Divider enable/disable */
+    Frequency /= (((IP_MC_CGM_2->MUX_8_DC_0 & MC_CGM_2_MUX_8_DC_0_DIV_MASK) >> MC_CGM_2_MUX_8_DC_0_DIV_SHIFT) + 1U);                                   /*  Apply divider value */
+    return Frequency;
+} 
+/* Return PFEMAC2_REF_DIV_CLK frequency */ 
+static uint32 get_PFEMAC2_REF_DIV_CLK_Frequency(void) {
+
+    uint32 Frequency = Clock_Ip_apfFreqTableClkSrc_1[((IP_MC_CGM_2->MUX_9_CSS & MC_CGM_2_MUX_9_CSS_SELSTAT_MASK) >> MC_CGM_2_MUX_9_CSS_SELSTAT_SHIFT)]();    /*  Selector value */
+    Frequency &= Clock_Ip_au32EnableDivider[((IP_MC_CGM_2->MUX_9_DC_0 & MC_CGM_2_MUX_9_DC_0_DE_MASK) >> MC_CGM_2_MUX_9_DC_0_DE_SHIFT)];                           /*  Divider enable/disable */
+    Frequency /= (((IP_MC_CGM_2->MUX_9_DC_0 & MC_CGM_MUX_9_DC_0_DIV_MASK) >> MC_CGM_2_MUX_9_DC_0_DIV_SHIFT) + 1U);                                   /*  Apply divider value */
+    return Frequency;
+} 
+/* Return CLKOUT0_CLK frequency */ 
+static uint32 get_CLKOUT0_CLK_Frequency(void) {
+
+    uint32 Frequency;
+    Frequency  = Clock_Ip_apfFreqTableClkSrc[((IP_MC_CGM_0->MUX_1_CSS & MC_CGM_MUX_1_CSS_SELSTAT_MASK) >> MC_CGM_MUX_1_CSS_SELSTAT_SHIFT)]();            /*  Selector value */
+    Frequency &= Clock_Ip_au32EnableDivider[((IP_MC_CGM_0->MUX_1_DC_0 & MC_CGM_MUX_1_DC_0_DE_MASK) >> MC_CGM_MUX_1_DC_0_DE_SHIFT)];                           /*  Divider enable/disable */
+    Frequency /= (((IP_MC_CGM_0->MUX_1_DC_0 & MC_CGM_MUX_1_DC_0_DIV_MASK) >> MC_CGM_MUX_1_DC_0_DIV_SHIFT) + 1U);                                 /*  Apply divider value */
+    return Frequency;
+} 
+/* Return CLKOUT1_CLK frequency */ 
+static uint32 get_CLKOUT1_CLK_Frequency(void) {
+
+    uint32 Frequency;
+    Frequency  = Clock_Ip_apfFreqTableClkSrc[((IP_MC_CGM_0->MUX_2_CSS & MC_CGM_MUX_2_CSS_SELSTAT_MASK) >> MC_CGM_MUX_2_CSS_SELSTAT_SHIFT)]();            /*  Selector value */
+    Frequency &= Clock_Ip_au32EnableDivider[((IP_MC_CGM_0->MUX_2_DC_0 & MC_CGM_MUX_2_DC_0_DE_MASK) >> MC_CGM_MUX_2_DC_0_DE_SHIFT)];                           /*  Divider enable/disable */
+    Frequency /= (((IP_MC_CGM_0->MUX_2_DC_0 & MC_CGM_MUX_2_DC_0_DIV_MASK) >> MC_CGM_MUX_2_DC_0_DIV_SHIFT) + 1U);                                 /*  Apply divider value */
+    return Frequency;
+} 
+/* Return DAPB_CLK frequency */ 
+static uint32 get_DAPB_CLK_Frequency(void) {
+
+    uint32 Frequency;
+    Frequency  = Clock_Ip_apfFreqTableClkSrc[((IP_MC_CGM_0->MUX_0_CSS & MC_CGM_MUX_0_CSS_SELSTAT_MASK) >> MC_CGM_MUX_0_CSS_SELSTAT_SHIFT)]();            /*  Selector value */
+    Frequency &= Clock_Ip_au32EnableDivider[((IP_MC_CGM_0->MUX_0_DC_1 & MC_CGM_MUX_0_DC_1_DE_MASK) >> MC_CGM_MUX_0_DC_1_DE_SHIFT)];                           /*  Divider enable/disable */
+    Frequency /= (((IP_MC_CGM_0->MUX_0_DC_1 & MC_CGM_MUX_0_DC_1_DIV_MASK) >> MC_CGM_MUX_0_DC_1_DIV_SHIFT) + 1U);                                 /*  Apply divider value */
+    return Frequency;
+} 
+/* Return FLEXCAN_CLK frequency */ 
+static uint32 get_FLEXCAN_CLK_Frequency(void) {
+
+    return Clock_Ip_apfFreqTableClkSrc[((IP_MC_CGM_0->MUX_7_CSS & MC_CGM_MUX_7_CSS_SELSTAT_MASK) >> MC_CGM_MUX_7_CSS_SELSTAT_SHIFT)]();                  /*  Selector value */
+} 
+/* Return FLEXCAN0_CLK frequency */ 
+static uint32 get_FLEXCAN0_CLK_Frequency(void) {
+
+    return get_FLEXCAN_CLK_Frequency();
+} 
+/* Return FLEXCAN1_CLK frequency */ 
+static uint32 get_FLEXCAN1_CLK_Frequency(void) {
+
+    return get_FLEXCAN_CLK_Frequency();
+} 
+/* Return FLEXCAN2_CLK frequency */ 
+static uint32 get_FLEXCAN2_CLK_Frequency(void) {
+
+    return get_FLEXCAN_CLK_Frequency();
+} 
+/* Return FLEXCAN3_CLK frequency */ 
+static uint32 get_FLEXCAN3_CLK_Frequency(void) {
+
+    return get_FLEXCAN_CLK_Frequency();
+} 
+/* Return FLEXRAY_CLK frequency */ 
+static uint32 get_FLEXRAY_CLK_Frequency(void) {
+
+    uint32 Frequency;
+    Frequency  = Clock_Ip_apfFreqTableClkSrc[((IP_MC_CGM_0->MUX_6_CSS & MC_CGM_MUX_6_CSS_SELSTAT_MASK) >> MC_CGM_MUX_6_CSS_SELSTAT_SHIFT)]();            /*  Selector value */
+    Frequency &= Clock_Ip_au32EnableDivider[((IP_MC_CGM_0->MUX_6_DC_0 & MC_CGM_MUX_6_DC_0_DE_MASK) >> MC_CGM_MUX_6_DC_0_DE_SHIFT)];                           /*  Divider enable/disable */
+    Frequency /= (((IP_MC_CGM_0->MUX_6_DC_0 & MC_CGM_MUX_6_DC_0_DIV_MASK) >> MC_CGM_MUX_6_DC_0_DIV_SHIFT) + 1U);                                 /*  Apply divider value */
+    return Frequency;
+} 
+/* Return FRAY0_CLK frequency */ 
+static uint32 get_FRAY0_CLK_Frequency(void) {
+
+    return get_FLEXRAY_CLK_Frequency();
+} 
+/* Return FLEXTIMERA_CLK frequency */ 
+static uint32 get_FLEXTIMERA_CLK_Frequency(void) {
+
+    uint32 Frequency;
+    Frequency  = Clock_Ip_apfFreqTableClkSrc[((IP_MC_CGM_0->MUX_4_CSS & MC_CGM_MUX_4_CSS_SELSTAT_MASK) >> MC_CGM_MUX_4_CSS_SELSTAT_SHIFT)]();            /*  Selector value */
+    Frequency &= Clock_Ip_au32EnableDivider[((IP_MC_CGM_0->MUX_4_DC_0 & MC_CGM_MUX_4_DC_0_DE_MASK) >> MC_CGM_MUX_4_DC_0_DE_SHIFT)];                           /*  Divider enable/disable */
+    Frequency /= (((IP_MC_CGM_0->MUX_4_DC_0 & MC_CGM_MUX_4_DC_0_DIV_MASK) >> MC_CGM_MUX_4_DC_0_DIV_SHIFT) + 1U);                                 /*  Apply divider value */
+    return Frequency;
+} 
+/* Return FTIMER0_CLK frequency */ 
+static uint32 get_FTIMER0_CLK_Frequency(void) {
+
+    return get_FLEXTIMERA_CLK_Frequency();
+} 
+/* Return FLEXTIMERB_CLK frequency */ 
+static uint32 get_FLEXTIMERB_CLK_Frequency(void) {
+
+    uint32 Frequency;
+    Frequency  = Clock_Ip_apfFreqTableClkSrc[((IP_MC_CGM_0->MUX_5_CSS & MC_CGM_MUX_5_CSS_SELSTAT_MASK) >> MC_CGM_MUX_5_CSS_SELSTAT_SHIFT)]();            /*  Selector value */
+    Frequency &= Clock_Ip_au32EnableDivider[((IP_MC_CGM_0->MUX_5_DC_0 & MC_CGM_MUX_5_DC_0_DE_MASK) >> MC_CGM_MUX_5_DC_0_DE_SHIFT)];                           /*  Divider enable/disable */
+    Frequency /= (((IP_MC_CGM_0->MUX_5_DC_0 & MC_CGM_MUX_5_DC_0_DIV_MASK) >> MC_CGM_MUX_5_DC_0_DIV_SHIFT) + 1U);                                 /*  Apply divider value */
+    return Frequency;
+} 
+/* Return FTIMER1_CLK frequency */ 
+static uint32 get_FTIMER1_CLK_Frequency(void) {
+
+    return get_FLEXTIMERB_CLK_Frequency();
+} 
+/* Return GMAC0_RX_CLK frequency */ 
+static uint32 get_GMAC0_RX_CLK_Frequency(void) {
+
+    return Clock_Ip_apfFreqTableClkSrc[((IP_MC_CGM_0->MUX_11_CSS & MC_CGM_MUX_11_CSS_SELSTAT_MASK) >> MC_CGM_MUX_11_CSS_SELSTAT_SHIFT)]();               /*  Selector value */
+} 
+/* Return GMAC_TS_CLK frequency */ 
+static uint32 get_GMAC_TS_CLK_Frequency(void) {
+
+    uint32 Frequency;
+    Frequency  = Clock_Ip_apfFreqTableClkSrc[((IP_MC_CGM_0->MUX_9_CSS & MC_CGM_MUX_9_CSS_SELSTAT_MASK) >> MC_CGM_MUX_9_CSS_SELSTAT_SHIFT)]();            /*  Selector value */
+    Frequency &= Clock_Ip_au32EnableDivider[((IP_MC_CGM_0->MUX_9_DC_0 & MC_CGM_MUX_9_DC_0_DE_MASK) >> MC_CGM_MUX_9_DC_0_DE_SHIFT)];                           /*  Divider enable/disable */
+    Frequency /= (((IP_MC_CGM_0->MUX_9_DC_0 & MC_CGM_MUX_9_DC_0_DIV_MASK) >> MC_CGM_MUX_9_DC_0_DIV_SHIFT) + 1U);                                 /*  Apply divider value */
+    return Frequency;
+} 
+/* Return GMAC0_TS_CLK frequency */ 
+static uint32 get_GMAC0_TS_CLK_Frequency(void) {
+
+    uint32 Frequency;
+    Frequency  = Clock_Ip_apfFreqTableClkSrc[((IP_MC_CGM_0->MUX_9_CSS & MC_CGM_MUX_9_CSS_SELSTAT_MASK) >> MC_CGM_MUX_9_CSS_SELSTAT_SHIFT)]();            /*  Selector value */
+    Frequency &= Clock_Ip_au32EnableDivider[((IP_MC_CGM_0->MUX_9_DC_0 & MC_CGM_MUX_9_DC_0_DE_MASK) >> MC_CGM_MUX_9_DC_0_DE_SHIFT)];                           /*  Divider enable/disable */
+    Frequency /= (((IP_MC_CGM_0->MUX_9_DC_0 & MC_CGM_MUX_9_DC_0_DIV_MASK) >> MC_CGM_MUX_9_DC_0_DIV_SHIFT) + 1U);                                 /*  Apply divider value */
+    return Frequency;
+} 
+/* Return GMAC0_TX_CLK frequency */ 
+static uint32 get_GMAC0_TX_CLK_Frequency(void) {
+
+    uint32 Frequency;
+    Frequency  = Clock_Ip_apfFreqTableClkSrc[((IP_MC_CGM_0->MUX_10_CSS & MC_CGM_MUX_10_CSS_SELSTAT_MASK) >> MC_CGM_MUX_10_CSS_SELSTAT_SHIFT)]();         /*  Selector value */
+    Frequency &= Clock_Ip_au32EnableDivider[((IP_MC_CGM_0->MUX_10_DC_0 & MC_CGM_MUX_10_DC_0_DE_MASK) >> MC_CGM_MUX_10_DC_0_DE_SHIFT)];                        /*  Divider enable/disable */
+    Frequency /= (((IP_MC_CGM_0->MUX_10_DC_0 & MC_CGM_MUX_10_DC_0_DIV_MASK) >> MC_CGM_MUX_10_DC_0_DIV_SHIFT) + 1U);                              /*  Apply divider value */
+    return Frequency;
+} 
+/* Return LBIST_CLK frequency */ 
+static uint32 get_LBIST_CLK_Frequency(void) {
+
+    uint32 Frequency;
+    Frequency  = Clock_Ip_apfFreqTableClkSrc[((IP_MC_CGM_0->MUX_0_CSS & MC_CGM_MUX_0_CSS_SELSTAT_MASK) >> MC_CGM_MUX_0_CSS_SELSTAT_SHIFT)]();            /*  Selector value */
+    Frequency &= Clock_Ip_au32EnableDivider[((IP_MC_CGM_0->MUX_0_DC_0 & MC_CGM_MUX_0_DC_0_DE_MASK) >> MC_CGM_MUX_0_DC_0_DE_SHIFT)];                           /*  Divider enable/disable */
+    Frequency /= (((IP_MC_CGM_0->MUX_0_DC_0 & MC_CGM_MUX_0_DC_0_DIV_MASK) >> MC_CGM_MUX_0_DC_0_DIV_SHIFT) + 1U);                                 /*  Apply divider value */
+    return Frequency;
+} 
+/* Return LBIST0_CLK frequency */ 
+static uint32 get_LBIST0_CLK_Frequency(void) {
+
+    return get_LBIST_CLK_Frequency();
+} 
+/* Return LBIST1_CLK frequency */ 
+static uint32 get_LBIST1_CLK_Frequency(void) {
+
+    return get_LBIST_CLK_Frequency();
+} 
+/* Return LBIST2_CLK frequency */ 
+static uint32 get_LBIST2_CLK_Frequency(void) {
+
+    return get_LBIST_CLK_Frequency();
+} 
+/* Return LBIST3_CLK frequency */ 
+static uint32 get_LBIST3_CLK_Frequency(void) {
+
+    return get_LBIST_CLK_Frequency();
+} 
+/* Return LBIST4_CLK frequency */ 
+static uint32 get_LBIST4_CLK_Frequency(void) {
+
+    return get_LBIST_CLK_Frequency();
+} 
+/* Return LBIST5_CLK frequency */ 
+static uint32 get_LBIST5_CLK_Frequency(void) {
+
+    return get_LBIST_CLK_Frequency();
+} 
+/* Return LBIST6_CLK frequency */ 
+static uint32 get_LBIST6_CLK_Frequency(void) {
+
+    return get_LBIST_CLK_Frequency();
+} 
+/* Return LBIST7_CLK frequency */ 
+static uint32 get_LBIST7_CLK_Frequency(void) {
+
+    return get_LBIST_CLK_Frequency();
+} 
+/* Return LIN_BAUD_CLK frequency */ 
+static uint32 get_LIN_BAUD_CLK_Frequency(void) {
+
+    return Clock_Ip_apfFreqTableClkSrc[((IP_MC_CGM_0->MUX_8_CSS & MC_CGM_MUX_8_CSS_SELSTAT_MASK) >> MC_CGM_MUX_8_CSS_SELSTAT_SHIFT)]();                  /*  Selector value */
+} 
+/* Return LINFLEX_CLK frequency */ 
+static uint32 get_LINFLEX_CLK_Frequency(void) {
+
+    return get_LIN_BAUD_CLK_Frequency() >> 1U;
+} 
+/* Return LIN0_CLK frequency */ 
+static uint32 get_LIN0_CLK_Frequency(void) {
+
+    return get_LIN_BAUD_CLK_Frequency();
+} 
+/* Return LIN1_CLK frequency */ 
+static uint32 get_LIN1_CLK_Frequency(void) {
+
+    return get_LIN_BAUD_CLK_Frequency();
+} 
+/* Return LIN2_CLK frequency */ 
+static uint32 get_LIN2_CLK_Frequency(void) {
+
+    return get_LIN_BAUD_CLK_Frequency();
+} 
+/* Return PFEMAC0_RX_CLK frequency */ 
+static uint32 get_PFEMAC0_RX_CLK_Frequency(void) {
+
+    return Clock_Ip_apfFreqTableClkSrc[((IP_MC_CGM_2->MUX_4_CSS & MC_CGM_2_MUX_4_CSS_SELSTAT_MASK) >> MC_CGM_2_MUX_4_CSS_SELSTAT_SHIFT)]();                  /*  Selector value */
+} 
+/* Return PFEMAC0_TX_DIV_CLK frequency */ 
+static uint32 get_PFEMAC0_TX_DIV_CLK_Frequency(void) {
+
+    uint32 Frequency;
+    Frequency  = Clock_Ip_apfFreqTableClkSrc[((IP_MC_CGM_2->MUX_1_CSS & MC_CGM_2_MUX_1_CSS_SELSTAT_MASK) >> MC_CGM_2_MUX_1_CSS_SELSTAT_SHIFT)]();            /*  Selector value */
+    Frequency &= Clock_Ip_au32EnableDivider[((IP_MC_CGM_2->MUX_1_DC_0 & MC_CGM_2_MUX_1_DC_0_DE_MASK) >> MC_CGM_2_MUX_1_DC_0_DE_SHIFT)];                           /*  Divider enable/disable */
+    Frequency /= (((IP_MC_CGM_2->MUX_1_DC_0 & MC_CGM_2_MUX_1_DC_0_DIV_MASK) >> MC_CGM_2_MUX_1_DC_0_DIV_SHIFT) + 1U);                                 /*  Apply divider value */
+    return Frequency;
+} 
+/* Return PFEMAC0_TX_CLK frequency */ 
+static uint32 get_PFEMAC0_TX_CLK_Frequency(void)
+{
+    uint32 RegValue;
+    uint32 Frequency;
+
+    RegValue = Call_Get_GENCTRL1_CTRL();
+    if (0U != ((RegValue & CLOCK_IP_GENCTRL1_CTRL_EMAC0_MASK) << CLOCK_IP_GENCTRL1_CTRL_EMAC0_SHIFT))
+    {
+        Frequency = get_SERDES_1_XPCS_0_TX_Frequency();
+    }
+    else
+    {
+        Frequency = get_PFEMAC0_TX_DIV_CLK_Frequency();
+    }
+    return Frequency;
+} 
+/* Return PFEMAC1_RX_CLK frequency */ 
+static uint32 get_PFEMAC1_RX_CLK_Frequency(void) {
+
+    return Clock_Ip_apfFreqTableClkSrc[((IP_MC_CGM_2->MUX_5_CSS & MC_CGM_2_MUX_5_CSS_SELSTAT_MASK) >> MC_CGM_2_MUX_5_CSS_SELSTAT_SHIFT)]();                  /*  Selector value */
+} 
+/* Return PFEMAC1_TX_CLK frequency */ 
+static uint32 get_PFEMAC1_TX_CLK_Frequency(void) {
+
+    uint32 Frequency;
+    Frequency  = Clock_Ip_apfFreqTableClkSrc_1[((IP_MC_CGM_2->MUX_2_CSS & MC_CGM_2_MUX_2_CSS_SELSTAT_MASK) >> MC_CGM_2_MUX_2_CSS_SELSTAT_SHIFT)]();            /*  Selector value */
+    Frequency &= Clock_Ip_au32EnableDivider[((IP_MC_CGM_2->MUX_2_DC_0 & MC_CGM_2_MUX_2_DC_0_DE_MASK) >> MC_CGM_2_MUX_2_DC_0_DE_SHIFT)];                           /*  Divider enable/disable */
+    Frequency /= (((IP_MC_CGM_2->MUX_2_DC_0 & MC_CGM_2_MUX_2_DC_0_DIV_MASK) >> MC_CGM_2_MUX_2_DC_0_DIV_SHIFT) + 1U);                                 /*  Apply divider value */
+    return Frequency;
+} 
+/* Return PFEMAC2_RX_CLK frequency */ 
+static uint32 get_PFEMAC2_RX_CLK_Frequency(void) {
+
+    return Clock_Ip_apfFreqTableClkSrc[((IP_MC_CGM_2->MUX_6_CSS & MC_CGM_2_MUX_6_CSS_SELSTAT_MASK) >> MC_CGM_2_MUX_6_CSS_SELSTAT_SHIFT)]();                  /*  Selector value */
+} 
+/* Return PFEMAC2_TX_CLK frequency */ 
+static uint32 get_PFEMAC2_TX_CLK_Frequency(void) {
+
+    uint32 Frequency;
+    Frequency  = Clock_Ip_apfFreqTableClkSrc[((IP_MC_CGM_2->MUX_3_CSS & MC_CGM_2_MUX_3_CSS_SELSTAT_MASK) >> MC_CGM_2_MUX_3_CSS_SELSTAT_SHIFT)]();            /*  Selector value */
+    Frequency &= Clock_Ip_au32EnableDivider[((IP_MC_CGM_2->MUX_3_DC_0 & MC_CGM_2_MUX_3_DC_0_DE_MASK) >> MC_CGM_2_MUX_3_DC_0_DE_SHIFT)];                           /*  Divider enable/disable */
+    Frequency /= (((IP_MC_CGM_2->MUX_3_DC_0 & MC_CGM_2_MUX_3_DC_0_DIV_MASK) >> MC_CGM_2_MUX_3_DC_0_DIV_SHIFT) + 1U);                                 /*  Apply divider value */
+    return Frequency;
+} 
+/* Return QSPI_2X_CLK frequency */ 
+static uint32 get_QSPI_2X_CLK_Frequency(void) {
+
+    uint32 Frequency;
+    Frequency  = Clock_Ip_apfFreqTableClkSrc[((IP_MC_CGM_0->MUX_12_CSS & MC_CGM_MUX_12_CSS_SELSTAT_MASK) >> MC_CGM_MUX_12_CSS_SELSTAT_SHIFT)]();         /*  Selector value */
+    Frequency &= Clock_Ip_au32EnableDivider[((IP_MC_CGM_0->MUX_12_DC_0 & MC_CGM_MUX_12_DC_0_DE_MASK) >> MC_CGM_MUX_12_DC_0_DE_SHIFT)];                        /*  Divider enable/disable */
+    Frequency /= (((IP_MC_CGM_0->MUX_12_DC_0 & MC_CGM_MUX_12_DC_0_DIV_MASK) >> MC_CGM_MUX_12_DC_0_DIV_SHIFT) + 1U);                              /*  Apply divider value */
+    return Frequency;
+} 
+/* Return QSPI_1X_CLK frequency */ 
+static uint32 get_QSPI_1X_CLK_Frequency(void) {
+
+    return get_QSPI_2X_CLK_Frequency() >> 1U;
+} 
+/* Return QSPI0_CLK frequency */ 
+static uint32 get_QSPI0_CLK_Frequency(void) {
+
+    return get_QSPI_2X_CLK_Frequency();
+}
+/* Return RTC_CLK frequency */
+uint32 get_RTC_CLK_Frequency_TrustedCall(void)
+{
+    uint32 Frequency;
+    Frequency = Clock_Ip_apfFreqTableRtcClkSrc[((IP_RTC->RTCC & RTC_RTCC_CLKSEL_MASK) >> RTC_RTCC_CLKSEL_SHIFT)]();      /*  Selector value */
+    return Frequency;
+}
+/* Return RTC_CLK frequency */
+static uint32 get_RTC_CLK_Frequency(void)
+{
+    uint32 Frequency;
 #ifdef CLOCK_IP_ENABLE_USER_MODE_SUPPORT
   #if (STD_ON == CLOCK_IP_ENABLE_USER_MODE_SUPPORT)
-    Frequency = OsIf_Trusted_Call_Return(Clock_Ip_Get_RR_RTC_CLK_Frequency_TrustedCall);
+    Frequency = OsIf_Trusted_Call_Return(get_RTC_CLK_Frequency_TrustedCall);
   #else
-    Frequency = Clock_Ip_Get_RR_RTC_CLK_Frequency_TrustedCall();
+    Frequency = get_RTC_CLK_Frequency_TrustedCall();
   #endif
 #endif /* CLOCK_IP_ENABLE_USER_MODE_SUPPORT */
     return Frequency;
 }
-/* Return RR_RTC_CLK frequency */
-uint64 Clock_Ip_Get_RR_RTC_CLK_Frequency_TrustedCall(void)
-{
-    uint64 Frequency;
+/* Return SPI_CLK frequency */
+static uint32 get_SPI_CLK_Frequency(void) {
 
-    Frequency = Clock_Ip_apfFreqSrcRtcTable[((IP_LPE_RTC->RTCC & RTC_RTCC_CLKSEL_MASK) >> RTC_RTCC_CLKSEL_SHIFT)]();                                  /*  Selector value */
+    return Clock_Ip_apfFreqTableClkSrc[((IP_MC_CGM_0->MUX_16_CSS & MC_CGM_MUX_16_CSS_SELSTAT_MASK) >> MC_CGM_MUX_16_CSS_SELSTAT_SHIFT)]();              /*  Selector value */
+} 
+/* Return SPI0_CLK frequency */ 
+static uint32 get_SPI0_CLK_Frequency(void) {
 
+    return get_SPI_CLK_Frequency();
+} 
+/* Return SPI1_CLK frequency */ 
+static uint32 get_SPI1_CLK_Frequency(void) {
+
+    return get_SPI_CLK_Frequency();
+} 
+/* Return SPI2_CLK frequency */ 
+static uint32 get_SPI2_CLK_Frequency(void) {
+
+    return get_SPI_CLK_Frequency();
+} 
+/* Return SPI3_CLK frequency */ 
+static uint32 get_SPI3_CLK_Frequency(void) {
+
+    return get_SPI_CLK_Frequency();
+} 
+/* Return SPI4_CLK frequency */ 
+static uint32 get_SPI4_CLK_Frequency(void) {
+
+    return get_SPI_CLK_Frequency();
+} 
+/* Return SPI5_CLK frequency */ 
+static uint32 get_SPI5_CLK_Frequency(void) {
+
+    return get_SPI_CLK_Frequency();
+} 
+/* Return USDHC_CLK frequency */ 
+static uint32 get_USDHC_CLK_Frequency(void) {
+
+    uint32 Frequency;
+    Frequency  = Clock_Ip_apfFreqTableClkSrc[((IP_MC_CGM_0->MUX_14_CSS & MC_CGM_MUX_14_CSS_SELSTAT_MASK) >> MC_CGM_MUX_14_CSS_SELSTAT_SHIFT)]();         /*  Selector value */
+    Frequency &= Clock_Ip_au32EnableDivider[((IP_MC_CGM_0->MUX_14_DC_0 & MC_CGM_MUX_14_DC_0_DE_MASK) >> MC_CGM_MUX_14_DC_0_DE_SHIFT)];                        /*  Divider enable/disable */
+    Frequency /= (((IP_MC_CGM_0->MUX_14_DC_0 & MC_CGM_MUX_14_DC_0_DIV_MASK) >> MC_CGM_MUX_14_DC_0_DIV_SHIFT) + 1U);                              /*  Apply divider value */
     return Frequency;
-}
-/* Return SAI0_MCLK frequency */
-static uint64 Clock_Ip_Get_SAI0_MCLK_Frequency(void) {
-    uint64 Frequency = 0U;
-    Frequency = Clock_Ip_apfFreqSrcTable[0U][((IP_MC_CGM_2->SLC_0_CSS & MC_CGM_SLC_0_CSS_SELSTAT_MASK) >> MC_CGM_SLC_0_CSS_SELSTAT_SHIFT)]();         /*  Selector value */
-    Frequency &= Clock_Ip_au32EnableDivider[((IP_MC_CGM_2->SLC_0_DC_0 & MC_CGM_SLC_0_DC_0_DE_MASK) >> MC_CGM_SLC_0_DC_0_DE_SHIFT)];                   /*  Divider enable/disable */
-    Frequency /= (((IP_MC_CGM_2->SLC_0_DC_0 & MC_CGM_SLC_0_DC_0_DIV_MASK) >> MC_CGM_SLC_0_DC_0_DIV_SHIFT) + 1U);                                      /*  Apply divider value */
-    return Frequency;                                                                                                                                 /*  Return frequency value */
-}
-/* Return SAI1_MCLK frequency */
-static uint64 Clock_Ip_Get_SAI1_MCLK_Frequency(void) {
-    uint64 Frequency = 0U;
-    Frequency = Clock_Ip_apfFreqSrcTable[0U][((IP_MC_CGM_5->SLC_0_CSS & MC_CGM_SLC_0_CSS_SELSTAT_MASK) >> MC_CGM_SLC_0_CSS_SELSTAT_SHIFT)]();         /*  Selector value */
-    Frequency &= Clock_Ip_au32EnableDivider[((IP_MC_CGM_5->SLC_0_DC_0 & MC_CGM_SLC_0_DC_0_DE_MASK) >> MC_CGM_SLC_0_DC_0_DE_SHIFT)];                   /*  Divider enable/disable */
-    Frequency /= (((IP_MC_CGM_5->SLC_0_DC_0 & MC_CGM_SLC_0_DC_0_DIV_MASK) >> MC_CGM_SLC_0_DC_0_DIV_SHIFT) + 1U);                                      /*  Apply divider value */
-    return Frequency;                                                                                                                                 /*  Return frequency value */
-}
-/* Return SERDES_AUX_CLK frequency */
-static uint64 Clock_Ip_Get_SERDES_AUX_CLK_Frequency(void) {
-    uint64 Frequency = 0U;
-    Frequency = Clock_Ip_apfFreqSrcTable[0U][((IP_MC_CGM_0->SLC_9_CSS & MC_CGM_SLC_9_CSS_SELSTAT_MASK) >> MC_CGM_SLC_9_CSS_SELSTAT_SHIFT)]();         /*  Selector value */
-    Frequency &= Clock_Ip_au32EnableDivider[((IP_MC_CGM_0->SLC_9_DC_0 & MC_CGM_SLC_9_DC_0_DE_MASK) >> MC_CGM_SLC_9_DC_0_DE_SHIFT)];                   /*  Divider enable/disable */
-    Frequency /= (((IP_MC_CGM_0->SLC_9_DC_0 & MC_CGM_SLC_9_DC_0_DIV_MASK) >> MC_CGM_SLC_9_DC_0_DIV_SHIFT) + 1U);                                      /*  Apply divider value */
-    return Frequency;                                                                                                                                 /*  Return frequency value */
-}
-/* Return SERDES_REF_CLK frequency */
-static uint64 Clock_Ip_Get_SERDES_REF_CLK_Frequency(void) {
-    uint64 Frequency = 0U;
-    Frequency = Clock_Ip_apfFreqSrcTable[0U][((IP_MC_CGM_0->SLC_10_CSS & MC_CGM_SLC_10_CSS_SELSTAT_MASK) >> MC_CGM_SLC_10_CSS_SELSTAT_SHIFT)]();      /*  Selector value */
-    Frequency &= Clock_Ip_au32EnableDivider[((IP_MC_CGM_0->SLC_10_DC_0 & MC_CGM_SLC_10_DC_0_DE_MASK) >> MC_CGM_SLC_10_DC_0_DE_SHIFT)];                /*  Divider enable/disable */
-    Frequency /= (((IP_MC_CGM_0->SLC_10_DC_0 & MC_CGM_SLC_10_DC_0_DIV_MASK) >> MC_CGM_SLC_10_DC_0_DIV_SHIFT) + 1U);                                   /*  Apply divider value */
-    return Frequency;                                                                                                                                 /*  Return frequency value */
-}
-/* Return STM0_CLK frequency */
-static uint64 Clock_Ip_Get_STM0_CLK_Frequency(void) {
-    uint64 Frequency = 0U;
-    Frequency = Clock_Ip_apfFreqSrcTable[0U][((IP_MC_CGM_3->SLC_6_CSS & MC_CGM_SLC_6_CSS_SELSTAT_MASK) >> MC_CGM_SLC_6_CSS_SELSTAT_SHIFT)]();         /*  Selector value */
-    Frequency &= Clock_Ip_au32EnableDivider[((IP_MC_CGM_3->SLC_6_DC_0 & MC_CGM_SLC_6_DC_0_DE_MASK) >> MC_CGM_SLC_6_DC_0_DE_SHIFT)];                   /*  Divider enable/disable */
-    Frequency /= (((IP_MC_CGM_3->SLC_6_DC_0 & MC_CGM_SLC_6_DC_0_DIV_MASK) >> MC_CGM_SLC_6_DC_0_DIV_SHIFT) + 1U);                                      /*  Apply divider value */
-    return Frequency;                                                                                                                                 /*  Return frequency value */
-}
-/* Return STM1_CLK frequency */
-static uint64 Clock_Ip_Get_STM1_CLK_Frequency(void) {
-    uint64 Frequency = 0U;
-    Frequency = Clock_Ip_apfFreqSrcTable[0U][((IP_MC_CGM_3->SLC_7_CSS & MC_CGM_SLC_7_CSS_SELSTAT_MASK) >> MC_CGM_SLC_7_CSS_SELSTAT_SHIFT)]();         /*  Selector value */
-    Frequency &= Clock_Ip_au32EnableDivider[((IP_MC_CGM_3->SLC_7_DC_0 & MC_CGM_SLC_7_DC_0_DE_MASK) >> MC_CGM_SLC_7_DC_0_DE_SHIFT)];                   /*  Divider enable/disable */
-    Frequency /= (((IP_MC_CGM_3->SLC_7_DC_0 & MC_CGM_SLC_7_DC_0_DIV_MASK) >> MC_CGM_SLC_7_DC_0_DIV_SHIFT) + 1U);                                      /*  Apply divider value */
-    return Frequency;                                                                                                                                 /*  Return frequency value */
-}
-/* Return STM2_CLK frequency */
-static uint64 Clock_Ip_Get_STM2_CLK_Frequency(void) {
-    uint64 Frequency = 0U;
-    Frequency = Clock_Ip_apfFreqSrcTable[0U][((IP_MC_CGM_3->SLC_8_CSS & MC_CGM_SLC_8_CSS_SELSTAT_MASK) >> MC_CGM_SLC_8_CSS_SELSTAT_SHIFT)]();         /*  Selector value */
-    Frequency &= Clock_Ip_au32EnableDivider[((IP_MC_CGM_3->SLC_8_DC_0 & MC_CGM_SLC_8_DC_0_DE_MASK) >> MC_CGM_SLC_8_DC_0_DE_SHIFT)];                   /*  Divider enable/disable */
-    Frequency /= (((IP_MC_CGM_3->SLC_8_DC_0 & MC_CGM_SLC_8_DC_0_DIV_MASK) >> MC_CGM_SLC_8_DC_0_DIV_SHIFT) + 1U);                                      /*  Apply divider value */
-    return Frequency;                                                                                                                                 /*  Return frequency value */
-}
-/* Return STM3_CLK frequency */
-static uint64 Clock_Ip_Get_STM3_CLK_Frequency(void) {
-    uint64 Frequency = 0U;
-    Frequency = Clock_Ip_apfFreqSrcTable[0U][((IP_MC_CGM_3->SLC_9_CSS & MC_CGM_SLC_9_CSS_SELSTAT_MASK) >> MC_CGM_SLC_9_CSS_SELSTAT_SHIFT)]();         /*  Selector value */
-    Frequency &= Clock_Ip_au32EnableDivider[((IP_MC_CGM_3->SLC_9_DC_0 & MC_CGM_SLC_9_DC_0_DE_MASK) >> MC_CGM_SLC_9_DC_0_DE_SHIFT)];                   /*  Divider enable/disable */
-    Frequency /= (((IP_MC_CGM_3->SLC_9_DC_0 & MC_CGM_SLC_9_DC_0_DIV_MASK) >> MC_CGM_SLC_9_DC_0_DIV_SHIFT) + 1U);                                      /*  Apply divider value */
-    return Frequency;                                                                                                                                 /*  Return frequency value */
-}
-/* Return TRACE_CLK frequency */
-static uint64 Clock_Ip_Get_TRACE_CLK_Frequency(void) {
-    uint64 Frequency = 0U;
-    Frequency = Clock_Ip_apfFreqSrcTable[0U][((IP_MC_CGM_3->SLC_11_CSS & MC_CGM_SLC_11_CSS_SELSTAT_MASK) >> MC_CGM_SLC_11_CSS_SELSTAT_SHIFT)]();      /*  Selector value */
-    Frequency &= Clock_Ip_au32EnableDivider[((IP_MC_CGM_3->SLC_11_DC_0 & MC_CGM_SLC_11_DC_0_DE_MASK) >> MC_CGM_SLC_11_DC_0_DE_SHIFT)];                /*  Divider enable/disable */
-    Frequency /= (((IP_MC_CGM_3->SLC_11_DC_0 & MC_CGM_SLC_11_DC_0_DIV_MASK) >> MC_CGM_SLC_11_DC_0_DIV_SHIFT) + 1U);                                   /*  Apply divider value */
-    return Frequency;                                                                                                                                 /*  Return frequency value */
-}
+} 
+/* Return USDHC0_CLK frequency */ 
+static uint32 get_USDHC0_CLK_Frequency(void) {
 
-/* Return Clock_Ip_PLL_VCO frequency */
-static uint64 Clock_Ip_PLL_VCO(const PLL_Type *Base)
+    return get_USDHC_CLK_Frequency();
+}
+/* Return PLL_VCO frequency */
+static uint32 PLL_VCO(const PLLDIG_Type *Base)
 {
-    uint64 Fin;
-    uint64 Rdiv;
-    uint64 Mfi;
-    //uint64 Mfn;
-    // uint64 Multiplier;
-    Fin  = (((Base->CTRL.RW & PLL_CTRL_REF_CLK_SEL_MASK) >> PLL_CTRL_REF_CLK_SEL_SHIFT) == 0U) ? Clock_Ip_Get_FIRC_CLK_Frequency() : Clock_Ip_Get_FXOSC_CLK_Frequency();   /* input freq */
-    Rdiv = ((Base->DIV.RW & PLL_DIV_RDIV_MASK) >> PLL_DIV_RDIV_SHIFT);              /* Rdiv */
-    Mfi  = ((Base->DIV.RW & PLL_DIV_MFI_MASK) >> PLL_DIV_MFI_SHIFT);                /* Mfi */
-    // Mfn  = ((Base->NUMERATOR.RW & PLL_NUMERATOR_MFN_MASK) >> PLL_NUMERATOR_MFN_SHIFT);                /* Mfn */
+    uint32 Fin;
+    uint32 Rdiv;
+    uint32 Mfi;
+    uint32 Mfn;
+    uint32 Fout;
+    uint32 Var1;
+    uint32 Var2;
+    uint32 Var3;
+    uint32 Var4;
+    uint32 Var5;
+    Fin  = (((Base->PLLCLKMUX & PLLDIG_PLLCLKMUX_REFCLKSEL_MASK) >> PLLDIG_PLLCLKMUX_REFCLKSEL_SHIFT) == 0U) ? get_FIRC_CLK_Frequency() : get_FXOSC_CLK_Frequency();   /* input freq */
+    Rdiv = ((Base->PLLDV & PLLDIG_PLLDV_RDIV_MASK) >> PLLDIG_PLLDV_RDIV_SHIFT);              /* Rdiv */
+    Mfi  = ((Base->PLLDV & PLLDIG_PLLDV_MFI_MASK) >> PLLDIG_PLLDV_MFI_SHIFT);                /* Mfi */
+    Mfn  = ((Base->PLLFD & PLLDIG_PLLFD_MFN_MASK) >> PLLDIG_PLLFD_MFN_SHIFT);                /* Mfn */
 
-    // Multiplier = ((Mfi << CLOCK_IP_MUL_BY_16384) + (Mfi << CLOCK_IP_MUL_BY_2048) + Mfn);
 
-    return ((Fin / Rdiv) * Mfi);                 /* Fin divided by predivider and multiplied. */
+    Var1 = Mfi / Rdiv;                                      /* Mfi divided by Rdiv */
+    Var2 = Mfi - (Var1 * Rdiv);                             /* Mfi minus Var1 multiplied by Rdiv */
+    Var3 = (Rdiv << CLOCK_IP_MUL_BY_16384) + (Rdiv << CLOCK_IP_MUL_BY_2048);  /* Rdiv multiplied by 18432 */
+    Var4 = Fin / Var3;                                      /* Fin divide by (Rdiv multiplied by 18432) */
+    Var5 = Fin - (Var4 * Var3);                               /* Fin minus Var4 multiplied by (Rdiv mul 18432) */
+
+    Fout = Var1 * Fin;                                      /* Var1 multipied by Fin */
+    Fout += Fin / Rdiv * Var2;                              /* Fin divided by Rdiv and multiplied by Var2 */
+    Fout += Var4 * Mfn;                                     /* Mfn multiplied by Var4 */
+    Fout += Var5 * Mfn / Var3;                              /* Var5 multiplied by Mfn and divide by (Rdiv mul 18432) */
+
+    return Fout;
 }
-
 /* Return DFS_OUTPUT frequency */
-static uint64 DFS_OUTPUT(const PLL_Type *Base, uint32 Channel, uint64 Fin)
+static uint32 DFS_OUTPUT(const DFS_Type *Base, uint32 Channel, uint32 Fin)
 {
     uint32 Mfi;
     uint32 Mfn;
     uint32 Divider;
+    uint32 DividerResult;
+    uint32 DividerModulo;
 
-    switch (Channel)
-    {
-        case 0U:
-        {
-            Mfi = ((Base->DFS_DIV_0.RW & PLL_DFS_DIV_0_MFI_MASK) >> PLL_DFS_DIV_0_MFI_SHIFT);              /* Mfi */
-            Mfn = ((Base->DFS_DIV_0.RW & PLL_DFS_DIV_0_MFN_MASK) >> PLL_DFS_DIV_0_MFN_SHIFT);              /* Mfn */
-        }
-        break;
-        case 1U:
-        {
-            Mfi = ((Base->DFS_DIV_1.RW & PLL_DFS_DIV_0_MFI_MASK) >> PLL_DFS_DIV_0_MFI_SHIFT);              /* Mfi */
-            Mfn = ((Base->DFS_DIV_1.RW & PLL_DFS_DIV_0_MFN_MASK) >> PLL_DFS_DIV_0_MFN_SHIFT);              /* Mfn */
-        }
-        break;
-        case 2U:
-        {
-            Mfi = ((Base->DFS_DIV_2.RW & PLL_DFS_DIV_0_MFI_MASK) >> PLL_DFS_DIV_0_MFI_SHIFT);              /* Mfi */
-            Mfn = ((Base->DFS_DIV_2.RW & PLL_DFS_DIV_0_MFN_MASK) >> PLL_DFS_DIV_0_MFN_SHIFT);              /* Mfn */
-        }
-        break;
-        case 3U:
-        {
-            Mfi = ((Base->DFS_DIV_3.RW & PLL_DFS_DIV_0_MFI_MASK) >> PLL_DFS_DIV_0_MFI_SHIFT);              /* Mfi */
-            Mfn = ((Base->DFS_DIV_3.RW & PLL_DFS_DIV_0_MFN_MASK) >> PLL_DFS_DIV_0_MFN_SHIFT);              /* Mfn */
-        }
-        break;
-        default:
-        {
-            /* Invalid index */
-        }
-    }
+    Mfi = ((Base->DVPORT[Channel] & DFS_DVPORT_MFI_MASK) >> DFS_DVPORT_MFI_SHIFT);              /* Mfi */
+    Mfn = ((Base->DVPORT[Channel] & DFS_DVPORT_MFN_MASK) >> DFS_DVPORT_MFN_SHIFT);              /* Mfn */
 
-    Divider = (Mfi + Mfn / 5);
+    Divider = ((Mfi << CLOCK_IP_MUL_BY_32) + (Mfi << CLOCK_IP_MUL_BY_4) + Mfn);               /* mfi multiplied by 36 add mfn */
+    DividerResult = (Divider != 0U) ? (Fin / Divider) : 0U;                 /* Fin divide by Divider */
+    DividerModulo = Fin - (Divider * DividerResult);                        /* Fin minus DividerResult multiplied by Divider */
 
-    return (Divider != 0U) ? (Fin / Divider) : 0U;                 /* Fin divide by Divider */
+    /* DividerResult multiplied by 18 added DividerModulo multiplied by 18 divide by Divider */
+    return (Divider != 0U) ? ((DividerResult << CLOCK_IP_MUL_BY_16) + (DividerResult << CLOCK_IP_MUL_BY_2) + 
+                                        (((DividerModulo << CLOCK_IP_MUL_BY_16) + (DividerModulo << CLOCK_IP_MUL_BY_2)) / Divider)) : 0U;   
 }
 
-
-/*==================================================================================================
-*                                       GLOBAL FUNCTIONS
-==================================================================================================*/
-
-/* Return frequency value */
-uint64 Clock_Ip_GetFreq(Clock_Ip_NameType ClockName)
-{
-    return Clock_Ip_apfFreqTable[ClockName]();
-}
-
-
-#if CLOCK_IP_XOSC_CALLBACKS_COUNT > 1
 /* Get external frequency */
-void Clock_Ip_SetExternalOscillatorFrequency(Clock_Ip_NameType ExtOscName, uint64 Frequency)
+void Clock_Ip_SetExternalOscillatorFrequency(Clock_Ip_NameType ExtOscName, uint32 Frequency)
 {
-    switch (ExtOscName)
-    {
-        case FXOSC_CLK:
-            Clock_Ip_u32fxosc = Frequency;
-            break;
-        default:
-            /* Do nothing */
-            break;
-    }
+    (void)ExtOscName;
+    Clock_Ip_u32Fxosc = Frequency;
 }
-#endif
-
-/* Clock stop section code */
-#define MCU_STOP_SEC_CODE
-#include "Mcu_MemMap.h"
-
-
-#endif  /* #if (defined(CLOCK_IP_GET_FREQUENCY_API) && (CLOCK_IP_GET_FREQUENCY_API == STD_ON)) */
-
-/* Clock start section code */
-#define MCU_START_SEC_CODE
-#include "Mcu_MemMap.h"
-
-/* Set frequency value for External Signal */
-void Clock_Ip_SetExternalSignalFrequency(Clock_Ip_NameType SignalName, uint64 Frequency)
+/* Get external frequency */
+void Clock_Ip_SetExternalSignalFrequency(Clock_Ip_NameType SignalName, uint32 Frequency)
 {
-#if (defined(CLOCK_IP_GET_FREQUENCY_API) && (CLOCK_IP_GET_FREQUENCY_API == STD_ON))
     uint32 Index;
     for (Index = 0U; Index < CLOCK_IP_EXT_SIGNALS_NO; Index++)
     {
@@ -1859,20 +1685,40 @@ void Clock_Ip_SetExternalSignalFrequency(Clock_Ip_NameType SignalName, uint64 Fr
             break;
         }
     }
-#else
-    (void)SignalName;
-    (void)Frequency;
-#endif
+}
+                                                                         
+/*==================================================================================================
+*                                       GLOBAL FUNCTIONS
+==================================================================================================*/
+/* Get GENCTRL1_CTRL value */
+uint32 Get_GENCTRL1_CTRL(void)
+{
+    uint32 RegValue;
+    /* Get GENCTRL1 register */
+    RegValue = ((IP_S32G_GPR->GENCTRL1) & S32G_GPR_GENCTRL1_CTRL_MASK);
+
+    return RegValue;
+}
+
+/* Return frequency value */
+uint32 Clock_Ip_GetFreq(Clock_Ip_NameType ClockName)
+{
+    return Clock_Ip_apfFreqTable[ClockName]();
 }
 
 /* Clock stop section code */
 #define MCU_STOP_SEC_CODE
-#include "Mcu_MemMap.h"
+#include "Mcu_MemMap.h"   
+
+#endif  /* #if (CLOCK_IP_GET_FREQUENCY_API == STD_ON) */
+#endif  /* #ifdef CLOCK_IP_GET_FREQUENCY_API */
 
 
+#endif /* (CLOCK_IP_PLATFORM_SPECIFIC) */
 
 #ifdef __cplusplus
 }
 #endif
 
 /** @} */
+

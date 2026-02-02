@@ -1,19 +1,26 @@
-/*
- * Copyright 2024-2025 NXP
- *
- * SPDX-License-Identifier: BSD-3-Clause
- */
-/**
-*   @file OsIf_Timer_System_Internal_Systick.h
-*   @version 0.8.0
+/*==================================================================================================
+* Project : RTD AUTOSAR 4.4
+* Platform : CORTEXM
+* Peripheral : S32G2XXM7
+* Dependencies : none
 *
-*   @brief   BaseNXP - Driver header file.
-*   @details Specific driver header file.
+* Autosar Version : 4.4.0
+* Autosar Revision : ASR_REL_4_4_REV_0000
+* Autosar Conf.Variant :
+* SW Version : 4.0.0
+* Build Version : S32_RTD_4_0_0_D2210_ASR_REL_4_4_REV_0000_20221031
 *
-*   @addtogroup osif_drv
-*   @{
-*/
-
+* (c) Copyright 2022 NXP Semiconductors
+* All Rights Reserved.
+*
+* NXP Confidential. This software is owned or controlled by NXP and may only be
+* used strictly in accordance with the applicable license terms. By expressly
+* accepting such terms or by downloading, installing, activating and/or otherwise
+* using the software, you are agreeing that you have read, and that you agree to
+* comply with and are bound by, such license terms. If you do not agree to be
+* bound by the applicable license terms, then you may not retain, install,
+* activate or otherwise use the software.
+==================================================================================================*/
 #ifndef OSIF_TIMER_SYSTEM_INTERNAL_SYSTICK
 #define OSIF_TIMER_SYSTEM_INTERNAL_SYSTICK
 
@@ -34,26 +41,24 @@ extern "C"{
 ==================================================================================================*/
 #define OSIF_TIMER_SYSTEM_INTERNAL_SYSTICK_VENDOR_ID                    43
 #define OSIF_TIMER_SYSTEM_INTERNAL_SYSTICK_AR_RELEASE_MAJOR_VERSION     4
-#define OSIF_TIMER_SYSTEM_INTERNAL_SYSTICK_AR_RELEASE_MINOR_VERSION     9
+#define OSIF_TIMER_SYSTEM_INTERNAL_SYSTICK_AR_RELEASE_MINOR_VERSION     4
 #define OSIF_TIMER_SYSTEM_INTERNAL_SYSTICK_AR_RELEASE_REVISION_VERSION  0
-#define OSIF_TIMER_SYSTEM_INTERNAL_SYSTICK_SW_MAJOR_VERSION             0
-#define OSIF_TIMER_SYSTEM_INTERNAL_SYSTICK_SW_MINOR_VERSION             8
+#define OSIF_TIMER_SYSTEM_INTERNAL_SYSTICK_SW_MAJOR_VERSION             4
+#define OSIF_TIMER_SYSTEM_INTERNAL_SYSTICK_SW_MINOR_VERSION             0
 #define OSIF_TIMER_SYSTEM_INTERNAL_SYSTICK_SW_PATCH_VERSION             0
 
 /*==================================================================================================
 *                                       FILE VERSION CHECKS
 ==================================================================================================*/
-/* Check if OsIf_Timer_System_Internal_Systick.h file and OsIf_Cfg.h file are of the same vendor */
+/* Checks against OsIf_Cfg.h */
 #if (OSIF_TIMER_SYSTEM_INTERNAL_SYSTICK_VENDOR_ID != OSIF_CFG_VENDOR_ID)
     #error "OsIf_Timer_System_Internal_Systick.h and OsIf_Cfg.h have different vendor ids"
 #endif
-/* Check if OsIf_Timer_System_Internal_Systick.h file and OsIf_Cfg.h file are of the same Autosar version */
 #if ((OSIF_TIMER_SYSTEM_INTERNAL_SYSTICK_AR_RELEASE_MAJOR_VERSION    != OSIF_CFG_AR_RELEASE_MAJOR_VERSION) || \
      (OSIF_TIMER_SYSTEM_INTERNAL_SYSTICK_AR_RELEASE_MINOR_VERSION    != OSIF_CFG_AR_RELEASE_MINOR_VERSION) || \
      (OSIF_TIMER_SYSTEM_INTERNAL_SYSTICK_AR_RELEASE_REVISION_VERSION != OSIF_CFG_AR_RELEASE_REVISION_VERSION))
     #error "AUTOSAR Version Numbers of OsIf_Timer_System_Internal_Systick.h and OsIf_Cfg.h are different"
 #endif
-/* Check if OsIf_Timer_System_Internal_Systick.h file and OsIf_Cfg.h file are of the same Software version */
 #if ((OSIF_TIMER_SYSTEM_INTERNAL_SYSTICK_SW_MAJOR_VERSION != OSIF_CFG_SW_MAJOR_VERSION) || \
      (OSIF_TIMER_SYSTEM_INTERNAL_SYSTICK_SW_MINOR_VERSION != OSIF_CFG_SW_MINOR_VERSION) || \
      (OSIF_TIMER_SYSTEM_INTERNAL_SYSTICK_SW_PATCH_VERSION != OSIF_CFG_SW_PATCH_VERSION) \
@@ -87,8 +92,8 @@ extern "C"{
 #if defined(OSIF_USE_SYSTICK)
 #if (OSIF_USE_SYSTICK == STD_ON)
 
-#define BASENXP_START_SEC_CODE
-#include "BaseNXP_MemMap.h"
+#define BASE_START_SEC_CODE
+#include "Base_MemMap.h"
 /*!
  * @brief Initialize SysTick timer
  *
@@ -119,10 +124,10 @@ uint32 OsIf_Timer_System_Internal_GetCounter(void);
  */
 uint32 OsIf_Timer_System_Internal_GetElapsed(uint32 * const CurrentRef);
 
-#define BASENXP_STOP_SEC_CODE
-#include "BaseNXP_MemMap.h"
+#define BASE_STOP_SEC_CODE
+#include "Base_MemMap.h"
 
-#endif /* (OSIF_USE_SYSTICK == STD_ON) */
+#endif /* OSIF_USE_SYSTICK == STD_ON */
 #endif /* defined(OSIF_USE_SYSTICK) */
 
 #ifdef __cplusplus
@@ -130,5 +135,3 @@ uint32 OsIf_Timer_System_Internal_GetElapsed(uint32 * const CurrentRef);
 #endif
 
 #endif /* OSIF_TIMER_SYSTEM_INTERNAL_SYSTICK */
-
-/** @} */

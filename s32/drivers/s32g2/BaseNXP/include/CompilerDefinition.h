@@ -1,18 +1,36 @@
-/*
- * Copyright 2024-2025 NXP
- *
- * SPDX-License-Identifier: BSD-3-Clause
- */
+/*==================================================================================================
+* Project : RTD AUTOSAR 4.4
+* Platform : CORTEXM
+* Peripheral : S32G2XXM7
+* Dependencies : none
+*
+* Autosar Version : 4.4.0
+* Autosar Revision : ASR_REL_4_4_REV_0000
+* Autosar Conf.Variant :
+* SW Version : 4.0.0
+* Build Version : S32_RTD_4_0_0_D2210_ASR_REL_4_4_REV_0000_20221031
+*
+* (c) Copyright 2022 NXP Semiconductors
+* All Rights Reserved.
+*
+* NXP Confidential. This software is owned or controlled by NXP and may only be
+* used strictly in accordance with the applicable license terms. By expressly
+* accepting such terms or by downloading, installing, activating and/or otherwise
+* using the software, you are agreeing that you have read, and that you agree to
+* comply with and are bound by, such license terms. If you do not agree to be
+* bound by the applicable license terms, then you may not retain, install,
+* activate or otherwise use the software.
+==================================================================================================*/
 /**
 *   @file           CompilerDefinition.h
-*   @version 0.8.0
+*   @version 4.0.0
 *
-*   @brief   AUTOSAR BaseNXP - SWS Compiler abstraction
+*   @brief   AUTOSAR Base - SWS Compiler abstraction
 *   @details The file Compiler.h provides macros for the encapsulation of definitions and
 *            declarations.
 *            This file contains sample code only. It is not part of the production code deliverables
 *
-*   @addtogroup BASENXP_COMPONENT
+*   @addtogroup BASE_COMPONENT
 *   @{
 */
 
@@ -39,10 +57,10 @@ extern "C"{
 */
 #define COMPILERDEFINITION_VENDOR_ID                      43
 #define COMPILERDEFINITION_AR_RELEASE_MAJOR_VERSION       4
-#define COMPILERDEFINITION_AR_RELEASE_MINOR_VERSION       9
+#define COMPILERDEFINITION_AR_RELEASE_MINOR_VERSION       4
 #define COMPILERDEFINITION_AR_RELEASE_REVISION_VERSION    0
-#define COMPILERDEFINITION_SW_MAJOR_VERSION               0
-#define COMPILERDEFINITION_SW_MINOR_VERSION               8
+#define COMPILERDEFINITION_SW_MAJOR_VERSION               4
+#define COMPILERDEFINITION_SW_MINOR_VERSION               0
 #define COMPILERDEFINITION_SW_PATCH_VERSION               0
 /**@}*/
 /*==================================================================================================
@@ -61,71 +79,44 @@ extern "C"{
     /**
     * @brief Symbol required to be defined when GreenHills compiler is used.
     */
-    #define _GREENHILLS_C_S32G2XX_
+    #define _GREENHILLS_C_S32XX_
 #endif
 #ifdef __DCC__
     /**
     * @brief Symbol required to be defined when Diab compiler is used.
     */
-    #define _DIABDATA_C_S32G2XX_
+    #define _DIABDATA_C_S32XX_
 #endif
 #ifdef __MWERKS__
     /**
     * @brief Symbol required to be defined when Codewarrior compiler is used.
     */
-    #define _CODEWARRIOR_C_S32G2XX_
+    #define _CODEWARRIOR_C_S32XX_
 #endif
-#if (defined(__GNUC__) && !defined(__DCC__) && !defined(__CC_ARM) && !defined(__ARMCC_VERSION) && !defined(__clang__))
+#ifdef __CSMC__
+    /**
+    * @brief Symbol required to be defined when Cosmic compiler is used.
+    */
+  #define _COSMIC_C_S32XX_
+#endif
+#if (defined(__GNUC__) && !defined(__DCC__))
          /**
-        * @brief Symbol required to be defined when GCC ARM compiler is used.
+        * @brief Symbol required to be defined when Linaro ARM compiler is used.
         */
-        #define _GCC_C_S32G2XX_
- #endif
-#ifdef __CC_ARM
+        #define _LINARO_C_S32XX_
+ #endif      
+#ifdef __CC_ARM 
         /**
         * @brief Symbol required to be defined when DS5 ARM compiler is used.
         */
-        #define _ARM_DS5_C_S32G2XX_
+        #define _ARM_DS5_C_S32XX_     
 #endif
-#ifdef __ICCARM__
+#ifdef __ICCARM__ 
         /**
         * @brief Symbol required to be defined when IAR compiler is used.
         */
-        #define _IAR_C_S32G2XX_
+        #define _IAR_C_S32XX_     
 #endif
-#ifdef __ARMCC_VERSION
-    #if __ARMCC_VERSION >= 60000
-         /**
-        * @brief Symbol required to be defined when ARM-DS6 compiler is used.
-        */
-        #define _ARM_DS6_S32G2XX_
-    #endif
-#endif
-
-#ifdef __clang__
-    #ifdef __riscv
-         /**
-        * @brief Symbol required to be defined when ZEN-V compiler is used.
-        */
-        #define _ZEN_V_S32G2XX_
-    #endif
-#endif
-
-/*==================================================================================================
-*                                             ENUMS
-==================================================================================================*/
-
-/*==================================================================================================
-*                                STRUCTURES AND OTHER TYPEDEFS
-==================================================================================================*/
-
-/*==================================================================================================
-*                                GLOBAL VARIABLE DECLARATIONS
-==================================================================================================*/
-
-/*==================================================================================================
-*                                    FUNCTION PROTOTYPES
-==================================================================================================*/
 
 #ifdef __cplusplus
 }

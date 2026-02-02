@@ -1,11 +1,29 @@
-/*
- * Copyright 2024-2025 NXP
- *
- * SPDX-License-Identifier: BSD-3-Clause
- */
+/*==================================================================================================
+*   Project              : RTD AUTOSAR 4.4
+*   Platform             : CORTEXM
+*   Peripheral           : 
+*   Dependencies         : none
+*
+*   Autosar Version      : 4.4.0
+*   Autosar Revision     : ASR_REL_4_4_REV_0000
+*   Autosar Conf.Variant :
+*   SW Version           : 4.0.0
+*   Build Version        : S32_RTD_4_0_0_D2210_ASR_REL_4_4_REV_0000_20221031
+*
+*   (c) Copyright 2022 NXP Semiconductors
+*   All Rights Reserved.
+*
+*   NXP Confidential. This software is owned or controlled by NXP and may only be
+*   used strictly in accordance with the applicable license terms. By expressly
+*   accepting such terms or by downloading, installing, activating and/or otherwise
+*   using the software, you are agreeing that you have read, and that you agree to
+*   comply with and are bound by, such license terms. If you do not agree to be
+*   bound by the applicable license terms, then you may not retain, install,
+*   activate or otherwise use the software.
+==================================================================================================*/
 /**
 *   @file       Clock_Ip_Data.c
-*   @version    0.8.0
+*   @version    4.0.0
 *
 *   @brief   CLOCK driver implementations.
 *   @details CLOCK driver implementations.
@@ -25,10 +43,9 @@ extern "C"{
 * 2) needed interfaces from external units
 * 3) internal and external interfaces from this unit
 ==================================================================================================*/
-
-
 #include "Clock_Ip_Private.h"
 
+#if defined(CLOCK_IP_PLATFORM_SPECIFIC)
 
 #if (defined(CLOCK_IP_ENABLE_USER_MODE_SUPPORT))
   #if (STD_ON == CLOCK_IP_ENABLE_USER_MODE_SUPPORT)
@@ -42,10 +59,10 @@ extern "C"{
 ==================================================================================================*/
 #define CLOCK_IP_DATA_VENDOR_ID_C                      43
 #define CLOCK_IP_DATA_AR_RELEASE_MAJOR_VERSION_C       4
-#define CLOCK_IP_DATA_AR_RELEASE_MINOR_VERSION_C       9
+#define CLOCK_IP_DATA_AR_RELEASE_MINOR_VERSION_C       4
 #define CLOCK_IP_DATA_AR_RELEASE_REVISION_VERSION_C    0
-#define CLOCK_IP_DATA_SW_MAJOR_VERSION_C               0
-#define CLOCK_IP_DATA_SW_MINOR_VERSION_C               8
+#define CLOCK_IP_DATA_SW_MAJOR_VERSION_C               4
+#define CLOCK_IP_DATA_SW_MINOR_VERSION_C               0
 #define CLOCK_IP_DATA_SW_PATCH_VERSION_C               0
 
 /*==================================================================================================
@@ -92,751 +109,152 @@ extern "C"{
 *                                       LOCAL MACROS
 ==================================================================================================*/
 
-#define CLOCK_IP_ALL_INDEX                     0U
-#define CLOCK_IP_LPE_INDEX                     1U
-#define CLOCK_IP_CPE_INDEX                     2U
+
 
 #define CLOCK_IP_NO_CALLBACK                   0U
-#define CLOCK_IP_MUX_DIV                       1U
-#define CLOCK_IP_FXOSC                         1U
-#define CLOCK_IP_GATE                          1U
-#define CLOCK_IP_PLL_DFS_OUT                   1U
+#define CLOCK_IP_GATE_HWMUX_DIV_CMU            1U
+#define CLOCK_IP_PCFS_DFS                      1U
 #define CLOCK_IP_PLL_MOD                       1U
-#define CLOCK_IP_IRCOSC                        1U
-#define CLOCK_IP_IRCOSC_OUT                    1U
-#define CLOCK_IP_DIV                           2U
-#define CLOCK_IP_MUX_PCFS                      2U
-#define CLOCK_IP_SXOSC                         2U
-#define CLOCK_IP_PLL_DIV_OUT                   3U
-#define CLOCK_IP_MUX_PCFS_CMU                  3U
+#define CLOCK_IP_HWMUX_DIV_CMU                 2U
+#define CLOCK_IP_GATE                          2U
+#define CLOCK_IP_PLL                           2U
+#define CLOCK_IP_DFS                           2U
+#define CLOCK_IP_HWMUX_CMU                     3U
+#define CLOCK_IP_PCFS_PLL_OUT                  3U
+#define CLOCK_IP_GATE_HWMUX_CMU                4U
 #define CLOCK_IP_PLL_OUT                       4U
-#define CLOCK_IP_MUX_RTC                       4U
-
-#define CLOCK_IP_0_INSTANCE                    0U
-#define CLOCK_IP_1_INSTANCE                    1U
-#define CLOCK_IP_2_INSTANCE                    2U
-#define CLOCK_IP_3_INSTANCE                    3U
-#define CLOCK_IP_5_INSTANCE                    5U
-#define CLOCK_IP_6_INSTANCE                    6U
-
-
-#define CLOCK_IP_SEL0_INDEX                    0U
-#define CLOCK_IP_SEL1_INDEX                    1U
-#define CLOCK_IP_SEL2_INDEX                    2U
-#define CLOCK_IP_SEL3_INDEX                    3U
-#define CLOCK_IP_SEL4_INDEX                    4U
-#define CLOCK_IP_SEL5_INDEX                    5U
-#define CLOCK_IP_SEL6_INDEX                    6U
-#define CLOCK_IP_SEL7_INDEX                    7U
-#define CLOCK_IP_SEL8_INDEX                    8U
-#define CLOCK_IP_SEL9_INDEX                    9U
-#define CLOCK_IP_SEL10_INDEX                   10U
-#define CLOCK_IP_SEL11_INDEX                   11U
-#define CLOCK_IP_SEL12_INDEX                   12U
-#define CLOCK_IP_SEL13_INDEX                   13U
-#define CLOCK_IP_SEL14_INDEX                   14U
-
-
-#define CLOCK_IP_DIV0_INDEX                    0U
-#define CLOCK_IP_DIV1_INDEX                    1U
-#define CLOCK_IP_DIV2_INDEX                    2U
-#define CLOCK_IP_DIV3_INDEX                    3U
-#define CLOCK_IP_DIV4_INDEX                    4U
-
-
-#define CLOCK_IP_000_DIV_IDS_BITS              0U
-#define CLOCK_IP_001_DIV_IDS_BITS              1U
-
-
-#define CLOCK_IP_NOPLL_TYPE                    1U
-#define CLOCK_IP_PLL_TYPE                      2U
-#define CLOCK_IP_SEL_TYPE                      4U
-#define CLOCK_IP_DIV_TYPE                      8U
-#define CLOCK_IP_SEL_DIV_TYPE                  12U
-#define CLOCK_IP_GATE_TYPE                     16U
-#define CLOCK_IP_SEL_CMU_TYPE                  36U
-
-
-#ifdef CLOCK_IP_HAS_LPE_UNGATED_CLK
-    #ifndef CLOCK_IP_SEL6_LPE_UNGATED_CLK_INDEX
-        #error "Selector macro index is not defined although associated clock name LPE_UNGATED_CLK is defined"
-    #endif
-#else
-    #ifdef CLOCK_IP_SEL6_LPE_UNGATED_CLK_INDEX
-        #error "Selector macro index is  defined although associated clock name LPE_UNGATED_CLK is not defined"
-    #endif
-#endif
-
-#ifdef CLOCK_IP_HAS_PHY_ETH_CLK
-    #ifndef CLOCK_IP_SEL1_PHY_ETH_CLK_INDEX
-        #error "Selector macro index is not defined although associated clock name PHY_ETH_CLK is defined"
-    #endif
-#else
-    #ifdef CLOCK_IP_SEL1_PHY_ETH_CLK_INDEX
-        #error "Selector macro index is  defined although associated clock name PHY_ETH_CLK is not defined"
-    #endif
-#endif
-
-#ifdef CLOCK_IP_HAS_DSPI_CLK
-    #ifndef CLOCK_IP_SEL5_DSPI_CLK_INDEX
-        #error "Selector macro index is not defined although associated clock name DSPI_CLK is defined"
-    #endif
-#else
-    #ifdef CLOCK_IP_SEL5_DSPI_CLK_INDEX
-        #error "Selector macro index is  defined although associated clock name DSPI_CLK is not defined"
-    #endif
-#endif
-
-#ifdef CLOCK_IP_HAS_FLEXCAN_0to7_PE_CLK
-    #ifndef CLOCK_IP_SEL2_FLEXCAN_0to7_PE_CLK_INDEX
-        #error "Selector macro index is not defined although associated clock name FLEXCAN_0to7_PE_CLK is defined"
-    #endif
-#else
-    #ifdef CLOCK_IP_SEL2_FLEXCAN_0to7_PE_CLK_INDEX
-        #error "Selector macro index is  defined although associated clock name FLEXCAN_0to7_PE_CLK is not defined"
-    #endif
-#endif
-
-#ifdef CLOCK_IP_HAS_ETH_TS_CLK
-    #ifndef CLOCK_IP_SEL13_ETH_TS_CLK_INDEX
-        #error "Selector macro index is not defined although associated clock name ETH_TS_CLK is defined"
-    #endif
-#else
-    #ifdef CLOCK_IP_SEL13_ETH_TS_CLK_INDEX
-        #error "Selector macro index is  defined although associated clock name ETH_TS_CLK is not defined"
-    #endif
-#endif
-
-#ifdef CLOCK_IP_HAS_FLEXCAN_8to10_PE_CLK
-    #ifndef CLOCK_IP_SEL3_FLEXCAN_8to10_PE_CLK_INDEX
-        #error "Selector macro index is not defined although associated clock name FLEXCAN_8to10_PE_CLK is defined"
-    #endif
-#else
-    #ifdef CLOCK_IP_SEL3_FLEXCAN_8to10_PE_CLK_INDEX
-        #error "Selector macro index is  defined although associated clock name FLEXCAN_8to10_PE_CLK is not defined"
-    #endif
-#endif
-
-#ifdef CLOCK_IP_HAS_FLEXCAN_11to16_PE_CLK
-    #ifndef CLOCK_IP_SEL4_FLEXCAN_11to16_PE_CLK_INDEX
-        #error "Selector macro index is not defined although associated clock name FLEXCAN_11to16_PE_CLK is defined"
-    #endif
-#else
-    #ifdef CLOCK_IP_SEL4_FLEXCAN_11to16_PE_CLK_INDEX
-        #error "Selector macro index is  defined although associated clock name FLEXCAN_11to16_PE_CLK is not defined"
-    #endif
-#endif
-
-#ifdef CLOCK_IP_HAS_FLEXIO_CLK
-    #ifndef CLOCK_IP_SEL1_FLEXIO_CLK_INDEX
-        #error "Selector macro index is not defined although associated clock name FLEXIO_CLK is defined"
-    #endif
-#else
-    #ifdef CLOCK_IP_SEL1_FLEXIO_CLK_INDEX
-        #error "Selector macro index is  defined although associated clock name FLEXIO_CLK is not defined"
-    #endif
-#endif
-
-#ifdef CLOCK_IP_HAS_LPE_FLEXCAN_PE_CLK
-    #ifndef CLOCK_IP_SEL4_LPE_FLEXCAN_PE_CLK_INDEX
-        #error "Selector macro index is not defined although associated clock name LPE_FLEXCAN_PE_CLK is defined"
-    #endif
-#else
-    #ifdef CLOCK_IP_SEL4_LPE_FLEXCAN_PE_CLK_INDEX
-        #error "Selector macro index is  defined although associated clock name LPE_FLEXCAN_PE_CLK is not defined"
-    #endif
-#endif
-
-#ifdef CLOCK_IP_HAS_LPE_STM_CLK
-    #ifndef CLOCK_IP_SEL5_LPE_STM_CLK_INDEX
-        #error "Selector macro index is not defined although associated clock name LPE_STM_CLK is defined"
-    #endif
-#else
-    #ifdef CLOCK_IP_SEL5_LPE_STM_CLK_INDEX
-        #error "Selector macro index is  defined although associated clock name LPE_STM_CLK is not defined"
-    #endif
-#endif
-
-#ifdef CLOCK_IP_HAS_STM0_CLK
-    #ifndef CLOCK_IP_SEL6_STM0_CLK_INDEX
-        #error "Selector macro index is not defined although associated clock name STM0_CLK is defined"
-    #endif
-#else
-    #ifdef CLOCK_IP_SEL6_STM0_CLK_INDEX
-        #error "Selector macro index is  defined although associated clock name STM0_CLK is not defined"
-    #endif
-#endif
-
-#ifdef CLOCK_IP_HAS_STM1_CLK
-    #ifndef CLOCK_IP_SEL7_STM1_CLK_INDEX
-        #error "Selector macro index is not defined although associated clock name STM1_CLK is defined"
-    #endif
-#else
-    #ifdef CLOCK_IP_SEL7_STM1_CLK_INDEX
-        #error "Selector macro index is  defined although associated clock name STM1_CLK is not defined"
-    #endif
-#endif
-
-#ifdef CLOCK_IP_HAS_STM2_CLK
-    #ifndef CLOCK_IP_SEL8_STM2_CLK_INDEX
-        #error "Selector macro index is not defined although associated clock name STM2_CLK is defined"
-    #endif
-#else
-    #ifdef CLOCK_IP_SEL8_STM2_CLK_INDEX
-        #error "Selector macro index is  defined although associated clock name STM2_CLK is not defined"
-    #endif
-#endif
-
-#ifdef CLOCK_IP_HAS_STM3_CLK
-    #ifndef CLOCK_IP_SEL9_STM3_CLK_INDEX
-        #error "Selector macro index is not defined although associated clock name STM3_CLK is defined"
-    #endif
-#else
-    #ifdef CLOCK_IP_SEL9_STM3_CLK_INDEX
-        #error "Selector macro index is  defined although associated clock name STM3_CLK is not defined"
-    #endif
-#endif
-
-#ifdef CLOCK_IP_HAS_LPE_CXPI_PE_CLK
-    #ifndef CLOCK_IP_SEL6_LPE_CXPI_PE_CLK_INDEX
-        #error "Selector macro index is not defined although associated clock name LPE_CXPI_PE_CLK is defined"
-    #endif
-#else
-    #ifdef CLOCK_IP_SEL6_LPE_CXPI_PE_CLK_INDEX
-        #error "Selector macro index is  defined although associated clock name LPE_CXPI_PE_CLK is not defined"
-    #endif
-#endif
-
-#ifdef CLOCK_IP_HAS_LPE_LPI2C_MOD_CLK
-    #ifndef CLOCK_IP_SEL3_LPE_LPI2C_MOD_CLK_INDEX
-        #error "Selector macro index is not defined although associated clock name LPE_LPI2C_MOD_CLK is defined"
-    #endif
-#else
-    #ifdef CLOCK_IP_SEL3_LPE_LPI2C_MOD_CLK_INDEX
-        #error "Selector macro index is  defined although associated clock name LPE_LPI2C_MOD_CLK is not defined"
-    #endif
-#endif
-
-#ifdef CLOCK_IP_HAS_LPE_LPSPI_MOD_CLK
-    #ifndef CLOCK_IP_SEL1_LPE_LPSPI_MOD_CLK_INDEX
-        #error "Selector macro index is not defined although associated clock name LPE_LPSPI_MOD_CLK is defined"
-    #endif
-#else
-    #ifdef CLOCK_IP_SEL1_LPE_LPSPI_MOD_CLK_INDEX
-        #error "Selector macro index is  defined although associated clock name LPE_LPSPI_MOD_CLK is not defined"
-    #endif
-#endif
-
-#ifdef CLOCK_IP_HAS_LPE_LPUART_MOD_CLK
-    #ifndef CLOCK_IP_SEL2_LPE_LPUART_MOD_CLK_INDEX
-        #error "Selector macro index is not defined although associated clock name LPE_LPUART_MOD_CLK is defined"
-    #endif
-#else
-    #ifdef CLOCK_IP_SEL2_LPE_LPUART_MOD_CLK_INDEX
-        #error "Selector macro index is  defined although associated clock name LPE_LPUART_MOD_CLK is not defined"
-    #endif
-#endif
-
-#ifdef CLOCK_IP_HAS_SAI0_MCLK
-    #ifndef CLOCK_IP_SEL0_SAI0_MCLK_INDEX
-        #error "Selector macro index is not defined although associated clock name SAI0_MCLK is defined"
-    #endif
-#else
-    #ifdef CLOCK_IP_SEL0_SAI0_MCLK_INDEX
-        #error "Selector macro index is  defined although associated clock name SAI0_MCLK is not defined"
-    #endif
-#endif
-
-#ifdef CLOCK_IP_HAS_SAI1_MCLK
-    #ifndef CLOCK_IP_SEL0_SAI1_MCLK_INDEX
-        #error "Selector macro index is not defined although associated clock name SAI1_MCLK is defined"
-    #endif
-#else
-    #ifdef CLOCK_IP_SEL0_SAI1_MCLK_INDEX
-        #error "Selector macro index is  defined although associated clock name SAI1_MCLK is not defined"
-    #endif
-#endif
-
-#ifdef CLOCK_IP_HAS_PERI_HIGH_SPEED_REST_USDHC_CLK
-    #ifndef CLOCK_IP_SEL1_PERI_HIGH_SPEED_REST_USDHC_CLK_INDEX
-        #error "Selector macro index is not defined although associated clock name PERI_HIGH_SPEED_REST_USDHC_CLK is defined"
-    #endif
-#else
-    #ifdef CLOCK_IP_SEL1_PERI_HIGH_SPEED_REST_USDHC_CLK_INDEX
-        #error "Selector macro index is  defined although associated clock name PERI_HIGH_SPEED_REST_USDHC_CLK is not defined"
-    #endif
-#endif
-
-#ifdef CLOCK_IP_HAS_SERDES_REF_CLK
-    #ifndef CLOCK_IP_SEL10_SERDES_REF_CLK_INDEX
-        #error "Selector macro index is not defined although associated clock name SERDES_REF_CLK is defined"
-    #endif
-#else
-    #ifdef CLOCK_IP_SEL10_SERDES_REF_CLK_INDEX
-        #error "Selector macro index is  defined although associated clock name SERDES_REF_CLK is not defined"
-    #endif
-#endif
-
-#ifdef CLOCK_IP_HAS_PERI_HIGH_SPEED_REST_XSPI_CLK
-    #ifndef CLOCK_IP_SEL2_PERI_HIGH_SPEED_REST_XSPI_CLK_INDEX
-        #error "Selector macro index is not defined although associated clock name PERI_HIGH_SPEED_REST_XSPI_CLK is defined"
-    #endif
-#else
-    #ifdef CLOCK_IP_SEL2_PERI_HIGH_SPEED_REST_XSPI_CLK_INDEX
-        #error "Selector macro index is  defined although associated clock name PERI_HIGH_SPEED_REST_XSPI_CLK is not defined"
-    #endif
-#endif
-
-#ifdef CLOCK_IP_HAS_LPE_CLK
-    #ifndef CLOCK_IP_SEL0_NODIV_LPE_CLK_INDEX
-        #error "Selector macro index is not defined although associated clock name LPE_CLK is defined"
-    #endif
-#else
-    #ifdef CLOCK_IP_SEL0_NODIV_LPE_CLK_INDEX
-        #error "Selector macro index is  defined although associated clock name LPE_CLK is not defined"
-    #endif
-#endif
-
-#ifdef CLOCK_IP_HAS_PLT_CLK
-    #ifndef CLOCK_IP_SEL0_NODIV_PLT_CLK_INDEX
-        #error "Selector macro index is not defined although associated clock name PLT_CLK is defined"
-    #endif
-#else
-    #ifdef CLOCK_IP_SEL0_NODIV_PLT_CLK_INDEX
-        #error "Selector macro index is  defined although associated clock name PLT_CLK is not defined"
-    #endif
-#endif
-
-#ifdef CLOCK_IP_HAS_CAN_PE_CLK
-    #ifndef CLOCK_IP_SEL3_DIV0_CAN_PE_CLK_INDEX
-        #error "Selector macro index is not defined although associated clock name CAN_PE_CLK is defined"
-    #endif
-#else
-    #ifdef CLOCK_IP_SEL3_DIV0_CAN_PE_CLK_INDEX
-        #error "Selector macro index is  defined although associated clock name CAN_PE_CLK is not defined"
-    #endif
-#endif
-
-#ifdef CLOCK_IP_HAS_DFT_CLK
-    #ifndef CLOCK_IP_SEL10_DIV0_DFT_CLK_INDEX
-        #error "Selector macro index is not defined although associated clock name DFT_CLK is defined"
-    #endif
-#else
-    #ifdef CLOCK_IP_SEL10_DIV0_DFT_CLK_INDEX
-        #error "Selector macro index is  defined although associated clock name DFT_CLK is not defined"
-    #endif
-#endif
-
-#ifdef CLOCK_IP_HAS_DSPI_CLK
-    #ifndef CLOCK_IP_SEL5_DIV0_DSPI_CLK_INDEX
-        #error "Selector macro index is not defined although associated clock name DSPI_CLK is defined"
-    #endif
-#else
-    #ifdef CLOCK_IP_SEL5_DIV0_DSPI_CLK_INDEX
-        #error "Selector macro index is  defined although associated clock name DSPI_CLK is not defined"
-    #endif
-#endif
-
-#ifdef CLOCK_IP_HAS_ETH_TS_CLK
-    #ifndef CLOCK_IP_SEL13_DIV0_ETH_TS_CLK_INDEX
-        #error "Selector macro index is not defined although associated clock name ETH_TS_CLK is defined"
-    #endif
-#else
-    #ifdef CLOCK_IP_SEL13_DIV0_ETH_TS_CLK_INDEX
-        #error "Selector macro index is  defined although associated clock name ETH_TS_CLK is not defined"
-    #endif
-#endif
-
-#ifdef CLOCK_IP_HAS_ETH0_RX_CLK
-    #ifndef CLOCK_IP_SEL3_DIV0_ETH0_RX_CLK_INDEX
-        #error "Selector macro index is not defined although associated clock name ETH0_RX_CLK is defined"
-    #endif
-#else
-    #ifdef CLOCK_IP_SEL3_DIV0_ETH0_RX_CLK_INDEX
-        #error "Selector macro index is  defined although associated clock name ETH0_RX_CLK is not defined"
-    #endif
-#endif
-
-#ifdef CLOCK_IP_HAS_ETH0_TX_CLK
-    #ifndef CLOCK_IP_SEL4_DIV0_ETH0_TX_CLK_INDEX
-        #error "Selector macro index is not defined although associated clock name ETH0_TX_CLK is defined"
-    #endif
-#else
-    #ifdef CLOCK_IP_SEL4_DIV0_ETH0_TX_CLK_INDEX
-        #error "Selector macro index is  defined although associated clock name ETH0_TX_CLK is not defined"
-    #endif
-#endif
-
-#ifdef CLOCK_IP_HAS_ETH1_RX_CLK
-    #ifndef CLOCK_IP_SEL5_DIV0_ETH1_RX_CLK_INDEX
-        #error "Selector macro index is not defined although associated clock name ETH1_RX_CLK is defined"
-    #endif
-#else
-    #ifdef CLOCK_IP_SEL5_DIV0_ETH1_RX_CLK_INDEX
-        #error "Selector macro index is  defined although associated clock name ETH1_RX_CLK is not defined"
-    #endif
-#endif
-
-#ifdef CLOCK_IP_HAS_ETH1_TX_CLK
-    #ifndef CLOCK_IP_SEL6_DIV0_ETH1_TX_CLK_INDEX
-        #error "Selector macro index is not defined although associated clock name ETH1_TX_CLK is defined"
-    #endif
-#else
-    #ifdef CLOCK_IP_SEL6_DIV0_ETH1_TX_CLK_INDEX
-        #error "Selector macro index is  defined although associated clock name ETH1_TX_CLK is not defined"
-    #endif
-#endif
-
-#ifdef CLOCK_IP_HAS_ETH2_RX_CLK
-    #ifndef CLOCK_IP_SEL7_DIV0_ETH2_RX_CLK_INDEX
-        #error "Selector macro index is not defined although associated clock name ETH2_RX_CLK is defined"
-    #endif
-#else
-    #ifdef CLOCK_IP_SEL7_DIV0_ETH2_RX_CLK_INDEX
-        #error "Selector macro index is  defined although associated clock name ETH2_RX_CLK is not defined"
-    #endif
-#endif
-
-#ifdef CLOCK_IP_HAS_ETH2_TX_CLK
-    #ifndef CLOCK_IP_SEL8_DIV0_ETH2_TX_CLK_INDEX
-        #error "Selector macro index is not defined although associated clock name ETH2_TX_CLK is defined"
-    #endif
-#else
-    #ifdef CLOCK_IP_SEL8_DIV0_ETH2_TX_CLK_INDEX
-        #error "Selector macro index is  defined although associated clock name ETH2_TX_CLK is not defined"
-    #endif
-#endif
-
-#ifdef CLOCK_IP_HAS_ETH3_RX_CLK
-    #ifndef CLOCK_IP_SEL11_DIV0_ETH3_RX_CLK_INDEX
-        #error "Selector macro index is not defined although associated clock name ETH3_RX_CLK is defined"
-    #endif
-#else
-    #ifdef CLOCK_IP_SEL11_DIV0_ETH3_RX_CLK_INDEX
-        #error "Selector macro index is  defined although associated clock name ETH3_RX_CLK is not defined"
-    #endif
-#endif
-
-#ifdef CLOCK_IP_HAS_ETH3_TX_CLK
-    #ifndef CLOCK_IP_SEL12_DIV0_ETH3_TX_CLK_INDEX
-        #error "Selector macro index is not defined although associated clock name ETH3_TX_CLK is defined"
-    #endif
-#else
-    #ifdef CLOCK_IP_SEL12_DIV0_ETH3_TX_CLK_INDEX
-        #error "Selector macro index is  defined although associated clock name ETH3_TX_CLK is not defined"
-    #endif
-#endif
-
-#ifdef CLOCK_IP_HAS_ETH4_RX_CLK
-    #ifndef CLOCK_IP_SEL13_DIV0_ETH4_RX_CLK_INDEX
-        #error "Selector macro index is not defined although associated clock name ETH4_RX_CLK is defined"
-    #endif
-#else
-    #ifdef CLOCK_IP_SEL13_DIV0_ETH4_RX_CLK_INDEX
-        #error "Selector macro index is  defined although associated clock name ETH4_RX_CLK is not defined"
-    #endif
-#endif
-
-#ifdef CLOCK_IP_HAS_ETH4_TX_CLK
-    #ifndef CLOCK_IP_SEL14_DIV0_ETH4_TX_CLK_INDEX
-        #error "Selector macro index is not defined although associated clock name ETH4_TX_CLK is defined"
-    #endif
-#else
-    #ifdef CLOCK_IP_SEL14_DIV0_ETH4_TX_CLK_INDEX
-        #error "Selector macro index is  defined although associated clock name ETH4_TX_CLK is not defined"
-    #endif
-#endif
-
-#ifdef CLOCK_IP_HAS_FLEXCAN_0to7_PE_CLK
-    #ifndef CLOCK_IP_SEL2_DIV0_FLEXCAN_0to7_PE_CLK_INDEX
-        #error "Selector macro index is not defined although associated clock name FLEXCAN_0to7_PE_CLK is defined"
-    #endif
-#else
-    #ifdef CLOCK_IP_SEL2_DIV0_FLEXCAN_0to7_PE_CLK_INDEX
-        #error "Selector macro index is  defined although associated clock name FLEXCAN_0to7_PE_CLK is not defined"
-    #endif
-#endif
-
-#ifdef CLOCK_IP_HAS_FLEXCAN_8to10_PE_CLK
-    #ifndef CLOCK_IP_SEL3_DIV0_FLEXCAN_8to10_PE_CLK_INDEX
-        #error "Selector macro index is not defined although associated clock name FLEXCAN_8to10_PE_CLK is defined"
-    #endif
-#else
-    #ifdef CLOCK_IP_SEL3_DIV0_FLEXCAN_8to10_PE_CLK_INDEX
-        #error "Selector macro index is  defined although associated clock name FLEXCAN_8to10_PE_CLK is not defined"
-    #endif
-#endif
-
-#ifdef CLOCK_IP_HAS_FLEXCAN_11to16_PE_CLK
-    #ifndef CLOCK_IP_SEL4_DIV0_FLEXCAN_11to16_PE_CLK_INDEX
-        #error "Selector macro index is not defined although associated clock name FLEXCAN_11to16_PE_CLK is defined"
-    #endif
-#else
-    #ifdef CLOCK_IP_SEL4_DIV0_FLEXCAN_11to16_PE_CLK_INDEX
-        #error "Selector macro index is  defined although associated clock name FLEXCAN_11to16_PE_CLK is not defined"
-    #endif
-#endif
-
-#ifdef CLOCK_IP_HAS_FLEXIO_CLK
-    #ifndef CLOCK_IP_SEL1_DIV0_FLEXIO_CLK_INDEX
-        #error "Selector macro index is not defined although associated clock name FLEXIO_CLK is defined"
-    #endif
-#else
-    #ifdef CLOCK_IP_SEL1_DIV0_FLEXIO_CLK_INDEX
-        #error "Selector macro index is  defined although associated clock name FLEXIO_CLK is not defined"
-    #endif
-#endif
-
-#ifdef CLOCK_IP_HAS_LPE_CXPI_PE_CLK
-    #ifndef CLOCK_IP_SEL6_DIV0_LPE_CXPI_PE_CLK_INDEX
-        #error "Selector macro index is not defined although associated clock name LPE_CXPI_PE_CLK is defined"
-    #endif
-#else
-    #ifdef CLOCK_IP_SEL6_DIV0_LPE_CXPI_PE_CLK_INDEX
-        #error "Selector macro index is  defined although associated clock name LPE_CXPI_PE_CLK is not defined"
-    #endif
-#endif
-
-#ifdef CLOCK_IP_HAS_LPE_DIV1_UNGATED_CLK
-    #ifndef CLOCK_IP_SEL6_DIV0_LPE_DIV1_UNGATED_CLK_INDEX
-        #error "Selector macro index is not defined although associated clock name LPE_DIV1_UNGATED_CLK is defined"
-    #endif
-#else
-    #ifdef CLOCK_IP_SEL6_DIV0_LPE_DIV1_UNGATED_CLK_INDEX
-        #error "Selector macro index is  defined although associated clock name LPE_DIV1_UNGATED_CLK is not defined"
-    #endif
-#endif
-
-#ifdef CLOCK_IP_HAS_LPE_DIV2_UNGATED_CLK
-    #ifndef CLOCK_IP_SEL6_DIV0_LPE_DIV2_UNGATED_CLK_INDEX
-        #error "Selector macro index is not defined although associated clock name LPE_DIV2_UNGATED_CLK is defined"
-    #endif
-#else
-    #ifdef CLOCK_IP_SEL6_DIV0_LPE_DIV2_UNGATED_CLK_INDEX
-        #error "Selector macro index is  defined although associated clock name LPE_DIV2_UNGATED_CLK is not defined"
-    #endif
-#endif
-
-#ifdef CLOCK_IP_HAS_LPE_DIV3_UNGATED_CLK
-    #ifndef CLOCK_IP_SEL6_DIV0_LPE_DIV3_UNGATED_CLK_INDEX
-        #error "Selector macro index is not defined although associated clock name LPE_DIV3_UNGATED_CLK is defined"
-    #endif
-#else
-    #ifdef CLOCK_IP_SEL6_DIV0_LPE_DIV3_UNGATED_CLK_INDEX
-        #error "Selector macro index is  defined although associated clock name LPE_DIV3_UNGATED_CLK is not defined"
-    #endif
-#endif
-
-#ifdef CLOCK_IP_HAS_LPE_DIV4_UNGATED_CLK
-    #ifndef CLOCK_IP_SEL6_DIV0_LPE_DIV4_UNGATED_CLK_INDEX
-        #error "Selector macro index is not defined although associated clock name LPE_DIV4_UNGATED_CLK is defined"
-    #endif
-#else
-    #ifdef CLOCK_IP_SEL6_DIV0_LPE_DIV4_UNGATED_CLK_INDEX
-        #error "Selector macro index is  defined although associated clock name LPE_DIV4_UNGATED_CLK is not defined"
-    #endif
-#endif
-
-#ifdef CLOCK_IP_HAS_LPE_FLEXCAN_PE_CLK
-    #ifndef CLOCK_IP_SEL4_DIV0_LPE_FLEXCAN_PE_CLK_INDEX
-        #error "Selector macro index is not defined although associated clock name LPE_FLEXCAN_PE_CLK is defined"
-    #endif
-#else
-    #ifdef CLOCK_IP_SEL4_DIV0_LPE_FLEXCAN_PE_CLK_INDEX
-        #error "Selector macro index is  defined although associated clock name LPE_FLEXCAN_PE_CLK is not defined"
-    #endif
-#endif
-
-#ifdef CLOCK_IP_HAS_LPE_LPI2C_MOD_CLK
-    #ifndef CLOCK_IP_SEL3_DIV0_LPE_LPI2C_MOD_CLK_INDEX
-        #error "Selector macro index is not defined although associated clock name LPE_LPI2C_MOD_CLK is defined"
-    #endif
-#else
-    #ifdef CLOCK_IP_SEL3_DIV0_LPE_LPI2C_MOD_CLK_INDEX
-        #error "Selector macro index is  defined although associated clock name LPE_LPI2C_MOD_CLK is not defined"
-    #endif
-#endif
-
-#ifdef CLOCK_IP_HAS_LPE_LPSPI_MOD_CLK
-    #ifndef CLOCK_IP_SEL1_DIV0_LPE_LPSPI_MOD_CLK_INDEX
-        #error "Selector macro index is not defined although associated clock name LPE_LPSPI_MOD_CLK is defined"
-    #endif
-#else
-    #ifdef CLOCK_IP_SEL1_DIV0_LPE_LPSPI_MOD_CLK_INDEX
-        #error "Selector macro index is  defined although associated clock name LPE_LPSPI_MOD_CLK is not defined"
-    #endif
-#endif
-
-#ifdef CLOCK_IP_HAS_LPE_LPUART_MOD_CLK
-    #ifndef CLOCK_IP_SEL2_DIV0_LPE_LPUART_MOD_CLK_INDEX
-        #error "Selector macro index is not defined although associated clock name LPE_LPUART_MOD_CLK is defined"
-    #endif
-#else
-    #ifdef CLOCK_IP_SEL2_DIV0_LPE_LPUART_MOD_CLK_INDEX
-        #error "Selector macro index is  defined although associated clock name LPE_LPUART_MOD_CLK is not defined"
-    #endif
-#endif
-
-#ifdef CLOCK_IP_HAS_LPE_STM_CLK
-    #ifndef CLOCK_IP_SEL5_DIV0_LPE_STM_CLK_INDEX
-        #error "Selector macro index is not defined although associated clock name LPE_STM_CLK is defined"
-    #endif
-#else
-    #ifdef CLOCK_IP_SEL5_DIV0_LPE_STM_CLK_INDEX
-        #error "Selector macro index is  defined although associated clock name LPE_STM_CLK is not defined"
-    #endif
-#endif
-
-#ifdef CLOCK_IP_HAS_LPE_UNGATED_CLK
-    #ifndef CLOCK_IP_SEL6_NODIV_LPE_UNGATED_CLK_INDEX
-        #error "Selector macro index is not defined although associated clock name LPE_UNGATED_CLK is defined"
-    #endif
-#else
-    #ifdef CLOCK_IP_SEL6_NODIV_LPE_UNGATED_CLK_INDEX
-        #error "Selector macro index is  defined although associated clock name LPE_UNGATED_CLK is not defined"
-    #endif
-#endif
-
-#ifdef CLOCK_IP_HAS_PERI_HIGH_SPEED_REST_USDHC_CLK
-    #ifndef CLOCK_IP_SEL1_DIV0_PERI_HIGH_SPEED_REST_USDHC_CLK_INDEX
-        #error "Selector macro index is not defined although associated clock name PERI_HIGH_SPEED_REST_USDHC_CLK is defined"
-    #endif
-#else
-    #ifdef CLOCK_IP_SEL1_DIV0_PERI_HIGH_SPEED_REST_USDHC_CLK_INDEX
-        #error "Selector macro index is  defined although associated clock name PERI_HIGH_SPEED_REST_USDHC_CLK is not defined"
-    #endif
-#endif
-
-#ifdef CLOCK_IP_HAS_PERI_HIGH_SPEED_REST_XSPI_CLK
-    #ifndef CLOCK_IP_SEL2_DIV0_PERI_HIGH_SPEED_REST_XSPI_CLK_INDEX
-        #error "Selector macro index is not defined although associated clock name PERI_HIGH_SPEED_REST_XSPI_CLK is defined"
-    #endif
-#else
-    #ifdef CLOCK_IP_SEL2_DIV0_PERI_HIGH_SPEED_REST_XSPI_CLK_INDEX
-        #error "Selector macro index is  defined although associated clock name PERI_HIGH_SPEED_REST_XSPI_CLK is not defined"
-    #endif
-#endif
-
-#ifdef CLOCK_IP_HAS_PERI_HIGH_SPEED_TRACE_CLK
-    #ifndef CLOCK_IP_SEL4_DIV0_PERI_HIGH_SPEED_TRACE_CLK_INDEX
-        #error "Selector macro index is not defined although associated clock name PERI_HIGH_SPEED_TRACE_CLK is defined"
-    #endif
-#else
-    #ifdef CLOCK_IP_SEL4_DIV0_PERI_HIGH_SPEED_TRACE_CLK_INDEX
-        #error "Selector macro index is  defined although associated clock name PERI_HIGH_SPEED_TRACE_CLK is not defined"
-    #endif
-#endif
-
-#ifdef CLOCK_IP_HAS_PHY_ETH_CLK
-    #ifndef CLOCK_IP_SEL1_DIV0_PHY_ETH_CLK_INDEX
-        #error "Selector macro index is not defined although associated clock name PHY_ETH_CLK is defined"
-    #endif
-#else
-    #ifdef CLOCK_IP_SEL1_DIV0_PHY_ETH_CLK_INDEX
-        #error "Selector macro index is  defined although associated clock name PHY_ETH_CLK is not defined"
-    #endif
-#endif
-
-#ifdef CLOCK_IP_HAS_RR_RTC_CLK
-    #ifndef CLOCK_IP_SEL0_NODIV_RR_RTC_CLK_INDEX
-        #error "Selector macro index is not defined although associated clock name RR_RTC_CLK is defined"
-    #endif
-#else
-    #ifdef CLOCK_IP_SEL0_NODIV_RR_RTC_CLK_INDEX
-        #error "Selector macro index is  defined although associated clock name RR_RTC_CLK is not defined"
-    #endif
-#endif
-
-#ifdef CLOCK_IP_HAS_SAI0_MCLK
-    #ifndef CLOCK_IP_SEL0_DIV0_SAI0_MCLK_INDEX
-        #error "Selector macro index is not defined although associated clock name SAI0_MCLK is defined"
-    #endif
-#else
-    #ifdef CLOCK_IP_SEL0_DIV0_SAI0_MCLK_INDEX
-        #error "Selector macro index is  defined although associated clock name SAI0_MCLK is not defined"
-    #endif
-#endif
-
-#ifdef CLOCK_IP_HAS_SAI1_MCLK
-    #ifndef CLOCK_IP_SEL0_DIV0_SAI1_MCLK_INDEX
-        #error "Selector macro index is not defined although associated clock name SAI1_MCLK is defined"
-    #endif
-#else
-    #ifdef CLOCK_IP_SEL0_DIV0_SAI1_MCLK_INDEX
-        #error "Selector macro index is  defined although associated clock name SAI1_MCLK is not defined"
-    #endif
-#endif
-
-#ifdef CLOCK_IP_HAS_SERDES_AUX_CLK
-    #ifndef CLOCK_IP_SEL9_DIV0_SERDES_AUX_CLK_INDEX
-        #error "Selector macro index is not defined although associated clock name SERDES_AUX_CLK is defined"
-    #endif
-#else
-    #ifdef CLOCK_IP_SEL9_DIV0_SERDES_AUX_CLK_INDEX
-        #error "Selector macro index is  defined although associated clock name SERDES_AUX_CLK is not defined"
-    #endif
-#endif
-
-#ifdef CLOCK_IP_HAS_SERDES_REF_CLK
-    #ifndef CLOCK_IP_SEL10_DIV0_SERDES_REF_CLK_INDEX
-        #error "Selector macro index is not defined although associated clock name SERDES_REF_CLK is defined"
-    #endif
-#else
-    #ifdef CLOCK_IP_SEL10_DIV0_SERDES_REF_CLK_INDEX
-        #error "Selector macro index is  defined although associated clock name SERDES_REF_CLK is not defined"
-    #endif
-#endif
-
-#ifdef CLOCK_IP_HAS_STM0_CLK
-    #ifndef CLOCK_IP_SEL6_DIV0_STM0_CLK_INDEX
-        #error "Selector macro index is not defined although associated clock name STM0_CLK is defined"
-    #endif
-#else
-    #ifdef CLOCK_IP_SEL6_DIV0_STM0_CLK_INDEX
-        #error "Selector macro index is  defined although associated clock name STM0_CLK is not defined"
-    #endif
-#endif
-
-#ifdef CLOCK_IP_HAS_STM1_CLK
-    #ifndef CLOCK_IP_SEL7_DIV0_STM1_CLK_INDEX
-        #error "Selector macro index is not defined although associated clock name STM1_CLK is defined"
-    #endif
-#else
-    #ifdef CLOCK_IP_SEL7_DIV0_STM1_CLK_INDEX
-        #error "Selector macro index is  defined although associated clock name STM1_CLK is not defined"
-    #endif
-#endif
-
-#ifdef CLOCK_IP_HAS_STM2_CLK
-    #ifndef CLOCK_IP_SEL8_DIV0_STM2_CLK_INDEX
-        #error "Selector macro index is not defined although associated clock name STM2_CLK is defined"
-    #endif
-#else
-    #ifdef CLOCK_IP_SEL8_DIV0_STM2_CLK_INDEX
-        #error "Selector macro index is  defined although associated clock name STM2_CLK is not defined"
-    #endif
-#endif
-
-#ifdef CLOCK_IP_HAS_STM3_CLK
-    #ifndef CLOCK_IP_SEL9_DIV0_STM3_CLK_INDEX
-        #error "Selector macro index is not defined although associated clock name STM3_CLK is defined"
-    #endif
-#else
-    #ifdef CLOCK_IP_SEL9_DIV0_STM3_CLK_INDEX
-        #error "Selector macro index is  defined although associated clock name STM3_CLK is not defined"
-    #endif
-#endif
-
-#ifdef CLOCK_IP_HAS_TRACE_CLK
-    #ifndef CLOCK_IP_SEL11_DIV0_TRACE_CLK_INDEX
-        #error "Selector macro index is not defined although associated clock name TRACE_CLK is defined"
-    #endif
-#else
-    #ifdef CLOCK_IP_SEL11_DIV0_TRACE_CLK_INDEX
-        #error "Selector macro index is  defined although associated clock name TRACE_CLK is not defined"
-    #endif
-#endif
-
+#define CLOCK_IP_HWMUX_PCFS                    5U
+#define CLOCK_IP_FAST_XOSC_CMU                 5U
+#define CLOCK_IP_HWMUX_PCFS_DIV                6U
+#define CLOCK_IP_CMU                           6U
+#define CLOCK_IP_HWMUX_DIV                     7U
+#define CLOCK_IP_SWMUX_DIV_CLKOUT              8U
+#define CLOCK_IP_HWMUX                         9U
+#define CLOCK_IP_GATE_SGMII                    10U
+#define CLOCK_IP_RTC_SEL                       11U
+
+#define CLOCK_IP_XBAR_2X_EXTENSION             0U        
+#define CLOCK_IP_XBAR_DIV2_EXTENSION           0U        
+#define CLOCK_IP_XBAR_DIV3_EXTENSION           0U        
+#define CLOCK_IP_XBAR_DIV4_EXTENSION           0U        
+#define CLOCK_IP_XBAR_DIV6_EXTENSION           0U        
+#define CLOCK_IP_XBAR_EXTENSION                0U        
+#define CLOCK_IP_A53_CORE_DIV10_EXTENSION      1U       
+#define CLOCK_IP_A53_CORE_DIV2_EXTENSION       1U        
+#define CLOCK_IP_A53_CORE_EXTENSION            1U      
+#define CLOCK_IP_DDR_EXTENSION                 2U
+#define CLOCK_IP_PFE_PE_EXTENSION              3U
+#define CLOCK_IP_PFE_SYS_EXTENSION             3U
+#define CLOCK_IP_PER_EXTENSION                 4U
+#define CLOCK_IP_GMAC0_REF_EXTENSION           5U
+#define CLOCK_IP_GMAC0_REF_DIV_EXTENSION       5U
+#define CLOCK_IP_PFEMAC0_REF_DIV_EXTENSION     6U
+#define CLOCK_IP_PFEMAC1_REF_DIV_EXTENSION     7U
+#define CLOCK_IP_PFEMAC2_REF_DIV_EXTENSION     8U
+#define CLOCK_IP_CLKOUT0_EXTENSION             9U
+#define CLOCK_IP_CLKOUT1_EXTENSION             10U
+#define CLOCK_IP_DAPB_EXTENSION                11U
+#define CLOCK_IP_FLEXCAN_EXTENSION             12U
+#define CLOCK_IP_FLEXRAY_EXTENSION             13U
+#define CLOCK_IP_FLEXTIMERA_EXTENSION          14U
+#define CLOCK_IP_FLEXTIMERB_EXTENSION          15U
+#define CLOCK_IP_GMAC_TS_EXTENSION             16U
+#define CLOCK_IP_GMAC0_RX_EXTENSION            17U
+#define CLOCK_IP_GMAC0_TX_EXTENSION            18U
+#define CLOCK_IP_LBIST_EXTENSION               19U
+#define CLOCK_IP_LIN_BAUD_EXTENSION            20U
+#define CLOCK_IP_PFEMAC0_RX_EXTENSION          21U
+#define CLOCK_IP_PFEMAC0_TX_EXTENSION          22U
+#define CLOCK_IP_PFEMAC1_RX_EXTENSION          23U
+#define CLOCK_IP_PFEMAC1_TX_EXTENSION          24U
+#define CLOCK_IP_PFEMAC2_RX_EXTENSION          25U
+#define CLOCK_IP_PFEMAC2_TX_EXTENSION          26U
+#define CLOCK_IP_QSPI_2X_EXTENSION             27U
+#define CLOCK_IP_SPI_EXTENSION                 28U
+#define CLOCK_IP_SDHC_EXTENSION                29U
+
+#define CLOCK_IP_COREPLL_INSTANCE                       0U 
+#define CLOCK_IP_PERIPHPLL_INSTANCE                     1U
+#define CLOCK_IP_DDRPLL_INSTANCE                        2U
+#define CLOCK_IP_ACCELPLL_INSTANCE                      3U
+
+#define CLOCK_IP_COREDFS_INSTANCE                       0U
+#define CLOCK_IP_PERIPHDFS_INSTANCE                     1U
+
+#define CLOCK_IP_CGM0_INSTANCE                          0U
+#define CLOCK_IP_CGM1_INSTANCE                          1U
+#define CLOCK_IP_CGM2_INSTANCE                          2U
+#define CLOCK_IP_CGM5_INSTANCE                          5U
+
+#define CLOCK_IP_CMU_0_INSTANCE                         0U
+#define CLOCK_IP_CMU_5_INSTANCE                         5U
+#define CLOCK_IP_CMU_6_INSTANCE                         6U
+#define CLOCK_IP_CMU_7_INSTANCE                         7U
+#define CLOCK_IP_CMU_8_INSTANCE                         8U
+#define CLOCK_IP_CMU_9_INSTANCE                         9U
+#define CLOCK_IP_CMU_10_INSTANCE                        10U
+#define CLOCK_IP_CMU_11_INSTANCE                        11U
+#define CLOCK_IP_CMU_12_INSTANCE                        12U
+#define CLOCK_IP_CMU_13_INSTANCE                        13U
+#define CLOCK_IP_CMU_14_INSTANCE                        14U
+#define CLOCK_IP_CMU_15_INSTANCE                        15U
+#define CLOCK_IP_CMU_16_INSTANCE                        16U
+#define CLOCK_IP_CMU_17_INSTANCE                        17U
+#define CLOCK_IP_CMU_18_INSTANCE                        18U
+#define CLOCK_IP_CMU_20_INSTANCE                        20U
+#define CLOCK_IP_CMU_21_INSTANCE                        21U
+#define CLOCK_IP_CMU_22_INSTANCE                        22U
+#define CLOCK_IP_CMU_27_INSTANCE                        27U
+#define CLOCK_IP_CMU_28_INSTANCE                        28U
+#define CLOCK_IP_CMU_39_INSTANCE                        39U
+#define CLOCK_IP_CMU_46_INSTANCE                        46U
+#define CLOCK_IP_CMU_47_INSTANCE                        47U
+#define CLOCK_IP_CMU_48_INSTANCE                        48U
+#define CLOCK_IP_CMU_49_INSTANCE                        49U
+#define CLOCK_IP_CMU_50_INSTANCE                        50U
+#define CLOCK_IP_CMU_51_INSTANCE                        51U
+
+#define CLOCK_IP_DIV_0_INDEX                            0U
+#define CLOCK_IP_DIV_1_INDEX                            1U
+#define CLOCK_IP_DIV_2_INDEX                            2U
+#define CLOCK_IP_DIV_3_INDEX                            3U
+#define CLOCK_IP_DIV_4_INDEX                            4U
+#define CLOCK_IP_DIV_5_INDEX                            5U
+#define CLOCK_IP_DIV_6_INDEX                            6U
+#define CLOCK_IP_DIV_7_INDEX                            7U
+
+#define CLOCK_IP_PCFS_3_INDEX                           3U
+#define CLOCK_IP_PCFS_11_INDEX                          11U
+#define CLOCK_IP_PCFS_32_INDEX                          32U
+
+#define CLOCK_IP_PRT0_COL0_REQ0_INDEX                   0U
+#define CLOCK_IP_PRT0_COL0_REQ1_INDEX                   1U
+#define CLOCK_IP_PRT2_COL0_REQ0_INDEX                   2U
+#define CLOCK_IP_PRT2_COL0_REQ1_INDEX                   3U
+#define CLOCK_IP_PRT2_COL0_REQ2_INDEX                   4U
+#define CLOCK_IP_PRT2_COL0_REQ3_INDEX                   5U
+
+#define CLOCK_IP_PARTITION_0_INDEX                      0U
+#define CLOCK_IP_PARTITION_2_INDEX                      2U
+#define CLOCK_IP_COLLECTION_0_INDEX                     0U
+
+#define CLOCK_IP_SEL_0_INDEX                            0U
+#define CLOCK_IP_SEL_1_INDEX                            1U
+#define CLOCK_IP_SEL_2_INDEX                            2U
+#define CLOCK_IP_SEL_3_INDEX                            3U
+#define CLOCK_IP_SEL_4_INDEX                            4U
+#define CLOCK_IP_SEL_5_INDEX                            5U
+#define CLOCK_IP_SEL_6_INDEX                            6U
+#define CLOCK_IP_SEL_7_INDEX                            7U
+#define CLOCK_IP_SEL_8_INDEX                            8U
+#define CLOCK_IP_SEL_9_INDEX                            9U
+#define CLOCK_IP_SEL_10_INDEX                           10U
+#define CLOCK_IP_SEL_11_INDEX                           11U
+#define CLOCK_IP_SEL_12_INDEX                           12U
+#define CLOCK_IP_SEL_14_INDEX                           14U
+#define CLOCK_IP_SEL_15_INDEX                           15U
+#define CLOCK_IP_SEL_16_INDEX                           16U
+                                       
 
 
 
@@ -855,20 +273,32 @@ extern "C"{
                                        GLOBAL CONSTANTS
 ==================================================================================================*/
 
-
-
 /* Clock start constant section data */
 #define MCU_START_SEC_CONST_8
 #include "Mcu_MemMap.h"
 
-const uint8 Clock_Ip_au8IrcoscCallbackIndex[CLOCK_IP_ALL_CALLBACKS_COUNT] = {
+const uint8 Clock_Ip_au8DividerCallbackIndex[CLOCK_IP_ALL_CALLBACKS_COUNT] = {
     CLOCK_IP_NO_CALLBACK,                                       /* No callback */
+    CLOCK_IP_CGM_X_DE_DIV_STAT_WITHOUT_PHASE,                   /* CLOCK_IP_GATE_HWMUX_DIV_CMU */
+    CLOCK_IP_CGM_X_DE_DIV_STAT_WITHOUT_PHASE,                   /* CLOCK_IP_HWMUX_DIV_CMU */
+    CLOCK_IP_PLLDIG_PLL0DIV_DE_DIV_OUTPUT,                      /* CLOCK_IP_PCFS_PLL_OUT */
+    CLOCK_IP_PLLDIG_PLL0DIV_DE_DIV_OUTPUT,                      /* CLOCK_IP_PLL_OUT */
     CLOCK_IP_NO_CALLBACK,                                       /* No callback */
+    CLOCK_IP_CGM_X_DE_DIV_STAT_WITHOUT_PHASE,                   /* CLOCK_IP_HWMUX_PCFS_DIV */
+    CLOCK_IP_CGM_X_DE_DIV_STAT_WITHOUT_PHASE,                   /* CLOCK_IP_HWMUX_DIV */
+    CLOCK_IP_CGM_X_DE_DIV_WITHOUT_PHASE,                        /* CLOCK_IP_SWMUX_DIV_CLKOUT */
     CLOCK_IP_NO_CALLBACK,                                       /* No callback */
     CLOCK_IP_NO_CALLBACK,                                       /* No callback */
     CLOCK_IP_NO_CALLBACK,                                       /* No callback */
 };
-const uint8 Clock_Ip_au8IrcoscOutCallbackIndex[CLOCK_IP_ALL_CALLBACKS_COUNT] = {
+const uint8 Clock_Ip_au8DividerTriggerCallbackIndex[CLOCK_IP_ALL_CALLBACKS_COUNT] = {
+    CLOCK_IP_NO_CALLBACK,                                       /* No callback */
+    CLOCK_IP_NO_CALLBACK,                                       /* No callback */
+    CLOCK_IP_NO_CALLBACK,                                       /* No callback */
+    CLOCK_IP_NO_CALLBACK,                                       /* No callback */
+    CLOCK_IP_NO_CALLBACK,                                       /* No callback */
+    CLOCK_IP_NO_CALLBACK,                                       /* No callback */
+    CLOCK_IP_NO_CALLBACK,                                       /* No callback */
     CLOCK_IP_NO_CALLBACK,                                       /* No callback */
     CLOCK_IP_NO_CALLBACK,                                       /* No callback */
     CLOCK_IP_NO_CALLBACK,                                       /* No callback */
@@ -877,40 +307,26 @@ const uint8 Clock_Ip_au8IrcoscOutCallbackIndex[CLOCK_IP_ALL_CALLBACKS_COUNT] = {
 };
 const uint8 Clock_Ip_au8XoscCallbackIndex[CLOCK_IP_ALL_CALLBACKS_COUNT] = {
     CLOCK_IP_NO_CALLBACK,                                       /* No callback */
-    CLOCK_IP_FXOSC_CTRL_OSCON_ALC_D_GM_SEL_EOCV_COMP_EN_OSC_BYP_OSC_STAT,/* CLOCK_IP_FXOSC */
-    CLOCK_IP_SXOSC_CTRL_OSCON_GM_SEL_EOCV_CURR_PRG_STAT,        /* CLOCK_IP_SXOSC */
-    CLOCK_IP_NO_CALLBACK,                                       /* No callback */
-    CLOCK_IP_NO_CALLBACK,                                       /* No callback */
-};
-const uint8 Clock_Ip_au8PllCallbackIndex[CLOCK_IP_ALL_CALLBACKS_COUNT] = {
-    CLOCK_IP_NO_CALLBACK,                                       /* No callback */
-    CLOCK_IP_PLL_POWERUP_RDIV_MFI_ENABLE_SPREADCTL_STEP_STOP_MFN_REF_CLK_SEL,/* CLOCK_IP_PLL_MOD */
     CLOCK_IP_NO_CALLBACK,                                       /* No callback */
     CLOCK_IP_NO_CALLBACK,                                       /* No callback */
     CLOCK_IP_NO_CALLBACK,                                       /* No callback */
-};
-const uint8 Clock_Ip_au8FractionalDividerCallbackIndex[CLOCK_IP_ALL_CALLBACKS_COUNT] = {
     CLOCK_IP_NO_CALLBACK,                                       /* No callback */
-    CLOCK_IP_DFS_BYPASS_CLKOUT_ENABLE_MFI_MFN,                  /* CLOCK_IP_PLL_DFS_OUT */
+    CLOCK_IP_FXOSC_OSCON_BYP_EOCV_GM_SEL,                       /* CLOCK_IP_FAST_XOSC_CMU */
+    CLOCK_IP_NO_CALLBACK,                                       /* No callback */
+    CLOCK_IP_NO_CALLBACK,                                       /* No callback */
+    CLOCK_IP_NO_CALLBACK,                                       /* No callback */
     CLOCK_IP_NO_CALLBACK,                                       /* No callback */
     CLOCK_IP_NO_CALLBACK,                                       /* No callback */
     CLOCK_IP_NO_CALLBACK,                                       /* No callback */
 };
-const uint8 Clock_Ip_au8SelectorCallbackIndex[CLOCK_IP_ALL_CALLBACKS_COUNT] = {
+const uint8 Clock_Ip_au8IrcoscCallbackIndex[CLOCK_IP_ALL_CALLBACKS_COUNT] = {
     CLOCK_IP_NO_CALLBACK,                                       /* No callback */
-    CLOCK_IP_CGM_X_CSC_CSS_CLK_SW_SWTRIG_SWIP,                  /* CLOCK_IP_MUX_DIV */
-    CLOCK_IP_CGM_X_CSC_CSS_CLK_SW_SWTRIG_SWIP_RMP_SW,           /* CLOCK_IP_MUX_PCFS */
-    CLOCK_IP_CGM_X_CSC_CSS_CLK_SW_SWTRIG_SWIP_RMP_SW,           /* CLOCK_IP_MUX_PCFS_CMU */
-    CLOCK_IP_RTC_RTCC_CLKSELECT,                                /* CLOCK_IP_MUX_RTC */
-};
-const uint8 Clock_Ip_au8DividerCallbackIndex[CLOCK_IP_ALL_CALLBACKS_COUNT] = {
     CLOCK_IP_NO_CALLBACK,                                       /* No callback */
-    CLOCK_IP_CGM_X_SLC_Y_DC_DE_DIV_UPD_STAT,                    /* CLOCK_IP_MUX_DIV */
-    CLOCK_IP_CGM_X_SLC_Y_DC_DE_DIV_UPD_STAT,                    /* CLOCK_IP_DIV */
-    CLOCK_IP_PLLDIV_OUTPUT_DIVIDER_DE_OUTPUT_DIV,               /* CLOCK_IP_PLL_DIV_OUT */
-    CLOCK_IP_PLLDIV_OUTPUT_DIVIDER_POSTDIV,                     /* CLOCK_IP_PLL_OUT */
-};
-const uint8 Clock_Ip_au8DividerTriggerCallbackIndex[CLOCK_IP_ALL_CALLBACKS_COUNT] = {
+    CLOCK_IP_NO_CALLBACK,                                       /* No callback */
+    CLOCK_IP_NO_CALLBACK,                                       /* No callback */
+    CLOCK_IP_NO_CALLBACK,                                       /* No callback */
+    CLOCK_IP_NO_CALLBACK,                                       /* No callback */
+    CLOCK_IP_NO_CALLBACK,                                       /* No callback */
     CLOCK_IP_NO_CALLBACK,                                       /* No callback */
     CLOCK_IP_NO_CALLBACK,                                       /* No callback */
     CLOCK_IP_NO_CALLBACK,                                       /* No callback */
@@ -919,12 +335,68 @@ const uint8 Clock_Ip_au8DividerTriggerCallbackIndex[CLOCK_IP_ALL_CALLBACKS_COUNT
 };
 const uint8 Clock_Ip_au8GateCallbackIndex[CLOCK_IP_ALL_CALLBACKS_COUNT] = {
     CLOCK_IP_NO_CALLBACK,                                       /* No callback */
-    CLOCK_IP_GPR_X_PCTL_MODULE_PCTL_PCTL,                       /* CLOCK_IP_GATE */
+    CLOCK_IP_MC_ME_PARTITION_COFB_ENABLE_REQUEST,               /* CLOCK_IP_GATE_HWMUX_DIV_CMU */
+    CLOCK_IP_MC_ME_PARTITION_COFB_ENABLE_REQUEST,               /* CLOCK_IP_GATE */
+    CLOCK_IP_NO_CALLBACK,                                       /* No callback */
+    CLOCK_IP_MC_ME_PARTITION_COFB_ENABLE_REQUEST,               /* CLOCK_IP_GATE_HWMUX_CMU */
+    CLOCK_IP_NO_CALLBACK,                                       /* No callback */
+    CLOCK_IP_NO_CALLBACK,                                       /* No callback */
+    CLOCK_IP_NO_CALLBACK,                                       /* No callback */
+    CLOCK_IP_NO_CALLBACK,                                       /* No callback */
+    CLOCK_IP_NO_CALLBACK,                                       /* No callback */
+    CLOCK_IP_MC_ME_PARTITION_COFB_ENABLE_REQUEST,               /* CLOCK_IP_GATE_SGMII */
+    CLOCK_IP_NO_CALLBACK,                                       /* No callback */
+};
+const uint8 Clock_Ip_au8FractionalDividerCallbackIndex[CLOCK_IP_ALL_CALLBACKS_COUNT] = {
+    CLOCK_IP_NO_CALLBACK,                                       /* No callback */
+    CLOCK_IP_DFS_MFI_MFN,                                       /* CLOCK_IP_PCFS_DFS */
+    CLOCK_IP_DFS_MFI_MFN,                                       /* CLOCK_IP_DFS */
+    CLOCK_IP_NO_CALLBACK,                                       /* No callback */
+    CLOCK_IP_NO_CALLBACK,                                       /* No callback */
+    CLOCK_IP_NO_CALLBACK,                                       /* No callback */
+    CLOCK_IP_NO_CALLBACK,                                       /* No callback */
+    CLOCK_IP_NO_CALLBACK,                                       /* No callback */
+    CLOCK_IP_NO_CALLBACK,                                       /* No callback */
     CLOCK_IP_NO_CALLBACK,                                       /* No callback */
     CLOCK_IP_NO_CALLBACK,                                       /* No callback */
     CLOCK_IP_NO_CALLBACK,                                       /* No callback */
 };
+const uint8 Clock_Ip_au8PllCallbackIndex[CLOCK_IP_ALL_CALLBACKS_COUNT] = {
+    CLOCK_IP_NO_CALLBACK,                                       /* No callback */
+    CLOCK_IP_PLLDIG_RDIV_MFI_MFN_SDMEN_SSCGBYP_SPREADCTL_STEPNO_STEPSIZE,/* CLOCK_IP_PLL_MOD */
+    CLOCK_IP_PLLDIG_RDIV_MFI_MFN_SDMEN,                         /* CLOCK_IP_PLL */
+    CLOCK_IP_NO_CALLBACK,                                       /* No callback */
+    CLOCK_IP_NO_CALLBACK,                                       /* No callback */
+    CLOCK_IP_NO_CALLBACK,                                       /* No callback */
+    CLOCK_IP_NO_CALLBACK,                                       /* No callback */
+    CLOCK_IP_NO_CALLBACK,                                       /* No callback */
+    CLOCK_IP_NO_CALLBACK,                                       /* No callback */
+    CLOCK_IP_NO_CALLBACK,                                       /* No callback */
+    CLOCK_IP_NO_CALLBACK,                                       /* No callback */
+    CLOCK_IP_NO_CALLBACK,                                       /* No callback */
+};
+const uint8 Clock_Ip_au8SelectorCallbackIndex[CLOCK_IP_ALL_CALLBACKS_COUNT] = {
+    CLOCK_IP_NO_CALLBACK,                                       /* No callback */
+    CLOCK_IP_CGM_X_CSC_CSS_CLK_SW_SWIP,                         /* CLOCK_IP_GATE_HWMUX_DIV_CMU */
+    CLOCK_IP_CGM_X_CSC_CSS_CLK_SW_SWIP,                         /* CLOCK_IP_HWMUX_DIV_CMU */
+    CLOCK_IP_CGM_X_CSC_CSS_CLK_SW_SWIP,                         /* CLOCK_IP_HWMUX_CMU */
+    CLOCK_IP_CGM_X_CSC_CSS_CLK_SW_SWIP,                         /* CLOCK_IP_GATE_HWMUX_CMU */
+    CLOCK_IP_CGM_X_CSC_CSS_CLK_SW_RAMPDOWN_RAMPUP_SWIP,         /* CLOCK_IP_HWMUX_PCFS */
+    CLOCK_IP_CGM_X_CSC_CSS_CLK_SW_RAMPDOWN_RAMPUP_SWIP,         /* CLOCK_IP_HWMUX_PCFS_DIV */
+    CLOCK_IP_CGM_X_CSC_CSS_CLK_SW_SWIP,                         /* CLOCK_IP_HWMUX_DIV */
+    CLOCK_IP_CGM_X_CSC_CSS_CS_GRIP,                             /* CLOCK_IP_SWMUX_DIV_CLKOUT */
+    CLOCK_IP_CGM_X_CSC_CSS_CLK_SW_SWIP,                         /* CLOCK_IP_HWMUX */
+    CLOCK_IP_GENCTRL1_CTRL_SUPPORT,                             /* CLOCK_IP_GATE_SGMII */
+    CLOCK_IP_RTC_RTCC_CLKSELECT,                                /* CLOCK_IP_RTC_SEL */
+};
 const uint8 Clock_Ip_au8PcfsCallbackIndex[CLOCK_IP_ALL_CALLBACKS_COUNT] = {
+    CLOCK_IP_NO_CALLBACK,                                       /* No callback */
+    CLOCK_IP_CGM_X_PCFS_SDUR_DIVC_DIVE_DIVS,                    /* CLOCK_IP_PCFS_DFS */
+    CLOCK_IP_NO_CALLBACK,                                       /* No callback */
+    CLOCK_IP_CGM_X_PCFS_SDUR_DIVC_DIVE_DIVS,                    /* CLOCK_IP_PCFS_PLL_OUT */
+    CLOCK_IP_NO_CALLBACK,                                       /* No callback */
+    CLOCK_IP_NO_CALLBACK,                                       /* No callback */
+    CLOCK_IP_NO_CALLBACK,                                       /* No callback */
     CLOCK_IP_NO_CALLBACK,                                       /* No callback */
     CLOCK_IP_NO_CALLBACK,                                       /* No callback */
     CLOCK_IP_NO_CALLBACK,                                       /* No callback */
@@ -933,9 +405,16 @@ const uint8 Clock_Ip_au8PcfsCallbackIndex[CLOCK_IP_ALL_CALLBACKS_COUNT] = {
 };
 const uint8 Clock_Ip_au8CmuCallbackIndex[CLOCK_IP_ALL_CALLBACKS_COUNT] = {
     CLOCK_IP_NO_CALLBACK,                                       /* No callback */
+    CLOCK_IP_CMU_FC_FCE_REF_CNT_LFREF_HFREF,                    /* CLOCK_IP_GATE_HWMUX_DIV_CMU */
+    CLOCK_IP_CMU_FC_FCE_REF_CNT_LFREF_HFREF,                    /* CLOCK_IP_HWMUX_DIV_CMU */
+    CLOCK_IP_CMU_FC_FCE_REF_CNT_LFREF_HFREF,                    /* CLOCK_IP_HWMUX_CMU */
+    CLOCK_IP_CMU_FC_FCE_REF_CNT_LFREF_HFREF,                    /* CLOCK_IP_GATE_HWMUX_CMU */
+    CLOCK_IP_CMU_FC_FCE_REF_CNT_LFREF_HFREF,                    /* CLOCK_IP_FAST_XOSC_CMU */
+    CLOCK_IP_CMU_FC_FCE_REF_CNT_LFREF_HFREF,                    /* CLOCK_IP_CMU */
     CLOCK_IP_NO_CALLBACK,                                       /* No callback */
     CLOCK_IP_NO_CALLBACK,                                       /* No callback */
-    CLOCK_IP_CMU_FC_FCE_REF_CNT_LFREF_HFREF_RS,                 /* CLOCK_IP_MUX_PCFS_CMU */
+    CLOCK_IP_NO_CALLBACK,                                       /* No callback */
+    CLOCK_IP_NO_CALLBACK,                                       /* No callback */
     CLOCK_IP_NO_CALLBACK,                                       /* No callback */
 };
 
@@ -943,484 +422,485 @@ const uint8 Clock_Ip_au8CmuCallbackIndex[CLOCK_IP_ALL_CALLBACKS_COUNT] = {
 
 
 /* Clock features mapping */
-const uint16 Clock_Ip_au16ClockFeatures[CLOCK_IP_NAMES_NO][CLOCK_IP_FEATURES_NO] =
-/*
-****************************************************************************************************************************************************************************************************************************************************************
-**********************************************     ************************   I   ***********************       *       *****************************************       *****************************************       ********************       *************
-**********************************************  I  ************************   M   ***********************       *   S   *****************************************   D   *****************************************       ********************       *************
-**********************************************  N  ************************   P   ***********************   P   *   E   *****************************************   I   *****************************************   G   ********************       *************
-**********************************************  S  ************************   L   ***********************   O   *   L   *****************************************   V   *****************************************   A   ********************   C   *************
-**********************************************  T  ************************   E   ***********************   W   *   E   *****************************************   I   *****************************************   T   ********************   M   *************
-**********************************************  A  ************************   M   ***********************   E   *   C   *****************************************   D   *****************************************   E   ********************   U   *************
-**********************************************  N  ************************   E   ***********************   R   *   T   *****************************************   E   *****************************************       ********************       *************
-**********************************************  C  ************************   N   ***********************       *   O   *****************************************   R   *****************************************       ********************       *************
-**********************************************  E  ************************   T   ***********************       *   R   *****************************************       *****************************************       ********************       *************
-**********************************************     ************************   A   ***********************       *       *****************************************       *****************************************       ********************       *************
-**********************************************     ************************   T   ***********************       *       *****************************************       *****************************************       ********************       *************
-**********************************************     ************************   I   ***********************       *       *****************************************       *****************************************       ********************       *************
-**********************************************     ************************   O   ***********************       *       *****************************************       *****************************************       ********************       *************
-**********************************************     ************************   N   ***********************       *       *****************************************       *****************************************       ********************       *************
-****************************************************************************************************************************************************************************************************************************************************************/
-{
-/*   FIRC_CLK clock                      */ {CLOCK_IP_IRCOSC,                CLOCK_IP_NOPLL_TYPE,            0U,                                                 0U,                                                 0U},         /*   FIRC_CLK clock                  */
-/*   FIRCDIV2_CLK clock                  */ {CLOCK_IP_NO_CALLBACK,           0U,                             0U,                                                 0U,                                                 0U},         /*   FIRCDIV2_CLK clock              */
-/*   SAFE_CLK clock                      */ {CLOCK_IP_NO_CALLBACK,           0U,                             0U,                                                 0U,                                                 0U},         /*   SAFE_CLK clock                  */
-/*   SIRC_CLK clock                      */ {CLOCK_IP_IRCOSC,                CLOCK_IP_NOPLL_TYPE,            0U,                                                 0U,                                                 0U},         /*   SIRC_CLK clock                  */
-/*   FXOSC_CLK clock                     */ {CLOCK_IP_FXOSC,                 CLOCK_IP_NOPLL_TYPE,            0U,                                                 0U,                                                 0U},         /*   FXOSC_CLK clock                 */
-/*   SXOSC_CLK clock                     */ {CLOCK_IP_SXOSC,                 CLOCK_IP_NOPLL_TYPE,            0U,                                                 0U,                                                 0U},         /*   SXOSC_CLK clock                 */
-/*   gated_clk clock                     */ {CLOCK_IP_NO_CALLBACK,           CLOCK_IP_NOPLL_TYPE,            0U,                                                 0U,                                                 0U},         /*   gated_clk clock                 */
-/*   fast_crystal_oscillator clock       */ {CLOCK_IP_NO_CALLBACK,           CLOCK_IP_NOPLL_TYPE,            0U,                                                 0U,                                                 0U},         /*   fast_crystal_oscillator clock   */
-/*   slow_crystal_oscillator clock       */ {CLOCK_IP_NO_CALLBACK,           CLOCK_IP_NOPLL_TYPE,            0U,                                                 0U,                                                 0U},         /*   slow_crystal_oscillator clock   */
-/*   eth0_mii_rx_ext_clk clock           */ {CLOCK_IP_NO_CALLBACK,           CLOCK_IP_NOPLL_TYPE,            0U,                                                 0U,                                                 0U},         /*   eth0_mii_rx_ext_clk clock       */
-/*   eth0_mii_tx_ext_clk clock           */ {CLOCK_IP_NO_CALLBACK,           CLOCK_IP_NOPLL_TYPE,            0U,                                                 0U,                                                 0U},         /*   eth0_mii_tx_ext_clk clock       */
-/*   eth0_rgmii_rx_ext_clk clock         */ {CLOCK_IP_NO_CALLBACK,           CLOCK_IP_NOPLL_TYPE,            0U,                                                 0U,                                                 0U},         /*   eth0_rgmii_rx_ext_clk clock     */
-/*   eth0_rgmii_tx_ext_clk clock         */ {CLOCK_IP_NO_CALLBACK,           CLOCK_IP_NOPLL_TYPE,            0U,                                                 0U,                                                 0U},         /*   eth0_rgmii_tx_ext_clk clock     */
-/*   eth0_rmii_ref_ext_clk clock         */ {CLOCK_IP_NO_CALLBACK,           CLOCK_IP_NOPLL_TYPE,            0U,                                                 0U,                                                 0U},         /*   eth0_rmii_ref_ext_clk clock     */
-/*   eth1_mii_rx_ext_clk clock           */ {CLOCK_IP_NO_CALLBACK,           CLOCK_IP_NOPLL_TYPE,            0U,                                                 0U,                                                 0U},         /*   eth1_mii_rx_ext_clk clock       */
-/*   eth1_mii_tx_ext_clk clock           */ {CLOCK_IP_NO_CALLBACK,           CLOCK_IP_NOPLL_TYPE,            0U,                                                 0U,                                                 0U},         /*   eth1_mii_tx_ext_clk clock       */
-/*   eth1_rgmii_rx_ext_clk clock         */ {CLOCK_IP_NO_CALLBACK,           CLOCK_IP_NOPLL_TYPE,            0U,                                                 0U,                                                 0U},         /*   eth1_rgmii_rx_ext_clk clock     */
-/*   eth1_rgmii_tx_ext_clk clock         */ {CLOCK_IP_NO_CALLBACK,           CLOCK_IP_NOPLL_TYPE,            0U,                                                 0U,                                                 0U},         /*   eth1_rgmii_tx_ext_clk clock     */
-/*   eth1_rmii_ref_ext_clk clock         */ {CLOCK_IP_NO_CALLBACK,           CLOCK_IP_NOPLL_TYPE,            0U,                                                 0U,                                                 0U},         /*   eth1_rmii_ref_ext_clk clock     */
-/*   eth2_mii_rx_ext_clk clock           */ {CLOCK_IP_NO_CALLBACK,           CLOCK_IP_NOPLL_TYPE,            0U,                                                 0U,                                                 0U},         /*   eth2_mii_rx_ext_clk clock       */
-/*   eth2_mii_tx_ext_clk clock           */ {CLOCK_IP_NO_CALLBACK,           CLOCK_IP_NOPLL_TYPE,            0U,                                                 0U,                                                 0U},         /*   eth2_mii_tx_ext_clk clock       */
-/*   eth2_rgmii_rx_ext_clk clock         */ {CLOCK_IP_NO_CALLBACK,           CLOCK_IP_NOPLL_TYPE,            0U,                                                 0U,                                                 0U},         /*   eth2_rgmii_rx_ext_clk clock     */
-/*   eth2_rgmii_tx_ext_clk clock         */ {CLOCK_IP_NO_CALLBACK,           CLOCK_IP_NOPLL_TYPE,            0U,                                                 0U,                                                 0U},         /*   eth2_rgmii_tx_ext_clk clock     */
-/*   eth2_rmii_ref_ext_clk clock         */ {CLOCK_IP_NO_CALLBACK,           CLOCK_IP_NOPLL_TYPE,            0U,                                                 0U,                                                 0U},         /*   eth2_rmii_ref_ext_clk clock     */
-/*   ts_1588_clk clock                   */ {CLOCK_IP_NO_CALLBACK,           CLOCK_IP_NOPLL_TYPE,            0U,                                                 0U,                                                 0U},         /*   ts_1588_clk clock               */
-/*   PLL0_CLK clock                      */ {CLOCK_IP_PLL_MOD,               CLOCK_IP_PLL_TYPE,              0U,                                                 0U,                                                 0U},         /*   PLL0_CLK clock                  */
-/*   PLL0_DIV_CLK clock                  */ {CLOCK_IP_PLL_OUT,               0U,                             0U,                                                 0U,                                                 0U},         /*   PLL0_DIV_CLK clock              */
-/*   PLL0_DIV0_CLK clock                 */ {CLOCK_IP_PLL_DIV_OUT,           CLOCK_IP_DIV_TYPE,              CLOCK_IP_DIV0_INDEX,                                0U,                                                 0U},         /*   PLL0_DIV0_CLK clock             */
-/*   PLL0_DIV4_CLK clock                 */ {CLOCK_IP_PLL_DIV_OUT,           CLOCK_IP_DIV_TYPE,              CLOCK_IP_DIV4_INDEX,                                0U,                                                 0U},         /*   PLL0_DIV4_CLK clock             */
-/*   PLL0_DFS0_CLK clock                 */ {CLOCK_IP_PLL_DFS_OUT,           CLOCK_IP_DIV_TYPE,              CLOCK_IP_DIV0_INDEX,                                0U,                                                 0U},         /*   PLL0_DFS0_CLK clock             */
-#if defined(CLOCK_IP_HAS_PLL0_DFS1_CLK)
-/*   PLL0_DFS1_CLK clock                 */ {CLOCK_IP_PLL_DFS_OUT,           CLOCK_IP_DIV_TYPE,              CLOCK_IP_DIV1_INDEX,                                0U,                                                 0U},         /*   PLL0_DFS1_CLK clock             */
-#endif
-#if defined(CLOCK_IP_HAS_PLL0_DFS2_CLK)
-/*   PLL0_DFS2_CLK clock                 */ {CLOCK_IP_PLL_DFS_OUT,           CLOCK_IP_DIV_TYPE,              CLOCK_IP_DIV2_INDEX,                                0U,                                                 0U},         /*   PLL0_DFS2_CLK clock             */
-#endif
-#if defined(CLOCK_IP_HAS_PLL0_DFS3_CLK)
-/*   PLL0_DFS3_CLK clock                 */ {CLOCK_IP_PLL_DFS_OUT,           CLOCK_IP_DIV_TYPE,              CLOCK_IP_DIV3_INDEX,                                0U,                                                 0U},         /*   PLL0_DFS3_CLK clock             */
-#endif
-/*   PLL1_CLK clock                      */ {CLOCK_IP_PLL_MOD,               CLOCK_IP_PLL_TYPE,              0U,                                                 0U,                                                 0U},         /*   PLL1_CLK clock                  */
-/*   PLL1_DIV_CLK clock                  */ {CLOCK_IP_PLL_OUT,               0U,                             0U,                                                 0U,                                                 0U},         /*   PLL1_DIV_CLK clock              */
-/*   PLL1_DIV0_CLK clock                 */ {CLOCK_IP_PLL_DIV_OUT,           CLOCK_IP_DIV_TYPE,              CLOCK_IP_DIV0_INDEX,                                0U,                                                 0U},         /*   PLL1_DIV0_CLK clock             */
-/*   CPE_PLL_CLK clock                   */ {CLOCK_IP_PLL_MOD,               CLOCK_IP_PLL_TYPE,              0U,                                                 0U,                                                 0U},         /*   CPE_PLL_CLK clock               */
-/*   CPE_DIV_CLK clock                   */ {CLOCK_IP_PLL_OUT,               0U,                             0U,                                                 0U,                                                 0U},         /*   CPE_DIV_CLK clock               */
-/*   CPE_DIV0_CLK clock                  */ {CLOCK_IP_PLL_DIV_OUT,           CLOCK_IP_DIV_TYPE,              CLOCK_IP_DIV0_INDEX,                                0U,                                                 0U},         /*   CPE_DIV0_CLK clock              */
-/*   LPE_CLK clock                       */ {CLOCK_IP_MUX_PCFS,              CLOCK_IP_SEL_TYPE,                             CLOCK_IP_SEL0_NODIV_LPE_CLK_INDEX,                                                 0U,                                                 0U},         /*   LPE_CLK clock                   */
-#if defined(CLOCK_IP_HAS_LPE_DIV1_CLK)
-/*   LPE_DIV1_CLK clock                  */ {CLOCK_IP_DIV,                   CLOCK_IP_DIV_TYPE,                             CLOCK_IP_SEL0_NODIV_LPE_CLK_INDEX,                                                 0U,                                                 0U},         /*   LPE_DIV1_CLK clock              */
-#endif
-#if defined(CLOCK_IP_HAS_LPE_DIV2_CLK)
-/*   LPE_DIV2_CLK clock                  */ {CLOCK_IP_NO_CALLBACK,           0U,                             0U,                                                 0U,                                                 0U},         /*   LPE_DIV2_CLK clock              */
-#endif
-#if defined(CLOCK_IP_HAS_LPE_DIV4_CLK)
-/*   LPE_DIV4_CLK clock                  */ {CLOCK_IP_NO_CALLBACK,           0U,                             0U,                                                 0U,                                                 0U},         /*   LPE_DIV4_CLK clock              */
-#endif
-#if defined(CLOCK_IP_HAS_LPE_DIV8_CLK)
-/*   LPE_DIV8_CLK clock                  */ {CLOCK_IP_NO_CALLBACK,           0U,                             0U,                                                 0U,                                                 0U},         /*   LPE_DIV8_CLK clock              */
-#endif
-/*   PLT_CLK clock                       */ {CLOCK_IP_MUX_PCFS,              CLOCK_IP_SEL_TYPE,                             CLOCK_IP_SEL0_NODIV_PLT_CLK_INDEX,                                                 0U,                                                 0U},         /*   PLT_CLK clock                   */
-#if defined(CLOCK_IP_HAS_PLTCORE_CLK)
-/*   PLTCORE_CLK clock                   */ {CLOCK_IP_DIV,                   CLOCK_IP_DIV_TYPE,                             CLOCK_IP_SEL0_NODIV_PLT_CLK_INDEX,                                                 0U,                                                 0U},         /*   PLTCORE_CLK clock               */
-#endif
-#if defined(CLOCK_IP_HAS_PLTDIV1_CLK)
-/*   PLTDIV1_CLK clock                   */ {CLOCK_IP_NO_CALLBACK,           0U,                             0U,                                                 0U,                                                 0U},         /*   PLTDIV1_CLK clock               */
-#endif
-#if defined(CLOCK_IP_HAS_PLTDIV2_CLK)
-/*   PLTDIV2_CLK clock                   */ {CLOCK_IP_NO_CALLBACK,           0U,                             0U,                                                 0U,                                                 0U},         /*   PLTDIV2_CLK clock               */
-#endif
-#if defined(CLOCK_IP_HAS_PLTDIV4_CLK)
-/*   PLTDIV4_CLK clock                   */ {CLOCK_IP_NO_CALLBACK,           0U,                             0U,                                                 0U,                                                 0U},         /*   PLTDIV4_CLK clock               */
-#endif
-/*   THE_LAST_PRODUCER_CLK clock          */ {0U,                          CLOCK_IP_NO_CALLBACK,         0U,    0U,                                             0U,                                             0U,                           0U},                                           /*   THE_LAST_PRODUCER_CLK clock          */
-/*   ACP_DMA3_H_CLK clock                */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   ACP_DMA3_H_CLK clock            */
-/*   ACP_DMA3_IPG_CLK clock              */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   ACP_DMA3_IPG_CLK clock          */
-/*   ADC0_IPG_CLK clock                  */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   ADC0_IPG_CLK clock              */
-/*   ADC1_IPG_CLK clock                  */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   ADC1_IPG_CLK clock              */
-/*   BCTU_IPG_CLK clock                  */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   BCTU_IPG_CLK clock              */
-/*   BCTU_IPS_CLK clock                  */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   BCTU_IPS_CLK clock              */
-/*   CAN_HUB_IPG_CLK clock               */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   CAN_HUB_IPG_CLK clock           */
-/*   CAN_PE_CLK clock                    */ {CLOCK_IP_MUX_DIV,               CLOCK_IP_SEL_DIV_TYPE,          CLOCK_IP_SEL3_DIV0_CAN_PE_CLK_INDEX,                0U,                                                 0U},         /*   CAN_PE_CLK clock                */
-/*   CLKBIST_IPG_CLK clock               */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   CLKBIST_IPG_CLK clock           */
-/*   CRC0_IPG_CLK clock                  */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   CRC0_IPG_CLK clock              */
-/*   CRC1_IPG_CLK clock                  */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   CRC1_IPG_CLK clock              */
-/*   CSTCU_IPG_CLK clock                 */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   CSTCU_IPG_CLK clock             */
-/*   DIG_PHY0_CLK clock                  */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   DIG_PHY0_CLK clock              */
-/*   DIG_PHY1_CLK clock                  */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   DIG_PHY1_CLK clock              */
-/*   DIG_PHY2_CLK clock                  */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   DIG_PHY2_CLK clock              */
-/*   DIG_PHY3_CLK clock                  */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   DIG_PHY3_CLK clock              */
-/*   DMA_CH_MUX0_IPG_CLK clock           */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   DMA_CH_MUX0_IPG_CLK clock       */
-/*   DMA_CH_MUX1_IPG_CLK clock           */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   DMA_CH_MUX1_IPG_CLK clock       */
-/*   DMA4_AXI_CLK clock                  */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   DMA4_AXI_CLK clock              */
-/*   DMA4_IPG_S_CLK clock                */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   DMA4_IPG_S_CLK clock            */
-/*   DFT_CLK clock                       */ {CLOCK_IP_MUX_DIV,               CLOCK_IP_SEL_DIV_TYPE,          CLOCK_IP_SEL10_DIV0_DFT_CLK_INDEX,                  0U,                                                 0U},         /*   DFT_CLK clock                   */
-/*   DSPI_CLK clock                      */ {CLOCK_IP_MUX_DIV,               CLOCK_IP_SEL_DIV_TYPE,          CLOCK_IP_SEL5_DIV0_DSPI_CLK_INDEX,                  0U,                                                 0U},         /*   DSPI_CLK clock                  */
-/*   DSPI0_IPG_CLK clock                 */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   DSPI0_IPG_CLK clock             */
-/*   DSPI1_IPG_CLK clock                 */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   DSPI1_IPG_CLK clock             */
-/*   EDMA_TCD_CLK clock                  */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   EDMA_TCD_CLK clock              */
-/*   EIM0_IPG_CLK clock                  */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   EIM0_IPG_CLK clock              */
-/*   EIM1_IPG_CLK clock                  */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   EIM1_IPG_CLK clock              */
-/*   EIM2_IPG_CLK clock                  */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   EIM2_IPG_CLK clock              */
-/*   EIM3_IPG_CLK clock                  */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   EIM3_IPG_CLK clock              */
-/*   EMIOS0_IPG_CLK clock                */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   EMIOS0_IPG_CLK clock            */
-/*   EMIOS1_IPG_CLK clock                */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   EMIOS1_IPG_CLK clock            */
-/*   EMIOS2_IPG_CLK clock                */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   EMIOS2_IPG_CLK clock            */
-/*   ERM0_IPG_CLK clock                  */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   ERM0_IPG_CLK clock              */
-/*   ERM1_IPG_CLK clock                  */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   ERM1_IPG_CLK clock              */
-/*   ERM2_IPG_CLK clock                  */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   ERM2_IPG_CLK clock              */
-/*   ERM3_IPG_CLK clock                  */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   ERM3_IPG_CLK clock              */
-/*   ETH_TS_CLK clock                    */ {CLOCK_IP_MUX_DIV,               CLOCK_IP_SEL_DIV_TYPE,          CLOCK_IP_SEL13_DIV0_ETH_TS_CLK_INDEX,               0U,                                                 0U},         /*   ETH_TS_CLK clock                */
-/*   ETH0_RX_CLK clock                   */ {CLOCK_IP_MUX_DIV,               CLOCK_IP_SEL_DIV_TYPE,          CLOCK_IP_SEL3_DIV0_ETH0_RX_CLK_INDEX,               0U,                                                 0U},         /*   ETH0_RX_CLK clock               */
-/*   ETH0_TX_CLK clock                   */ {CLOCK_IP_MUX_DIV,               CLOCK_IP_SEL_DIV_TYPE,          CLOCK_IP_SEL4_DIV0_ETH0_TX_CLK_INDEX,               0U,                                                 0U},         /*   ETH0_TX_CLK clock               */
-/*   ETH1_RX_CLK clock                   */ {CLOCK_IP_MUX_DIV,               CLOCK_IP_SEL_DIV_TYPE,          CLOCK_IP_SEL5_DIV0_ETH1_RX_CLK_INDEX,               0U,                                                 0U},         /*   ETH1_RX_CLK clock               */
-/*   ETH1_TX_CLK clock                   */ {CLOCK_IP_MUX_DIV,               CLOCK_IP_SEL_DIV_TYPE,          CLOCK_IP_SEL6_DIV0_ETH1_TX_CLK_INDEX,               0U,                                                 0U},         /*   ETH1_TX_CLK clock               */
-/*   ETH2_RX_CLK clock                   */ {CLOCK_IP_MUX_DIV,               CLOCK_IP_SEL_DIV_TYPE,          CLOCK_IP_SEL7_DIV0_ETH2_RX_CLK_INDEX,               0U,                                                 0U},         /*   ETH2_RX_CLK clock               */
-/*   ETH2_TX_CLK clock                   */ {CLOCK_IP_MUX_DIV,               CLOCK_IP_SEL_DIV_TYPE,          CLOCK_IP_SEL8_DIV0_ETH2_TX_CLK_INDEX,               0U,                                                 0U},         /*   ETH2_TX_CLK clock               */
-/*   ETH3_RX_CLK clock                   */ {CLOCK_IP_MUX_DIV,               CLOCK_IP_SEL_DIV_TYPE,          CLOCK_IP_SEL11_DIV0_ETH3_RX_CLK_INDEX,              0U,                                                 0U},         /*   ETH3_RX_CLK clock               */
-/*   ETH3_TX_CLK clock                   */ {CLOCK_IP_MUX_DIV,               CLOCK_IP_SEL_DIV_TYPE,          CLOCK_IP_SEL12_DIV0_ETH3_TX_CLK_INDEX,              0U,                                                 0U},         /*   ETH3_TX_CLK clock               */
-/*   ETH4_RX_CLK clock                   */ {CLOCK_IP_MUX_DIV,               CLOCK_IP_SEL_DIV_TYPE,          CLOCK_IP_SEL13_DIV0_ETH4_RX_CLK_INDEX,              0U,                                                 0U},         /*   ETH4_RX_CLK clock               */
-/*   ETH4_TX_CLK clock                   */ {CLOCK_IP_MUX_DIV,               CLOCK_IP_SEL_DIV_TYPE,          CLOCK_IP_SEL14_DIV0_ETH4_TX_CLK_INDEX,              0U,                                                 0U},         /*   ETH4_TX_CLK clock               */
-/*   FLEXCAN_0to7_PE_CLK clock           */ {CLOCK_IP_MUX_DIV,               CLOCK_IP_SEL_DIV_TYPE,          CLOCK_IP_SEL2_DIV0_FLEXCAN_0to7_PE_CLK_INDEX,       0U,                                                 0U},         /*   FLEXCAN_0to7_PE_CLK clock       */
-/*   FLEXCAN_8to10_PE_CLK clock          */ {CLOCK_IP_MUX_DIV,               CLOCK_IP_SEL_DIV_TYPE,          CLOCK_IP_SEL3_DIV0_FLEXCAN_8to10_PE_CLK_INDEX,      0U,                                                 0U},         /*   FLEXCAN_8to10_PE_CLK clock      */
-/*   FLEXCAN_11to16_PE_CLK clock         */ {CLOCK_IP_MUX_DIV,               CLOCK_IP_SEL_DIV_TYPE,          CLOCK_IP_SEL4_DIV0_FLEXCAN_11to16_PE_CLK_INDEX,     0U,                                                 0U},         /*   FLEXCAN_11to16_PE_CLK clock     */
-/*   FLEXCAN0_IPG_CLK clock              */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   FLEXCAN0_IPG_CLK clock          */
-/*   FLEXCAN0_PE_NOGATE_CLK clock        */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   FLEXCAN0_PE_NOGATE_CLK clock    */
-/*   FLEXCAN0_TS_CLK clock               */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   FLEXCAN0_TS_CLK clock           */
-/*   FLEXCAN1_IPG_CLK clock              */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   FLEXCAN1_IPG_CLK clock          */
-/*   FLEXCAN1_PE_NOGATE_CLK clock        */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   FLEXCAN1_PE_NOGATE_CLK clock    */
-/*   FLEXCAN1_TS_CLK clock               */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   FLEXCAN1_TS_CLK clock           */
-/*   FLEXCAN2_IPG_CLK clock              */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   FLEXCAN2_IPG_CLK clock          */
-/*   FLEXCAN2_PE_NOGATE_CLK clock        */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   FLEXCAN2_PE_NOGATE_CLK clock    */
-/*   FLEXCAN2_TS_CLK clock               */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   FLEXCAN2_TS_CLK clock           */
-/*   FLEXCAN3_IPG_CLK clock              */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   FLEXCAN3_IPG_CLK clock          */
-/*   FLEXCAN3_PE_NOGATE_CLK clock        */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   FLEXCAN3_PE_NOGATE_CLK clock    */
-/*   FLEXCAN3_TS_CLK clock               */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   FLEXCAN3_TS_CLK clock           */
-/*   FLEXCAN4_IPG_CLK clock              */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   FLEXCAN4_IPG_CLK clock          */
-/*   FLEXCAN4_PE_NOGATE_CLK clock        */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   FLEXCAN4_PE_NOGATE_CLK clock    */
-/*   FLEXCAN4_TS_CLK clock               */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   FLEXCAN4_TS_CLK clock           */
-/*   FLEXCAN5_IPG_CLK clock              */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   FLEXCAN5_IPG_CLK clock          */
-/*   FLEXCAN5_PE_NOGATE_CLK clock        */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   FLEXCAN5_PE_NOGATE_CLK clock    */
-/*   FLEXCAN5_TS_CLK clock               */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   FLEXCAN5_TS_CLK clock           */
-/*   FLEXCAN6_IPG_CLK clock              */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   FLEXCAN6_IPG_CLK clock          */
-/*   FLEXCAN6_PE_NOGATE_CLK clock        */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   FLEXCAN6_PE_NOGATE_CLK clock    */
-/*   FLEXCAN6_TS_CLK clock               */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   FLEXCAN6_TS_CLK clock           */
-/*   FLEXCAN7_IPG_CLK clock              */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   FLEXCAN7_IPG_CLK clock          */
-/*   FLEXCAN7_PE_NOGATE_CLK clock        */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   FLEXCAN7_PE_NOGATE_CLK clock    */
-/*   FLEXCAN7_TS_CLK clock               */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   FLEXCAN7_TS_CLK clock           */
-/*   FLEXCAN8_IPG_CLK clock              */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   FLEXCAN8_IPG_CLK clock          */
-/*   FLEXCAN8_PE_NOGATE_CLK clock        */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   FLEXCAN8_PE_NOGATE_CLK clock    */
-/*   FLEXCAN8_TS_CLK clock               */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   FLEXCAN8_TS_CLK clock           */
-/*   FLEXCAN9_IPG_CLK clock              */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   FLEXCAN9_IPG_CLK clock          */
-/*   FLEXCAN9_PE_NOGATE_CLK clock        */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   FLEXCAN9_PE_NOGATE_CLK clock    */
-/*   FLEXCAN9_TS_CLK clock               */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   FLEXCAN9_TS_CLK clock           */
-/*   FLEXCAN10_IPG_CLK clock             */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   FLEXCAN10_IPG_CLK clock         */
-/*   FLEXCAN10_PE_NOGATE_CLK clock       */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   FLEXCAN10_PE_NOGATE_CLK clock   */
-/*   FLEXCAN10_TS_CLK clock              */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   FLEXCAN10_TS_CLK clock          */
-/*   FLEXCAN11_IPG_CLK clock             */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   FLEXCAN11_IPG_CLK clock         */
-/*   FLEXCAN11_PE_NOGATE_CLK clock       */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   FLEXCAN11_PE_NOGATE_CLK clock   */
-/*   FLEXCAN11_TS_CLK clock              */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   FLEXCAN11_TS_CLK clock          */
-/*   FLEXCAN12_IPG_CLK clock             */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   FLEXCAN12_IPG_CLK clock         */
-/*   FLEXCAN12_PE_NOGATE_CLK clock       */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   FLEXCAN12_PE_NOGATE_CLK clock   */
-/*   FLEXCAN12_TS_CLK clock              */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   FLEXCAN12_TS_CLK clock          */
-/*   FLEXCAN13_IPG_CLK clock             */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   FLEXCAN13_IPG_CLK clock         */
-/*   FLEXCAN13_PE_NOGATE_CLK clock       */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   FLEXCAN13_PE_NOGATE_CLK clock   */
-/*   FLEXCAN13_TS_CLK clock              */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   FLEXCAN13_TS_CLK clock          */
-/*   FLEXCAN14_IPG_CLK clock             */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   FLEXCAN14_IPG_CLK clock         */
-/*   FLEXCAN14_PE_NOGATE_CLK clock       */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   FLEXCAN14_PE_NOGATE_CLK clock   */
-/*   FLEXCAN14_TS_CLK clock              */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   FLEXCAN14_TS_CLK clock          */
-/*   FLEXCAN15_IPG_CLK clock             */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   FLEXCAN15_IPG_CLK clock         */
-/*   FLEXCAN15_PE_NOGATE_CLK clock       */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   FLEXCAN15_PE_NOGATE_CLK clock   */
-/*   FLEXCAN15_TS_CLK clock              */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   FLEXCAN15_TS_CLK clock          */
-/*   FLEXCAN16_IPG_CLK clock             */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   FLEXCAN16_IPG_CLK clock         */
-/*   FLEXCAN16_PE_NOGATE_CLK clock       */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   FLEXCAN16_PE_NOGATE_CLK clock   */
-/*   FLEXCAN16_TS_CLK clock              */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   FLEXCAN16_TS_CLK clock          */
-/*   FLEXIO_CLK clock                    */ {CLOCK_IP_MUX_DIV,               CLOCK_IP_SEL_DIV_TYPE,          CLOCK_IP_SEL1_DIV0_FLEXIO_CLK_INDEX,                0U,                                                 0U},         /*   FLEXIO_CLK clock                */
-/*   FLEXIO0_IPG_CLK clock               */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   FLEXIO0_IPG_CLK clock           */
-/*   FLEXIO0_PE_CLK clock                */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   FLEXIO0_PE_CLK clock            */
-/*   FLEXIO1_IPG_CLK clock               */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   FLEXIO1_IPG_CLK clock           */
-/*   FLEXIO1_PE_CLK clock                */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   FLEXIO1_PE_CLK clock            */
-/*   GPR0_IPG_CLK clock                  */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   GPR0_IPG_CLK clock              */
-/*   GPR1_IPG_CLK clock                  */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   GPR1_IPG_CLK clock              */
-/*   INTM_IPG_CLK clock                  */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   INTM_IPG_CLK clock              */
-/*   IPSYNC_CSSI_MC_CGM_MASTER_CLK       */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   IPSYNC_CSSI_MC_CGM_MASTER_CLK   */
-/*   IPSYNC_CSSI_MC_CGM_SLAVE_CLK clock  */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   IPSYNC_CSSI_MC_CGM_SLAVE_CLK    */
-/*   IPSYNC_CVFCCU_MASTER_CLK clock      */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   IPSYNC_CVFCCU_MASTER_CLK clock  */
-/*   IPSYNC_CVFCCU_SLAVE_CLK clock       */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   IPSYNC_CVFCCU_SLAVE_CLK clock   */
-/*   IPSYNC_DSPI_IPI_0_MASTER_CLK clock  */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   IPSYNC_DSPI_IPI_0_MASTER_CLK    */
-/*   IPSYNC_DSPI_IPI_1_MASTER_CLK clock  */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   IPSYNC_DSPI_IPI_1_MASTER_CLK    */
-/*   IPSYNC_LPE_D_IP_FLEXCAN3_SYN_MASTER_CLK */ {CLOCK_IP_GATE,              CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   IPSYNC_LPE_D_IP_FLEXCAN3_SYN_MASTER_CLK */
-/*   IPSYNC_LPE_D_IP_FLEXCAN3_SYN_SLAVE_CLK */ {CLOCK_IP_GATE,               CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   IPSYNC_LPE_D_IP_FLEXCAN3_SYN_SLAVE_CLK */
-/*   IPSYNC_LPE_D_IP_LOGIC_UNIT_SYN_MASTER_CLK */ {CLOCK_IP_GATE,            CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   IPSYNC_LPE_D_IP_LOGIC_UNIT_SYN_MASTER_CLK */
-/*   IPSYNC_LPE_D_IP_LOGIC_UNIT_SYN_SLAVE_CLK */ {CLOCK_IP_GATE,             CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   IPSYNC_LPE_D_IP_LOGIC_UNIT_SYN_SLAVE_CLK */
-/*   IPSYNC_LPE_DA_IP_TEMPSENSE_C16FFC_MASTER_CLK */ {CLOCK_IP_GATE,         CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   IPSYNC_LPE_DA_IP_TEMPSENSE_C16FFC_MASTER_CLK */
-/*   IPSYNC_LPE_DA_IP_TEMPSENSE_C16FFC_SLAVE_CLK */ {CLOCK_IP_GATE,          CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   IPSYNC_LPE_DA_IP_TEMPSENSE_C16FFC_SLAVE_CLK */
-/*   IPSYNC_LPE_LVFCCU_MASTER_CLK clock  */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   IPSYNC_LPE_LVFCCU_MASTER_CLK    */
-/*   IPSYNC_LPE_LVFCCU_SLAVE_CLK clock   */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   IPSYNC_LPE_LVFCCU_SLAVE_CLK     */
-/*   IPSYNC_LPE_MC_CGM_MASTER_CLK clock  */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   IPSYNC_LPE_MC_CGM_MASTER_CLK    */
-/*   IPSYNC_LPE_MC_CGM_SLAVE_CLK clock   */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   IPSYNC_LPE_MC_CGM_SLAVE_CLK     */
-/*   IPSYNC_LPE_MC_RGM_MASTER_CLK clock  */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   IPSYNC_LPE_MC_RGM_MASTER_CLK    */
-/*   IPSYNC_LPE_MC_RGM_SLAVE_CLK clock   */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   IPSYNC_LPE_MC_RGM_SLAVE_CLK     */
-/*   IPSYNC_LPE_STM_MASTER_CLK clock     */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   IPSYNC_LPE_STM_MASTER_CLK       */
-/*   IPSYNC_LPE_STM_SLAVE_CLK clock      */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   IPSYNC_LPE_STM_SLAVE_CLK clock  */
-/*   IPSYNC_LVFCCU0_MASTER_CLK clock     */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   IPSYNC_LVFCCU0_MASTER_CLK       */
-/*   IPSYNC_LVFCCU0_SLAVE_CLK clock      */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   IPSYNC_LVFCCU0_SLAVE_CLK clock  */
-/*   IPSYNC_LVFCCU1_MASTER_CLK clock     */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   IPSYNC_LVFCCU1_MASTER_CLK       */
-/*   IPSYNC_LVFCCU1_SLAVE_CLK clock      */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   IPSYNC_LVFCCU1_SLAVE_CLK clock  */
-/*   IPSYNC_LVFCCU2_MASTER_CLK clock     */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   IPSYNC_LVFCCU2_MASTER_CLK       */
-/*   IPSYNC_LVFCCU2_SLAVE_CLK clock      */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   IPSYNC_LVFCCU2_SLAVE_CLK clock  */
-/*   IPSYNC_MC_CGM_MASTER_CLK clock      */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   IPSYNC_MC_CGM_MASTER_CLK clock  */
-/*   IPSYNC_MC_CGM_SLAVE_CLK clock       */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   IPSYNC_MC_CGM_SLAVE_CLK clock   */
-/*   IPSYNC_NETC_MC_CGM_MASTER_CLK       */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   IPSYNC_NETC_MC_CGM_MASTER_CLK   */
-/*   IPSYNC_NETC_MC_CGM_SLAVE_CLK clock  */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   IPSYNC_NETC_MC_CGM_SLAVE_CLK    */
-/*   IPSYNC_PERI_MC_CGM_MASTER_CLK       */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   IPSYNC_PERI_MC_CGM_MASTER_CLK   */
-/*   IPSYNC_PERI_MC_CGM_SLAVE_CLK clock  */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   IPSYNC_PERI_MC_CGM_SLAVE_CLK    */
-/*   IPSYNC_SAI0_MC_CGM_MASTER_CLK       */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   IPSYNC_SAI0_MC_CGM_MASTER_CLK   */
-/*   IPSYNC_SAI0_MC_CGM_SLAVE_CLK clock  */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   IPSYNC_SAI0_MC_CGM_SLAVE_CLK    */
-/*   IPSYNC_SAI1_MC_CGM_MASTER_CLK       */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   IPSYNC_SAI1_MC_CGM_MASTER_CLK   */
-/*   IPSYNC_SAI1_MC_CGM_SLAVE_CLK clock  */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   IPSYNC_SAI1_MC_CGM_SLAVE_CLK    */
-/*   IPSYNC_STM0_MASTER_CLK clock        */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   IPSYNC_STM0_MASTER_CLK clock    */
-/*   IPSYNC_STM0_SLAVE_CLK clock         */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   IPSYNC_STM0_SLAVE_CLK clock     */
-/*   IPSYNC_STM1_MASTER_CLK clock        */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   IPSYNC_STM1_MASTER_CLK clock    */
-/*   IPSYNC_STM1_SLAVE_CLK clock         */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   IPSYNC_STM1_SLAVE_CLK clock     */
-/*   IPSYNC_STM2_MASTER_CLK clock        */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   IPSYNC_STM2_MASTER_CLK clock    */
-/*   IPSYNC_STM2_SLAVE_CLK clock         */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   IPSYNC_STM2_SLAVE_CLK clock     */
-/*   IPSYNC_STM3_MASTER_CLK clock        */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   IPSYNC_STM3_MASTER_CLK clock    */
-/*   IPSYNC_STM3_SLAVE_CLK clock         */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   IPSYNC_STM3_SLAVE_CLK clock     */
-/*   IPSYNC_XSPI_MASTER_CLK clock        */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   IPSYNC_XSPI_MASTER_CLK clock    */
-/*   IPSYNC_XSPI_SLAVE_CLK clock         */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   IPSYNC_XSPI_SLAVE_CLK clock     */
-/*   LCU0_IPG_CLK clock                  */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   LCU0_IPG_CLK clock              */
-/*   LCU1_IPG_CLK clock                  */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   LCU1_IPG_CLK clock              */
-/*   LMEM_HCLK_CLK clock                 */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   LMEM_HCLK_CLK clock             */
-/*   LPE_ADC_IPG_CLK clock               */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   LPE_ADC_IPG_CLK clock           */
-/*   LPE_BCTU_IPG_CLK clock              */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   LPE_BCTU_IPG_CLK clock          */
-/*   LPE_BCTU_IPG_CLK_S clock            */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   LPE_BCTU_IPG_CLK_S clock        */
-/*   LPE_CMU_IPG_CLK clock               */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   LPE_CMU_IPG_CLK clock           */
-/*   LPE_CRC_IPG_CLK clock               */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   LPE_CRC_IPG_CLK clock           */
-/*   LPE_CXPI_PE_CLK clock               */ {CLOCK_IP_MUX_DIV,               CLOCK_IP_SEL_DIV_TYPE,          CLOCK_IP_SEL6_DIV0_LPE_CXPI_PE_CLK_INDEX,           0U,                                                 0U},         /*   LPE_CXPI_PE_CLK clock           */
-/*   LPE_CXPI0_IPG_CLK clock             */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   LPE_CXPI0_IPG_CLK clock         */
-/*   LPE_CXPI0_PE_CLK clock              */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   LPE_CXPI0_PE_CLK clock          */
-/*   LPE_CXPI1_IPG_CLK clock             */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   LPE_CXPI1_IPG_CLK clock         */
-/*   LPE_CXPI1_PE_CLK clock              */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   LPE_CXPI1_PE_CLK clock          */
-/*   LPE_DIV1_UNGATED_CLK clock          */ {CLOCK_IP_DIV,                   CLOCK_IP_DIV_TYPE,              CLOCK_IP_SEL6_DIV0_LPE_DIV1_UNGATED_CLK_INDEX,      0U,                                                 0U},         /*   LPE_DIV1_UNGATED_CLK clock      */
-/*   LPE_DIV2_UNGATED_CLK clock          */ {CLOCK_IP_DIV,                   CLOCK_IP_DIV_TYPE,              CLOCK_IP_SEL6_DIV0_LPE_DIV2_UNGATED_CLK_INDEX,      0U,                                                 0U},         /*   LPE_DIV2_UNGATED_CLK clock      */
-/*   LPE_DIV3_UNGATED_CLK clock          */ {CLOCK_IP_DIV,                   CLOCK_IP_DIV_TYPE,              CLOCK_IP_SEL6_DIV0_LPE_DIV3_UNGATED_CLK_INDEX,      0U,                                                 0U},         /*   LPE_DIV3_UNGATED_CLK clock      */
-/*   LPE_DIV4_UNGATED_CLK clock          */ {CLOCK_IP_DIV,                   CLOCK_IP_DIV_TYPE,              CLOCK_IP_SEL6_DIV0_LPE_DIV4_UNGATED_CLK_INDEX,      0U,                                                 0U},         /*   LPE_DIV4_UNGATED_CLK clock      */
-/*   LPE_DMA_CH_MUX_IPG_CLK clock        */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   LPE_DMA_CH_MUX_IPG_CLK clock    */
-/*   LPE_EIM_IPG_CLK clock               */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   LPE_EIM_IPG_CLK clock           */
-/*   LPE_FIRC_IPG_CLK clock              */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   LPE_FIRC_IPG_CLK clock          */
-/*   LPE_FLEXCAN_MOD_CLK clock           */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   LPE_FLEXCAN_MOD_CLK clock       */
-/*   LPE_FLEXCAN_PE_CLK clock            */ {CLOCK_IP_MUX_DIV,               CLOCK_IP_SEL_DIV_TYPE,          CLOCK_IP_SEL4_DIV0_LPE_FLEXCAN_PE_CLK_INDEX,        0U,                                                 0U},         /*   LPE_FLEXCAN_PE_CLK clock        */
-/*   LPE_FTM_IPG_CLK clock               */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   LPE_FTM_IPG_CLK clock           */
-/*   LPE_FXOSC_IPG_CLK clock             */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   LPE_FXOSC_IPG_CLK clock         */
-/*   LPE_GPR0_IPG_CLK clock              */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   LPE_GPR0_IPG_CLK clock          */
-/*   LPE_GPR1_IPG_CLK clock              */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   LPE_GPR1_IPG_CLK clock          */
-/*   LPE_LCU_IPG_CLK clock               */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   LPE_LCU_IPG_CLK clock           */
-/*   LPE_LPCMP0_IPG_CLK clock            */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   LPE_LPCMP0_IPG_CLK clock        */
-/*   LPE_LPCMP0_RR_CLK clock             */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   LPE_LPCMP0_RR_CLK clock         */
-/*   LPE_LPCMP0_SAMPLE_GATED_CLK clock   */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   LPE_LPCMP0_SAMPLE_GATED_CLK     */
-/*   LPE_LPCMP1_IPG_CLK clock            */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   LPE_LPCMP1_IPG_CLK clock        */
-/*   LPE_LPCMP1_RR_CLK clock             */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   LPE_LPCMP1_RR_CLK clock         */
-/*   LPE_LPCMP1_SAMPLE_GATED_CLK clock   */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   LPE_LPCMP1_SAMPLE_GATED_CLK     */
-/*   LPE_LPCMP2_IPG_CLK clock            */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   LPE_LPCMP2_IPG_CLK clock        */
-/*   LPE_LPCMP2_RR_CLK clock             */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   LPE_LPCMP2_RR_CLK clock         */
-/*   LPE_LPCMP2_SAMPLE_GATED_CLK clock   */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   LPE_LPCMP2_SAMPLE_GATED_CLK     */
-/*   LPE_LPI2C_CLK clock                 */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   LPE_LPI2C_CLK clock             */
-/*   LPE_LPI2C_IPG_CLK clock             */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   LPE_LPI2C_IPG_CLK clock         */
-/*   LPE_LPI2C_MOD_CLK clock             */ {CLOCK_IP_MUX_DIV,               CLOCK_IP_SEL_DIV_TYPE,          CLOCK_IP_SEL3_DIV0_LPE_LPI2C_MOD_CLK_INDEX,         0U,                                                 0U},         /*   LPE_LPI2C_MOD_CLK clock         */
-/*   LPE_LPSPI_MOD_CLK clock             */ {CLOCK_IP_MUX_DIV,               CLOCK_IP_SEL_DIV_TYPE,          CLOCK_IP_SEL1_DIV0_LPE_LPSPI_MOD_CLK_INDEX,         0U,                                                 0U},         /*   LPE_LPSPI_MOD_CLK clock         */
-/*   LPE_LPSPI0_CLK clock                */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   LPE_LPSPI0_CLK clock            */
-/*   LPE_LPSPI0_IPG_CLK clock            */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   LPE_LPSPI0_IPG_CLK clock        */
-/*   LPE_LPSPI1_CLK clock                */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   LPE_LPSPI1_CLK clock            */
-/*   LPE_LPSPI1_IPG_CLK clock            */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   LPE_LPSPI1_IPG_CLK clock        */
-/*   LPE_LPUART_MOD_CLK clock            */ {CLOCK_IP_MUX_DIV,               CLOCK_IP_SEL_DIV_TYPE,          CLOCK_IP_SEL2_DIV0_LPE_LPUART_MOD_CLK_INDEX,        0U,                                                 0U},         /*   LPE_LPUART_MOD_CLK clock        */
-/*   LPE_LPUART0_CLK clock               */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   LPE_LPUART0_CLK clock           */
-/*   LPE_LPUART0_pCLK clock              */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   LPE_LPUART0_pCLK clock          */
-/*   LPE_LPUART1_CLK clock               */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   LPE_LPUART1_CLK clock           */
-/*   LPE_LPUART1_pCLK clock              */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   LPE_LPUART1_pCLK clock          */
-/*   LPE_LPUART2_CLK clock               */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   LPE_LPUART2_CLK clock           */
-/*   LPE_LPUART2_pCLK clock              */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   LPE_LPUART2_pCLK clock          */
-/*   LPE_LSTCU_IPG_CLK clock             */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   LPE_LSTCU_IPG_CLK clock         */
-/*   LPE_PIT_RTI_IPG_CLK_OSC_RTI clock   */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   LPE_PIT_RTI_IPG_CLK_OSC_RTI     */
-/*   LPE_PIT_RTI_IPG_CLK_SYNC clock      */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   LPE_PIT_RTI_IPG_CLK_SYNC clock  */
-/*   LPE_RTC_API_FIRC_CLK clock          */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   LPE_RTC_API_FIRC_CLK clock      */
-/*   LPE_RTC_API_FXOSC_CLK clock         */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   LPE_RTC_API_FXOSC_CLK clock     */
-/*   LPE_RTC_API_IPG_CLK clock           */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   LPE_RTC_API_IPG_CLK clock       */
-/*   LPE_RTC_API_SIRC_CLK clock          */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   LPE_RTC_API_SIRC_CLK clock      */
-/*   LPE_RTC_API_SXOSC_CLK clock         */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   LPE_RTC_API_SXOSC_CLK clock     */
-/*   LPE_SEMA42_CLK clock                */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   LPE_SEMA42_CLK clock            */
-/*   LPE_STM_CLK clock                   */ {CLOCK_IP_MUX_DIV,               CLOCK_IP_SEL_DIV_TYPE,          CLOCK_IP_SEL5_DIV0_LPE_STM_CLK_INDEX,               0U,                                                 0U},         /*   LPE_STM_CLK clock               */
-/*   LPE_STM_IPG_CLK clock               */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   LPE_STM_IPG_CLK clock           */
-/*   LPE_SWT_COUNTER_IP_CLK clock        */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   LPE_SWT_COUNTER_IP_CLK clock    */
-/*   LPE_SWT_IPG_CLK clock               */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   LPE_SWT_IPG_CLK clock           */
-/*   LPE_SXOSC_IPG_CLK clock             */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   LPE_SXOSC_IPG_CLK clock         */
-/*   LPE_TRGMUX_IPG_CLK clock            */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   LPE_TRGMUX_IPG_CLK clock        */
-/*   LPE_TSPC_IPG_CLK clock              */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   LPE_TSPC_IPG_CLK clock          */
-/*   LPE_TSU_NS_IPG_CLK clock            */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   LPE_TSU_NS_IPG_CLK clock        */
-/*   LPE_UNGATED_CLK clock               */ {CLOCK_IP_MUX_PCFS_CMU,          CLOCK_IP_SEL_CMU_TYPE,          CLOCK_IP_SEL6_NODIV_LPE_UNGATED_CLK_INDEX,          0U,                                                 0U},         /*   LPE_UNGATED_CLK clock           */
-/*   LPE_VIRT_IPG_CLK clock              */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   LPE_VIRT_IPG_CLK clock          */
-/*   LPE_WKPU_IPG_CLK clock              */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   LPE_WKPU_IPG_CLK clock          */
-/*   LPE_WKPU_IPG_CLK_S clock            */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   LPE_WKPU_IPG_CLK_S clock        */
-/*   LPI2C0_CLK clock                    */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   LPI2C0_CLK clock                */
-/*   LPI2C1_CLK clock                    */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   LPI2C1_CLK clock                */
-/*   LPI2C2_CLK clock                    */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   LPI2C2_CLK clock                */
-/*   LPI2C3_CLK clock                    */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   LPI2C3_CLK clock                */
-/*   LPSPI0_CLK clock                    */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   LPSPI0_CLK clock                */
-/*   LPSPI1_CLK clock                    */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   LPSPI1_CLK clock                */
-/*   LPSPI2_CLK clock                    */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   LPSPI2_CLK clock                */
-/*   LPSPI3_CLK clock                    */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   LPSPI3_CLK clock                */
-/*   LPSPI4_CLK clock                    */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   LPSPI4_CLK clock                */
-/*   LPSPI5_CLK clock                    */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   LPSPI5_CLK clock                */
-/*   LPSPI6_CLK clock                    */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   LPSPI6_CLK clock                */
-/*   LPSPI7_CLK clock                    */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   LPSPI7_CLK clock                */
-/*   LPUART_MSC_CLK clock                */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   LPUART_MSC_CLK clock            */
-/*   LPUART_MSC_pCLK clock               */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   LPUART_MSC_pCLK clock           */
-/*   LPUART0_CLK clock                   */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   LPUART0_CLK clock               */
-/*   LPUART0_pCLK clock                  */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   LPUART0_pCLK clock              */
-/*   LPUART1_CLK clock                   */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   LPUART1_CLK clock               */
-/*   LPUART1_pCLK clock                  */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   LPUART1_pCLK clock              */
-/*   LPUART2_CLK clock                   */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   LPUART2_CLK clock               */
-/*   LPUART2_pCLK clock                  */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   LPUART2_pCLK clock              */
-/*   LPUART3_CLK clock                   */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   LPUART3_CLK clock               */
-/*   LPUART3_pCLK clock                  */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   LPUART3_pCLK clock              */
-/*   LPUART4_CLK clock                   */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   LPUART4_CLK clock               */
-/*   LPUART4_pCLK clock                  */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   LPUART4_pCLK clock              */
-/*   LPUART5_CLK clock                   */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   LPUART5_CLK clock               */
-/*   LPUART5_pCLK clock                  */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   LPUART5_pCLK clock              */
-/*   LPUART6_CLK clock                   */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   LPUART6_CLK clock               */
-/*   LPUART6_pCLK clock                  */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   LPUART6_pCLK clock              */
-/*   LPUART7_CLK clock                   */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   LPUART7_CLK clock               */
-/*   LPUART7_pCLK clock                  */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   LPUART7_pCLK clock              */
-/*   LPUART8_CLK clock                   */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   LPUART8_CLK clock               */
-/*   LPUART8_pCLK clock                  */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   LPUART8_pCLK clock              */
-/*   LPUART9_CLK clock                   */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   LPUART9_CLK clock               */
-/*   LPUART9_pCLK clock                  */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   LPUART9_pCLK clock              */
-/*   LPUART10_CLK clock                  */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   LPUART10_CLK clock              */
-/*   LPUART10_pCLK clock                 */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   LPUART10_pCLK clock             */
-/*   LPUART11_CLK clock                  */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   LPUART11_CLK clock              */
-/*   LPUART11_pCLK clock                 */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   LPUART11_pCLK clock             */
-/*   LPUART12_CLK clock                  */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   LPUART12_CLK clock              */
-/*   LPUART12_pCLK clock                 */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   LPUART12_pCLK clock             */
-/*   LPUART13_CLK clock                  */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   LPUART13_CLK clock              */
-/*   LPUART13_pCLK clock                 */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   LPUART13_pCLK clock             */
-/*   LPUART14_CLK clock                  */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   LPUART14_CLK clock              */
-/*   LPUART14_pCLK clock                 */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   LPUART14_pCLK clock             */
-/*   LPUART15_CLK clock                  */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   LPUART15_CLK clock              */
-/*   LPUART15_pCLK clock                 */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   LPUART15_pCLK clock             */
-/*   LPUART16_CLK clock                  */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   LPUART16_CLK clock              */
-/*   LPUART16_pCLK clock                 */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   LPUART16_pCLK clock             */
-/*   LPUART17_CLK clock                  */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   LPUART17_CLK clock              */
-/*   LPUART17_pCLK clock                 */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   LPUART17_pCLK clock             */
-/*   LPUART18_CLK clock                  */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   LPUART18_CLK clock              */
-/*   LPUART18_pCLK clock                 */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   LPUART18_pCLK clock             */
-/*   LPUART19_CLK clock                  */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   LPUART19_CLK clock              */
-/*   LPUART19_pCLK clock                 */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   LPUART19_pCLK clock             */
-/*   LPUART20_CLK clock                  */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   LPUART20_CLK clock              */
-/*   LPUART20_pCLK clock                 */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   LPUART20_pCLK clock             */
-/*   LSTCU_ACCEL_IPG_CLK clock           */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   LSTCU_ACCEL_IPG_CLK clock       */
-/*   LSTCU_CORE0_IPG_CLK clock           */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   LSTCU_CORE0_IPG_CLK clock       */
-/*   LSTCU_CORE12_IPG_CLK clock          */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   LSTCU_CORE12_IPG_CLK clock      */
-/*   LSTCU_CORE3_IPG_CLK clock           */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   LSTCU_CORE3_IPG_CLK clock       */
-/*   LSTCU_HSPI_IPG_CLK clock            */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   LSTCU_HSPI_IPG_CLK clock        */
-/*   LSTCU_NETC_IPG_CLK clock            */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   LSTCU_NETC_IPG_CLK clock        */
-/*   LSTCU_PBRIDGE1_IPG_CLK clock        */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   LSTCU_PBRIDGE1_IPG_CLK clock    */
-/*   LSTCU_PBRIDGE3_IPG_CLK clock        */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   LSTCU_PBRIDGE3_IPG_CLK clock    */
-/*   LSTCU_PBRIDGE4_IPG_CLK clock        */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   LSTCU_PBRIDGE4_IPG_CLK clock    */
-/*   LSTCU_REST_IPG_CLK clock            */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   LSTCU_REST_IPG_CLK clock        */
-/*   MRAM_IPG_CLK clock                  */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   MRAM_IPG_CLK clock              */
-/*   MRAMC_IPG_CLK clock                 */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   MRAMC_IPG_CLK clock             */
-/*   MRAMC_IPG_CLK_S clock               */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   MRAMC_IPG_CLK_S clock           */
-/*   MSCM_IPG_CLK clock                  */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   MSCM_IPG_CLK clock              */
-/*   MSGINTR0_APB_CLK clock              */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   MSGINTR0_APB_CLK clock          */
-/*   MSGINTR1_APB_CLK clock              */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   MSGINTR1_APB_CLK clock          */
-/*   MSGINTR2_APB_CLK clock              */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   MSGINTR2_APB_CLK clock          */
-/*   MSGINTR3_APB_CLK clock              */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   MSGINTR3_APB_CLK clock          */
-/*   MSGINTR4_APB_CLK clock              */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   MSGINTR4_APB_CLK clock          */
-/*   MSGINTR5_APB_CLK clock              */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   MSGINTR5_APB_CLK clock          */
-/*   MSGINTR6_APB_CLK clock              */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   MSGINTR6_APB_CLK clock          */
-/*   MSGINTR7_APB_CLK clock              */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   MSGINTR7_APB_CLK clock          */
-/*   PERI_HIGH_SPEED_REST_USDHC_CLK      */ {CLOCK_IP_MUX_DIV,               CLOCK_IP_SEL_DIV_TYPE,          CLOCK_IP_SEL1_DIV0_PERI_HIGH_SPEED_REST_USDHC_CLK_INDEX, 0U,                                            0U},         /*   PERI_HIGH_SPEED_REST_USDHC_CLK  */
-/*   PERI_HIGH_SPEED_REST_XSPI_CLK       */ {CLOCK_IP_MUX_DIV,               CLOCK_IP_SEL_DIV_TYPE,          CLOCK_IP_SEL2_DIV0_PERI_HIGH_SPEED_REST_XSPI_CLK_INDEX, 0U,                                             0U},         /*   PERI_HIGH_SPEED_REST_XSPI_CLK   */
-/*   PERI_HIGH_SPEED_TRACE_CLK clock     */ {CLOCK_IP_MUX_DIV,               CLOCK_IP_SEL_DIV_TYPE,          CLOCK_IP_SEL4_DIV0_PERI_HIGH_SPEED_TRACE_CLK_INDEX, 0U,                                                 0U},         /*   PERI_HIGH_SPEED_TRACE_CLK       */
-/*   PHY_ETH_CLK clock                   */ {CLOCK_IP_MUX_DIV,               CLOCK_IP_SEL_DIV_TYPE,          CLOCK_IP_SEL1_DIV0_PHY_ETH_CLK_INDEX,               0U,                                                 0U},         /*   PHY_ETH_CLK clock               */
-/*   PIT0_IPG_CLK_OSC clock              */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   PIT0_IPG_CLK_OSC clock          */
-/*   PIT0_IPG_CLK_SYNC clock             */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   PIT0_IPG_CLK_SYNC clock         */
-/*   PIT1_IPG_CLK_OSC clock              */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   PIT1_IPG_CLK_OSC clock          */
-/*   PIT1_IPG_CLK_SYNC clock             */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   PIT1_IPG_CLK_SYNC clock         */
-/*   PIT2_IPG_CLK_OSC clock              */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   PIT2_IPG_CLK_OSC clock          */
-/*   PIT2_IPG_CLK_SYNC clock             */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   PIT2_IPG_CLK_SYNC clock         */
-/*   PIT3_IPG_CLK_OSC clock              */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   PIT3_IPG_CLK_OSC clock          */
-/*   PIT3_IPG_CLK_SYNC clock             */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   PIT3_IPG_CLK_SYNC clock         */
-/*   POST_IPG_CLK clock                  */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   POST_IPG_CLK clock              */
-/*   RR_RTC_CLK clock                    */ {CLOCK_IP_MUX_RTC,               CLOCK_IP_SEL_TYPE,              CLOCK_IP_SEL0_NODIV_RR_RTC_CLK_INDEX,               0U,                                                 0U},         /*   RR_RTC_CLK clock                */
-/*   RXLUT_ERM_CLK clock                 */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   RXLUT_ERM_CLK clock             */
-/*   RXLUT_IPG_CLK clock                 */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   RXLUT_IPG_CLK clock             */
-/*   SAI0_MCLK clock                     */ {CLOCK_IP_MUX_DIV,               CLOCK_IP_SEL_DIV_TYPE,          CLOCK_IP_SEL0_DIV0_SAI0_MCLK_INDEX,                 0U,                                                 0U},         /*   SAI0_MCLK clock                 */
-/*   SAI0_IO_MCLK clock                  */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   SAI0_IO_MCLK clock              */
-/*   SAI0_IPG_CLK clock                  */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   SAI0_IPG_CLK clock              */
-/*   SAI1_IO_MCLK clock                  */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   SAI1_IO_MCLK clock              */
-/*   SAI1_IPG_CLK clock                  */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   SAI1_IPG_CLK clock              */
-/*   SAI1_MCLK clock                     */ {CLOCK_IP_MUX_DIV,               CLOCK_IP_SEL_DIV_TYPE,          CLOCK_IP_SEL0_DIV0_SAI1_MCLK_INDEX,                 0U,                                                 0U},         /*   SAI1_MCLK clock                 */
-/*   SDHC_IPG_CLK clock                  */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   SDHC_IPG_CLK clock              */
-/*   SDHC_PER_CLK clock                  */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   SDHC_PER_CLK clock              */
-/*   SEMA42_IPG_CLK clock                */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   SEMA42_IPG_CLK clock            */
-/*   SERDES_ALT_REF_CLK clock            */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   SERDES_ALT_REF_CLK clock        */
-/*   SERDES_AUX_CLK clock                */ {CLOCK_IP_MUX_DIV,               CLOCK_IP_SEL_DIV_TYPE,          CLOCK_IP_SEL9_DIV0_SERDES_AUX_CLK_INDEX,            0U,                                                 0U},         /*   SERDES_AUX_CLK clock            */
-/*   SERDES_REF_CLK clock                */ {CLOCK_IP_MUX_DIV,               CLOCK_IP_SEL_DIV_TYPE,          CLOCK_IP_SEL10_DIV0_SERDES_REF_CLK_INDEX,           0U,                                                 0U},         /*   SERDES_REF_CLK clock            */
-/*   SINC_IPG_CLK clock                  */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   SINC_IPG_CLK clock              */
-/*   SOG_REST_CMU_IPG_CLK clock          */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   SOG_REST_CMU_IPG_CLK clock      */
-/*   SRC_FIRC_CLK clock                  */ {CLOCK_IP_NO_CALLBACK,           0U,                             0U,                                                 0U,                                                 0U},         /*   SRC_FIRC_CLK clock              */
-/*   SRC_FIRCDIV2_CLK clock              */ {CLOCK_IP_NO_CALLBACK,           0U,                             0U,                                                 0U,                                                 0U},         /*   SRC_FIRCDIV2_CLK clock          */
-/*   SRC_FXOSC_CLK clock                 */ {CLOCK_IP_NO_CALLBACK,           0U,                             0U,                                                 0U,                                                 0U},         /*   SRC_FXOSC_CLK clock             */
-/*   SRC_LPE_CLK clock                   */ {CLOCK_IP_NO_CALLBACK,           0U,                             0U,                                                 0U,                                                 0U},         /*   SRC_LPE_CLK clock               */
-/*   SRC_LPE_DIV1_CLK clock              */ {CLOCK_IP_NO_CALLBACK,           0U,                             0U,                                                 0U,                                                 0U},         /*   SRC_LPE_DIV1_CLK clock          */
-/*   SRC_LPE_DIV2_CLK clock              */ {CLOCK_IP_NO_CALLBACK,           0U,                             0U,                                                 0U,                                                 0U},         /*   SRC_LPE_DIV2_CLK clock          */
-/*   SRC_LPE_DIV4_CLK clock              */ {CLOCK_IP_NO_CALLBACK,           0U,                             0U,                                                 0U,                                                 0U},         /*   SRC_LPE_DIV4_CLK clock          */
-/*   SRC_LPE_DIV8_CLK clock              */ {CLOCK_IP_NO_CALLBACK,           0U,                             0U,                                                 0U,                                                 0U},         /*   SRC_LPE_DIV8_CLK clock          */
-/*   SRC_PLT_CLK clock                   */ {CLOCK_IP_NO_CALLBACK,           0U,                             0U,                                                 0U,                                                 0U},         /*   SRC_PLT_CLK clock               */
-/*   SRC_PLTCORE_CLK clock               */ {CLOCK_IP_NO_CALLBACK,           0U,                             0U,                                                 0U,                                                 0U},         /*   SRC_PLTCORE_CLK clock           */
-/*   SRC_PLTDIV1_CLK clock               */ {CLOCK_IP_NO_CALLBACK,           0U,                             0U,                                                 0U,                                                 0U},         /*   SRC_PLTDIV1_CLK clock           */
-/*   SRC_PLTDIV2_CLK clock               */ {CLOCK_IP_NO_CALLBACK,           0U,                             0U,                                                 0U,                                                 0U},         /*   SRC_PLTDIV2_CLK clock           */
-/*   SRC_PLTDIV4_CLK clock               */ {CLOCK_IP_NO_CALLBACK,           0U,                             0U,                                                 0U,                                                 0U},         /*   SRC_PLTDIV4_CLK clock           */
-/*   SRC_SIRC_CLK clock                  */ {CLOCK_IP_NO_CALLBACK,           0U,                             0U,                                                 0U,                                                 0U},         /*   SRC_SIRC_CLK clock              */
-/*   SRC_SXOSC_CLK clock                 */ {CLOCK_IP_NO_CALLBACK,           0U,                             0U,                                                 0U,                                                 0U},         /*   SRC_SXOSC_CLK clock             */
-/*   SRAM0_CONTROLLER_IPS_CLK clock      */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   SRAM0_CONTROLLER_IPS_CLK clock  */
-/*   SRAM1_CONTROLLER_IPS_CLK clock      */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   SRAM1_CONTROLLER_IPS_CLK clock  */
-/*   SRAM2_CONTROLLER_IPS_CLK clock      */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   SRAM2_CONTROLLER_IPS_CLK clock  */
-/*   STAM_CLK clock                      */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   STAM_CLK clock                  */
-/*   STM0_CLK clock                      */ {CLOCK_IP_MUX_DIV,               CLOCK_IP_SEL_DIV_TYPE,          CLOCK_IP_SEL6_DIV0_STM0_CLK_INDEX,                  0U,                                                 0U},         /*   STM0_CLK clock                  */
-/*   STM0_IPG_CLK clock                  */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   STM0_IPG_CLK clock              */
-/*   STM1_CLK clock                      */ {CLOCK_IP_MUX_DIV,               CLOCK_IP_SEL_DIV_TYPE,          CLOCK_IP_SEL7_DIV0_STM1_CLK_INDEX,                  0U,                                                 0U},         /*   STM1_CLK clock                  */
-/*   STM1_IPG_CLK clock                  */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   STM1_IPG_CLK clock              */
-/*   STM2_CLK clock                      */ {CLOCK_IP_MUX_DIV,               CLOCK_IP_SEL_DIV_TYPE,          CLOCK_IP_SEL8_DIV0_STM2_CLK_INDEX,                  0U,                                                 0U},         /*   STM2_CLK clock                  */
-/*   STM2_IPG_CLK clock                  */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   STM2_IPG_CLK clock              */
-/*   STM3_CLK clock                      */ {CLOCK_IP_MUX_DIV,               CLOCK_IP_SEL_DIV_TYPE,          CLOCK_IP_SEL9_DIV0_STM3_CLK_INDEX,                  0U,                                                 0U},         /*   STM3_CLK clock                  */
-/*   STM3_IPG_CLK clock                  */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   STM3_IPG_CLK clock              */
-/*   SWT_STARTUP_IPG_CLK clock           */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   SWT_STARTUP_IPG_CLK clock       */
-/*   SWT_STARTUP_IPG_COUNTER_CLK clock   */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   SWT_STARTUP_IPG_COUNTER_CLK     */
-/*   SWT0_IPG_CLK clock                  */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   SWT0_IPG_CLK clock              */
-/*   SWT0_IPG_COUNTER_CLK clock          */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   SWT0_IPG_COUNTER_CLK clock      */
-/*   SWT1_IPG_CLK clock                  */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   SWT1_IPG_CLK clock              */
-/*   SWT1_IPG_COUNTER_CLK clock          */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   SWT1_IPG_COUNTER_CLK clock      */
-/*   SWT2_IPG_CLK clock                  */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   SWT2_IPG_CLK clock              */
-/*   SWT2_IPG_COUNTER_CLK clock          */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   SWT2_IPG_COUNTER_CLK clock      */
-/*   SWT3_IPG_CLK clock                  */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   SWT3_IPG_CLK clock              */
-/*   SWT3_IPG_COUNTER_CLK clock          */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   SWT3_IPG_COUNTER_CLK clock      */
-/*   TRACE_CLK clock                     */ {CLOCK_IP_MUX_DIV,               CLOCK_IP_SEL_DIV_TYPE,          CLOCK_IP_SEL11_DIV0_TRACE_CLK_INDEX,                0U,                                                 0U},         /*   TRACE_CLK clock                 */
-/*   TRGMUX_IPG_CLK_S clock              */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   TRGMUX_IPG_CLK_S clock          */
-/*   TRGMUX_MSC_IPG_CLK_S clock          */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   TRGMUX_MSC_IPG_CLK_S clock      */
-/*   VWRAP0_IPG_CLK clock                */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   VWRAP0_IPG_CLK clock            */
-/*   VWRAP1_IPG_CLK clock                */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   VWRAP1_IPG_CLK clock            */
-/*   VWRAP2_IPG_CLK clock                */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   VWRAP2_IPG_CLK clock            */
-/*   VWRAP3_IPG_CLK clock                */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   VWRAP3_IPG_CLK clock            */
-/*   XSPI_IPG_CLK clock                  */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   XSPI_IPG_CLK clock              */
-/*   XSPI_UNGATED_2XSFIF_CLK clock       */ {CLOCK_IP_GATE,                  CLOCK_IP_GATE_TYPE,             0U,                                                 0U,                                                 0U},         /*   XSPI_UNGATED_2XSFIF_CLK clock   */
+const uint8 Clock_Ip_au8ClockFeatures[CLOCK_IP_NAMES_NO][CLOCK_IP_FEATURES_NO] =
+/*   \
+************************************************************************************************************************************************************************************************************************************************************************************************  \
+*************************************     *************************       *************************   E   *****************************       *************       *********************       **********************       *************************       *****************       *************  \
+*************************************  I  *************************   C   *************************   X   *****************************       *************   S   *********************   D   **********************       *************************       *****************       *************  \
+*************************************  N  *************************   A   *************************   T   *****************************   P   *************   E   *********************   I   **********************   G   *************************   P   *****************       *************  \
+*************************************  S  *************************   L   *************************   E   *****************************   O   *************   L   *********************   V   **********************   A   *************************   C   *****************   C   *************  \
+*************************************  T  *************************   L   *************************   N   *****************************   W   *************   E   *********************   I   **********************   T   *************************   F   *****************   M   *************  \
+*************************************  A  *************************   B   *************************   S   *****************************   E   *************   C   *********************   D   **********************   E   *************************   S   *****************   U   *************  \
+*************************************  N  *************************   A   *************************   I   *****************************   R   *************   T   *********************   E   **********************       *************************       *****************       *************  \
+*************************************  C  *************************   C   *************************   O   *****************************       *************   O   *********************   R   **********************       *************************       *****************       *************  \
+*************************************  E  *************************   K   *************************   N   *****************************       *************   R   *********************       **********************       *************************       *****************       *************  \
+*************************************     *************************       *************************       ****************************        *************       *********************       **********************       *************************       *****************       *************  \
+*************************************************************************************************************************************************************************************************************************************************************************************************/\
+{ \
+/*   FIRC_CLK clock             */ {0U,                            CLOCK_IP_NO_CALLBACK,           0U,                                 0U,                 0U,                          0U,                          0U,                            0U,                     0U},                        /*   FIRC_CLK clock             */ \
+/*   FXOSC_CLK clock            */ {0U,                            CLOCK_IP_FAST_XOSC_CMU,         0U,                                 0U,                 0U,                          0U,                          0U,                            0U,                     CLOCK_IP_CMU_0_INSTANCE},   /*   FXOSC_CLK clock            */ \
+/*   SIRC_CLK clock             */ {0U,                            CLOCK_IP_NO_CALLBACK,           0U,                                 0U,                 0U,                          0U,                          0U,                            0U,                     0U},                        /*   SIRC_CLK clock             */ \
+/*   COREPLL_CLK clock          */ {CLOCK_IP_COREPLL_INSTANCE,     CLOCK_IP_PLL_MOD,               0U,                                 0U,                 0U,                          0U,                          0U,                            0U,                     0U},                        /*   COREPLL_CLK clock          */ \
+/*   PERIPHPLL_CLK clock        */ {CLOCK_IP_PERIPHPLL_INSTANCE,   CLOCK_IP_PLL,                   0U,                                 0U,                 0U,                          0U,                          0U,                            0U,                     0U},                        /*   PERIPHPLL_CLK clock        */ \
+/*   DDRPLL_CLK clock           */ {CLOCK_IP_DDRPLL_INSTANCE,      CLOCK_IP_PLL_MOD,               0U,                                 0U,                 0U,                          0U,                          0U,                            0U,                     0U},                        /*   DDRPLL_CLK clock           */ \
+/*   ACCELPLL_CLK clock         */ {CLOCK_IP_ACCELPLL_INSTANCE,    CLOCK_IP_PLL_MOD,               0U,                                 0U,                 0U,                          0U,                          0U,                            0U,                     0U},                        /*   ACCELPLL_CLK clock         */ \
+/*   COREPLL_PHI0 clock         */ {CLOCK_IP_COREPLL_INSTANCE,     CLOCK_IP_PCFS_PLL_OUT,          0U,                                 0U,                 0U,                          CLOCK_IP_DIV_0_INDEX,        0U,                            CLOCK_IP_PCFS_3_INDEX,  0U},                        /*   COREPLL_PHI0 clock         */ \
+/*   COREPLL_PHI1 clock         */ {CLOCK_IP_COREPLL_INSTANCE,     CLOCK_IP_PLL_OUT,               0U,                                 0U,                 0U,                          CLOCK_IP_DIV_1_INDEX,        0U,                            0U,                     0U},                        /*   COREPLL_PHI1 clock         */ \
+/*   COREPLL_DFS1 clock         */ {CLOCK_IP_COREDFS_INSTANCE,     CLOCK_IP_PCFS_DFS,              0U,                                 0U,                 0U,                          CLOCK_IP_DIV_0_INDEX,        0U,                            CLOCK_IP_PCFS_11_INDEX, 0U},                        /*   COREPLL_DFS1 clock         */ \
+/*   COREPLL_DFS2 clock         */ {CLOCK_IP_COREDFS_INSTANCE,     CLOCK_IP_DFS,                   0U,                                 0U,                 0U,                          CLOCK_IP_DIV_1_INDEX,        0U,                            0U,                     0U},                        /*   COREPLL_DFS2 clock         */ \
+/*   COREPLL_DFS3 clock         */ {CLOCK_IP_COREDFS_INSTANCE,     CLOCK_IP_DFS,                   0U,                                 0U,                 0U,                          CLOCK_IP_DIV_2_INDEX,        0U,                            0U,                     0U},                        /*   COREPLL_DFS3 clock         */ \
+/*   COREPLL_DFS4 clock         */ {CLOCK_IP_COREDFS_INSTANCE,     CLOCK_IP_DFS,                   0U,                                 0U,                 0U,                          CLOCK_IP_DIV_3_INDEX,        0U,                            0U,                     0U},                        /*   COREPLL_DFS4 clock         */ \
+/*   COREPLL_DFS5 clock         */ {CLOCK_IP_COREDFS_INSTANCE,     CLOCK_IP_DFS,                   0U,                                 0U,                 0U,                          CLOCK_IP_DIV_4_INDEX,        0U,                            0U,                     0U},                        /*   COREPLL_DFS5 clock         */ \
+/*   COREPLL_DFS6 clock         */ {CLOCK_IP_COREDFS_INSTANCE,     CLOCK_IP_DFS,                   0U,                                 0U,                 0U,                          CLOCK_IP_DIV_5_INDEX,        0U,                            0U,                     0U},                        /*   COREPLL_DFS6 clock         */ \
+/*   PERIPHPLL_PHI0 clock       */ {CLOCK_IP_PERIPHPLL_INSTANCE,   CLOCK_IP_PLL_OUT,               0U,                                 0U,                 0U,                          CLOCK_IP_DIV_0_INDEX,        0U,                            0U,                     0U},                        /*   PERIPHPLL_PHI0 clock       */ \
+/*   PERIPHPLL_PHI1 clock       */ {CLOCK_IP_PERIPHPLL_INSTANCE,   CLOCK_IP_PLL_OUT,               0U,                                 0U,                 0U,                          CLOCK_IP_DIV_1_INDEX,        0U,                            0U,                     0U},                        /*   PERIPHPLL_PHI1 clock       */ \
+/*   PERIPHPLL_PHI2 clock       */ {CLOCK_IP_PERIPHPLL_INSTANCE,   CLOCK_IP_PLL_OUT,               0U,                                 0U,                 0U,                          CLOCK_IP_DIV_2_INDEX,        0U,                            0U,                     0U},                        /*   PERIPHPLL_PHI2 clock       */ \
+/*   PERIPHPLL_PHI3 clock       */ {CLOCK_IP_PERIPHPLL_INSTANCE,   CLOCK_IP_PLL_OUT,               0U,                                 0U,                 0U,                          CLOCK_IP_DIV_3_INDEX,        0U,                            0U,                     0U},                        /*   PERIPHPLL_PHI3 clock       */ \
+/*   PERIPHPLL_PHI4 clock       */ {CLOCK_IP_PERIPHPLL_INSTANCE,   CLOCK_IP_PLL_OUT,               0U,                                 0U,                 0U,                          CLOCK_IP_DIV_4_INDEX,        0U,                            0U,                     0U},                        /*   PERIPHPLL_PHI4 clock       */ \
+/*   PERIPHPLL_PHI5 clock       */ {CLOCK_IP_PERIPHPLL_INSTANCE,   CLOCK_IP_PLL_OUT,               0U,                                 0U,                 0U,                          CLOCK_IP_DIV_5_INDEX,        0U,                            0U,                     0U},                        /*   PERIPHPLL_PHI5 clock       */ \
+/*   PERIPHPLL_PHI6 clock       */ {CLOCK_IP_PERIPHPLL_INSTANCE,   CLOCK_IP_PLL_OUT,               0U,                                 0U,                 0U,                          CLOCK_IP_DIV_6_INDEX,        0U,                            0U,                     0U},                        /*   PERIPHPLL_PHI6 clock       */ \
+/*   PERIPHPLL_PHI7 clock       */ {CLOCK_IP_PERIPHPLL_INSTANCE,   CLOCK_IP_PLL_OUT,               0U,                                 0U,                 0U,                          CLOCK_IP_DIV_7_INDEX,        0U,                            0U,                     0U},                        /*   PERIPHPLL_PHI7 clock       */ \
+/*   PERIPHPLL_DFS1 clock       */ {CLOCK_IP_PERIPHDFS_INSTANCE,   CLOCK_IP_DFS,                   0U,                                 0U,                 0U,                          CLOCK_IP_DIV_0_INDEX,        0U,                            0U,                     0U},                        /*   PERIPHPLL_DFS1 clock       */ \
+/*   PERIPHPLL_DFS2 clock       */ {CLOCK_IP_PERIPHDFS_INSTANCE,   CLOCK_IP_DFS,                   0U,                                 0U,                 0U,                          CLOCK_IP_DIV_1_INDEX,        0U,                            0U,                     0U},                        /*   PERIPHPLL_DFS2 clock       */ \
+/*   PERIPHPLL_DFS3 clock       */ {CLOCK_IP_PERIPHDFS_INSTANCE,   CLOCK_IP_DFS,                   0U,                                 0U,                 0U,                          CLOCK_IP_DIV_2_INDEX,        0U,                            0U,                     0U},                        /*   PERIPHPLL_DFS3 clock       */ \
+/*   PERIPHPLL_DFS4 clock       */ {CLOCK_IP_PERIPHDFS_INSTANCE,   CLOCK_IP_DFS,                   0U,                                 0U,                 0U,                          CLOCK_IP_DIV_3_INDEX,        0U,                            0U,                     0U},                        /*   PERIPHPLL_DFS4 clock       */ \
+/*   PERIPHPLL_DFS5 clock       */ {CLOCK_IP_PERIPHDFS_INSTANCE,   CLOCK_IP_DFS,                   0U,                                 0U,                 0U,                          CLOCK_IP_DIV_4_INDEX,        0U,                            0U,                     0U},                        /*   PERIPHPLL_DFS5 clock       */ \
+/*   PERIPHPLL_DFS6 clock       */ {CLOCK_IP_PERIPHDFS_INSTANCE,   CLOCK_IP_DFS,                   0U,                                 0U,                 0U,                          CLOCK_IP_DIV_5_INDEX,        0U,                            0U,                     0U},                        /*   PERIPHPLL_DFS6 clock       */ \
+/*   DDRPLL_PHI0 clock          */ {CLOCK_IP_DDRPLL_INSTANCE,      CLOCK_IP_PLL_OUT,               0U,                                 0U,                 0U,                          CLOCK_IP_DIV_0_INDEX,        0U,                            0U,                     0U},                        /*   DDRPLL_PHI0 clock          */ \
+/*   ACCELPLL_PHI0 clock        */ {CLOCK_IP_ACCELPLL_INSTANCE,    CLOCK_IP_PLL_OUT,               0U,                                 0U,                 0U,                          CLOCK_IP_DIV_0_INDEX,        0U,                            0U,                     0U},                        /*   ACCELPLL_PHI0 clock        */ \
+/*   ACCELPLL_PHI1 clock        */ {CLOCK_IP_ACCELPLL_INSTANCE,    CLOCK_IP_PCFS_PLL_OUT,          0U,                                 0U,                 0U,                          CLOCK_IP_DIV_1_INDEX,        0U,                            CLOCK_IP_PCFS_32_INDEX, 0U},                        /*   ACCELPLL_PHI1 clock        */ \
+/*   rtc_ext_ref clock          */ {0U,                            CLOCK_IP_NO_CALLBACK,           0U,                                 0U,                 0U,                          0U,                          0U,                            0U,                     0U},                        /*   rtc_ext_ref clock        */ \
+/*   ftm_0_ext_ref clock        */ {0U,                            CLOCK_IP_NO_CALLBACK,           0U,                                 0U,                 0U,                          0U,                          0U,                            0U,                     0U},                        /*   ftm_0_ext_ref clock        */ \
+/*   ftm_1_ext_ref clock        */ {0U,                            CLOCK_IP_NO_CALLBACK,           0U,                                 0U,                 0U,                          0U,                          0U,                            0U,                     0U},                        /*   ftm_1_ext_ref clock        */ \
+/*   gmac_0_ext_ref clock       */ {0U,                            CLOCK_IP_NO_CALLBACK,           0U,                                 0U,                 0U,                          0U,                          0U,                            0U,                     0U},                        /*   gmac_0_ext_ref clock       */ \
+/*   gmac_0_ext_rx clock        */ {0U,                            CLOCK_IP_NO_CALLBACK,           0U,                                 0U,                 0U,                          0U,                          0U,                            0U,                     0U},                        /*   gmac_0_ext_rx clock        */ \
+/*   gmac_0_ext_tx clock        */ {0U,                            CLOCK_IP_NO_CALLBACK,           0U,                                 0U,                 0U,                          0U,                          0U,                            0U,                     0U},                        /*   gmac_0_ext_tx clock        */ \
+/*   gmac_ext_ts clock          */ {0U,                            CLOCK_IP_NO_CALLBACK,           0U,                                 0U,                 0U,                          0U,                          0U,                            0U,                     0U},                        /*   gmac_ext_ts clock          */ \
+/*   pfe_mac_0_ext_ref clock    */ {0U,                            CLOCK_IP_NO_CALLBACK,           0U,                                 0U,                 0U,                          0U,                          0U,                            0U,                     0U},                        /*   pfe_mac_0_ext_ref clock    */ \
+/*   pfe_mac_0_ext_rx clock     */ {0U,                            CLOCK_IP_NO_CALLBACK,           0U,                                 0U,                 0U,                          0U,                          0U,                            0U,                     0U},                        /*   pfe_mac_0_ext_rx clock     */ \
+/*   pfe_mac_0_ext_tx clock     */ {0U,                            CLOCK_IP_NO_CALLBACK,           0U,                                 0U,                 0U,                          0U,                          0U,                            0U,                     0U},                        /*   pfe_mac_0_ext_tx clock     */ \
+/*   pfe_mac_1_ext_ref clock    */ {0U,                            CLOCK_IP_NO_CALLBACK,           0U,                                 0U,                 0U,                          0U,                          0U,                            0U,                     0U},                        /*   pfe_mac_1_ext_ref clock    */ \
+/*   pfe_mac_1_ext_rx clock     */ {0U,                            CLOCK_IP_NO_CALLBACK,           0U,                                 0U,                 0U,                          0U,                          0U,                            0U,                     0U},                        /*   pfe_mac_1_ext_rx clock     */ \
+/*   pfe_mac_1_ext_tx clock     */ {0U,                            CLOCK_IP_NO_CALLBACK,           0U,                                 0U,                 0U,                          0U,                          0U,                            0U,                     0U},                        /*   pfe_mac_1_ext_tx clock     */ \
+/*   pfe_mac_2_ext_ref clock    */ {0U,                            CLOCK_IP_NO_CALLBACK,           0U,                                 0U,                 0U,                          0U,                          0U,                            0U,                     0U},                        /*   pfe_mac_2_ext_ref clock    */ \
+/*   pfe_mac_2_ext_rx clock     */ {0U,                            CLOCK_IP_NO_CALLBACK,           0U,                                 0U,                 0U,                          0U,                          0U,                            0U,                     0U},                        /*   pfe_mac_2_ext_rx clock     */ \
+/*   pfe_mac_2_ext_tx clock     */ {0U,                            CLOCK_IP_NO_CALLBACK,           0U,                                 0U,                 0U,                          0U,                          0U,                            0U,                     0U},                        /*   pfe_mac_2_ext_tx clock     */ \
+/*   SERDES_0_XPCS_0_TX clock   */ {0U,                            CLOCK_IP_NO_CALLBACK,           0U,                                 0U,                 0U,                          0U,                          0U,                            0U,                     0U},                        /*   SERDES_0_XPCS_0_TX clock   */ \
+/*   SERDES_0_XPCS_0_CDR clock  */ {0U,                            CLOCK_IP_NO_CALLBACK,           0U,                                 0U,                 0U,                          0U,                          0U,                            0U,                     0U},                        /*   SERDES_0_XPCS_0_CDR clock  */ \
+/*   SERDES_0_XPCS_1_TX clock   */ {0U,                            CLOCK_IP_NO_CALLBACK,           0U,                                 0U,                 0U,                          0U,                          0U,                            0U,                     0U},                        /*   SERDES_0_XPCS_1_TX clock   */ \
+/*   SERDES_0_XPCS_1_CDR clock  */ {0U,                            CLOCK_IP_NO_CALLBACK,           0U,                                 0U,                 0U,                          0U,                          0U,                            0U,                     0U},                        /*   SERDES_0_XPCS_1_CDR clock  */ \
+/*   SERDES_1_XPCS_0_TX clock   */ {0U,                            CLOCK_IP_NO_CALLBACK,           0U,                                 0U,                 0U,                          0U,                          0U,                            0U,                     0U},                        /*   SERDES_1_XPCS_0_TX clock   */ \
+/*   SERDES_1_XPCS_0_CDR clock  */ {0U,                            CLOCK_IP_NO_CALLBACK,           0U,                                 0U,                 0U,                          0U,                          0U,                            0U,                     0U},                        /*   SERDES_1_XPCS_0_CDR clock  */ \
+/*   SERDES_1_XPCS_1_TX clock   */ {0U,                            CLOCK_IP_NO_CALLBACK,           0U,                                 0U,                 0U,                          0U,                          0U,                            0U,                     0U},                        /*   SERDES_1_XPCS_1_TX clock   */ \
+/*   SERDES_1_XPCS_1_CDR clock  */ {0U,                            CLOCK_IP_NO_CALLBACK,           0U,                                 0U,                 0U,                          0U,                          0U,                            0U,                     0U},                        /*   SERDES_1_XPCS_1_CDR clock  */ \
+/*   XBAR_2X_CLK clock          */ {CLOCK_IP_CGM0_INSTANCE,        CLOCK_IP_HWMUX_PCFS,            CLOCK_IP_XBAR_2X_EXTENSION,         0U,                 CLOCK_IP_SEL_0_INDEX,        0U,                          0U,                            0U,                     0U},                        /*   XBAR_2X_CLK clock          */ \
+/*   XBAR_CLK clock             */ {CLOCK_IP_CGM0_INSTANCE,        CLOCK_IP_NO_CALLBACK,           CLOCK_IP_XBAR_EXTENSION,            0U,                 CLOCK_IP_SEL_0_INDEX,        0U,                          0U,                            0U,                     0U},                        /*   XBAR_CLK clock             */ \
+/*   XBAR_DIV2_CLK clock        */ {CLOCK_IP_CGM0_INSTANCE,        CLOCK_IP_NO_CALLBACK,           CLOCK_IP_XBAR_DIV2_EXTENSION,       0U,                 CLOCK_IP_SEL_0_INDEX,        0U,                          0U,                            0U,                     0U},                        /*   XBAR_DIV2_CLK clock        */ \
+/*   XBAR_DIV3_CLK clock        */ {CLOCK_IP_CGM0_INSTANCE,        CLOCK_IP_CMU,                   CLOCK_IP_XBAR_DIV3_EXTENSION,       0U,                 CLOCK_IP_SEL_0_INDEX,        0U,                          0U,                            0U,                     CLOCK_IP_CMU_7_INSTANCE},   /*   XBAR_DIV3_CLK clock        */ \
+/*   XBAR_DIV4_CLK clock        */ {CLOCK_IP_CGM0_INSTANCE,        CLOCK_IP_NO_CALLBACK,           CLOCK_IP_XBAR_DIV4_EXTENSION,       0U,                 CLOCK_IP_SEL_0_INDEX,        0U,                          0U,                            0U,                     0U},                        /*   XBAR_DIV4_CLK clock        */ \
+/*   XBAR_DIV6_CLK clock        */ {CLOCK_IP_CGM0_INSTANCE,        CLOCK_IP_NO_CALLBACK,           CLOCK_IP_XBAR_DIV6_EXTENSION,       0U,                 CLOCK_IP_SEL_0_INDEX,        0U,                          0U,                            0U,                     0U},                        /*   XBAR_DIV6_CLK clock        */ \
+/*   A53_CORE_CLK clock         */ {CLOCK_IP_CGM1_INSTANCE,        CLOCK_IP_HWMUX_PCFS,            CLOCK_IP_A53_CORE_EXTENSION,        0U,                 CLOCK_IP_SEL_0_INDEX,        0U,                          0U,                            0U,                     0U},                        /*   A53_CORE_CLK clock         */ \
+/*   A53_CORE_DIV2_CLK clock    */ {CLOCK_IP_CGM1_INSTANCE,        CLOCK_IP_NO_CALLBACK,           CLOCK_IP_A53_CORE_DIV2_EXTENSION,   0U,                 CLOCK_IP_SEL_0_INDEX,        0U,                          0U,                            0U,                     0U},                        /*   A53_CORE_DIV2_CLK clock    */ \
+/*   A53_CORE_DIV10_CLK clock   */ {CLOCK_IP_CGM1_INSTANCE,        CLOCK_IP_NO_CALLBACK,           CLOCK_IP_A53_CORE_DIV10_EXTENSION,  0U,                 CLOCK_IP_SEL_0_INDEX,        0U,                          0U,                            0U,                     0U},                        /*   A53_CORE_DIV10_CLK clock   */ \
+/*   DDR_CLK clock              */ {CLOCK_IP_CGM5_INSTANCE,        CLOCK_IP_HWMUX_CMU,             CLOCK_IP_DDR_EXTENSION,             0U,                 CLOCK_IP_SEL_0_INDEX,        0U,                          0U,                            0U,                     CLOCK_IP_CMU_20_INSTANCE},  /*   DDR_CLK clock              */ \
+/*   PFE_PE_CLK clock           */ {CLOCK_IP_CGM2_INSTANCE,        CLOCK_IP_HWMUX_PCFS_DIV,        CLOCK_IP_PFE_PE_EXTENSION,          0U,                 CLOCK_IP_SEL_0_INDEX,        CLOCK_IP_DIV_0_INDEX,        0U,                            0U,                     0U},                        /*   PFE_PE_CLK clock           */ \
+/*   PFE_SYS_CLK clock          */ {CLOCK_IP_CGM2_INSTANCE,        CLOCK_IP_CMU,                   CLOCK_IP_PFE_SYS_EXTENSION,         0U,                 CLOCK_IP_SEL_0_INDEX,        0U,                          0U,                            0U,                     CLOCK_IP_CMU_39_INSTANCE},  /*   PFE_SYS_CLK clock          */ \
+/*   PER_CLK clock              */ {CLOCK_IP_CGM0_INSTANCE,        CLOCK_IP_HWMUX_DIV_CMU,         CLOCK_IP_PER_EXTENSION,             0U,                 CLOCK_IP_SEL_3_INDEX,        CLOCK_IP_DIV_0_INDEX,        0U,                            0U,                     CLOCK_IP_CMU_10_INSTANCE},  /*   PER_CLK clock              */ \
+/*   GMAC0_REF_CLK clock        */ {CLOCK_IP_CGM0_INSTANCE,        CLOCK_IP_HWMUX,                 CLOCK_IP_GMAC0_REF_EXTENSION,       0U,                 CLOCK_IP_SEL_15_INDEX,       0U,                          0U,                            0U,                     0U},                           /*   GMAC0_REF_CLK clock        */ \
+/*   GMAC0_REF_DIV_CLK clock    */ {CLOCK_IP_CGM0_INSTANCE,        CLOCK_IP_HWMUX_DIV,             CLOCK_IP_GMAC0_REF_DIV_EXTENSION,   0U,                 CLOCK_IP_SEL_15_INDEX,       CLOCK_IP_DIV_0_INDEX,        0U,                            0U,                     0U},                        /*   GMAC0_REF_DIV_CLK clock    */ \
+/*   PFEMAC0_REF_DIV_CLK clock  */ {CLOCK_IP_CGM2_INSTANCE,        CLOCK_IP_HWMUX_DIV,             CLOCK_IP_PFEMAC0_REF_DIV_EXTENSION, 0U,                 CLOCK_IP_SEL_7_INDEX,        CLOCK_IP_DIV_0_INDEX,        0U,                            0U,                     0U},                        /*   PFEMAC0_REF_DIV_CLK clock  */ \
+/*   PFEMAC1_REF_DIV_CLK clock  */ {CLOCK_IP_CGM2_INSTANCE,        CLOCK_IP_HWMUX_DIV,             CLOCK_IP_PFEMAC1_REF_DIV_EXTENSION, 0U,                 CLOCK_IP_SEL_8_INDEX,        CLOCK_IP_DIV_0_INDEX,        0U,                            0U,                     0U},                        /*   PFEMAC1_REF_DIV_CLK clock  */ \
+/*   PFEMAC2_REF_DIV_CLK clock  */ {CLOCK_IP_CGM2_INSTANCE,        CLOCK_IP_HWMUX_DIV,             CLOCK_IP_PFEMAC2_REF_DIV_EXTENSION, 0U,                 CLOCK_IP_SEL_9_INDEX,        CLOCK_IP_DIV_0_INDEX,        0U,                            0U,                     0U},                        /*   PFEMAC2_REF_DIV_CLK clock  */ \
+/*   SERDES_REF_CLK clock       */ {0U,                            CLOCK_IP_CMU,                   0U,                                 0U,                 0U,                          0U,                          0U,                            0U,                     CLOCK_IP_CMU_11_INSTANCE},  /*   SERDES_REF_CLK clock       */ \
+/*   THE_LAST_PRODUCER_CLK      */ {0U,                            CLOCK_IP_NO_CALLBACK,           0U,                                 0U,                 0U,                          0U,                          0U,                            0U,                     0U},                        /*   THE_LAST_PRODUCER_CLK      */ \
+/*   ADC0_CLK clock             */ {0U,                            CLOCK_IP_NO_CALLBACK,           0U,                                 0U,                 0U,                          0U,                          0U,                            0U,                     0U},                        /*   ADC0_CLK clock             */ \
+/*   ADC1_CLK clock             */ {0U,                            CLOCK_IP_NO_CALLBACK,           0U,                                 0U,                 0U,                          0U,                          0U,                            0U,                     0U},                        /*   ADC1_CLK clock             */ \
+/*   CLKOUT0_CLK clock          */ {CLOCK_IP_CGM0_INSTANCE,        CLOCK_IP_SWMUX_DIV_CLKOUT,      CLOCK_IP_CLKOUT0_EXTENSION,         0U,                 CLOCK_IP_SEL_1_INDEX,        CLOCK_IP_DIV_0_INDEX,        0U,                            0U,                     0U},                        /*   CLKOUT0_CLK clock          */ \
+/*   CLKOUT1_CLK clock          */ {CLOCK_IP_CGM0_INSTANCE,        CLOCK_IP_SWMUX_DIV_CLKOUT,      CLOCK_IP_CLKOUT1_EXTENSION,         0U,                 CLOCK_IP_SEL_2_INDEX,        CLOCK_IP_DIV_0_INDEX,        0U,                            0U,                     0U},                        /*   CLKOUT1_CLK clock          */ \
+/*   CORE_A53_CLUSTER_0_CLK     */ {0U,                            CLOCK_IP_CMU,                   0U,                                 0U,                 0U,                          0U,                          0U,                            0U,                     CLOCK_IP_CMU_27_INSTANCE},  /*   CORE_A53_CLUSTER_0_CLK     */ \
+/*   CORE_A53_CLUSTER_1_CLK     */ {0U,                            CLOCK_IP_CMU,                   0U,                                 0U,                 0U,                          0U,                          0U,                            0U,                     CLOCK_IP_CMU_28_INSTANCE},  /*   CORE_A53_CLUSTER_1_CLK     */ \
+/*   CORE_M7_0_CLK clock        */ {0U,                            CLOCK_IP_CMU,                   0U,                                 0U,                 0U,                          0U,                          0U,                            0U,                     CLOCK_IP_CMU_6_INSTANCE},   /*   CORE_M7_0_CLK clock        */ \
+/*   CORE_M7_1_CLK clock        */ {0U,                            CLOCK_IP_CMU,                   0U,                                 0U,                 0U,                          0U,                          0U,                            0U,                     CLOCK_IP_CMU_8_INSTANCE},   /*   CORE_M7_1_CLK clock        */ \
+/*   CORE_M7_2_CLK clock        */ {0U,                            CLOCK_IP_CMU,                   0U,                                 0U,                 0U,                          0U,                          0U,                            0U,                     CLOCK_IP_CMU_9_INSTANCE},   /*   CORE_M7_2_CLK clock        */ \
+/*   CRC0_CLK clock             */ {0U,                            CLOCK_IP_NO_CALLBACK,           0U,                                 0U,                 0U,                          0U,                          0U,                            0U,                     0U},                        /*   CRC0_CLK clock             */ \
+/*   CTU0_CLK clock             */ {0U,                            CLOCK_IP_NO_CALLBACK,           0U,                                 0U,                 0U,                          0U,                          0U,                            0U,                     0U},                        /*   CTU0_CLK clock             */ \
+/*   CTU1_CLK clock             */ {0U,                            CLOCK_IP_NO_CALLBACK,           0U,                                 0U,                 0U,                          0U,                          0U,                            0U,                     0U},                        /*   CTU1_CLK clock             */ \
+/*   DAPB_CLK clock             */ {CLOCK_IP_CGM0_INSTANCE,        CLOCK_IP_HWMUX_DIV,             CLOCK_IP_DAPB_EXTENSION,            0U,                 CLOCK_IP_SEL_0_INDEX,        CLOCK_IP_DIV_1_INDEX,        0U,                            0U,                     0U},                        /*   DAPB_CLK clock             */ \
+/*   DDR0_CLK clock             */ {0U,                            CLOCK_IP_GATE,                  0U,                                 0U,                 0U,                          0U,                          CLOCK_IP_PRT0_COL0_REQ1_INDEX, 0U,                     0U},                        /*   DDR0_CLK clock             */ \
+/*   DMA0_CLK clock             */ {0U,                            CLOCK_IP_NO_CALLBACK,           0U,                                 0U,                 0U,                          0U,                          0U,                            0U,                     0U},                        /*   DMA0_CLK clock             */ \
+/*   DMA1_CLK clock             */ {0U,                            CLOCK_IP_NO_CALLBACK,           0U,                                 0U,                 0U,                          0U,                          0U,                            0U,                     0U},                        /*   DMA1_CLK clock             */ \
+/*   DMAMUX0_CLK clock          */ {0U,                            CLOCK_IP_NO_CALLBACK,           0U,                                 0U,                 0U,                          0U,                          0U,                            0U,                     0U},                        /*   DMAMUX0_CLK clock          */ \
+/*   DMAMUX1_CLK clock          */ {0U,                            CLOCK_IP_NO_CALLBACK,           0U,                                 0U,                 0U,                          0U,                          0U,                            0U,                     0U},                        /*   DMAMUX1_CLK clock          */ \
+/*   DMAMUX2_CLK clock          */ {0U,                            CLOCK_IP_NO_CALLBACK,           0U,                                 0U,                 0U,                          0U,                          0U,                            0U,                     0U},                        /*   DMAMUX2_CLK clock          */ \
+/*   DMAMUX3_CLK clock          */ {0U,                            CLOCK_IP_NO_CALLBACK,           0U,                                 0U,                 0U,                          0U,                          0U,                            0U,                     0U},                        /*   DMAMUX3_CLK clock          */ \
+/*   DMA_CRC0_CLK clock         */ {0U,                            CLOCK_IP_NO_CALLBACK,           0U,                                 0U,                 0U,                          0U,                          0U,                            0U,                     0U},                        /*   DMA_CRC0_CLK clock         */ \
+/*   DMA_CRC1_CLK clock         */ {0U,                            CLOCK_IP_NO_CALLBACK,           0U,                                 0U,                 0U,                          0U,                          0U,                            0U,                     0U},                        /*   DMA_CRC1_CLK clock         */ \
+/*   EIM0_CLK clock             */ {0U,                            CLOCK_IP_NO_CALLBACK,           0U,                                 0U,                 0U,                          0U,                          0U,                            0U,                     0U},                        /*   EIM0_CLK clock             */ \
+/*   EIM1_CLK clock             */ {0U,                            CLOCK_IP_NO_CALLBACK,           0U,                                 0U,                 0U,                          0U,                          0U,                            0U,                     0U},                        /*   EIM1_CLK clock             */ \
+/*   EIM2_CLK clock             */ {0U,                            CLOCK_IP_NO_CALLBACK,           0U,                                 0U,                 0U,                          0U,                          0U,                            0U,                     0U},                        /*   EIM2_CLK clock             */ \
+/*   EIM3_CLK clock             */ {0U,                            CLOCK_IP_NO_CALLBACK,           0U,                                 0U,                 0U,                          0U,                          0U,                            0U,                     0U},                        /*   EIM3_CLK clock             */ \
+/*   EIM_CLK clock              */ {0U,                            CLOCK_IP_NO_CALLBACK,           0U,                                 0U,                 0U,                          0U,                          0U,                            0U,                     0U},                        /*   EIM_CLK clock              */ \
+/*   ERM0_CLK clock             */ {0U,                            CLOCK_IP_NO_CALLBACK,           0U,                                 0U,                 0U,                          0U,                          0U,                            0U,                     0U},                        /*   ERM0_CLK clock             */ \
+/*   FLEXCAN_CLK clock          */ {CLOCK_IP_CGM0_INSTANCE,        CLOCK_IP_HWMUX_CMU,             CLOCK_IP_FLEXCAN_EXTENSION,         0U,                 CLOCK_IP_SEL_7_INDEX,        0U,                          0U,                            0U,                     CLOCK_IP_CMU_13_INSTANCE},  /*   FLEXCAN_CLK clock          */ \
+/*   FLEXCAN0_CLK clock         */ {0U,                            CLOCK_IP_NO_CALLBACK,           0U,                                 0U,                 0U,                          0U,                          0U,                            0U,                     0U},                        /*   FLEXCAN0_CLK clock         */ \
+/*   FLEXCAN1_CLK clock         */ {0U,                            CLOCK_IP_NO_CALLBACK,           0U,                                 0U,                 0U,                          0U,                          0U,                            0U,                     0U},                        /*   FLEXCAN1_CLK clock         */ \
+/*   FLEXCAN2_CLK clock         */ {0U,                            CLOCK_IP_NO_CALLBACK,           0U,                                 0U,                 0U,                          0U,                          0U,                            0U,                     0U},                        /*   FLEXCAN2_CLK clock         */ \
+/*   FLEXCAN3_CLK clock         */ {0U,                            CLOCK_IP_NO_CALLBACK,           0U,                                 0U,                 0U,                          0U,                          0U,                            0U,                     0U},                        /*   FLEXCAN3_CLK clock         */ \
+/*   FLEXRAY_CLK clock          */ {CLOCK_IP_CGM0_INSTANCE,        CLOCK_IP_HWMUX_DIV_CMU,         CLOCK_IP_FLEXRAY_EXTENSION,         0U,                 CLOCK_IP_SEL_6_INDEX,        0U,                          0U,                            0U,                     CLOCK_IP_CMU_12_INSTANCE},  /*   FLEXRAY_CLK clock          */ \
+/*   FRAY0_CLK clock            */ {0U,                            CLOCK_IP_NO_CALLBACK,           0U,                                 0U,                 0U,                          0U,                          0U,                            0U,                     0U},                        /*   FRAY0_CLK clock            */ \
+/*   FLEXTIMERA_CLK clock       */ {CLOCK_IP_CGM0_INSTANCE,        CLOCK_IP_HWMUX_DIV,             CLOCK_IP_FLEXTIMERA_EXTENSION,      0U,                 CLOCK_IP_SEL_4_INDEX,        0U,                          0U,                            0U,                     0U},                        /*   FLEXTIMERA_CLK clock       */ \
+/*   FTIMER0_CLK clock          */ {0U,                            CLOCK_IP_NO_CALLBACK,           0U,                                 0U,                 0U,                          0U,                          0U,                            0U,                     0U},                        /*   FTIMER0_CLK clock          */ \
+/*   FLEXTIMERB_CLK clock       */ {CLOCK_IP_CGM0_INSTANCE,        CLOCK_IP_HWMUX_DIV,             CLOCK_IP_FLEXTIMERB_EXTENSION,      0U,                 CLOCK_IP_SEL_5_INDEX,        0U,                          0U,                            0U,                     0U},                        /*   FLEXTIMERB_CLK clock       */ \
+/*   FTIMER1_CLK clock          */ {0U,                            CLOCK_IP_NO_CALLBACK,           0U,                                 0U,                 0U,                          0U,                          0U,                            0U,                     0U},                        /*   FTIMER1_CLK clock          */ \
+/*   GMAC_TS_CLK clock          */ {CLOCK_IP_CGM0_INSTANCE,        CLOCK_IP_HWMUX_DIV_CMU,         CLOCK_IP_GMAC_TS_EXTENSION,         0U,                 CLOCK_IP_SEL_9_INDEX,        0U,                          0U,                            0U,                     CLOCK_IP_CMU_15_INSTANCE},  /*   GMAC_TS_CLK clock          */ \
+/*   GMAC0_TS_CLK clock         */ {0U,                            CLOCK_IP_GATE,                  0U,                                 0U,                 0U,                          0U,                          CLOCK_IP_PRT2_COL0_REQ3_INDEX, 0U,                     0U},                        /*   GMAC0_TS_CLK clock         */ \
+/*   GMAC0_RX_CLK clock         */ {CLOCK_IP_CGM0_INSTANCE,        CLOCK_IP_HWMUX_CMU,             CLOCK_IP_GMAC0_RX_EXTENSION,        0U,                 CLOCK_IP_SEL_11_INDEX,       0U,                          0U,                            0U,                     CLOCK_IP_CMU_21_INSTANCE},  /*   GMAC0_RX_CLK clock         */ \
+/*   GMAC0_TX_CLK clock         */ {CLOCK_IP_CGM0_INSTANCE,        CLOCK_IP_HWMUX_DIV_CMU,         CLOCK_IP_GMAC0_TX_EXTENSION,        0U,                 CLOCK_IP_SEL_10_INDEX,       CLOCK_IP_DIV_0_INDEX,        0U,                            0U,                     CLOCK_IP_CMU_14_INSTANCE},  /*   GMAC0_TX_CLK clock         */ \
+/*   IIC0_CLK clock             */ {0U,                            CLOCK_IP_NO_CALLBACK,           0U,                                 0U,                 0U,                          0U,                          0U,                            0U,                     0U},                        /*   IIC0_CLK clock             */ \
+/*   IIC1_CLK clock             */ {0U,                            CLOCK_IP_NO_CALLBACK,           0U,                                 0U,                 0U,                          0U,                          0U,                            0U,                     0U},                        /*   IIC1_CLK clock             */ \
+/*   IIC2_CLK clock             */ {0U,                            CLOCK_IP_NO_CALLBACK,           0U,                                 0U,                 0U,                          0U,                          0U,                            0U,                     0U},                        /*   IIC2_CLK clock             */ \
+/*   IIC3_CLK clock             */ {0U,                            CLOCK_IP_NO_CALLBACK,           0U,                                 0U,                 0U,                          0U,                          0U,                            0U,                     0U},                        /*   IIC3_CLK clock             */ \
+/*   IIC4_CLK clock             */ {0U,                            CLOCK_IP_NO_CALLBACK,           0U,                                 0U,                 0U,                          0U,                          0U,                            0U,                     0U},                        /*   IIC4_CLK clock             */ \
+/*   LBIST_CLK clock            */ {CLOCK_IP_CGM0_INSTANCE,        CLOCK_IP_HWMUX_DIV,             CLOCK_IP_LBIST_EXTENSION,           0U,                 CLOCK_IP_SEL_0_INDEX,        0U,                          0U,                            0U,                     0U},                        /*   LBIST_CLK clock            */ \
+/*   LBIST0_CLK clock           */ {0U,                            CLOCK_IP_NO_CALLBACK,           0U,                                 0U,                 0U,                          0U,                          0U,                            0U,                     0U},                        /*   LBIST0_CLK clock           */ \
+/*   LBIST1_CLK clock           */ {0U,                            CLOCK_IP_NO_CALLBACK,           0U,                                 0U,                 0U,                          0U,                          0U,                            0U,                     0U},                        /*   LBIST1_CLK clock           */ \
+/*   LBIST2_CLK clock           */ {0U,                            CLOCK_IP_NO_CALLBACK,           0U,                                 0U,                 0U,                          0U,                          0U,                            0U,                     0U},                        /*   LBIST2_CLK clock           */ \
+/*   LBIST3_CLK clock           */ {0U,                            CLOCK_IP_NO_CALLBACK,           0U,                                 0U,                 0U,                          0U,                          0U,                            0U,                     0U},                        /*   LBIST3_CLK clock           */ \
+/*   LBIST4_CLK clock           */ {0U,                            CLOCK_IP_NO_CALLBACK,           0U,                                 0U,                 0U,                          0U,                          0U,                            0U,                     0U},                        /*   LBIST4_CLK clock           */ \
+/*   LBIST5_CLK clock           */ {0U,                            CLOCK_IP_NO_CALLBACK,           0U,                                 0U,                 0U,                          0U,                          0U,                            0U,                     0U},                        /*   LBIST5_CLK clock           */ \
+/*   LBIST6_CLK clock           */ {0U,                            CLOCK_IP_NO_CALLBACK,           0U,                                 0U,                 0U,                          0U,                          0U,                            0U,                     0U},                        /*   LBIST6_CLK clock           */ \
+/*   LBIST7_CLK clock           */ {0U,                            CLOCK_IP_NO_CALLBACK,           0U,                                 0U,                 0U,                          0U,                          0U,                            0U,                     0U},                        /*   LBIST7_CLK clock           */ \
+/*   LIN_BAUD_CLK clock         */ {CLOCK_IP_CGM0_INSTANCE,        CLOCK_IP_HWMUX,                 CLOCK_IP_LIN_BAUD_EXTENSION,        0U,                 CLOCK_IP_SEL_8_INDEX,        0U,                          0U,                            0U,                     0U},                        /*   LIN_BAUD_CLK clock         */ \
+/*   LINFLEXD_CLK clock         */ {0U,                            CLOCK_IP_CMU,                   0U,                                 0U,                 0U,                          0U,                          0U,                            0U,                     CLOCK_IP_CMU_16_INSTANCE},  /*   LINFLEXD_CLK clock         */ \
+/*   LIN0_CLK clock             */ {0U,                            CLOCK_IP_NO_CALLBACK,           0U,                                 0U,                 0U,                          0U,                          0U,                            0U,                     0U},                        /*   LIN0_CLK clock             */ \
+/*   LIN1_CLK clock             */ {0U,                            CLOCK_IP_NO_CALLBACK,           0U,                                 0U,                 0U,                          0U,                          0U,                            0U,                     0U},                        /*   LIN1_CLK clock             */ \
+/*   LIN2_CLK clock             */ {0U,                            CLOCK_IP_NO_CALLBACK,           0U,                                 0U,                 0U,                          0U,                          0U,                            0U,                     0U},                        /*   LIN2_CLK clock             */ \
+/*   OCOTP0_CLK clock           */ {0U,                            CLOCK_IP_NO_CALLBACK,           0U,                                 0U,                 0U,                          0U,                          0U,                            0U,                     0U},                        /*   OCOTP0_CLK clock           */ \
+/*   PFEMAC0_RX_CLK clock       */ {CLOCK_IP_CGM2_INSTANCE,        CLOCK_IP_GATE_HWMUX_CMU,        CLOCK_IP_PFEMAC0_RX_EXTENSION,      0U,                 CLOCK_IP_SEL_4_INDEX,        0U,                          CLOCK_IP_PRT2_COL0_REQ0_INDEX, 0U,                     CLOCK_IP_CMU_47_INSTANCE},  /*   PFEMAC0_RX_CLK clock       */ \
+/*   PFEMAC0_TX_CLK clock       */ {CLOCK_IP_CGM2_INSTANCE,        CLOCK_IP_GATE_SGMII,            0U,                                 0U,                 CLOCK_IP_SEL_0_INDEX,        0U,                          CLOCK_IP_PRT2_COL0_REQ0_INDEX, 0U,                     0U},                        /*   PFEMAC0_TX_CLK clock       */ \
+/*   PFEMAC0_TX_DIV_CLK clock   */ {CLOCK_IP_CGM2_INSTANCE,        CLOCK_IP_HWMUX_DIV_CMU,         CLOCK_IP_PFEMAC0_TX_EXTENSION,      0U,                 CLOCK_IP_SEL_1_INDEX,        CLOCK_IP_DIV_0_INDEX,        0U,                            0U,                     CLOCK_IP_CMU_46_INSTANCE},  /*   PFEMAC0_TX_DIV_CLK clock   */ \
+/*   PFEMAC1_RX_CLK clock       */ {CLOCK_IP_CGM2_INSTANCE,        CLOCK_IP_GATE_HWMUX_CMU,        CLOCK_IP_PFEMAC1_RX_EXTENSION,      0U,                 CLOCK_IP_SEL_5_INDEX,        0U,                          CLOCK_IP_PRT2_COL0_REQ1_INDEX, 0U,                     CLOCK_IP_CMU_49_INSTANCE},  /*   PFEMAC1_RX_CLK clock       */ \
+/*   PFEMAC1_TX_CLK clock       */ {CLOCK_IP_CGM2_INSTANCE,        CLOCK_IP_GATE_HWMUX_DIV_CMU,    CLOCK_IP_PFEMAC1_TX_EXTENSION,      0U,                 CLOCK_IP_SEL_2_INDEX,        CLOCK_IP_DIV_0_INDEX,        CLOCK_IP_PRT2_COL0_REQ1_INDEX, 0U,                     CLOCK_IP_CMU_48_INSTANCE},  /*   PFEMAC1_TX_CLK clock   */ \
+/*   PFEMAC2_RX_CLK clock       */ {CLOCK_IP_CGM2_INSTANCE,        CLOCK_IP_GATE_HWMUX_CMU,        CLOCK_IP_PFEMAC2_RX_EXTENSION,      0U,                 CLOCK_IP_SEL_6_INDEX,        0U,                          CLOCK_IP_PRT2_COL0_REQ2_INDEX, 0U,                     CLOCK_IP_CMU_51_INSTANCE},  /*   PFEMAC2_RX_CLK clock       */ \
+/*   PFEMAC2_TX_CLK clock       */ {CLOCK_IP_CGM2_INSTANCE,        CLOCK_IP_GATE_HWMUX_DIV_CMU,    CLOCK_IP_PFEMAC2_TX_EXTENSION,      0U,                 CLOCK_IP_SEL_3_INDEX,        CLOCK_IP_DIV_0_INDEX,        CLOCK_IP_PRT2_COL0_REQ2_INDEX, 0U,                     CLOCK_IP_CMU_50_INSTANCE},  /*   PFEMAC2_TX_CLK clock   */ \
+/*   PIT0_CLK clock             */ {0U,                            CLOCK_IP_NO_CALLBACK,           0U,                                 0U,                 0U,                          0U,                          0U,                            0U,                     0U},                        /*   PIT0_CLK clock             */ \
+/*   PIT1_CLK clock             */ {0U,                            CLOCK_IP_NO_CALLBACK,           0U,                                 0U,                 0U,                          0U,                          0U,                            0U,                     0U},                        /*   PIT1_CLK clock             */ \
+/*   QSPI_2X_CLK clock          */ {CLOCK_IP_CGM0_INSTANCE,        CLOCK_IP_HWMUX_DIV,             CLOCK_IP_QSPI_2X_EXTENSION,         0U,                 CLOCK_IP_SEL_12_INDEX,       0U,                          0U,                            0U,                     0U},                        /*   QSPI_2X_CLK clock          */ \
+/*   QSPI_1X_CLK clock          */ {0U,                            CLOCK_IP_CMU,                   0U,                                 0U,                 0U,                          0U,                          0U,                            0U,                     CLOCK_IP_CMU_17_INSTANCE},  /*   QSPI_1X_CLK clock         */ \
+/*   QSPI0_CLK clock            */ {0U,                            CLOCK_IP_NO_CALLBACK,           0U,                                 0U,                 0U,                          0U,                          0U,                            0U,                     0U},                        /*   QSPI0_CLK clock            */ \
+/*   RTC_CLK clock              */ {0U,                            CLOCK_IP_RTC_SEL,               0U,                                 0U,                 0U,                          0U,                          0U,                            0U,                     0U},                        /*   RTC_CLK clock              */
+/*   RTC0_CLK clock             */ {0U,                            CLOCK_IP_NO_CALLBACK,           0U,                                 0U,                 0U,                          0U,                          0U,                            0U,                     0U},                        /*   RTC0_CLK clock             */ \
+/*   SIUL0_CLK clock            */ {0U,                            CLOCK_IP_NO_CALLBACK,           0U,                                 0U,                 0U,                          0U,                          0U,                            0U,                     0U},                        /*   SIUL0_CLK clock            */ \
+/*   SIUL1_CLK clock            */ {0U,                            CLOCK_IP_NO_CALLBACK,           0U,                                 0U,                 0U,                          0U,                          0U,                            0U,                     0U},                        /*   SIUL1_CLK clock            */ \
+/*   SPI_CLK clock              */ {CLOCK_IP_CGM0_INSTANCE,        CLOCK_IP_HWMUX_CMU,             CLOCK_IP_SPI_EXTENSION,             0U,                 CLOCK_IP_SEL_16_INDEX,       0U,                          0U,                            0U,                     CLOCK_IP_CMU_22_INSTANCE},  /*   SPI_CLK clock              */ \
+/*   SPI0_CLK clock             */ {0U,                            CLOCK_IP_NO_CALLBACK,           0U,                                 0U,                 0U,                          0U,                          0U,                            0U,                     0U},                        /*   SPI0_CLK clock             */ \
+/*   SPI1_CLK clock             */ {0U,                            CLOCK_IP_NO_CALLBACK,           0U,                                 0U,                 0U,                          0U,                          0U,                            0U,                     0U},                        /*   SPI1_CLK clock             */ \
+/*   SPI2_CLK clock             */ {0U,                            CLOCK_IP_NO_CALLBACK,           0U,                                 0U,                 0U,                          0U,                          0U,                            0U,                     0U},                        /*   SPI2_CLK clock             */ \
+/*   SPI3_CLK clock             */ {0U,                            CLOCK_IP_NO_CALLBACK,           0U,                                 0U,                 0U,                          0U,                          0U,                            0U,                     0U},                        /*   SPI3_CLK clock             */ \
+/*   SPI4_CLK clock             */ {0U,                            CLOCK_IP_NO_CALLBACK,           0U,                                 0U,                 0U,                          0U,                          0U,                            0U,                     0U},                        /*   SPI4_CLK clock             */ \
+/*   SPI5_CLK clock             */ {0U,                            CLOCK_IP_NO_CALLBACK,           0U,                                 0U,                 0U,                          0U,                          0U,                            0U,                     0U},                        /*   SPI5_CLK clock             */ \
+/*   STM0_CLK clock             */ {0U,                            CLOCK_IP_NO_CALLBACK,           0U,                                 0U,                 0U,                          0U,                          0U,                            0U,                     0U},                        /*   STM0_CLK clock             */ \
+/*   STM1_CLK clock             */ {0U,                            CLOCK_IP_NO_CALLBACK,           0U,                                 0U,                 0U,                          0U,                          0U,                            0U,                     0U},                        /*   STM1_CLK clock             */ \
+/*   STM2_CLK clock             */ {0U,                            CLOCK_IP_NO_CALLBACK,           0U,                                 0U,                 0U,                          0U,                          0U,                            0U,                     0U},                        /*   STM2_CLK clock             */ \
+/*   STM3_CLK clock             */ {0U,                            CLOCK_IP_NO_CALLBACK,           0U,                                 0U,                 0U,                          0U,                          0U,                            0U,                     0U},                        /*   STM3_CLK clock             */ \
+/*   STM4_CLK clock             */ {0U,                            CLOCK_IP_NO_CALLBACK,           0U,                                 0U,                 0U,                          0U,                          0U,                            0U,                     0U},                        /*   STM4_CLK clock             */ \
+/*   STM5_CLK clock             */ {0U,                            CLOCK_IP_NO_CALLBACK,           0U,                                 0U,                 0U,                          0U,                          0U,                            0U,                     0U},                        /*   STM5_CLK clock             */ \
+/*   STM6_CLK clock             */ {0U,                            CLOCK_IP_NO_CALLBACK,           0U,                                 0U,                 0U,                          0U,                          0U,                            0U,                     0U},                        /*   STM6_CLK clock             */ \
+/*   STM7_CLK clock             */ {0U,                            CLOCK_IP_NO_CALLBACK,           0U,                                 0U,                 0U,                          0U,                          0U,                            0U,                     0U},                        /*   STM7_CLK clock             */ \
+/*   SWT0_CLK clock             */ {0U,                            CLOCK_IP_NO_CALLBACK,           0U,                                 0U,                 0U,                          0U,                          0U,                            0U,                     0U},                        /*   SWT0_CLK clock             */ \
+/*   SWT1_CLK clock             */ {0U,                            CLOCK_IP_NO_CALLBACK,           0U,                                 0U,                 0U,                          0U,                          0U,                            0U,                     0U},                        /*   SWT1_CLK clock             */ \
+/*   SWT2_CLK clock             */ {0U,                            CLOCK_IP_NO_CALLBACK,           0U,                                 0U,                 0U,                          0U,                          0U,                            0U,                     0U},                        /*   SWT2_CLK clock             */ \
+/*   SWT3_CLK clock             */ {0U,                            CLOCK_IP_NO_CALLBACK,           0U,                                 0U,                 0U,                          0U,                          0U,                            0U,                     0U},                        /*   SWT3_CLK clock             */ \
+/*   SWT4_CLK clock             */ {0U,                            CLOCK_IP_NO_CALLBACK,           0U,                                 0U,                 0U,                          0U,                          0U,                            0U,                     0U},                        /*   SWT4_CLK clock             */ \
+/*   SWT5_CLK clock             */ {0U,                            CLOCK_IP_NO_CALLBACK,           0U,                                 0U,                 0U,                          0U,                          0U,                            0U,                     0U},                        /*   SWT5_CLK clock             */ \
+/*   SWT6_CLK clock             */ {0U,                            CLOCK_IP_NO_CALLBACK,           0U,                                 0U,                 0U,                          0U,                          0U,                            0U,                     0U},                        /*   SWT6_CLK clock             */ \
+/*   SDHC_CLK clock             */ {CLOCK_IP_CGM0_INSTANCE,        CLOCK_IP_HWMUX_DIV_CMU,         CLOCK_IP_SDHC_EXTENSION,            0U,                 CLOCK_IP_SEL_14_INDEX,       0U,                          0U,                            0U,                     CLOCK_IP_CMU_18_INSTANCE},  /*   SDHC_CLK clock             */ \
+/*   USDHC0_CLK clock           */ {0U,                            CLOCK_IP_GATE,                  0U,                                 0U,                 0U,                          0U,                          CLOCK_IP_PRT0_COL0_REQ0_INDEX, 0U,                     0U},                        /*   USDHC0_CLK clock           */ \
+/*   WKPU0_CLK clock            */ {0U,                            CLOCK_IP_NO_CALLBACK,           0U,                                 0U,                 0U,                          0U,                          0U,                            0U,                     0U},                        /*   WKPU0_CLK clock            */ \
+/*   XBAR_DIV3_FAIL_CLK clock   */ {0U,                            CLOCK_IP_CMU,                   0U,                                 0U,                 0U,                          0U,                          0U,                            0U,                     CLOCK_IP_CMU_5_INSTANCE},   /*   XBAR_DIV3_FAIL_CLK clock   */ \
 };
 
 /* Clock stop constant section data */
 #define MCU_STOP_SEC_CONST_8
 #include "Mcu_MemMap.h"
 
+
+
+
+/* Clock start constant section data */
+#define MCU_START_SEC_CONST_16
+#include "Mcu_MemMap.h"
+/*!
+ * @brief Converts a clock name to a selector entry hardware value
+ */
+const uint16 Clock_Ip_au16SelectorEntryHardwareValue[CLOCK_IP_NAMES_NO] = {
+    0U,                                       /*!< FIRC_CLK                                */
+    2U,                                       /*!< FXOSC_CLK                               */
+    1U,                                       /*!< SIRC_CLK                                */
+    0U,                                       /*!< COREPLL_CLK                             */
+    0U,                                       /*!< PERIPHPLL_CLK                           */
+    0U,                                       /*!< DDRPLL_CLK                              */
+    0U,                                       /*!< ACCELPLL_CLK                            */
+    4U,                                       /*!< CORE_PLL_PHI0_CLK                       */
+    5U,                                       /*!< CORE_PLL_PHI1_CLK                       */
+    12U,                                      /*!< CORE_PLL_DFS1_CLK                       */
+    13U,                                      /*!< CORE_PLL_DFS2_CLK                       */
+    14U,                                      /*!< CORE_PLL_DFS3_CLK                       */
+    15U,                                      /*!< CORE_PLL_DFS4_CLK                       */
+    16U,                                      /*!< CORE_PLL_DFS5_CLK                       */
+    17U,                                      /*!< CORE_PLL_DFS6_CLK                       */
+    18U,                                      /*!< PERIPH_PLL_PHI0_CLK                     */
+    19U,                                      /*!< PERIPH_PLL_PHI1_CLK                     */
+    20U,                                      /*!< PERIPH_PLL_PHI2_CLK                     */
+    21U,                                      /*!< PERIPH_PLL_PHI3_CLK                     */
+    22U,                                      /*!< PERIPH_PLL_PHI4_CLK                     */
+    23U,                                      /*!< PERIPH_PLL_PHI5_CLK                     */
+    24U,                                      /*!< PERIPH_PLL_PHI6_CLK                     */
+    25U,                                      /*!< PERIPH_PLL_PHI7_CLK                     */
+    26U,                                      /*!< PERIPH_PLL_DFS1_CLK                     */
+    27U,                                      /*!< PERIPH_PLL_DFS2_CLK                     */
+    28U,                                      /*!< PERIPH_PLL_DFS3_CLK                     */
+    29U,                                      /*!< PERIPH_PLL_DFS4_CLK                     */
+    30U,                                      /*!< PERIPH_PLL_DFS5_CLK                     */
+    31U,                                      /*!< PERIPH_PLL_DFS6_CLK                     */
+    36U,                                      /*!< DDR_PLL_PHI0_CLK                        */
+    32U,                                      /*!< ACCEL_PLL_PHI0_CLK                      */
+    33U,                                      /*!< ACCEL_PLL_PHI1_CLK                      */
+    3U,                                       /*!< RTC_EXT_REF_CLK                         */
+    34U,                                      /*!< FTM_0_EXT_REF_CLK                       */
+    35U,                                      /*!< FTM_1_EXT_REF_CLK                       */
+    39U,                                      /*!< GMAC_0_EXT_REF_CLK                      */
+    38U,                                      /*!< GMAC_0_EXT_RX_CLK                       */
+    37U,                                      /*!< GMAC_0_EXT_TX_CLK                       */
+    44U,                                      /*!< GMAC_EXT_TS_CLK                         */
+    50U,                                      /*!< PFE_MAC_0_EXT_REF_CLK                   */
+    49U,                                      /*!< PFE_MAC_0_EXT_RX_CLK                    */
+    48U,                                      /*!< PFE_MAC_0_EXT_TX_CLK                    */
+    53U,                                      /*!< PFE_MAC_1_EXT_REF_CLK                   */
+    52U,                                      /*!< PFE_MAC_1_EXT_RX_CLK                    */
+    51U,                                      /*!< PFE_MAC_1_EXT_TX_CLK                    */
+    56U,                                      /*!< PFE_MAC_2_EXT_REF_CLK                   */
+    55U,                                      /*!< PFE_MAC_2_EXT_RX_CLK                    */
+    54U,                                      /*!< PFE_MAC_2_EXT_TX_CLK                    */
+    40U,                                      /*!< SERDES_0_XPCS_0_TX                      */
+    41U,                                      /*!< SERDES_0_XPCS_0_CDR                     */
+    46U,                                      /*!< SERDES_0_XPCS_1_TX                      */
+    47U,                                      /*!< SERDES_0_XPCS_1_CDR                     */
+    57U,                                      /*!< SERDES_1_XPCS_0_TX                      */
+    58U,                                      /*!< SERDES_1_XPCS_0_CDR                     */
+    62U,                                      /*!< SERDES_1_XPCS_1_TX                      */
+    63U,                                      /*!< SERDES_1_XPCS_1_CDR                     */
+    0U,                                       /*!< XBAR_2X_CLK                             */
+    0U,                                       /*!< XBAR_CLK                                */
+    0U,                                       /*!< XBAR_DIV2_CLK                           */
+    0U,                                       /*!< XBAR_DIV3_CLK                           */
+    0U,                                       /*!< XBAR_DIV4_CLK                           */
+    0U,                                       /*!< XBAR_DIV6_CLK                           */
+    0U,                                       /*!< A53_CORE_CLK                            */
+    0U,                                       /*!< A53_CORE_DIV2_CLK                       */
+    0U,                                       /*!< A53_CORE_DIV10_CLK                      */
+    0U,                                       /*!< DDR_CLK                                 */
+    0U,                                       /*!< PFE_PE_CLK                              */
+    0U,                                       /*!< PFE_SYS_CLK                             */
+    0U,                                       /*!< PER_CLK                                 */
+    0U,                                       /*!< GMAC0_REF_CLK                           */
+    45U,                                      /*!< GMAC0_REF_DIV_CLK                       */
+    59U,                                      /*!< PFEMAC0_REF_DIV_CLK                     */
+    60U,                                      /*!< PFEMAC1_REF_DIV_CLK                     */
+    61U,                                      /*!< PFEMAC2_REF_DIV_CLK                     */
+    0U,                                       /*!< SERDES_REF_CLK                          */
+    0U,                                       /*!< THE_LAST_PRODUCER_CLK           */
+    0U,                                       /*!< ADC0_CLK                        */
+    0U,                                       /*!< ADC1_CLK                        */
+    0U,                                       /*!< CLKOUT0_CLK                     */
+    0U,                                       /*!< CLKOUT1_CLK                     */
+    0U,                                       /*!< CORE_A53_CLUSTER_0_CLK          */
+    0U,                                       /*!< CORE_A53_CLUSTER_1_CLK          */
+    0U,                                       /*!< CORE_M7_0_CLK                   */
+    0U,                                       /*!< CORE_M7_1_CLK                   */
+    0U,                                       /*!< CORE_M7_2_CLK                   */
+    0U,                                       /*!< CRC0_CLK                        */
+    0U,                                       /*!< CTU0_CLK                        */
+    0U,                                       /*!< CTU1_CLK                        */
+    0U,                                       /*!< DAPB_CLK                        */
+    0U,                                       /*!< DDR0_CLK                        */
+    0U,                                       /*!< DMA0_CLK                        */
+    0U,                                       /*!< DMA1_CLK                        */
+    0U,                                       /*!< DMAMUX0_CLK                     */
+    0U,                                       /*!< DMAMUX1_CLK                     */
+    0U,                                       /*!< DMAMUX2_CLK                     */
+    0U,                                       /*!< DMAMUX3_CLK                     */
+    0U,                                       /*!< DMA_CRC0_CLK                    */
+    0U,                                       /*!< DMA_CRC1_CLK                    */
+    0U,                                       /*!< EIM0_CLK                        */
+    0U,                                       /*!< EIM1_CLK                        */
+    0U,                                       /*!< EIM2_CLK                        */
+    0U,                                       /*!< EIM3_CLK                        */
+    0U,                                       /*!< EIM_CLK                         */
+    0U,                                       /*!< ERM0_CLK                        */
+    0U,                                       /*!< FLEXCAN_CLK                     */
+    0U,                                       /*!< FLEXCAN0_CLK                    */
+    0U,                                       /*!< FLEXCAN1_CLK                    */
+    0U,                                       /*!< FLEXCAN2_CLK                    */
+    0U,                                       /*!< FLEXCAN3_CLK                    */
+    0U,                                       /*!< FLEXRAY_CLK                     */
+    0U,                                       /*!< FRAY0_CLK                       */
+    0U,                                       /*!< FLEXTIMERA_CLK                  */
+    0U,                                       /*!< FTIMER0_CLK                     */
+    0U,                                       /*!< FLEXTIMERB_CLK                  */
+    0U,                                       /*!< FTIMER1_CLK                     */
+    0U,                                       /*!< GMAC_TS_CLK                     */
+    0U,                                       /*!< GMAC0_TS_CLK                    */
+    0U,                                       /*!< GMAC0_RX_CLK                    */
+    0U,                                       /*!< GMAC0_TX_CLK                    */
+    0U,                                       /*!< IIC0_CLK                        */
+    0U,                                       /*!< IIC1_CLK                        */
+    0U,                                       /*!< IIC2_CLK                        */
+    0U,                                       /*!< IIC3_CLK                        */
+    0U,                                       /*!< IIC4_CLK                        */
+    0U,                                       /*!< LBIST_CLK                       */
+    0U,                                       /*!< LBIST0_CLK                      */
+    0U,                                       /*!< LBIST1_CLK                      */
+    0U,                                       /*!< LBIST2_CLK                      */
+    0U,                                       /*!< LBIST3_CLK                      */
+    0U,                                       /*!< LBIST4_CLK                      */
+    0U,                                       /*!< LBIST5_CLK                      */
+    0U,                                       /*!< LBIST6_CLK                      */
+    0U,                                       /*!< LBIST7_CLK                      */
+    0U,                                       /*!< LIN_BAUD_CLK                    */
+    0U,                                       /*!< LINFLEXD_CLK                    */
+    0U,                                       /*!< LIN0_CLK                        */
+    0U,                                       /*!< LIN1_CLK                        */
+    0U,                                       /*!< LIN2_CLK                        */
+    0U,                                       /*!< OCOTP0_CLK                      */
+    0U,                                       /*!< PFEMAC0_RX_CLK                  */
+    0U,                                       /*!< PFEMAC0_TX_CLK                  */
+    0U,                                       /*!< PFEMAC0_TX_DIV_CLK              */
+    0U,                                       /*!< PFEMAC1_RX_CLK                  */
+    0U,                                       /*!< PFEMAC1_TX_CLK                  */
+    0U,                                       /*!< PFEMAC2_RX_CLK                  */
+    0U,                                       /*!< PFEMAC2_TX_CLK                  */
+    0U,                                       /*!< PIT0_CLK                        */
+    0U,                                       /*!< PIT1_CLK                        */
+    0U,                                       /*!< QSPI_2X_CLK                     */
+    0U,                                       /*!< QSPI_1X_CLK                     */
+    0U,                                       /*!< QSPI0_CLK                       */
+    0U,                                       /*!< RTC_CLK                         */
+    0U,                                       /*!< RTC0_CLK                        */
+    0U,                                       /*!< SIUL0_CLK                       */
+    0U,                                       /*!< SIUL1_CLK                       */
+    0U,                                       /*!< SPI_CLK                         */
+    0U,                                       /*!< SPI0_CLK                        */
+    0U,                                       /*!< SPI1_CLK                        */
+    0U,                                       /*!< SPI2_CLK                        */
+    0U,                                       /*!< SPI3_CLK                        */
+    0U,                                       /*!< SPI4_CLK                        */
+    0U,                                       /*!< SPI5_CLK                        */
+    0U,                                       /*!< STM0_CLK                        */
+    0U,                                       /*!< STM1_CLK                        */
+    0U,                                       /*!< STM2_CLK                        */
+    0U,                                       /*!< STM3_CLK                        */
+    0U,                                       /*!< STM4_CLK                        */
+    0U,                                       /*!< STM5_CLK                        */
+    0U,                                       /*!< STM6_CLK                        */
+    0U,                                       /*!< STM7_CLK                        */
+    0U,                                       /*!< SWT0_CLK                        */
+    0U,                                       /*!< SWT1_CLK                        */
+    0U,                                       /*!< SWT2_CLK                        */
+    0U,                                       /*!< SWT3_CLK                        */
+    0U,                                       /*!< SWT4_CLK                        */
+    0U,                                       /*!< SWT5_CLK                        */
+    0U,                                       /*!< SWT6_CLK                        */
+    0U,                                       /*!< SDHC_CLK                        */
+    0U,                                       /*!< USDHC0_CLK                      */
+    0U,                                       /*!< WKPU0_CLK                       */
+    0U,                                       /*!< XBAR_DIV3_FAIL_CLK              */
+};
+
+/*!
+ * @brief Converts a clock name to a RTC selector entry hardware value
+ */
+const uint16 Clock_Ip_au16SelectorEntryRtcHardwareValue[CLOCK_IP_PRODUCERS_NO] = {
+    2U,                                       /*!< FIRC_CLK                         */
+    0U,                                       /*!< FXOSC_CLK                     NA */
+    0U,                                       /*!< SIRC_CLK                         */
+    0U,                                       /*!< COREPLL_CLK                   NA */
+    0U,                                       /*!< PERIPHPLL_CLK                 NA */
+    0U,                                       /*!< DDRPLL_CLK                    NA */
+    0U,                                       /*!< ACCELPLL_CLK                  NA */
+    0U,                                       /*!< CORE_PLL_PHI0_CLK             NA */
+    0U,                                       /*!< CORE_PLL_PHI1_CLK             NA */
+    0U,                                       /*!< CORE_PLL_DFS1_CLK             NA */
+    0U,                                       /*!< CORE_PLL_DFS2_CLK             NA */
+    0U,                                       /*!< CORE_PLL_DFS3_CLK             NA */
+    0U,                                       /*!< CORE_PLL_DFS4_CLK             NA */
+    0U,                                       /*!< CORE_PLL_DFS5_CLK             NA */
+    0U,                                       /*!< CORE_PLL_DFS6_CLK             NA */
+    0U,                                       /*!< PERIPH_PLL_PHI0_CLK           NA */
+    0U,                                       /*!< PERIPH_PLL_PHI1_CLK           NA */
+    0U,                                       /*!< PERIPH_PLL_PHI2_CLK           NA */
+    0U,                                       /*!< PERIPH_PLL_PHI3_CLK           NA */
+    0U,                                       /*!< PERIPH_PLL_PHI4_CLK           NA */
+    0U,                                       /*!< PERIPH_PLL_PHI5_CLK           NA */
+    0U,                                       /*!< PERIPH_PLL_PHI6_CLK           NA */
+    0U,                                       /*!< PERIPH_PLL_PHI7_CLK           NA */
+    0U,                                       /*!< PERIPH_PLL_DFS1_CLK           NA */
+    0U,                                       /*!< PERIPH_PLL_DFS2_CLK           NA */
+    0U,                                       /*!< PERIPH_PLL_DFS3_CLK           NA */
+    0U,                                       /*!< PERIPH_PLL_DFS4_CLK           NA */
+    0U,                                       /*!< PERIPH_PLL_DFS5_CLK           NA */
+    0U,                                       /*!< PERIPH_PLL_DFS6_CLK           NA */
+    0U,                                       /*!< DDR_PLL_PHI0_CLK              NA */
+    0U,                                       /*!< ACCEL_PLL_PHI0_CLK            NA */
+    0U,                                       /*!< ACCEL_PLL_PHI1_CLK            NA */
+    3U,                                       /*!< RTC_EXT_REF_CLK                  */
+    0U,                                       /*!< FTM_0_EXT_REF_CLK             NA */
+    0U,                                       /*!< FTM_1_EXT_REF_CLK             NA */
+    0U,                                       /*!< GMAC_0_EXT_REF_CLK            NA */
+    0U,                                       /*!< GMAC_0_EXT_RX_CLK             NA */
+    0U,                                       /*!< GMAC_0_EXT_TX_CLK             NA */
+    0U,                                       /*!< GMAC_EXT_TS_CLK               NA */
+    0U,                                       /*!< PFE_MAC_0_EXT_REF_CLK         NA */
+    0U,                                       /*!< PFE_MAC_0_EXT_RX_CLK          NA */
+    0U,                                       /*!< PFE_MAC_0_EXT_TX_CLK          NA */
+    0U,                                       /*!< PFE_MAC_1_EXT_REF_CLK         NA */
+    0U,                                       /*!< PFE_MAC_1_EXT_RX_CLK          NA */
+    0U,                                       /*!< PFE_MAC_1_EXT_TX_CLK          NA */
+    0U,                                       /*!< PFE_MAC_2_EXT_REF_CLK         NA */
+    0U,                                       /*!< PFE_MAC_2_EXT_RX_CLK          NA */
+    0U,                                       /*!< PFE_MAC_2_EXT_TX_CLK          NA */
+    0U,                                       /*!< SERDES_0_XPCS_0_TX            NA */
+    0U,                                       /*!< SERDES_0_XPCS_0_CDR           NA */
+    0U,                                       /*!< SERDES_0_XPCS_1_TX            NA */
+    0U,                                       /*!< SERDES_0_XPCS_1_CDR           NA */
+    0U,                                       /*!< SERDES_1_XPCS_0_TX            NA */
+    0U,                                       /*!< SERDES_1_XPCS_0_CDR           NA */
+    0U,                                       /*!< SERDES_1_XPCS_1_TX            NA */
+    0U,                                       /*!< SERDES_1_XPCS_1_CDR           NA */
+    0U,                                       /*!< XBAR_2X_CLK                   NA */
+    0U,                                       /*!< XBAR_CLK                      NA */
+    0U,                                       /*!< XBAR_DIV2_CLK                 NA */
+    0U,                                       /*!< XBAR_DIV3_CLK                 NA */
+    0U,                                       /*!< XBAR_DIV4_CLK                 NA */
+    0U,                                       /*!< XBAR_DIV6_CLK                 NA */
+    0U,                                       /*!< A53_CORE_CLK                  NA */
+    0U,                                       /*!< A53_CORE_DIV2_CLK             NA */
+    0U,                                       /*!< A53_CORE_DIV10_CLK            NA */
+    0U,                                       /*!< DDR_CLK                       NA */
+    0U,                                       /*!< PFE_PE_CLK                    NA */
+    0U,                                       /*!< PFE_SYS_CLK                   NA */
+    0U,                                       /*!< PER_CLK                       NA */
+    0U,                                       /*!< GMAC0_REF_CLK                 NA */
+    0U,                                       /*!< GMAC0_REF_DIV_CLK             NA */
+    0U,                                       /*!< PFEMAC0_REF_DIV_CLK           NA */
+    0U,                                       /*!< PFEMAC1_REF_DIV_CLK           NA */
+    0U,                                       /*!< PFEMAC2_REF_DIV_CLK           NA */
+    0U,                                       /*!< SERDES_REF_CLK                NA */
+};
+
+/* Clock stop constant section data */
+#define MCU_STOP_SEC_CONST_16
+#include "Mcu_MemMap.h"
 
 
 
@@ -1434,755 +914,947 @@ const uint16 Clock_Ip_au16ClockFeatures[CLOCK_IP_NAMES_NO][CLOCK_IP_FEATURES_NO]
 /* Clock name types */
 const uint32 Clock_Ip_au8ClockNameTypes[CLOCK_IP_NAMES_NO] =
 {
-/*   FIRC_CLK clock             */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   FIRC_CLK clock             */
-/*   FIRCDIV2_CLK clock         */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   FIRCDIV2_CLK clock         */
-/*   SAFE_CLK clock             */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   SAFE_CLK clock             */
-/*   SIRC_CLK clock             */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   SIRC_CLK clock             */
-/*   FXOSC_CLK clock            */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   FXOSC_CLK clock            */
-/*   SXOSC_CLK clock            */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   SXOSC_CLK clock            */
-/*   gated_clk clock            */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   gated_clk clock            */
-/*   fast_crystal_oscillator    */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   fast_crystal_oscillator    */
-/*   slow_crystal_oscillator    */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   slow_crystal_oscillator    */
-/*   eth0_mii_rx_ext_clk clock  */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   eth0_mii_rx_ext_clk clock  */
-/*   eth0_mii_tx_ext_clk clock  */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   eth0_mii_tx_ext_clk clock  */
-/*   eth0_rgmii_rx_ext_clk      */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   eth0_rgmii_rx_ext_clk      */
-/*   eth0_rgmii_tx_ext_clk      */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   eth0_rgmii_tx_ext_clk      */
-/*   eth0_rmii_ref_ext_clk      */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   eth0_rmii_ref_ext_clk      */
-/*   eth1_mii_rx_ext_clk clock  */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   eth1_mii_rx_ext_clk clock  */
-/*   eth1_mii_tx_ext_clk clock  */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   eth1_mii_tx_ext_clk clock  */
-/*   eth1_rgmii_rx_ext_clk      */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   eth1_rgmii_rx_ext_clk      */
-/*   eth1_rgmii_tx_ext_clk      */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   eth1_rgmii_tx_ext_clk      */
-/*   eth1_rmii_ref_ext_clk      */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   eth1_rmii_ref_ext_clk      */
-/*   eth2_mii_rx_ext_clk clock  */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   eth2_mii_rx_ext_clk clock  */
-/*   eth2_mii_tx_ext_clk clock  */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   eth2_mii_tx_ext_clk clock  */
-/*   eth2_rgmii_rx_ext_clk      */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   eth2_rgmii_rx_ext_clk      */
-/*   eth2_rgmii_tx_ext_clk      */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   eth2_rgmii_tx_ext_clk      */
-/*   eth2_rmii_ref_ext_clk      */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   eth2_rmii_ref_ext_clk      */
-/*   ts_1588_clk clock          */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   ts_1588_clk clock          */
-/*   PLL0_CLK clock             */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   PLL0_CLK clock             */
-/*   PLL0_DIV_CLK clock         */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   PLL0_DIV_CLK clock         */
-/*   PLL0_DIV0_CLK clock        */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   PLL0_DIV0_CLK clock        */
-/*   PLL0_DIV4_CLK clock        */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   PLL0_DIV4_CLK clock        */
-/*   PLL0_DFS0_CLK clock        */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   PLL0_DFS0_CLK clock        */
-#if defined(CLOCK_IP_HAS_PLL0_DFS1_CLK)
-/*   PLL0_DFS1_CLK clock        */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   PLL0_DFS1_CLK clock        */
-#endif
-#if defined(CLOCK_IP_HAS_PLL0_DFS2_CLK)
-/*   PLL0_DFS2_CLK clock        */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   PLL0_DFS2_CLK clock        */
-#endif
-#if defined(CLOCK_IP_HAS_PLL0_DFS3_CLK)
-/*   PLL0_DFS3_CLK clock        */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   PLL0_DFS3_CLK clock        */
-#endif
-/*   PLL1_CLK clock             */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   PLL1_CLK clock             */
-/*   PLL1_DIV_CLK clock         */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   PLL1_DIV_CLK clock         */
-/*   PLL1_DIV0_CLK clock        */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   PLL1_DIV0_CLK clock        */
-/*   CPE_PLL_CLK clock          */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   CPE_PLL_CLK clock          */
-/*   CPE_DIV_CLK clock          */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   CPE_DIV_CLK clock          */
-/*   CPE_DIV0_CLK clock         */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   CPE_DIV0_CLK clock         */
-/*   LPE_CLK clock              */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   LPE_CLK clock              */
-#if defined(CLOCK_IP_HAS_LPE_DIV1_CLK)
-/*   LPE_DIV1_CLK clock         */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   LPE_DIV1_CLK clock         */
-#endif
-#if defined(CLOCK_IP_HAS_LPE_DIV2_CLK)
-/*   LPE_DIV2_CLK clock         */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   LPE_DIV2_CLK clock         */
-#endif
-#if defined(CLOCK_IP_HAS_LPE_DIV4_CLK)
-/*   LPE_DIV4_CLK clock         */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   LPE_DIV4_CLK clock         */
-#endif
-#if defined(CLOCK_IP_HAS_LPE_DIV8_CLK)
-/*   LPE_DIV8_CLK clock         */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   LPE_DIV8_CLK clock         */
-#endif
-/*   PLT_CLK clock              */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   PLT_CLK clock              */
-#if defined(CLOCK_IP_HAS_PLTCORE_CLK)
-/*   PLTCORE_CLK clock          */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   PLTCORE_CLK clock          */
-#endif
-#if defined(CLOCK_IP_HAS_PLTDIV1_CLK)
-/*   PLTDIV1_CLK clock          */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   PLTDIV1_CLK clock          */
-#endif
-#if defined(CLOCK_IP_HAS_PLTDIV2_CLK)
-/*   PLTDIV2_CLK clock          */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   PLTDIV2_CLK clock          */
-#endif
-#if defined(CLOCK_IP_HAS_PLTDIV4_CLK)
-/*   PLTDIV4_CLK clock          */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   PLTDIV4_CLK clock          */
-#endif
-/*   THE_LAST_PRODUCER_CLK      */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   THE_LAST_PRODUCER_CLK      */
-/*   ACP_DMA3_H_CLK clock       */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   ACP_DMA3_H_CLK clock       */
-/*   ACP_DMA3_IPG_CLK clock     */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   ACP_DMA3_IPG_CLK clock     */
-/*   ADC0_IPG_CLK clock         */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   ADC0_IPG_CLK clock         */
-/*   ADC1_IPG_CLK clock         */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   ADC1_IPG_CLK clock         */
-/*   BCTU_IPG_CLK clock         */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   BCTU_IPG_CLK clock         */
-/*   BCTU_IPS_CLK clock         */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   BCTU_IPS_CLK clock         */
-/*   CAN_HUB_IPG_CLK clock      */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   CAN_HUB_IPG_CLK clock      */
-/*   CAN_PE_CLK clock           */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   CAN_PE_CLK clock           */
-/*   CLKBIST_IPG_CLK clock      */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   CLKBIST_IPG_CLK clock      */
-/*   CRC0_IPG_CLK clock         */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   CRC0_IPG_CLK clock         */
-/*   CRC1_IPG_CLK clock         */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   CRC1_IPG_CLK clock         */
-/*   CSTCU_IPG_CLK clock        */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   CSTCU_IPG_CLK clock        */
-/*   DIG_PHY0_CLK clock         */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   DIG_PHY0_CLK clock         */
-/*   DIG_PHY1_CLK clock         */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   DIG_PHY1_CLK clock         */
-/*   DIG_PHY2_CLK clock         */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   DIG_PHY2_CLK clock         */
-/*   DIG_PHY3_CLK clock         */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   DIG_PHY3_CLK clock         */
-/*   DMA_CH_MUX0_IPG_CLK clock  */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   DMA_CH_MUX0_IPG_CLK clock  */
-/*   DMA_CH_MUX1_IPG_CLK clock  */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   DMA_CH_MUX1_IPG_CLK clock  */
-/*   DMA4_AXI_CLK clock         */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   DMA4_AXI_CLK clock         */
-/*   DMA4_IPG_S_CLK clock       */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   DMA4_IPG_S_CLK clock       */
-/*   DFT_CLK clock              */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   DFT_CLK clock              */
-/*   DSPI_CLK clock             */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   DSPI_CLK clock             */
-/*   DSPI0_IPG_CLK clock        */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   DSPI0_IPG_CLK clock        */
-/*   DSPI1_IPG_CLK clock        */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   DSPI1_IPG_CLK clock        */
-/*   EDMA_TCD_CLK clock         */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   EDMA_TCD_CLK clock         */
-/*   EIM0_IPG_CLK clock         */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   EIM0_IPG_CLK clock         */
-/*   EIM1_IPG_CLK clock         */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   EIM1_IPG_CLK clock         */
-/*   EIM2_IPG_CLK clock         */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   EIM2_IPG_CLK clock         */
-/*   EIM3_IPG_CLK clock         */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   EIM3_IPG_CLK clock         */
-/*   EMIOS0_IPG_CLK clock       */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   EMIOS0_IPG_CLK clock       */
-/*   EMIOS1_IPG_CLK clock       */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   EMIOS1_IPG_CLK clock       */
-/*   EMIOS2_IPG_CLK clock       */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   EMIOS2_IPG_CLK clock       */
-/*   ERM0_IPG_CLK clock         */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   ERM0_IPG_CLK clock         */
-/*   ERM1_IPG_CLK clock         */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   ERM1_IPG_CLK clock         */
-/*   ERM2_IPG_CLK clock         */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   ERM2_IPG_CLK clock         */
-/*   ERM3_IPG_CLK clock         */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   ERM3_IPG_CLK clock         */
-/*   ETH_TS_CLK clock           */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   ETH_TS_CLK clock           */
-/*   ETH0_RX_CLK clock          */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   ETH0_RX_CLK clock          */
-/*   ETH0_TX_CLK clock          */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   ETH0_TX_CLK clock          */
-/*   ETH1_RX_CLK clock          */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   ETH1_RX_CLK clock          */
-/*   ETH1_TX_CLK clock          */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   ETH1_TX_CLK clock          */
-/*   ETH2_RX_CLK clock          */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   ETH2_RX_CLK clock          */
-/*   ETH2_TX_CLK clock          */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   ETH2_TX_CLK clock          */
-/*   ETH3_RX_CLK clock          */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   ETH3_RX_CLK clock          */
-/*   ETH3_TX_CLK clock          */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   ETH3_TX_CLK clock          */
-/*   ETH4_RX_CLK clock          */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   ETH4_RX_CLK clock          */
-/*   ETH4_TX_CLK clock          */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   ETH4_TX_CLK clock          */
-/*   FLEXCAN_0to7_PE_CLK clock  */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   FLEXCAN_0to7_PE_CLK clock  */
-/*   FLEXCAN_8to10_PE_CLK       */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   FLEXCAN_8to10_PE_CLK       */
-/*   FLEXCAN_11to16_PE_CLK      */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   FLEXCAN_11to16_PE_CLK      */
-/*   FLEXCAN0_IPG_CLK clock     */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   FLEXCAN0_IPG_CLK clock     */
-/*   FLEXCAN0_PE_NOGATE_CLK     */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   FLEXCAN0_PE_NOGATE_CLK     */
-/*   FLEXCAN0_TS_CLK clock      */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   FLEXCAN0_TS_CLK clock      */
-/*   FLEXCAN1_IPG_CLK clock     */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   FLEXCAN1_IPG_CLK clock     */
-/*   FLEXCAN1_PE_NOGATE_CLK     */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   FLEXCAN1_PE_NOGATE_CLK     */
-/*   FLEXCAN1_TS_CLK clock      */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   FLEXCAN1_TS_CLK clock      */
-/*   FLEXCAN2_IPG_CLK clock     */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   FLEXCAN2_IPG_CLK clock     */
-/*   FLEXCAN2_PE_NOGATE_CLK     */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   FLEXCAN2_PE_NOGATE_CLK     */
-/*   FLEXCAN2_TS_CLK clock      */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   FLEXCAN2_TS_CLK clock      */
-/*   FLEXCAN3_IPG_CLK clock     */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   FLEXCAN3_IPG_CLK clock     */
-/*   FLEXCAN3_PE_NOGATE_CLK     */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   FLEXCAN3_PE_NOGATE_CLK     */
-/*   FLEXCAN3_TS_CLK clock      */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   FLEXCAN3_TS_CLK clock      */
-/*   FLEXCAN4_IPG_CLK clock     */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   FLEXCAN4_IPG_CLK clock     */
-/*   FLEXCAN4_PE_NOGATE_CLK     */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   FLEXCAN4_PE_NOGATE_CLK     */
-/*   FLEXCAN4_TS_CLK clock      */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   FLEXCAN4_TS_CLK clock      */
-/*   FLEXCAN5_IPG_CLK clock     */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   FLEXCAN5_IPG_CLK clock     */
-/*   FLEXCAN5_PE_NOGATE_CLK     */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   FLEXCAN5_PE_NOGATE_CLK     */
-/*   FLEXCAN5_TS_CLK clock      */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   FLEXCAN5_TS_CLK clock      */
-/*   FLEXCAN6_IPG_CLK clock     */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   FLEXCAN6_IPG_CLK clock     */
-/*   FLEXCAN6_PE_NOGATE_CLK     */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   FLEXCAN6_PE_NOGATE_CLK     */
-/*   FLEXCAN6_TS_CLK clock      */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   FLEXCAN6_TS_CLK clock      */
-/*   FLEXCAN7_IPG_CLK clock     */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   FLEXCAN7_IPG_CLK clock     */
-/*   FLEXCAN7_PE_NOGATE_CLK     */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   FLEXCAN7_PE_NOGATE_CLK     */
-/*   FLEXCAN7_TS_CLK clock      */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   FLEXCAN7_TS_CLK clock      */
-/*   FLEXCAN8_IPG_CLK clock     */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   FLEXCAN8_IPG_CLK clock     */
-/*   FLEXCAN8_PE_NOGATE_CLK     */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   FLEXCAN8_PE_NOGATE_CLK     */
-/*   FLEXCAN8_TS_CLK clock      */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   FLEXCAN8_TS_CLK clock      */
-/*   FLEXCAN9_IPG_CLK clock     */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   FLEXCAN9_IPG_CLK clock     */
-/*   FLEXCAN9_PE_NOGATE_CLK     */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   FLEXCAN9_PE_NOGATE_CLK     */
-/*   FLEXCAN9_TS_CLK clock      */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   FLEXCAN9_TS_CLK clock      */
-/*   FLEXCAN10_IPG_CLK clock    */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   FLEXCAN10_IPG_CLK clock    */
-/*   FLEXCAN10_PE_NOGATE_CLK    */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   FLEXCAN10_PE_NOGATE_CLK    */
-/*   FLEXCAN10_TS_CLK clock     */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   FLEXCAN10_TS_CLK clock     */
-/*   FLEXCAN11_IPG_CLK clock    */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   FLEXCAN11_IPG_CLK clock    */
-/*   FLEXCAN11_PE_NOGATE_CLK    */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   FLEXCAN11_PE_NOGATE_CLK    */
-/*   FLEXCAN11_TS_CLK clock     */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   FLEXCAN11_TS_CLK clock     */
-/*   FLEXCAN12_IPG_CLK clock    */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   FLEXCAN12_IPG_CLK clock    */
-/*   FLEXCAN12_PE_NOGATE_CLK    */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   FLEXCAN12_PE_NOGATE_CLK    */
-/*   FLEXCAN12_TS_CLK clock     */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   FLEXCAN12_TS_CLK clock     */
-/*   FLEXCAN13_IPG_CLK clock    */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   FLEXCAN13_IPG_CLK clock    */
-/*   FLEXCAN13_PE_NOGATE_CLK    */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   FLEXCAN13_PE_NOGATE_CLK    */
-/*   FLEXCAN13_TS_CLK clock     */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   FLEXCAN13_TS_CLK clock     */
-/*   FLEXCAN14_IPG_CLK clock    */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   FLEXCAN14_IPG_CLK clock    */
-/*   FLEXCAN14_PE_NOGATE_CLK    */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   FLEXCAN14_PE_NOGATE_CLK    */
-/*   FLEXCAN14_TS_CLK clock     */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   FLEXCAN14_TS_CLK clock     */
-/*   FLEXCAN15_IPG_CLK clock    */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   FLEXCAN15_IPG_CLK clock    */
-/*   FLEXCAN15_PE_NOGATE_CLK    */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   FLEXCAN15_PE_NOGATE_CLK    */
-/*   FLEXCAN15_TS_CLK clock     */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   FLEXCAN15_TS_CLK clock     */
-/*   FLEXCAN16_IPG_CLK clock    */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   FLEXCAN16_IPG_CLK clock    */
-/*   FLEXCAN16_PE_NOGATE_CLK    */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   FLEXCAN16_PE_NOGATE_CLK    */
-/*   FLEXCAN16_TS_CLK clock     */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   FLEXCAN16_TS_CLK clock     */
-/*   FLEXIO_CLK clock           */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   FLEXIO_CLK clock           */
-/*   FLEXIO0_IPG_CLK clock      */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   FLEXIO0_IPG_CLK clock      */
-/*   FLEXIO0_PE_CLK clock       */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   FLEXIO0_PE_CLK clock       */
-/*   FLEXIO1_IPG_CLK clock      */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   FLEXIO1_IPG_CLK clock      */
-/*   FLEXIO1_PE_CLK clock       */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   FLEXIO1_PE_CLK clock       */
-/*   GPR0_IPG_CLK clock         */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   GPR0_IPG_CLK clock         */
-/*   GPR1_IPG_CLK clock         */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   GPR1_IPG_CLK clock         */
-/*   INTM_IPG_CLK clock         */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   INTM_IPG_CLK clock         */
-/*   IPSYNC_CSSI_MC_CGM_MASTER_CLK */(CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   IPSYNC_CSSI_MC_CGM_MASTER_CLK */
-/*   IPSYNC_CSSI_MC_CGM_SLAVE_CLK */(CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   IPSYNC_CSSI_MC_CGM_SLAVE_CLK */
-/*   IPSYNC_CVFCCU_MASTER_CLK   */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   IPSYNC_CVFCCU_MASTER_CLK   */
-/*   IPSYNC_CVFCCU_SLAVE_CLK    */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   IPSYNC_CVFCCU_SLAVE_CLK    */
-/*   IPSYNC_DSPI_IPI_0_MASTER_CLK */(CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   IPSYNC_DSPI_IPI_0_MASTER_CLK */
-/*   IPSYNC_DSPI_IPI_1_MASTER_CLK */(CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   IPSYNC_DSPI_IPI_1_MASTER_CLK */
-/*   IPSYNC_LPE_D_IP_FLEXCAN3_SYN_MASTER_CLK */(CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   IPSYNC_LPE_D_IP_FLEXCAN3_SYN_MASTER_CLK */
-/*   IPSYNC_LPE_D_IP_FLEXCAN3_SYN_SLAVE_CLK */(CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   IPSYNC_LPE_D_IP_FLEXCAN3_SYN_SLAVE_CLK */
-/*   IPSYNC_LPE_D_IP_LOGIC_UNIT_SYN_MASTER_CLK */(CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   IPSYNC_LPE_D_IP_LOGIC_UNIT_SYN_MASTER_CLK */
-/*   IPSYNC_LPE_D_IP_LOGIC_UNIT_SYN_SLAVE_CLK */(CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   IPSYNC_LPE_D_IP_LOGIC_UNIT_SYN_SLAVE_CLK */
-/*   IPSYNC_LPE_DA_IP_TEMPSENSE_C16FFC_MASTER_CLK */(CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   IPSYNC_LPE_DA_IP_TEMPSENSE_C16FFC_MASTER_CLK */
-/*   IPSYNC_LPE_DA_IP_TEMPSENSE_C16FFC_SLAVE_CLK */(CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   IPSYNC_LPE_DA_IP_TEMPSENSE_C16FFC_SLAVE_CLK */
-/*   IPSYNC_LPE_LVFCCU_MASTER_CLK */(CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   IPSYNC_LPE_LVFCCU_MASTER_CLK */
-/*   IPSYNC_LPE_LVFCCU_SLAVE_CLK */(CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   IPSYNC_LPE_LVFCCU_SLAVE_CLK */
-/*   IPSYNC_LPE_MC_CGM_MASTER_CLK */(CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   IPSYNC_LPE_MC_CGM_MASTER_CLK */
-/*   IPSYNC_LPE_MC_CGM_SLAVE_CLK */(CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   IPSYNC_LPE_MC_CGM_SLAVE_CLK */
-/*   IPSYNC_LPE_MC_RGM_MASTER_CLK */(CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   IPSYNC_LPE_MC_RGM_MASTER_CLK */
-/*   IPSYNC_LPE_MC_RGM_SLAVE_CLK */(CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   IPSYNC_LPE_MC_RGM_SLAVE_CLK */
-/*   IPSYNC_LPE_STM_MASTER_CLK  */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   IPSYNC_LPE_STM_MASTER_CLK  */
-/*   IPSYNC_LPE_STM_SLAVE_CLK   */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   IPSYNC_LPE_STM_SLAVE_CLK   */
-/*   IPSYNC_LVFCCU0_MASTER_CLK  */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   IPSYNC_LVFCCU0_MASTER_CLK  */
-/*   IPSYNC_LVFCCU0_SLAVE_CLK   */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   IPSYNC_LVFCCU0_SLAVE_CLK   */
-/*   IPSYNC_LVFCCU1_MASTER_CLK  */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   IPSYNC_LVFCCU1_MASTER_CLK  */
-/*   IPSYNC_LVFCCU1_SLAVE_CLK   */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   IPSYNC_LVFCCU1_SLAVE_CLK   */
-/*   IPSYNC_LVFCCU2_MASTER_CLK  */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   IPSYNC_LVFCCU2_MASTER_CLK  */
-/*   IPSYNC_LVFCCU2_SLAVE_CLK   */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   IPSYNC_LVFCCU2_SLAVE_CLK   */
-/*   IPSYNC_MC_CGM_MASTER_CLK   */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   IPSYNC_MC_CGM_MASTER_CLK   */
-/*   IPSYNC_MC_CGM_SLAVE_CLK    */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   IPSYNC_MC_CGM_SLAVE_CLK    */
-/*   IPSYNC_NETC_MC_CGM_MASTER_CLK */(CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   IPSYNC_NETC_MC_CGM_MASTER_CLK */
-/*   IPSYNC_NETC_MC_CGM_SLAVE_CLK */(CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   IPSYNC_NETC_MC_CGM_SLAVE_CLK */
-/*   IPSYNC_PERI_MC_CGM_MASTER_CLK */(CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   IPSYNC_PERI_MC_CGM_MASTER_CLK */
-/*   IPSYNC_PERI_MC_CGM_SLAVE_CLK */(CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   IPSYNC_PERI_MC_CGM_SLAVE_CLK */
-/*   IPSYNC_SAI0_MC_CGM_MASTER_CLK */(CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   IPSYNC_SAI0_MC_CGM_MASTER_CLK */
-/*   IPSYNC_SAI0_MC_CGM_SLAVE_CLK */(CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   IPSYNC_SAI0_MC_CGM_SLAVE_CLK */
-/*   IPSYNC_SAI1_MC_CGM_MASTER_CLK */(CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   IPSYNC_SAI1_MC_CGM_MASTER_CLK */
-/*   IPSYNC_SAI1_MC_CGM_SLAVE_CLK */(CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   IPSYNC_SAI1_MC_CGM_SLAVE_CLK */
-/*   IPSYNC_STM0_MASTER_CLK     */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   IPSYNC_STM0_MASTER_CLK     */
-/*   IPSYNC_STM0_SLAVE_CLK      */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   IPSYNC_STM0_SLAVE_CLK      */
-/*   IPSYNC_STM1_MASTER_CLK     */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   IPSYNC_STM1_MASTER_CLK     */
-/*   IPSYNC_STM1_SLAVE_CLK      */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   IPSYNC_STM1_SLAVE_CLK      */
-/*   IPSYNC_STM2_MASTER_CLK     */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   IPSYNC_STM2_MASTER_CLK     */
-/*   IPSYNC_STM2_SLAVE_CLK      */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   IPSYNC_STM2_SLAVE_CLK      */
-/*   IPSYNC_STM3_MASTER_CLK     */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   IPSYNC_STM3_MASTER_CLK     */
-/*   IPSYNC_STM3_SLAVE_CLK      */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   IPSYNC_STM3_SLAVE_CLK      */
-/*   IPSYNC_XSPI_MASTER_CLK     */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   IPSYNC_XSPI_MASTER_CLK     */
-/*   IPSYNC_XSPI_SLAVE_CLK      */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   IPSYNC_XSPI_SLAVE_CLK      */
-/*   LCU0_IPG_CLK clock         */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   LCU0_IPG_CLK clock         */
-/*   LCU1_IPG_CLK clock         */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   LCU1_IPG_CLK clock         */
-/*   LMEM_HCLK_CLK clock        */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   LMEM_HCLK_CLK clock        */
-/*   LPE_ADC_IPG_CLK clock      */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   LPE_ADC_IPG_CLK clock      */
-/*   LPE_BCTU_IPG_CLK clock     */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   LPE_BCTU_IPG_CLK clock     */
-/*   LPE_BCTU_IPG_CLK_S clock   */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   LPE_BCTU_IPG_CLK_S clock   */
-/*   LPE_CMU_IPG_CLK clock      */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   LPE_CMU_IPG_CLK clock      */
-/*   LPE_CRC_IPG_CLK clock      */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   LPE_CRC_IPG_CLK clock      */
-/*   LPE_CXPI_PE_CLK clock      */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   LPE_CXPI_PE_CLK clock      */
-/*   LPE_CXPI0_IPG_CLK clock    */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   LPE_CXPI0_IPG_CLK clock    */
-/*   LPE_CXPI0_PE_CLK clock     */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   LPE_CXPI0_PE_CLK clock     */
-/*   LPE_CXPI1_IPG_CLK clock    */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   LPE_CXPI1_IPG_CLK clock    */
-/*   LPE_CXPI1_PE_CLK clock     */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   LPE_CXPI1_PE_CLK clock     */
-/*   LPE_DIV1_UNGATED_CLK       */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   LPE_DIV1_UNGATED_CLK       */
-/*   LPE_DIV2_UNGATED_CLK       */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   LPE_DIV2_UNGATED_CLK       */
-/*   LPE_DIV3_UNGATED_CLK       */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   LPE_DIV3_UNGATED_CLK       */
-/*   LPE_DIV4_UNGATED_CLK       */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   LPE_DIV4_UNGATED_CLK       */
-/*   LPE_DMA_CH_MUX_IPG_CLK     */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   LPE_DMA_CH_MUX_IPG_CLK     */
-/*   LPE_EIM_IPG_CLK clock      */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   LPE_EIM_IPG_CLK clock      */
-/*   LPE_FIRC_IPG_CLK clock     */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   LPE_FIRC_IPG_CLK clock     */
-/*   LPE_FLEXCAN_MOD_CLK clock  */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   LPE_FLEXCAN_MOD_CLK clock  */
-/*   LPE_FLEXCAN_PE_CLK clock   */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   LPE_FLEXCAN_PE_CLK clock   */
-/*   LPE_FTM_IPG_CLK clock      */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   LPE_FTM_IPG_CLK clock      */
-/*   LPE_FXOSC_IPG_CLK clock    */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   LPE_FXOSC_IPG_CLK clock    */
-/*   LPE_GPR0_IPG_CLK clock     */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   LPE_GPR0_IPG_CLK clock     */
-/*   LPE_GPR1_IPG_CLK clock     */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   LPE_GPR1_IPG_CLK clock     */
-/*   LPE_LCU_IPG_CLK clock      */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   LPE_LCU_IPG_CLK clock      */
-/*   LPE_LPCMP0_IPG_CLK clock   */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   LPE_LPCMP0_IPG_CLK clock   */
-/*   LPE_LPCMP0_RR_CLK clock    */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   LPE_LPCMP0_RR_CLK clock    */
-/*   LPE_LPCMP0_SAMPLE_GATED_CLK */(CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   LPE_LPCMP0_SAMPLE_GATED_CLK */
-/*   LPE_LPCMP1_IPG_CLK clock   */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   LPE_LPCMP1_IPG_CLK clock   */
-/*   LPE_LPCMP1_RR_CLK clock    */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   LPE_LPCMP1_RR_CLK clock    */
-/*   LPE_LPCMP1_SAMPLE_GATED_CLK */(CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   LPE_LPCMP1_SAMPLE_GATED_CLK */
-/*   LPE_LPCMP2_IPG_CLK clock   */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   LPE_LPCMP2_IPG_CLK clock   */
-/*   LPE_LPCMP2_RR_CLK clock    */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   LPE_LPCMP2_RR_CLK clock    */
-/*   LPE_LPCMP2_SAMPLE_GATED_CLK */(CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   LPE_LPCMP2_SAMPLE_GATED_CLK */
-/*   LPE_LPI2C_CLK clock        */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   LPE_LPI2C_CLK clock        */
-/*   LPE_LPI2C_IPG_CLK clock    */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   LPE_LPI2C_IPG_CLK clock    */
-/*   LPE_LPI2C_MOD_CLK clock    */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   LPE_LPI2C_MOD_CLK clock    */
-/*   LPE_LPSPI_MOD_CLK clock    */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   LPE_LPSPI_MOD_CLK clock    */
-/*   LPE_LPSPI0_CLK clock       */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   LPE_LPSPI0_CLK clock       */
-/*   LPE_LPSPI0_IPG_CLK clock   */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   LPE_LPSPI0_IPG_CLK clock   */
-/*   LPE_LPSPI1_CLK clock       */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   LPE_LPSPI1_CLK clock       */
-/*   LPE_LPSPI1_IPG_CLK clock   */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   LPE_LPSPI1_IPG_CLK clock   */
-/*   LPE_LPUART_MOD_CLK clock   */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   LPE_LPUART_MOD_CLK clock   */
-/*   LPE_LPUART0_CLK clock      */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   LPE_LPUART0_CLK clock      */
-/*   LPE_LPUART0_pCLK clock     */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   LPE_LPUART0_pCLK clock     */
-/*   LPE_LPUART1_CLK clock      */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   LPE_LPUART1_CLK clock      */
-/*   LPE_LPUART1_pCLK clock     */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   LPE_LPUART1_pCLK clock     */
-/*   LPE_LPUART2_CLK clock      */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   LPE_LPUART2_CLK clock      */
-/*   LPE_LPUART2_pCLK clock     */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   LPE_LPUART2_pCLK clock     */
-/*   LPE_LSTCU_IPG_CLK clock    */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   LPE_LSTCU_IPG_CLK clock    */
-/*   LPE_PIT_RTI_IPG_CLK_OSC_RTI */(CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   LPE_PIT_RTI_IPG_CLK_OSC_RTI */
-/*   LPE_PIT_RTI_IPG_CLK_SYNC   */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   LPE_PIT_RTI_IPG_CLK_SYNC   */
-/*   LPE_RTC_API_FIRC_CLK       */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   LPE_RTC_API_FIRC_CLK       */
-/*   LPE_RTC_API_FXOSC_CLK      */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   LPE_RTC_API_FXOSC_CLK      */
-/*   LPE_RTC_API_IPG_CLK clock  */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   LPE_RTC_API_IPG_CLK clock  */
-/*   LPE_RTC_API_SIRC_CLK       */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   LPE_RTC_API_SIRC_CLK       */
-/*   LPE_RTC_API_SXOSC_CLK      */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   LPE_RTC_API_SXOSC_CLK      */
-/*   LPE_SEMA42_CLK clock       */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   LPE_SEMA42_CLK clock       */
-/*   LPE_STM_CLK clock          */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   LPE_STM_CLK clock          */
-/*   LPE_STM_IPG_CLK clock      */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   LPE_STM_IPG_CLK clock      */
-/*   LPE_SWT_COUNTER_IP_CLK     */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   LPE_SWT_COUNTER_IP_CLK     */
-/*   LPE_SWT_IPG_CLK clock      */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   LPE_SWT_IPG_CLK clock      */
-/*   LPE_SXOSC_IPG_CLK clock    */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   LPE_SXOSC_IPG_CLK clock    */
-/*   LPE_TRGMUX_IPG_CLK clock   */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   LPE_TRGMUX_IPG_CLK clock   */
-/*   LPE_TSPC_IPG_CLK clock     */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   LPE_TSPC_IPG_CLK clock     */
-/*   LPE_TSU_NS_IPG_CLK clock   */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   LPE_TSU_NS_IPG_CLK clock   */
-/*   LPE_UNGATED_CLK clock      */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   LPE_UNGATED_CLK clock      */
-/*   LPE_VIRT_IPG_CLK clock     */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   LPE_VIRT_IPG_CLK clock     */
-/*   LPE_WKPU_IPG_CLK clock     */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   LPE_WKPU_IPG_CLK clock     */
-/*   LPE_WKPU_IPG_CLK_S clock   */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   LPE_WKPU_IPG_CLK_S clock   */
-/*   LPI2C0_CLK clock           */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   LPI2C0_CLK clock           */
-/*   LPI2C1_CLK clock           */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   LPI2C1_CLK clock           */
-/*   LPI2C2_CLK clock           */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   LPI2C2_CLK clock           */
-/*   LPI2C3_CLK clock           */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   LPI2C3_CLK clock           */
-/*   LPSPI0_CLK clock           */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   LPSPI0_CLK clock           */
-/*   LPSPI1_CLK clock           */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   LPSPI1_CLK clock           */
-/*   LPSPI2_CLK clock           */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   LPSPI2_CLK clock           */
-/*   LPSPI3_CLK clock           */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   LPSPI3_CLK clock           */
-/*   LPSPI4_CLK clock           */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   LPSPI4_CLK clock           */
-/*   LPSPI5_CLK clock           */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   LPSPI5_CLK clock           */
-/*   LPSPI6_CLK clock           */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   LPSPI6_CLK clock           */
-/*   LPSPI7_CLK clock           */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   LPSPI7_CLK clock           */
-/*   LPUART_MSC_CLK clock       */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   LPUART_MSC_CLK clock       */
-/*   LPUART_MSC_pCLK clock      */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   LPUART_MSC_pCLK clock      */
-/*   LPUART0_CLK clock          */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   LPUART0_CLK clock          */
-/*   LPUART0_pCLK clock         */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   LPUART0_pCLK clock         */
-/*   LPUART1_CLK clock          */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   LPUART1_CLK clock          */
-/*   LPUART1_pCLK clock         */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   LPUART1_pCLK clock         */
-/*   LPUART2_CLK clock          */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   LPUART2_CLK clock          */
-/*   LPUART2_pCLK clock         */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   LPUART2_pCLK clock         */
-/*   LPUART3_CLK clock          */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   LPUART3_CLK clock          */
-/*   LPUART3_pCLK clock         */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   LPUART3_pCLK clock         */
-/*   LPUART4_CLK clock          */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   LPUART4_CLK clock          */
-/*   LPUART4_pCLK clock         */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   LPUART4_pCLK clock         */
-/*   LPUART5_CLK clock          */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   LPUART5_CLK clock          */
-/*   LPUART5_pCLK clock         */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   LPUART5_pCLK clock         */
-/*   LPUART6_CLK clock          */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   LPUART6_CLK clock          */
-/*   LPUART6_pCLK clock         */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   LPUART6_pCLK clock         */
-/*   LPUART7_CLK clock          */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   LPUART7_CLK clock          */
-/*   LPUART7_pCLK clock         */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   LPUART7_pCLK clock         */
-/*   LPUART8_CLK clock          */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   LPUART8_CLK clock          */
-/*   LPUART8_pCLK clock         */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   LPUART8_pCLK clock         */
-/*   LPUART9_CLK clock          */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   LPUART9_CLK clock          */
-/*   LPUART9_pCLK clock         */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   LPUART9_pCLK clock         */
-/*   LPUART10_CLK clock         */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   LPUART10_CLK clock         */
-/*   LPUART10_pCLK clock        */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   LPUART10_pCLK clock        */
-/*   LPUART11_CLK clock         */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   LPUART11_CLK clock         */
-/*   LPUART11_pCLK clock        */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   LPUART11_pCLK clock        */
-/*   LPUART12_CLK clock         */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   LPUART12_CLK clock         */
-/*   LPUART12_pCLK clock        */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   LPUART12_pCLK clock        */
-/*   LPUART13_CLK clock         */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   LPUART13_CLK clock         */
-/*   LPUART13_pCLK clock        */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   LPUART13_pCLK clock        */
-/*   LPUART14_CLK clock         */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   LPUART14_CLK clock         */
-/*   LPUART14_pCLK clock        */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   LPUART14_pCLK clock        */
-/*   LPUART15_CLK clock         */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   LPUART15_CLK clock         */
-/*   LPUART15_pCLK clock        */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   LPUART15_pCLK clock        */
-/*   LPUART16_CLK clock         */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   LPUART16_CLK clock         */
-/*   LPUART16_pCLK clock        */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   LPUART16_pCLK clock        */
-/*   LPUART17_CLK clock         */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   LPUART17_CLK clock         */
-/*   LPUART17_pCLK clock        */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   LPUART17_pCLK clock        */
-/*   LPUART18_CLK clock         */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   LPUART18_CLK clock         */
-/*   LPUART18_pCLK clock        */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   LPUART18_pCLK clock        */
-/*   LPUART19_CLK clock         */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   LPUART19_CLK clock         */
-/*   LPUART19_pCLK clock        */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   LPUART19_pCLK clock        */
-/*   LPUART20_CLK clock         */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   LPUART20_CLK clock         */
-/*   LPUART20_pCLK clock        */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   LPUART20_pCLK clock        */
-/*   LSTCU_ACCEL_IPG_CLK clock  */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   LSTCU_ACCEL_IPG_CLK clock  */
-/*   LSTCU_CORE0_IPG_CLK clock  */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   LSTCU_CORE0_IPG_CLK clock  */
-/*   LSTCU_CORE12_IPG_CLK       */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   LSTCU_CORE12_IPG_CLK       */
-/*   LSTCU_CORE3_IPG_CLK clock  */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   LSTCU_CORE3_IPG_CLK clock  */
-/*   LSTCU_HSPI_IPG_CLK clock   */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   LSTCU_HSPI_IPG_CLK clock   */
-/*   LSTCU_NETC_IPG_CLK clock   */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   LSTCU_NETC_IPG_CLK clock   */
-/*   LSTCU_PBRIDGE1_IPG_CLK     */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   LSTCU_PBRIDGE1_IPG_CLK     */
-/*   LSTCU_PBRIDGE3_IPG_CLK     */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   LSTCU_PBRIDGE3_IPG_CLK     */
-/*   LSTCU_PBRIDGE4_IPG_CLK     */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   LSTCU_PBRIDGE4_IPG_CLK     */
-/*   LSTCU_REST_IPG_CLK clock   */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   LSTCU_REST_IPG_CLK clock   */
-/*   MRAM_IPG_CLK clock         */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   MRAM_IPG_CLK clock         */
-/*   MRAMC_IPG_CLK clock        */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   MRAMC_IPG_CLK clock        */
-/*   MRAMC_IPG_CLK_S clock      */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   MRAMC_IPG_CLK_S clock      */
-/*   MSCM_IPG_CLK clock         */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   MSCM_IPG_CLK clock         */
-/*   MSGINTR0_APB_CLK clock     */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   MSGINTR0_APB_CLK clock     */
-/*   MSGINTR1_APB_CLK clock     */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   MSGINTR1_APB_CLK clock     */
-/*   MSGINTR2_APB_CLK clock     */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   MSGINTR2_APB_CLK clock     */
-/*   MSGINTR3_APB_CLK clock     */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   MSGINTR3_APB_CLK clock     */
-/*   MSGINTR4_APB_CLK clock     */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   MSGINTR4_APB_CLK clock     */
-/*   MSGINTR5_APB_CLK clock     */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   MSGINTR5_APB_CLK clock     */
-/*   MSGINTR6_APB_CLK clock     */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   MSGINTR6_APB_CLK clock     */
-/*   MSGINTR7_APB_CLK clock     */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   MSGINTR7_APB_CLK clock     */
-/*   PERI_HIGH_SPEED_REST_USDHC_CLK */(CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   PERI_HIGH_SPEED_REST_USDHC_CLK */
-/*   PERI_HIGH_SPEED_REST_XSPI_CLK */(CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   PERI_HIGH_SPEED_REST_XSPI_CLK */
-/*   PERI_HIGH_SPEED_TRACE_CLK  */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   PERI_HIGH_SPEED_TRACE_CLK  */
-/*   PHY_ETH_CLK clock          */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   PHY_ETH_CLK clock          */
-/*   PIT0_IPG_CLK_OSC clock     */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   PIT0_IPG_CLK_OSC clock     */
-/*   PIT0_IPG_CLK_SYNC clock    */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   PIT0_IPG_CLK_SYNC clock    */
-/*   PIT1_IPG_CLK_OSC clock     */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   PIT1_IPG_CLK_OSC clock     */
-/*   PIT1_IPG_CLK_SYNC clock    */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   PIT1_IPG_CLK_SYNC clock    */
-/*   PIT2_IPG_CLK_OSC clock     */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   PIT2_IPG_CLK_OSC clock     */
-/*   PIT2_IPG_CLK_SYNC clock    */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   PIT2_IPG_CLK_SYNC clock    */
-/*   PIT3_IPG_CLK_OSC clock     */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   PIT3_IPG_CLK_OSC clock     */
-/*   PIT3_IPG_CLK_SYNC clock    */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   PIT3_IPG_CLK_SYNC clock    */
-/*   POST_IPG_CLK clock         */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   POST_IPG_CLK clock         */
-/*   RR_RTC_CLK clock           */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   RR_RTC_CLK clock           */
-/*   RXLUT_ERM_CLK clock        */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   RXLUT_ERM_CLK clock        */
-/*   RXLUT_IPG_CLK clock        */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   RXLUT_IPG_CLK clock        */
-/*   SAI0_MCLK clock            */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   SAI0_MCLK clock            */
-/*   SAI0_IO_MCLK clock         */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   SAI0_IO_MCLK clock         */
-/*   SAI0_IPG_CLK clock         */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   SAI0_IPG_CLK clock         */
-/*   SAI1_IO_MCLK clock         */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   SAI1_IO_MCLK clock         */
-/*   SAI1_IPG_CLK clock         */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   SAI1_IPG_CLK clock         */
-/*   SAI1_MCLK clock            */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   SAI1_MCLK clock            */
-/*   SDHC_IPG_CLK clock         */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   SDHC_IPG_CLK clock         */
-/*   SDHC_PER_CLK clock         */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   SDHC_PER_CLK clock         */
-/*   SEMA42_IPG_CLK clock       */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   SEMA42_IPG_CLK clock       */
-/*   SERDES_ALT_REF_CLK clock   */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   SERDES_ALT_REF_CLK clock   */
-/*   SERDES_AUX_CLK clock       */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   SERDES_AUX_CLK clock       */
-/*   SERDES_REF_CLK clock       */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   SERDES_REF_CLK clock       */
-/*   SINC_IPG_CLK clock         */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   SINC_IPG_CLK clock         */
-/*   SOG_REST_CMU_IPG_CLK       */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   SOG_REST_CMU_IPG_CLK       */
-/*   SRC_FIRC_CLK clock         */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   SRC_FIRC_CLK clock         */
-/*   SRC_FIRCDIV2_CLK clock     */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   SRC_FIRCDIV2_CLK clock     */
-/*   SRC_FXOSC_CLK clock        */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   SRC_FXOSC_CLK clock        */
-/*   SRC_LPE_CLK clock          */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   SRC_LPE_CLK clock          */
-/*   SRC_LPE_DIV1_CLK clock     */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   SRC_LPE_DIV1_CLK clock     */
-/*   SRC_LPE_DIV2_CLK clock     */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   SRC_LPE_DIV2_CLK clock     */
-/*   SRC_LPE_DIV4_CLK clock     */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   SRC_LPE_DIV4_CLK clock     */
-/*   SRC_LPE_DIV8_CLK clock     */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   SRC_LPE_DIV8_CLK clock     */
-/*   SRC_PLT_CLK clock          */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   SRC_PLT_CLK clock          */
-/*   SRC_PLTCORE_CLK clock      */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   SRC_PLTCORE_CLK clock      */
-/*   SRC_PLTDIV1_CLK clock      */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   SRC_PLTDIV1_CLK clock      */
-/*   SRC_PLTDIV2_CLK clock      */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   SRC_PLTDIV2_CLK clock      */
-/*   SRC_PLTDIV4_CLK clock      */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   SRC_PLTDIV4_CLK clock      */
-/*   SRC_SIRC_CLK clock         */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   SRC_SIRC_CLK clock         */
-/*   SRC_SXOSC_CLK clock        */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   SRC_SXOSC_CLK clock        */
-/*   SRAM0_CONTROLLER_IPS_CLK   */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   SRAM0_CONTROLLER_IPS_CLK   */
-/*   SRAM1_CONTROLLER_IPS_CLK   */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   SRAM1_CONTROLLER_IPS_CLK   */
-/*   SRAM2_CONTROLLER_IPS_CLK   */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   SRAM2_CONTROLLER_IPS_CLK   */
-/*   STAM_CLK clock             */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   STAM_CLK clock             */
-/*   STM0_CLK clock             */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   STM0_CLK clock             */
-/*   STM0_IPG_CLK clock         */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   STM0_IPG_CLK clock         */
-/*   STM1_CLK clock             */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   STM1_CLK clock             */
-/*   STM1_IPG_CLK clock         */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   STM1_IPG_CLK clock         */
-/*   STM2_CLK clock             */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   STM2_CLK clock             */
-/*   STM2_IPG_CLK clock         */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   STM2_IPG_CLK clock         */
-/*   STM3_CLK clock             */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   STM3_CLK clock             */
-/*   STM3_IPG_CLK clock         */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   STM3_IPG_CLK clock         */
-/*   SWT_STARTUP_IPG_CLK clock  */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   SWT_STARTUP_IPG_CLK clock  */
-/*   SWT_STARTUP_IPG_COUNTER_CLK */(CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   SWT_STARTUP_IPG_COUNTER_CLK */
-/*   SWT0_IPG_CLK clock         */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   SWT0_IPG_CLK clock         */
-/*   SWT0_IPG_COUNTER_CLK       */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   SWT0_IPG_COUNTER_CLK       */
-/*   SWT1_IPG_CLK clock         */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   SWT1_IPG_CLK clock         */
-/*   SWT1_IPG_COUNTER_CLK       */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   SWT1_IPG_COUNTER_CLK       */
-/*   SWT2_IPG_CLK clock         */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   SWT2_IPG_CLK clock         */
-/*   SWT2_IPG_COUNTER_CLK       */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   SWT2_IPG_COUNTER_CLK       */
-/*   SWT3_IPG_CLK clock         */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   SWT3_IPG_CLK clock         */
-/*   SWT3_IPG_COUNTER_CLK       */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   SWT3_IPG_COUNTER_CLK       */
-/*   TRACE_CLK clock            */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   TRACE_CLK clock            */
-/*   TRGMUX_IPG_CLK_S clock     */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   TRGMUX_IPG_CLK_S clock     */
-/*   TRGMUX_MSC_IPG_CLK_S       */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   TRGMUX_MSC_IPG_CLK_S       */
-/*   VWRAP0_IPG_CLK clock       */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   VWRAP0_IPG_CLK clock       */
-/*   VWRAP1_IPG_CLK clock       */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   VWRAP1_IPG_CLK clock       */
-/*   VWRAP2_IPG_CLK clock       */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   VWRAP2_IPG_CLK clock       */
-/*   VWRAP3_IPG_CLK clock       */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   VWRAP3_IPG_CLK clock       */
-/*   XSPI_IPG_CLK clock         */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   XSPI_IPG_CLK clock         */
-/*   XSPI_UNGATED_2XSFIF_CLK    */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   XSPI_UNGATED_2XSFIF_CLK    */
+/*   FIRC_CLK clock            */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   FIRC_CLK clock            */        \
+/*   FXOSC_CLK clock           */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   FXOSC_CLK clock           */        \
+/*   SIRC_CLK clock            */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   SIRC_CLK clock            */        \
+/*   COREPLL_CLK clock         */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   COREPLL_CLK clock         */        \
+/*   PERIPHPLL_CLK clock       */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   PERIPHPLL_CLK clock       */        \
+/*   DDRPLL_CLK clock          */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   DDRPLL_CLK clock          */        \
+/*   ACCELPLL_CLK clock        */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   ACCELPLL_CLK clock        */        \
+/*   COREPLL_PHI0 clock        */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   COREPLL_PHI0 clock        */        \
+/*   COREPLL_PHI1 clock        */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   COREPLL_PHI1 clock        */        \
+/*   COREPLL_DFS1 clock        */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   COREPLL_DFS1 clock        */        \
+/*   COREPLL_DFS2 clock        */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   COREPLL_DFS2 clock        */        \
+/*   COREPLL_DFS3 clock        */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   COREPLL_DFS3 clock        */        \
+/*   COREPLL_DFS4 clock        */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   COREPLL_DFS4 clock        */        \
+/*   COREPLL_DFS5 clock        */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   COREPLL_DFS5 clock        */        \
+/*   COREPLL_DFS6 clock        */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   COREPLL_DFS6 clock        */        \
+/*   PERIPHPLL_PHI0 clock      */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   PERIPHPLL_PHI0 clock      */        \
+/*   PERIPHPLL_PHI1 clock      */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   PERIPHPLL_PHI1 clock      */        \
+/*   PERIPHPLL_PHI2 clock      */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   PERIPHPLL_PHI2 clock      */        \
+/*   PERIPHPLL_PHI3 clock      */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   PERIPHPLL_PHI3 clock      */        \
+/*   PERIPHPLL_PHI4 clock      */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   PERIPHPLL_PHI4 clock      */        \
+/*   PERIPHPLL_PHI5 clock      */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   PERIPHPLL_PHI5 clock      */        \
+/*   PERIPHPLL_PHI6 clock      */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   PERIPHPLL_PHI6 clock      */        \
+/*   PERIPHPLL_PHI7 clock      */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   PERIPHPLL_PHI7 clock      */        \
+/*   PERIPHPLL_DFS1 clock      */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   PERIPHPLL_DFS1 clock      */        \
+/*   PERIPHPLL_DFS2 clock      */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   PERIPHPLL_DFS2 clock      */        \
+/*   PERIPHPLL_DFS3 clock      */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   PERIPHPLL_DFS3 clock      */        \
+/*   PERIPHPLL_DFS4 clock      */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   PERIPHPLL_DFS4 clock      */        \
+/*   PERIPHPLL_DFS5 clock      */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   PERIPHPLL_DFS5 clock      */        \
+/*   PERIPHPLL_DFS6 clock      */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   PERIPHPLL_DFS6 clock      */        \
+/*   DDRPLL_PHI0 clock         */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   DDRPLL_PHI0 clock         */        \
+/*   ACCELPLL_PHI0 clock       */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   ACCELPLL_PHI0 clock       */        \
+/*   ACCELPLL_PHI1 clock       */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   ACCELPLL_PHI1 clock       */        \
+/*   rtc_ext_ref clock         */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   rtc_ext_ref clock         */        \
+/*   ftm_0_ext_ref clock       */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   ftm_0_ext_ref clock       */        \
+/*   ftm_1_ext_ref clock       */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   ftm_1_ext_ref clock       */        \
+/*   gmac_0_ext_ref clock      */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   gmac_0_ext_ref clock      */        \
+/*   gmac_0_ext_rx clock       */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   gmac_0_ext_rx clock       */        \
+/*   gmac_0_ext_tx clock       */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   gmac_0_ext_tx clock       */        \
+/*   gmac_ext_ts clock         */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   gmac_ext_ts clock         */        \
+/*   pfe_mac_0_ext_ref clock   */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   pfe_mac_0_ext_ref clock   */        \
+/*   pfe_mac_0_ext_rx clock    */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   pfe_mac_0_ext_rx clock    */        \
+/*   pfe_mac_0_ext_tx clock    */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   pfe_mac_0_ext_tx clock    */        \
+/*   pfe_mac_1_ext_ref clock   */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   pfe_mac_1_ext_ref clock   */        \
+/*   pfe_mac_1_ext_rx clock    */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   pfe_mac_1_ext_rx clock    */        \
+/*   pfe_mac_1_ext_tx clock    */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   pfe_mac_1_ext_tx clock    */        \
+/*   pfe_mac_2_ext_ref clock   */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   pfe_mac_2_ext_ref clock   */        \
+/*   pfe_mac_2_ext_rx clock    */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   pfe_mac_2_ext_rx clock    */        \
+/*   pfe_mac_2_ext_tx clock    */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   pfe_mac_2_ext_tx clock    */        \
+/*   SERDES_0_XPCS_0_TX clock  */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   SERDES_0_XPCS_0_TX clock  */        \
+/*   SERDES_0_XPCS_0_CDR clock */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   SERDES_0_XPCS_0_CDR clock */        \
+/*   SERDES_0_XPCS_1_TX clock  */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   SERDES_0_XPCS_1_TX clock  */        \
+/*   SERDES_0_XPCS_1_CDR clock */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   SERDES_0_XPCS_1_CDR clock */        \
+/*   SERDES_1_XPCS_0_TX clock  */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   SERDES_1_XPCS_0_TX clock  */        \
+/*   SERDES_1_XPCS_0_CDR clock */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   SERDES_1_XPCS_0_CDR clock */        \
+/*   SERDES_1_XPCS_1_TX clock  */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   SERDES_1_XPCS_1_TX clock  */        \
+/*   SERDES_1_XPCS_1_CDR clock */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   SERDES_1_XPCS_1_CDR clock */        \
+/*   XBAR_2X_CLK clock         */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   XBAR_2X_CLK clock         */        \
+/*   XBAR_CLK clock            */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   XBAR_CLK clock            */        \
+/*   XBAR_DIV2_CLK clock       */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   XBAR_DIV2_CLK clock       */        \
+/*   XBAR_DIV3_CLK clock       */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   XBAR_DIV3_CLK clock       */        \
+/*   XBAR_DIV4_CLK clock       */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   XBAR_DIV4_CLK clock       */        \
+/*   XBAR_DIV6_CLK clock       */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   XBAR_DIV6_CLK clock       */        \
+/*   A53_CORE_CLK clock        */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   A53_CORE_CLK clock        */        \
+/*   A53_CORE_DIV2_CLK clock   */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   A53_CORE_DIV2_CLK clock   */        \
+/*   A53_CORE_DIV10_CLK clock  */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   A53_CORE_DIV10_CLK clock  */        \
+/*   DDR_CLK clock             */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   DDR_CLK clock             */        \
+/*   PFE_PE_CLK clock          */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   PFE_PE_CLK clock          */        \
+/*   PFE_SYS_CLK clock         */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   PFE_SYS_CLK clock         */        \
+/*   PER_CLK clock             */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   PER_CLK clock             */        \
+/*   GMAC0_REF_CLK clock       */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   GMAC0_REF_CLK clock       */        \
+/*   GMAC0_REF_DIV_CLK clock   */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   GMAC0_REF_DIV_CLK clock   */        \
+/*   PFEMAC0_REF_DIV_CLK clock */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   PFEMAC0_REF_DIV_CLK clock */        \
+/*   PFEMAC1_REF_DIV_CLK clock */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   PFEMAC1_REF_DIV_CLK clock */        \
+/*   PFEMAC2_REF_DIV_CLK clock */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   PFEMAC2_REF_DIV_CLK clock */        \
+/*   SERDES_REF_CLK clock      */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   SERDES_REF_CLK clock      */        \
+/*   THE_LAST_PRODUCER_CLK     */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   THE_LAST_PRODUCER_CLK     */        \
+/*   ADC0_CLK clock            */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   ADC0_CLK clock            */        \
+/*   ADC1_CLK clock            */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   ADC1_CLK clock            */        \
+/*   CLKOUT0_CLK clock         */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   CLKOUT0_CLK clock         */        \
+/*   CLKOUT1_CLK clock         */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   CLKOUT1_CLK clock         */        \
+/*   CORE_A53_CLUSTER_0_CLK clock */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) , /*   CORE_A53_CLUSTER_0_CLK clock */     \
+/*   CORE_A53_CLUSTER_1_CLK clock */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) , /*   CORE_A53_CLUSTER_1_CLK clock */     \
+/*   CORE_M7_0_CLK clock       */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   CORE_M7_0_CLK clock       */        \
+/*   CORE_M7_1_CLK clock       */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   CORE_M7_1_CLK clock       */        \
+/*   CORE_M7_2_CLK clock       */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   CORE_M7_2_CLK clock       */        \
+/*   CRC0_CLK clock            */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   CRC0_CLK clock            */        \
+/*   CTU0_CLK clock            */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   CTU0_CLK clock            */        \
+/*   CTU1_CLK clock            */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   CTU1_CLK clock            */        \
+/*   DAPB_CLK clock            */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   DAPB_CLK clock            */        \
+/*   DDR0_CLK clock            */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   DDR0_CLK clock            */        \
+/*   DMA0_CLK clock            */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   DMA0_CLK clock            */        \
+/*   DMA1_CLK clock            */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   DMA1_CLK clock            */        \
+/*   DMAMUX0_CLK clock         */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   DMAMUX0_CLK clock         */        \
+/*   DMAMUX1_CLK clock         */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   DMAMUX1_CLK clock         */        \
+/*   DMAMUX2_CLK clock         */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   DMAMUX2_CLK clock         */        \
+/*   DMAMUX3_CLK clock         */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   DMAMUX3_CLK clock         */        \
+/*   DMA_CRC0_CLK clock        */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   DMA_CRC0_CLK clock        */        \
+/*   DMA_CRC1_CLK clock        */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   DMA_CRC1_CLK clock        */        \
+/*   EIM0_CLK clock            */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   EIM0_CLK clock            */        \
+/*   EIM1_CLK clock            */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   EIM1_CLK clock            */        \
+/*   EIM2_CLK clock            */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   EIM2_CLK clock            */        \
+/*   EIM3_CLK clock            */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   EIM3_CLK clock            */        \
+/*   EIM_CLK clock             */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   EIM_CLK clock             */        \
+/*   ERM0_CLK clock            */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   ERM0_CLK clock            */        \
+/*   FLEXCAN_CLK clock         */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   FLEXCAN_CLK clock         */        \
+/*   FLEXCAN0_CLK clock        */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   FLEXCAN0_CLK clock        */        \
+/*   FLEXCAN1_CLK clock        */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   FLEXCAN1_CLK clock        */        \
+/*   FLEXCAN2_CLK clock        */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   FLEXCAN2_CLK clock        */        \
+/*   FLEXCAN3_CLK clock        */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   FLEXCAN3_CLK clock        */        \
+/*   FLEXRAY_CLK clock         */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   FLEXRAY_CLK clock         */        \
+/*   FRAY0_CLK clock           */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   FRAY0_CLK clock           */        \
+/*   FLEXTIMERA_CLK clock      */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   FLEXTIMERA_CLK clock      */        \
+/*   FTIMER0_CLK clock         */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   FTIMER0_CLK clock         */        \
+/*   FLEXTIMERB_CLK clock      */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   FLEXTIMERB_CLK clock      */        \
+/*   FTIMER1_CLK clock         */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   FTIMER1_CLK clock         */        \
+/*   GMAC_TS_CLK clock         */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   GMAC_TS_CLK clock         */        \
+/*   GMAC0_RX_CLK clock        */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   GMAC0_RX_CLK clock        */        \
+/*   GMAC0_TX_CLK clock        */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   GMAC0_TX_CLK clock        */        \
+/*   GMAC0_TS_CLK clock        */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   GMAC0_TS_CLK clock        */        \
+/*   IIC0_CLK clock            */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   IIC0_CLK clock            */        \
+/*   IIC1_CLK clock            */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   IIC1_CLK clock            */        \
+/*   IIC2_CLK clock            */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   IIC2_CLK clock            */        \
+/*   IIC3_CLK clock            */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   IIC3_CLK clock            */        \
+/*   IIC4_CLK clock            */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   IIC4_CLK clock            */        \
+/*   LBIST_CLK clock           */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   LBIST_CLK clock           */        \
+/*   LBIST0_CLK clock          */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   LBIST0_CLK clock          */        \
+/*   LBIST1_CLK clock          */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   LBIST1_CLK clock          */        \
+/*   LBIST2_CLK clock          */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   LBIST2_CLK clock          */        \
+/*   LBIST3_CLK clock          */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   LBIST3_CLK clock          */        \
+/*   LBIST4_CLK clock          */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   LBIST4_CLK clock          */        \
+/*   LBIST5_CLK clock          */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   LBIST5_CLK clock          */        \
+/*   LBIST6_CLK clock          */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   LBIST6_CLK clock          */        \
+/*   LBIST7_CLK clock          */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   LBIST7_CLK clock          */        \
+/*   LIN_BAUD_CLK clock        */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   LIN_BAUD_CLK clock        */        \
+/*   LINFLEXD_CLK clock        */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   LINFLEXD_CLK clock        */        \
+/*   LIN0_CLK clock            */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   LIN0_CLK clock            */        \
+/*   LIN1_CLK clock            */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   LIN1_CLK clock            */        \
+/*   LIN2_CLK clock            */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   LIN2_CLK clock            */        \
+/*   OCOTP0_CLK clock          */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   OCOTP0_CLK clock          */        \
+/*   PFEMAC0_RX_CLK clock      */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   PFEMAC0_RX_CLK clock      */        \
+/*   PFEMAC0_TX_CLK clock      */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   PFEMAC0_TX_CLK clock      */        \
+/*   PFEMAC0_TX_DIV_CLK clock  */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   PFEMAC0_TX_DIV_CLK clock  */        \
+/*   PFEMAC1_RX_CLK clock      */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   PFEMAC1_RX_CLK clock      */        \
+/*   PFEMAC1_TX_CLK clock      */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   PFEMAC1_TX_CLK clock  */        \
+/*   PFEMAC2_RX_CLK clock      */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   PFEMAC2_RX_CLK clock      */        \
+/*   PFEMAC2_TX_CLK clock      */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   PFEMAC2_TX_CLK clock  */        \
+/*   PIT0_CLK clock            */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   PIT0_CLK clock            */        \
+/*   PIT1_CLK clock            */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   PIT1_CLK clock            */        \
+/*   QSPI_2X_CLK clock         */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   QSPI_2X_CLK clock         */        \
+/*   QSPI_1X_CLK clock         */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   QSPI_1X_CLK clock         */        \
+/*   QSPI0_CLK clock           */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   QSPI0_CLK clock           */        \
+/*   RTC_CLK clock             */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,   /*   RTC_CLK clock             */         \
+/*   RTC0_CLK clock            */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   RTC0_CLK clock            */        \
+/*   SIUL0_CLK clock           */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   SIUL0_CLK clock           */        \
+/*   SIUL1_CLK clock           */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   SIUL1_CLK clock           */        \
+/*   SPI_CLK clock             */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   SPI_CLK clock             */        \
+/*   SPI0_CLK clock            */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   SPI0_CLK clock            */        \
+/*   SPI1_CLK clock            */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   SPI1_CLK clock            */        \
+/*   SPI2_CLK clock            */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   SPI2_CLK clock            */        \
+/*   SPI3_CLK clock            */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   SPI3_CLK clock            */        \
+/*   SPI4_CLK clock            */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   SPI4_CLK clock            */        \
+/*   SPI5_CLK clock            */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   SPI5_CLK clock            */        \
+/*   STM0_CLK clock            */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   STM0_CLK clock            */        \
+/*   STM1_CLK clock            */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   STM1_CLK clock            */        \
+/*   STM2_CLK clock            */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   STM2_CLK clock            */        \
+/*   STM3_CLK clock            */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   STM3_CLK clock            */        \
+/*   STM4_CLK clock            */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   STM4_CLK clock            */        \
+/*   STM5_CLK clock            */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   STM5_CLK clock            */        \
+/*   STM6_CLK clock            */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   STM6_CLK clock            */        \
+/*   STM7_CLK clock            */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   STM7_CLK clock            */        \
+/*   SWT0_CLK clock            */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   SWT0_CLK clock            */        \
+/*   SWT1_CLK clock            */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   SWT1_CLK clock            */        \
+/*   SWT2_CLK clock            */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   SWT2_CLK clock            */        \
+/*   SWT3_CLK clock            */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   SWT3_CLK clock            */        \
+/*   SWT4_CLK clock            */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   SWT4_CLK clock            */        \
+/*   SWT5_CLK clock            */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   SWT5_CLK clock            */        \
+/*   SWT6_CLK clock            */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   SWT6_CLK clock            */        \
+/*   SDHC_CLK clock            */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   SDHC_CLK clock            */        \
+/*   USDHC0_CLK clock          */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   USDHC0_CLK clock          */        \
+/*   WKPU0_CLK clock           */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   WKPU0_CLK clock           */        \
+/*   XBAR_DIV3_FAIL_CLK clock  */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,    /*   XBAR_DIV3_FAIL_CLK clock  */        \
 };
     #endif /* CLOCK_IP_DEV_ERROR_DETECT == STD_ON */
 #endif /* CLOCK_IP_DEV_ERROR_DETECT */
-
 
 /* Clock stop constant section data */
 #define MCU_STOP_SEC_CONST_32
 #include "Mcu_MemMap.h"
 
 
-
-
-/* Clock start constant section data */
-#define MCU_START_SEC_CONST_16
-#include "Mcu_MemMap.h"
-
-
-
-/*!
- * @brief Converts a clock name to a selector entry hardware value
- */
-const uint16 Clock_Ip_au16SelectorEntryHardwareValue[CLOCK_IP_PRODUCERS_NO] = {
-
-   5U,                                         /*!< FIRC_CLK                                */
-   1U,                                         /*!< FIRCDIV2_CLK                            */
-   0U,                                         /*!< SAFE_CLK                                */
-   2U,                                         /*!< SIRC_CLK                                */
-   3U,                                         /*!< FXOSC_CLK                               */
-   4U,                                         /*!< SXOSC_CLK                               */
-   0U,                                         /*!< gated_clk                               */
-   0U,                                         /*!< fast_crystal_oscillator                 */
-   0U,                                         /*!< slow_crystal_oscillator                 */
-   22U,                                        /*!< eth0_mii_rx_ext_clk                     */
-   23U,                                        /*!< eth0_mii_tx_ext_clk                     */
-   24U,                                        /*!< eth0_rgmii_rx_ext_clk                   */
-   25U,                                        /*!< eth0_rgmii_tx_ext_clk                   */
-   21U,                                        /*!< eth0_rmii_ref_ext_clk                   */
-   27U,                                        /*!< eth1_mii_rx_ext_clk                     */
-   28U,                                        /*!< eth1_mii_tx_ext_clk                     */
-   29U,                                        /*!< eth1_rgmii_rx_ext_clk                   */
-   30U,                                        /*!< eth1_rgmii_tx_ext_clk                   */
-   26U,                                        /*!< eth1_rmii_ref_ext_clk                   */
-   32U,                                        /*!< eth2_mii_rx_ext_clk                     */
-   33U,                                        /*!< eth2_mii_tx_ext_clk                     */
-   34U,                                        /*!< eth2_rgmii_rx_ext_clk                   */
-   35U,                                        /*!< eth2_rgmii_tx_ext_clk                   */
-   31U,                                        /*!< eth2_rmii_ref_ext_clk                   */
-   20U,                                        /*!< ts_1588_clk                             */
-   9U,                                         /*!< PLL0_CLK                                */
-   0U,                                         /*!< PLL0_DIV_CLK                            */
-   0U,                                         /*!< PLL0_DIV0_CLK                           */
-   8U,                                         /*!< PLL0_DIV4_CLK                           */
-   13U,                                        /*!< PLL0_DFS0_CLK                           */
-#if defined(CLOCK_IP_HAS_PLL0_DFS1_CLK)
-   14U,                                        /*!< PLL0_DFS1_CLK                           */
-#endif
-#if defined(CLOCK_IP_HAS_PLL0_DFS2_CLK)
-   15U,                                        /*!< PLL0_DFS2_CLK                           */
-#endif
-#if defined(CLOCK_IP_HAS_PLL0_DFS3_CLK)
-   16U,                                        /*!< PLL0_DFS3_CLK                           */
-#endif
-   7U,                                         /*!< PLL1_CLK                                */
-   0U,                                         /*!< PLL1_DIV_CLK                            */
-   0U,                                         /*!< PLL1_DIV0_CLK                           */
-   0U,                                         /*!< CPE_PLL_CLK                             */
-   0U,                                         /*!< CPE_DIV_CLK                             */
-   0U,                                         /*!< CPE_DIV0_CLK                            */
-   0U,                                         /*!< LPE_CLK                                 */
-#if defined(CLOCK_IP_HAS_LPE_DIV1_CLK)
-   0U,                                         /*!< LPE_DIV1_CLK                            */
-#endif
-#if defined(CLOCK_IP_HAS_LPE_DIV2_CLK)
-   11U,                                        /*!< LPE_DIV2_CLK                            */
-#endif
-#if defined(CLOCK_IP_HAS_LPE_DIV4_CLK)
-   0U,                                         /*!< LPE_DIV4_CLK                            */
-#endif
-#if defined(CLOCK_IP_HAS_LPE_DIV8_CLK)
-   0U,                                         /*!< LPE_DIV8_CLK                            */
-#endif
-   0U,                                         /*!< PLT_CLK                                 */
-#if defined(CLOCK_IP_HAS_PLTCORE_CLK)
-   0U,                                         /*!< PLTCORE_CLK                             */
-#endif
-#if defined(CLOCK_IP_HAS_PLTDIV1_CLK)
-   17U,                                        /*!< PLTDIV1_CLK                             */
-#endif
-#if defined(CLOCK_IP_HAS_PLTDIV2_CLK)
-   18U,                                        /*!< PLTDIV2_CLK                             */
-#endif
-#if defined(CLOCK_IP_HAS_PLTDIV4_CLK)
-   0U,                                         /*!< PLTDIV4_CLK                             */
-#endif
-};
-
-const uint16 Clock_Ip_au16SelectorEntryRtcHardwareValue[7U] = {
-
-   0U,                                         /*!< FIRC_CLK                                */
-   0U,                                         /*!< FIRCDIV2_CLK                            */
-   2U,                                         /*!< SAFE_CLK                                */
-   1U,                                         /*!< SIRC_CLK                                */
-   3U,                                         /*!< FXOSC_CLK                               */
-   0U,                                         /*!< SXOSC_CLK                               */
-   0U,                                         /*!< gated_clk                               */
-};
-/* Clock stop constant section data */
-#define MCU_STOP_SEC_CONST_16
-#include "Mcu_MemMap.h"
-
-
-
-
-
 /* Clock start constant section data */
 #define MCU_START_SEC_CONST_UNSPECIFIED
 #include "Mcu_MemMap.h"
 
-Clock_Ip_ExtOSCType* const Clock_Ip_apxXosc[CLOCK_IP_XOSC_INSTANCES_ARRAY_SIZE] =
+Clock_Ip_CgmMuxType* const Clock_Ip_apxCgm[CLOCK_IP_MC_CGM_INSTANCES_COUNT][CLOCK_IP_MC_CGM_MUXS_COUNT] =
 {
-    (Clock_Ip_ExtOSCType*)IP_LPE_FXOSC,
-    (Clock_Ip_ExtOSCType*)IP_LPE_SXOSC,
-};
-Clock_Ip_PllType const Clock_Ip_apxPll[CLOCK_IP_PLL_INSTANCES_ARRAY_SIZE] = {
     {
-        (PLL_Type *)IP_PLL_0,
-        0U,
+        (Clock_Ip_CgmMuxType*)(&(IP_MC_CGM_0->MUX_0_CSC)),
+        (Clock_Ip_CgmMuxType*)(&(IP_MC_CGM_0->MUX_1_CSC)),
+        (Clock_Ip_CgmMuxType*)(&(IP_MC_CGM_0->MUX_2_CSC)),
+        (Clock_Ip_CgmMuxType*)(&(IP_MC_CGM_0->MUX_3_CSC)),
+        (Clock_Ip_CgmMuxType*)(&(IP_MC_CGM_0->MUX_4_CSC)),
+        (Clock_Ip_CgmMuxType*)(&(IP_MC_CGM_0->MUX_5_CSC)),
+        (Clock_Ip_CgmMuxType*)(&(IP_MC_CGM_0->MUX_6_CSC)),
+        (Clock_Ip_CgmMuxType*)(&(IP_MC_CGM_0->MUX_7_CSC)),
+        (Clock_Ip_CgmMuxType*)(&(IP_MC_CGM_0->MUX_8_CSC)),
+        (Clock_Ip_CgmMuxType*)(&(IP_MC_CGM_0->MUX_9_CSC)),
+        (Clock_Ip_CgmMuxType*)(&(IP_MC_CGM_0->MUX_10_CSC)),
+        (Clock_Ip_CgmMuxType*)(&(IP_MC_CGM_0->MUX_11_CSC)),
+        (Clock_Ip_CgmMuxType*)(&(IP_MC_CGM_0->MUX_12_CSC)),
+        NULL_PTR,
+        (Clock_Ip_CgmMuxType*)(&(IP_MC_CGM_0->MUX_14_CSC)),
+        (Clock_Ip_CgmMuxType*)(&(IP_MC_CGM_0->MUX_15_CSC)),
+        (Clock_Ip_CgmMuxType*)(&(IP_MC_CGM_0->MUX_16_CSC))
     },
-    {
-        (PLL_Type *)IP_PLL_1,
-        0U,
-    },
-    {
-        (PLL_Type *)IP_CPE_PLL,
-        0U,
-    },
-};
-
-volatile uint32* const Clock_Ip_SwitchDuration[8U] = {
-    (volatile uint32* const)IP_MC_CGM_0_BASE,
-    (volatile uint32* const)IP_MC_CGM_1_BASE,
-    (volatile uint32* const)IP_MC_CGM_2_BASE,
-    (volatile uint32* const)IP_MC_CGM_3_BASE,
-    (volatile uint32* const)IP_MC_CGM_4_BASE,
-    (volatile uint32* const)IP_MC_CGM_5_BASE,
-    (volatile uint32* const)IP_LPE_MC_CGM_BASE,
-    (volatile uint32* const)IP_CPE_MC_CGM_BASE,
-};
-Clock_Ip_CmuInfoType const Clock_Ip_axCmuInfo[CLOCK_IP_CMU_INFO_SIZE] =  {
 
     {
-        RESERVED_CLK,       /* Name of the clock that can be monitored/supports cmu (clock monitor) */
-        RESERVED_CLK,       /* Name of the reference clock */
-        RESERVED_CLK,       /* Name of the bus clock */
+        (Clock_Ip_CgmMuxType*)(&(IP_MC_CGM_1->MUX_0_CSC)),
+        NULL_PTR,
+        NULL_PTR,
+        NULL_PTR,
+        NULL_PTR,
+        NULL_PTR,
+        NULL_PTR,
+        NULL_PTR,
+        NULL_PTR,
+        NULL_PTR,
+        NULL_PTR,
+        NULL_PTR,
+        NULL_PTR,
+        NULL_PTR,
+        NULL_PTR,
+        NULL_PTR,
+        NULL_PTR
+    },
+
+    {
+        (Clock_Ip_CgmMuxType*)(&(IP_MC_CGM_2->MUX_0_CSC)),
+        (Clock_Ip_CgmMuxType*)(&(IP_MC_CGM_2->MUX_1_CSC)),
+        (Clock_Ip_CgmMuxType*)(&(IP_MC_CGM_2->MUX_2_CSC)),
+        (Clock_Ip_CgmMuxType*)(&(IP_MC_CGM_2->MUX_3_CSC)),
+        (Clock_Ip_CgmMuxType*)(&(IP_MC_CGM_2->MUX_4_CSC)),
+        (Clock_Ip_CgmMuxType*)(&(IP_MC_CGM_2->MUX_5_CSC)),
+        (Clock_Ip_CgmMuxType*)(&(IP_MC_CGM_2->MUX_6_CSC)),
+        (Clock_Ip_CgmMuxType*)(&(IP_MC_CGM_2->MUX_7_CSC)),
+        (Clock_Ip_CgmMuxType*)(&(IP_MC_CGM_2->MUX_8_CSC)),
+        (Clock_Ip_CgmMuxType*)(&(IP_MC_CGM_2->MUX_9_CSC)),
+        NULL_PTR,
+        NULL_PTR,
+        NULL_PTR,
+        NULL_PTR,
+        NULL_PTR,
+        NULL_PTR,
+        NULL_PTR
+    },
+
+    {
+        NULL_PTR,
+        NULL_PTR,
+        NULL_PTR,
+        NULL_PTR,
+        NULL_PTR,
+        NULL_PTR,
+        NULL_PTR,
+        NULL_PTR,
+        NULL_PTR,
+        NULL_PTR,
+        NULL_PTR,
+        NULL_PTR,
+        NULL_PTR,
+        NULL_PTR,
+        NULL_PTR,
+        NULL_PTR,
+        NULL_PTR
+    },
+
+    {
+        NULL_PTR,
+        NULL_PTR,
+        NULL_PTR,
+        NULL_PTR,
+        NULL_PTR,
+        NULL_PTR,
+        NULL_PTR,
+        NULL_PTR,
+        NULL_PTR,
+        NULL_PTR,
+        NULL_PTR,
+        NULL_PTR,
+        NULL_PTR,
+        NULL_PTR,
+        NULL_PTR,
+        NULL_PTR,
+        NULL_PTR
+    },
+
+    {
+        (Clock_Ip_CgmMuxType*)(&(IP_MC_CGM_5->MUX_0_CSC)),
+        NULL_PTR,
+        NULL_PTR,
+        NULL_PTR,
+        NULL_PTR,
+        NULL_PTR,
+        NULL_PTR,
+        NULL_PTR,
+        NULL_PTR,
+        NULL_PTR,
+        NULL_PTR,
+        NULL_PTR,
+        NULL_PTR,
+        NULL_PTR,
+        NULL_PTR,
+        NULL_PTR,
         NULL_PTR
     },
 
 };
+volatile Clock_Ip_CgmPcfsType* const Clock_Ip_apxCgmPcfs[CLOCK_IP_MC_CGM_INSTANCES_COUNT] =
+{
+    (volatile Clock_Ip_CgmPcfsType*)(&(IP_MC_CGM_0->PCFS_SDUR)),
+    (volatile Clock_Ip_CgmPcfsType*)(&(IP_MC_CGM_1->PCFS_SDUR)),
+    (volatile Clock_Ip_CgmPcfsType*)(&(IP_MC_CGM_2->PCFS_SDUR)),
+    NULL_PTR,
+    NULL_PTR,
+    NULL_PTR
+};
+Clock_Ip_ExtOSCType* const Clock_Ip_apxXosc[CLOCK_IP_XOSC_INSTANCES_ARRAY_SIZE] = {(Clock_Ip_ExtOSCType*)IP_FXOSC};
+PLLDIG_Type* const Clock_Ip_pxPll[CLOCK_IP_PLL_INSTANCES_ARRAY_SIZE] = {IP_CORE_PLL, IP_PERIPH_PLL, IP_DDR_PLL, IP_ACCEL_PLL};
+DFS_Type* const Clock_Ip_apxDfs[CLOCK_IP_DFS_INSTANCES_ARRAY_SIZE] = {IP_CORE_DFS,IP_PERIPH_DFS};
+Clock_Ip_ClockMonitorType* const Clock_Ip_apxCmu[CLOCK_IP_CMU_INSTANCES_ARRAY_SIZE] =
+{
+
+    (Clock_Ip_ClockMonitorType*)IP_CMU_FC_0,
+    (Clock_Ip_ClockMonitorType*)IP_CMU_FC_5,
+    (Clock_Ip_ClockMonitorType*)IP_CMU_FC_6,
+    (Clock_Ip_ClockMonitorType*)IP_CMU_FC_7,
+    (Clock_Ip_ClockMonitorType*)IP_CMU_FC_8,
+    (Clock_Ip_ClockMonitorType*)IP_CMU_FC_9,
+    (Clock_Ip_ClockMonitorType*)IP_CMU_FC_10,
+    (Clock_Ip_ClockMonitorType*)IP_CMU_FC_11,
+    (Clock_Ip_ClockMonitorType*)IP_CMU_FC_12,
+    (Clock_Ip_ClockMonitorType*)IP_CMU_FC_13,
+    (Clock_Ip_ClockMonitorType*)IP_CMU_FC_14,
+    (Clock_Ip_ClockMonitorType*)IP_CMU_FC_15,
+    (Clock_Ip_ClockMonitorType*)IP_CMU_FC_16,
+    (Clock_Ip_ClockMonitorType*)IP_CMU_FC_17,
+    (Clock_Ip_ClockMonitorType*)IP_CMU_FC_18,
+    (Clock_Ip_ClockMonitorType*)IP_CMU_FC_20,
+    (Clock_Ip_ClockMonitorType*)IP_CMU_FC_21,
+    (Clock_Ip_ClockMonitorType*)IP_CMU_FC_22,
+    (Clock_Ip_ClockMonitorType*)IP_CMU_FC_27,
+    (Clock_Ip_ClockMonitorType*)IP_CMU_FC_28,
+    (Clock_Ip_ClockMonitorType*)IP_CMU_FC_39,
+    (Clock_Ip_ClockMonitorType*)IP_CMU_FC_46,
+    (Clock_Ip_ClockMonitorType*)IP_CMU_FC_47,
+    (Clock_Ip_ClockMonitorType*)IP_CMU_FC_48,
+    (Clock_Ip_ClockMonitorType*)IP_CMU_FC_49,
+    (Clock_Ip_ClockMonitorType*)IP_CMU_FC_50,
+    (Clock_Ip_ClockMonitorType*)IP_CMU_FC_51,
+};
+Clock_Ip_NameType const Clock_Ip_aeCmuNames[CLOCK_IP_CMU_INSTANCES_ARRAY_SIZE] =
+{
+        FXOSC_CLK,
+        XBAR_DIV3_FAIL_CLK,
+        CORE_M7_0_CLK,
+        XBAR_DIV3_CLK,
+        CORE_M7_1_CLK,
+        CORE_M7_2_CLK,
+        PER_CLK,
+        SERDES_REF_CLK,
+        FLEXRAY_CLK,
+        FLEXCAN_CLK,
+        GMAC0_TX_CLK,
+        GMAC_TS_CLK,
+        LINFLEXD_CLK,
+        QSPI_1X_CLK,
+        SDHC_CLK,
+        DDR_CLK,
+        GMAC0_RX_CLK,
+        SPI_CLK,
+        CORE_A53_CLUSTER_0_CLK,
+        CORE_A53_CLUSTER_1_CLK,
+        PFE_PE_CLK,
+        PFEMAC0_TX_DIV_CLK,
+        PFEMAC0_RX_CLK,
+        PFEMAC1_TX_CLK,
+        PFEMAC1_RX_CLK,
+        PFEMAC2_TX_CLK,
+        PFEMAC2_RX_CLK,
+};
+
+Clock_Ip_CmuInfoType const Clock_Ip_axCmuInfo[CLOCK_IP_CMU_INFO_SIZE] =  {
+
+/* CLOCK_IP_CMU_0_INSTANCE */
+{
+    FXOSC_CLK,                                       /* Name of the clock that supports cmu (clock monitor) */
+    FIRC_CLK,                                        /* Name of the reference clock */
+    XBAR_DIV3_CLK,                                   /* Name of the bus clock */
+    (Clock_Ip_ClockMonitorType*)IP_CMU_FC_0,        /* Cmu instance */
+},
+/* Reserved cmu instance */
+{
+    RESERVED_CLK,                                    /* Name of the clock that supports cmu (clock monitor) */
+    RESERVED_CLK,                                    /* Name of the reference clock */
+    RESERVED_CLK,                                    /* Name of the bus clock */
+    NULL_PTR,                                        /* Cmu instance */
+},
+/* Reserved cmu instance */
+{
+    RESERVED_CLK,                                    /* Name of the clock that supports cmu (clock monitor) */
+    RESERVED_CLK,                                    /* Name of the reference clock */
+    RESERVED_CLK,                                    /* Name of the bus clock */
+    NULL_PTR,                                        /* Cmu instance */
+},
+/* Reserved cmu instance */
+{
+    RESERVED_CLK,                                    /* Name of the clock that supports cmu (clock monitor) */
+    RESERVED_CLK,                                    /* Name of the reference clock */
+    RESERVED_CLK,                                    /* Name of the bus clock */
+    NULL_PTR,                                        /* Cmu instance */
+},
+/* Reserved cmu instance */
+{
+    RESERVED_CLK,                                    /* Name of the clock that supports cmu (clock monitor) */
+    RESERVED_CLK,                                    /* Name of the reference clock */
+    RESERVED_CLK,                                    /* Name of the bus clock */
+    NULL_PTR,                                        /* Cmu instance */
+},
+/* CLOCK_IP_CMU_5_INSTANCE */
+{
+    XBAR_DIV3_FAIL_CLK,                              /* Name of the clock that supports cmu (clock monitor) */
+    FIRC_CLK,                                        /* Name of the reference clock */
+    XBAR_DIV3_CLK,                                   /* Name of the bus clock */
+    (Clock_Ip_ClockMonitorType*)IP_CMU_FC_5,         /* Cmu instance */
+},
+/* CLOCK_IP_CMU_6_INSTANCE */
+{
+    CORE_M7_0_CLK,                                   /* Name of the clock that supports cmu (clock monitor) */
+    FIRC_CLK,                                        /* Name of the reference clock */
+    XBAR_DIV3_CLK,                                   /* Name of the bus clock */
+    (Clock_Ip_ClockMonitorType*)IP_CMU_FC_6,         /* Cmu instance */
+},
+/* CLOCK_IP_CMU_7_INSTANCE */
+{
+    XBAR_DIV3_CLK,                                   /* Name of the clock that supports cmu (clock monitor) */
+    FXOSC_CLK,                                       /* Name of the reference clock */
+    XBAR_DIV3_CLK,                                   /* Name of the bus clock */
+    (Clock_Ip_ClockMonitorType*)IP_CMU_FC_7,         /* Cmu instance */
+},
+/* CLOCK_IP_CMU_8_INSTANCE */
+{
+    CORE_M7_1_CLK,                                   /* Name of the clock that supports cmu (clock monitor) */
+    FIRC_CLK,                                        /* Name of the reference clock */
+    XBAR_DIV3_CLK,                                   /* Name of the bus clock */
+    (Clock_Ip_ClockMonitorType*)IP_CMU_FC_8,         /* Cmu instance */
+},
+/* CLOCK_IP_CMU_9_INSTANCE */
+{
+    CORE_M7_2_CLK,                                   /* Name of the clock that supports cmu (clock monitor) */
+    FIRC_CLK,                                        /* Name of the reference clock */
+    XBAR_DIV3_CLK,                                   /* Name of the bus clock */
+    (Clock_Ip_ClockMonitorType*)IP_CMU_FC_9,         /* Cmu instance */
+},
+/* CLOCK_IP_CMU_10_INSTANCE */
+{
+    PER_CLK,                                         /* Name of the clock that supports cmu (clock monitor) */
+    FIRC_CLK,                                        /* Name of the reference clock */
+    XBAR_DIV3_CLK,                                   /* Name of the bus clock */
+    (Clock_Ip_ClockMonitorType*)IP_CMU_FC_10,        /* Cmu instance */
+},
+/* CLOCK_IP_CMU_11_INSTANCE */
+{
+    SERDES_REF_CLK,                                  /* Name of the clock that supports cmu (clock monitor) */
+    FXOSC_CLK,                                       /* Name of the reference clock */
+    XBAR_DIV3_CLK,                                   /* Name of the bus clock */
+    (Clock_Ip_ClockMonitorType*)IP_CMU_FC_11,        /* Cmu instance */
+},
+/* CLOCK_IP_CMU_12_INSTANCE */
+{
+    FLEXRAY_CLK,                                     /* Name of the clock that supports cmu (clock monitor) */
+    FXOSC_CLK,                                       /* Name of the reference clock */
+    XBAR_DIV3_CLK,                                   /* Name of the bus clock */
+    (Clock_Ip_ClockMonitorType*)IP_CMU_FC_12,        /* Cmu instance */
+},
+/* CLOCK_IP_CMU_13_INSTANCE */
+{
+    FLEXCAN_CLK,                                     /* Name of the clock that supports cmu (clock monitor) */
+    FXOSC_CLK,                                       /* Name of the reference clock */
+    XBAR_DIV3_CLK,                                   /* Name of the bus clock */
+    (Clock_Ip_ClockMonitorType*)IP_CMU_FC_13,        /* Cmu instance */
+},
+/* CLOCK_IP_CMU_14_INSTANCE */
+{
+    GMAC0_TX_CLK,                                    /* Name of the clock that supports cmu (clock monitor) */
+    FXOSC_CLK,                                       /* Name of the reference clock */
+    XBAR_DIV3_CLK,                                   /* Name of the bus clock */
+    (Clock_Ip_ClockMonitorType*)IP_CMU_FC_14,        /* Cmu instance */
+},
+/* CLOCK_IP_CMU_15_INSTANCE */
+{
+    GMAC_TS_CLK,                                     /* Name of the clock that supports cmu (clock monitor) */
+    FXOSC_CLK,                                       /* Name of the reference clock */
+    XBAR_DIV3_CLK,                                   /* Name of the bus clock */
+    (Clock_Ip_ClockMonitorType*)IP_CMU_FC_15,        /* Cmu instance */
+},
+/* CLOCK_IP_CMU_16_INSTANCE */
+{
+    LINFLEXD_CLK,                                    /* Name of the clock that supports cmu (clock monitor) */
+    FXOSC_CLK,                                       /* Name of the reference clock */
+    XBAR_DIV3_CLK,                                   /* Name of the bus clock */
+    (Clock_Ip_ClockMonitorType*)IP_CMU_FC_16,        /* Cmu instance */
+},
+/* CLOCK_IP_CMU_17_INSTANCE */
+{
+    QSPI_1X_CLK,                                     /* Name of the clock that supports cmu (clock monitor) */
+    FXOSC_CLK,                                       /* Name of the reference clock */
+    XBAR_DIV3_CLK,                                   /* Name of the bus clock */
+    (Clock_Ip_ClockMonitorType*)IP_CMU_FC_17,        /* Cmu instance */
+},
+/* CLOCK_IP_CMU_18_INSTANCE */
+{
+    SDHC_CLK,                                        /* Name of the clock that supports cmu (clock monitor) */
+    FXOSC_CLK,                                       /* Name of the reference clock */
+    XBAR_DIV3_CLK,                                   /* Name of the bus clock */
+    (Clock_Ip_ClockMonitorType*)IP_CMU_FC_18,        /* Cmu instance */
+},
+/* Reserved cmu instance */
+{
+    RESERVED_CLK,                                    /* Name of the clock that supports cmu (clock monitor) */
+    RESERVED_CLK,                                    /* Name of the reference clock */
+    RESERVED_CLK,                                    /* Name of the bus clock */
+    NULL_PTR,                                        /* Cmu instance */
+},
+/* CLOCK_IP_CMU_20_INSTANCE */
+{
+    DDR_CLK,                                         /* Name of the clock that supports cmu (clock monitor) */
+    FIRC_CLK,                                        /* Name of the reference clock */
+    XBAR_DIV3_CLK,                                   /* Name of the bus clock */
+    (Clock_Ip_ClockMonitorType*)IP_CMU_FC_20,        /* Cmu instance */
+},
+/* CLOCK_IP_CMU_21_INSTANCE */
+{
+    GMAC0_RX_CLK,                                    /* Name of the clock that supports cmu (clock monitor) */
+    FXOSC_CLK,                                       /* Name of the reference clock */
+    XBAR_DIV3_CLK,                                   /* Name of the bus clock */
+    (Clock_Ip_ClockMonitorType*)IP_CMU_FC_21,        /* Cmu instance */
+},
+/* CLOCK_IP_CMU_22_INSTANCE */
+{
+    SPI_CLK,                                         /* Name of the clock that supports cmu (clock monitor) */
+    FXOSC_CLK,                                       /* Name of the reference clock */
+    XBAR_DIV3_CLK,                                   /* Name of the bus clock */
+    (Clock_Ip_ClockMonitorType*)IP_CMU_FC_22,        /* Cmu instance */
+},
+/* Reserved cmu instance */
+{
+    RESERVED_CLK,                                    /* Name of the clock that supports cmu (clock monitor) */
+    RESERVED_CLK,                                    /* Name of the reference clock */
+    RESERVED_CLK,                                    /* Name of the bus clock */
+    NULL_PTR,                                        /* Cmu instance */
+},
+/* Reserved cmu instance */
+{
+    RESERVED_CLK,                                    /* Name of the clock that supports cmu (clock monitor) */
+    RESERVED_CLK,                                    /* Name of the reference clock */
+    RESERVED_CLK,                                    /* Name of the bus clock */
+    NULL_PTR,                                        /* Cmu instance */
+},
+/* Reserved cmu instance */
+{
+    RESERVED_CLK,                                    /* Name of the clock that supports cmu (clock monitor) */
+    RESERVED_CLK,                                    /* Name of the reference clock */
+    RESERVED_CLK,                                    /* Name of the bus clock */
+    NULL_PTR,                                        /* Cmu instance */
+},
+/* Reserved cmu instance */
+{
+    RESERVED_CLK,                                    /* Name of the clock that supports cmu (clock monitor) */
+    RESERVED_CLK,                                    /* Name of the reference clock */
+    RESERVED_CLK,                                    /* Name of the bus clock */
+    NULL_PTR,                                        /* Cmu instance */
+},
+/* CLOCK_IP_CMU_27_INSTANCE */
+{
+    CORE_A53_CLUSTER_0_CLK,                          /* Name of the clock that supports cmu (clock monitor) */
+    FXOSC_CLK,                                       /* Name of the reference clock */
+    XBAR_DIV3_CLK,                                   /* Name of the bus clock */
+    (Clock_Ip_ClockMonitorType*)IP_CMU_FC_27,        /* Cmu instance */
+},
+/* CLOCK_IP_CMU_28_INSTANCE */
+{
+    CORE_A53_CLUSTER_1_CLK,                          /* Name of the clock that supports cmu (clock monitor) */
+    FIRC_CLK,                                        /* Name of the reference clock */
+    XBAR_DIV3_CLK,                                   /* Name of the bus clock */
+    (Clock_Ip_ClockMonitorType*)IP_CMU_FC_28,        /* Cmu instance */
+},
+/* Reserved cmu instance */
+{
+    RESERVED_CLK,                                    /* Name of the clock that supports cmu (clock monitor) */
+    RESERVED_CLK,                                    /* Name of the reference clock */
+    RESERVED_CLK,                                    /* Name of the bus clock */
+    NULL_PTR,                                        /* Cmu instance */
+},
+/* Reserved cmu instance */
+{
+    RESERVED_CLK,                                    /* Name of the clock that supports cmu (clock monitor) */
+    RESERVED_CLK,                                    /* Name of the reference clock */
+    RESERVED_CLK,                                    /* Name of the bus clock */
+    NULL_PTR,                                        /* Cmu instance */
+},
+/* Reserved cmu instance */
+{
+    RESERVED_CLK,                                    /* Name of the clock that supports cmu (clock monitor) */
+    RESERVED_CLK,                                    /* Name of the reference clock */
+    RESERVED_CLK,                                    /* Name of the bus clock */
+    NULL_PTR,                                        /* Cmu instance */
+},
+/* Reserved cmu instance */
+{
+    RESERVED_CLK,                                    /* Name of the clock that supports cmu (clock monitor) */
+    RESERVED_CLK,                                    /* Name of the reference clock */
+    RESERVED_CLK,                                    /* Name of the bus clock */
+    NULL_PTR,                                        /* Cmu instance */
+},
+/* Reserved cmu instance */
+{
+    RESERVED_CLK,                                    /* Name of the clock that supports cmu (clock monitor) */
+    RESERVED_CLK,                                    /* Name of the reference clock */
+    RESERVED_CLK,                                    /* Name of the bus clock */
+    NULL_PTR,                                        /* Cmu instance */
+},
+/* Reserved cmu instance */
+{
+    RESERVED_CLK,                                    /* Name of the clock that supports cmu (clock monitor) */
+    RESERVED_CLK,                                    /* Name of the reference clock */
+    RESERVED_CLK,                                    /* Name of the bus clock */
+    NULL_PTR,                                        /* Cmu instance */
+},
+/* Reserved cmu instance */
+{
+    RESERVED_CLK,                                    /* Name of the clock that supports cmu (clock monitor) */
+    RESERVED_CLK,                                    /* Name of the reference clock */
+    RESERVED_CLK,                                    /* Name of the bus clock */
+    NULL_PTR,                                        /* Cmu instance */
+},
+/* Reserved cmu instance */
+{
+    RESERVED_CLK,                                    /* Name of the clock that supports cmu (clock monitor) */
+    RESERVED_CLK,                                    /* Name of the reference clock */
+    RESERVED_CLK,                                    /* Name of the bus clock */
+    NULL_PTR,                                        /* Cmu instance */
+},
+/* Reserved cmu instance */
+{
+    RESERVED_CLK,                                    /* Name of the clock that supports cmu (clock monitor) */
+    RESERVED_CLK,                                    /* Name of the reference clock */
+    RESERVED_CLK,                                    /* Name of the bus clock */
+    NULL_PTR,                                        /* Cmu instance */
+},
+/* Reserved cmu instance */
+{
+    RESERVED_CLK,                                    /* Name of the clock that supports cmu (clock monitor) */
+    RESERVED_CLK,                                    /* Name of the reference clock */
+    RESERVED_CLK,                                    /* Name of the bus clock */
+    NULL_PTR,                                        /* Cmu instance */
+},
+/* CLOCK_IP_CMU_39_INSTANCE */
+{
+    PFE_PE_CLK,                                      /* Name of the clock that supports cmu (clock monitor) */
+    FXOSC_CLK,                                       /* Name of the reference clock */
+    XBAR_DIV3_CLK,                                   /* Name of the bus clock */
+    (Clock_Ip_ClockMonitorType*)IP_CMU_FC_39,        /* Cmu instance */
+},
+/* Reserved cmu instance */
+{
+    RESERVED_CLK,                                    /* Name of the clock that supports cmu (clock monitor) */
+    RESERVED_CLK,                                    /* Name of the reference clock */
+    RESERVED_CLK,                                    /* Name of the bus clock */
+    NULL_PTR,                                        /* Cmu instance */
+},
+/* Reserved cmu instance */
+{
+    RESERVED_CLK,                                    /* Name of the clock that supports cmu (clock monitor) */
+    RESERVED_CLK,                                    /* Name of the reference clock */
+    RESERVED_CLK,                                    /* Name of the bus clock */
+    NULL_PTR,                                        /* Cmu instance */
+},
+/* Reserved cmu instance */
+{
+    RESERVED_CLK,                                    /* Name of the clock that supports cmu (clock monitor) */
+    RESERVED_CLK,                                    /* Name of the reference clock */
+    RESERVED_CLK,                                    /* Name of the bus clock */
+    NULL_PTR,                                        /* Cmu instance */
+},
+/* Reserved cmu instance */
+{
+    RESERVED_CLK,                                    /* Name of the clock that supports cmu (clock monitor) */
+    RESERVED_CLK,                                    /* Name of the reference clock */
+    RESERVED_CLK,                                    /* Name of the bus clock */
+    NULL_PTR,                                        /* Cmu instance */
+},
+/* Reserved cmu instance */
+{
+    RESERVED_CLK,                                    /* Name of the clock that supports cmu (clock monitor) */
+    RESERVED_CLK,                                    /* Name of the reference clock */
+    RESERVED_CLK,                                    /* Name of the bus clock */
+    NULL_PTR,                                        /* Cmu instance */
+},
+/* Reserved cmu instance */
+{
+    RESERVED_CLK,                                    /* Name of the clock that supports cmu (clock monitor) */
+    RESERVED_CLK,                                    /* Name of the reference clock */
+    RESERVED_CLK,                                    /* Name of the bus clock */
+    NULL_PTR,                                        /* Cmu instance */
+},
+/* CLOCK_IP_CMU_46_INSTANCE */
+{
+    PFEMAC0_TX_DIV_CLK,                              /* Name of the clock that supports cmu (clock monitor) */
+    FXOSC_CLK,                                       /* Name of the reference clock */
+    XBAR_DIV3_CLK,                                   /* Name of the bus clock */
+    (Clock_Ip_ClockMonitorType*)IP_CMU_FC_46,        /* Cmu instance */
+},
+/* CLOCK_IP_CMU_47_INSTANCE */
+{
+    PFEMAC0_RX_CLK,                                  /* Name of the clock that supports cmu (clock monitor) */
+    FXOSC_CLK,                                       /* Name of the reference clock */
+    XBAR_DIV3_CLK,                                   /* Name of the bus clock */
+    (Clock_Ip_ClockMonitorType*)IP_CMU_FC_47,        /* Cmu instance */
+},
+/* CLOCK_IP_CMU_48_INSTANCE */
+{
+    PFEMAC1_TX_CLK,                                  /* Name of the clock that supports cmu (clock monitor) */
+    FXOSC_CLK,                                       /* Name of the reference clock */
+    XBAR_DIV3_CLK,                                   /* Name of the bus clock */
+    (Clock_Ip_ClockMonitorType*)IP_CMU_FC_48,        /* Cmu instance */
+},
+/* CLOCK_IP_CMU_49_INSTANCE */
+{
+    PFEMAC1_RX_CLK,                                  /* Name of the clock that supports cmu (clock monitor) */
+    FXOSC_CLK,                                       /* Name of the reference clock */
+    XBAR_DIV3_CLK,                                   /* Name of the bus clock */
+    (Clock_Ip_ClockMonitorType*)IP_CMU_FC_49,        /* Cmu instance */
+
+},
+/* CLOCK_IP_CMU_50_INSTANCE */
+{
+    PFEMAC2_TX_CLK,                                  /* Name of the clock that supports cmu (clock monitor) */
+    FXOSC_CLK,                                       /* Name of the reference clock */
+    XBAR_DIV3_CLK,                                   /* Name of the bus clock */
+    (Clock_Ip_ClockMonitorType*)IP_CMU_FC_50,        /* Cmu instance */
 
 
-const Clock_Ip_ClockNameSourceType Clock_Ip_aeSourceTypeClockName[CLOCK_IP_PRODUCERS_NO] = {
+},
+/* CLOCK_IP_CMU_51_INSTANCE */
+{
+    PFEMAC2_RX_CLK,                                  /* Name of the clock that supports cmu (clock monitor) */
+    FXOSC_CLK,                                       /* Name of the reference clock */
+    XBAR_DIV3_CLK,                                   /* Name of the bus clock */
+    (Clock_Ip_ClockMonitorType*)IP_CMU_FC_51,        /* Cmu instance */
+},
+};
+
+
+        
+volatile Clock_Ip_McmePartitionSetType* const Clock_Ip_apxMcMeSetPartitions[CLOCK_IP_MC_ME_PARTITIONS_COUNT] =
+{
+    (volatile Clock_Ip_McmePartitionSetType*)((volatile uint8*)&IP_MC_ME->PRTN0_COFB0_CLKEN),
+    NULL_PTR,
+    (volatile Clock_Ip_McmePartitionSetType*)((volatile uint8*)&IP_MC_ME->PRTN2_COFB0_CLKEN),
+    (volatile Clock_Ip_McmePartitionSetType*)((volatile uint8*)&IP_MC_ME->PRTN3_COFB0_CLKEN),
+};
+volatile const Clock_Ip_McmePartitionGetType* const Clock_Ip_apxMcMeGetPartitions[CLOCK_IP_MC_ME_PARTITIONS_COUNT] =
+{
+    (volatile const Clock_Ip_McmePartitionGetType*)((volatile const uint8*)&IP_MC_ME->PRTN0_COFB0_STAT),
+    NULL_PTR,
+    (volatile const Clock_Ip_McmePartitionGetType*)((volatile const uint8*)&IP_MC_ME->PRTN2_COFB0_STAT),
+    (volatile const Clock_Ip_McmePartitionGetType*)((volatile const uint8*)&IP_MC_ME->PRTN3_COFB0_STAT),
+};
+volatile Clock_Ip_McmePartitionTriggerType* const Clock_Ip_apxMcMeTriggerPartitions[CLOCK_IP_MC_ME_PARTITIONS_COUNT] =
+{
+    (volatile Clock_Ip_McmePartitionTriggerType*)((volatile uint8*)&IP_MC_ME->PRTN0_PCONF),
+    NULL_PTR,
+    (volatile Clock_Ip_McmePartitionTriggerType*)((volatile uint8*)&IP_MC_ME->PRTN2_PCONF),
+    (volatile Clock_Ip_McmePartitionTriggerType*)((volatile uint8*)&IP_MC_ME->PRTN3_PCONF),
+};
+
+
+
+
+
+
+
+
+const Clock_Ip_ClockNameSourceType Clock_Ip_aeSourceTypeClockName[CLOCK_IP_PRODUCERS_NO + 1U] = {
     IRCOSC_TYPE,                               /*!< FIRC_CLK                                */
-    UKNOWN_TYPE,                               /*!< FIRCDIV2_CLK                            */
-    UKNOWN_TYPE,                               /*!< SAFE_CLK                                */
-    IRCOSC_TYPE,                               /*!< SIRC_CLK                                */
     XOSC_TYPE,                                 /*!< FXOSC_CLK                               */
-    XOSC_TYPE,                                 /*!< SXOSC_CLK                               */
-    EXT_CLK_TYPE,                              /*!< gated_clk                               */
-    EXT_CLK_TYPE,                              /*!< fast_crystal_oscillator                 */
-    EXT_CLK_TYPE,                              /*!< slow_crystal_oscillator                 */
-    EXT_CLK_TYPE,                              /*!< eth0_mii_rx_ext_clk                     */
-    EXT_CLK_TYPE,                              /*!< eth0_mii_tx_ext_clk                     */
-    EXT_CLK_TYPE,                              /*!< eth0_rgmii_rx_ext_clk                   */
-    EXT_CLK_TYPE,                              /*!< eth0_rgmii_tx_ext_clk                   */
-    EXT_CLK_TYPE,                              /*!< eth0_rmii_ref_ext_clk                   */
-    EXT_CLK_TYPE,                              /*!< eth1_mii_rx_ext_clk                     */
-    EXT_CLK_TYPE,                              /*!< eth1_mii_tx_ext_clk                     */
-    EXT_CLK_TYPE,                              /*!< eth1_rgmii_rx_ext_clk                   */
-    EXT_CLK_TYPE,                              /*!< eth1_rgmii_tx_ext_clk                   */
-    EXT_CLK_TYPE,                              /*!< eth1_rmii_ref_ext_clk                   */
-    EXT_CLK_TYPE,                              /*!< eth2_mii_rx_ext_clk                     */
-    EXT_CLK_TYPE,                              /*!< eth2_mii_tx_ext_clk                     */
-    EXT_CLK_TYPE,                              /*!< eth2_rgmii_rx_ext_clk                   */
-    EXT_CLK_TYPE,                              /*!< eth2_rgmii_tx_ext_clk                   */
-    EXT_CLK_TYPE,                              /*!< eth2_rmii_ref_ext_clk                   */
-    EXT_CLK_TYPE,                              /*!< ts_1588_clk                             */
-    PLL_TYPE,                                  /*!< PLL0_CLK                                */
-    UKNOWN_TYPE,                               /*!< PLL0_DIV_CLK                            */
-    PLL_TYPE,                                  /*!< PLL0_DIV0_CLK                           */
-    PLL_TYPE,                                  /*!< PLL0_DIV4_CLK                           */
-    PLL_TYPE,                                  /*!< PLL0_DFS0_CLK                           */
-#if defined(CLOCK_IP_HAS_PLL0_DFS1_CLK)
-    PLL_TYPE,                                  /*!< PLL0_DFS1_CLK                           */
-#endif
-#if defined(CLOCK_IP_HAS_PLL0_DFS2_CLK)
-    PLL_TYPE,                                  /*!< PLL0_DFS2_CLK                           */
-#endif
-#if defined(CLOCK_IP_HAS_PLL0_DFS3_CLK)
-    PLL_TYPE,                                  /*!< PLL0_DFS3_CLK                           */
-#endif
-    PLL_TYPE,                                  /*!< PLL1_CLK                                */
-    UKNOWN_TYPE,                               /*!< PLL1_DIV_CLK                            */
-    PLL_TYPE,                                  /*!< PLL1_DIV0_CLK                           */
-    PLL_TYPE,                                  /*!< CPE_PLL_CLK                             */
-    UKNOWN_TYPE,                               /*!< CPE_DIV_CLK                             */
-    PLL_TYPE,                                  /*!< CPE_DIV0_CLK                            */
-    UKNOWN_TYPE,                               /*!< LPE_CLK                                 */
-#if defined(CLOCK_IP_HAS_LPE_DIV1_CLK)
-    UKNOWN_TYPE,                               /*!< LPE_DIV1_CLK                            */
-#endif
-#if defined(CLOCK_IP_HAS_LPE_DIV2_CLK)
-    UKNOWN_TYPE,                               /*!< LPE_DIV2_CLK                            */
-#endif
-#if defined(CLOCK_IP_HAS_LPE_DIV4_CLK)
-    UKNOWN_TYPE,                               /*!< LPE_DIV4_CLK                            */
-#endif
-#if defined(CLOCK_IP_HAS_LPE_DIV8_CLK)
-    UKNOWN_TYPE,                               /*!< LPE_DIV8_CLK                            */
-#endif
-    UKNOWN_TYPE,                               /*!< PLT_CLK                                 */
-#if defined(CLOCK_IP_HAS_PLTCORE_CLK)
-    UKNOWN_TYPE,                               /*!< PLTCORE_CLK                             */
-#endif
-#if defined(CLOCK_IP_HAS_PLTDIV1_CLK)
-    UKNOWN_TYPE,                               /*!< PLTDIV1_CLK                             */
-#endif
-#if defined(CLOCK_IP_HAS_PLTDIV2_CLK)
-    UKNOWN_TYPE,                               /*!< PLTDIV2_CLK                             */
-#endif
-#if defined(CLOCK_IP_HAS_PLTDIV4_CLK)
-    UKNOWN_TYPE,                               /*!< PLTDIV4_CLK                             */
-#endif
+    IRCOSC_TYPE,                               /*!< SIRC_CLK                                */
+    PLL_TYPE,                                  /*!< COREPLL_CLK                             */
+    PLL_TYPE,                                  /*!< PERIPHPLL_CLK                           */
+    PLL_TYPE,                                  /*!< DDRPLL_CLK                              */
+    PLL_TYPE,                                  /*!< ACCELPLL_CLK                            */
+    PLL_TYPE,                                  /*!< CORE_PLL_PHI0_CLK                       */
+    PLL_TYPE,                                  /*!< CORE_PLL_PHI1_CLK                       */
+    PLL_TYPE,                                  /*!< CORE_PLL_DFS1_CLK                       */
+    PLL_TYPE,                                  /*!< CORE_PLL_DFS2_CLK                       */
+    PLL_TYPE,                                  /*!< CORE_PLL_DFS3_CLK                       */
+    PLL_TYPE,                                  /*!< CORE_PLL_DFS4_CLK                       */
+    PLL_TYPE,                                  /*!< CORE_PLL_DFS5_CLK                       */
+    PLL_TYPE,                                  /*!< CORE_PLL_DFS6_CLK                       */
+    PLL_TYPE,                                  /*!< PERIPH_PLL_PHI0_CLK                     */
+    PLL_TYPE,                                  /*!< PERIPH_PLL_PHI1_CLK                     */
+    PLL_TYPE,                                  /*!< PERIPH_PLL_PHI2_CLK                     */
+    PLL_TYPE,                                  /*!< PERIPH_PLL_PHI3_CLK                     */
+    PLL_TYPE,                                  /*!< PERIPH_PLL_PHI4_CLK                     */
+    PLL_TYPE,                                  /*!< PERIPH_PLL_PHI5_CLK                     */
+    PLL_TYPE,                                  /*!< PERIPH_PLL_PHI6_CLK                     */
+    PLL_TYPE,                                  /*!< PERIPH_PLL_PHI7_CLK                     */
+    PLL_TYPE,                                  /*!< PERIPH_PLL_DFS1_CLK                     */
+    PLL_TYPE,                                  /*!< PERIPH_PLL_DFS2_CLK                     */
+    PLL_TYPE,                                  /*!< PERIPH_PLL_DFS3_CLK                     */
+    PLL_TYPE,                                  /*!< PERIPH_PLL_DFS4_CLK                     */
+    PLL_TYPE,                                  /*!< PERIPH_PLL_DFS5_CLK                     */
+    PLL_TYPE,                                  /*!< PERIPH_PLL_DFS6_CLK                     */
+    PLL_TYPE,                                  /*!< DDR_PLL_PHI0_CLK                        */
+    PLL_TYPE,                                  /*!< ACCEL_PLL_PHI0_CLK                      */
+    PLL_TYPE,                                  /*!< ACCEL_PLL_PHI1_CLK                      */
+    EXT_CLK_TYPE,                              /*!< RTC_EXT_REF_CLK                         */
+    EXT_CLK_TYPE,                              /*!< FTM_0_EXT_REF_CLK                       */
+    EXT_CLK_TYPE,                              /*!< FTM_1_EXT_REF_CLK                       */
+    EXT_CLK_TYPE,                              /*!< GMAC_0_EXT_REF_CLK                      */
+    EXT_CLK_TYPE,                              /*!< GMAC_0_EXT_RX_CLK                       */
+    EXT_CLK_TYPE,                              /*!< GMAC_0_EXT_TX_CLK                       */
+    EXT_CLK_TYPE,                              /*!< GMAC_EXT_TS_CLK                         */
+    EXT_CLK_TYPE,                              /*!< PFE_MAC_0_EXT_REF_CLK                   */
+    EXT_CLK_TYPE,                              /*!< PFE_MAC_0_EXT_RX_CLK                    */
+    EXT_CLK_TYPE,                              /*!< PFE_MAC_0_EXT_TX_CLK                    */
+    EXT_CLK_TYPE,                              /*!< PFE_MAC_1_EXT_REF_CLK                   */
+    EXT_CLK_TYPE,                              /*!< PFE_MAC_1_EXT_RX_CLK                    */
+    EXT_CLK_TYPE,                              /*!< PFE_MAC_1_EXT_TX_CLK                    */
+    EXT_CLK_TYPE,                              /*!< PFE_MAC_2_EXT_REF_CLK                   */
+    EXT_CLK_TYPE,                              /*!< PFE_MAC_2_EXT_RX_CLK                    */
+    EXT_CLK_TYPE,                              /*!< PFE_MAC_2_EXT_TX_CLK                    */
+    SERDES_TYPE,                              /*!< SERDES_0_XPCS_0_TX                      */
+    SERDES_TYPE,                              /*!< SERDES_0_XPCS_0_CDR                     */
+    SERDES_TYPE,                              /*!< SERDES_0_XPCS_1_TX                      */
+    SERDES_TYPE,                              /*!< SERDES_0_XPCS_1_CDR                     */
+    SERDES_TYPE,                              /*!< SERDES_1_XPCS_0_TX                      */
+    SERDES_TYPE,                              /*!< SERDES_1_XPCS_0_CDR                     */
+    SERDES_TYPE,                              /*!< SERDES_1_XPCS_1_TX                      */
+    SERDES_TYPE,                              /*!< SERDES_1_XPCS_1_CDR                     */
+    UKNOWN_TYPE,                               /*!< XBAR_2X_CLK                             */
+    UKNOWN_TYPE,                               /*!< XBAR_CLK                                */
+    UKNOWN_TYPE,                               /*!< XBAR_DIV2_CLK                           */
+    UKNOWN_TYPE,                               /*!< XBAR_DIV3_CLK                           */
+    UKNOWN_TYPE,                               /*!< XBAR_DIV4_CLK                           */
+    UKNOWN_TYPE,                               /*!< XBAR_DIV6_CLK                           */
+    UKNOWN_TYPE,                               /*!< A53_CORE_CLK                            */
+    UKNOWN_TYPE,                               /*!< A53_CORE_DIV2_CLK                       */
+    UKNOWN_TYPE,                               /*!< A53_CORE_DIV10_CLK                      */
+    UKNOWN_TYPE,                               /*!< DDR_CLK                                 */
+    UKNOWN_TYPE,                               /*!< PFE_PE_CLK                              */
+    UKNOWN_TYPE,                               /*!< PFE_SYS_CLK                             */
+    UKNOWN_TYPE,                               /*!< PER_CLK                                 */
+    UKNOWN_TYPE,                               /*!< GMAC0_REF_CLK                           */
+    UKNOWN_TYPE,                               /*!< GMAC0_REF_DIV_CLK                       */
+    UKNOWN_TYPE,                               /*!< PFEMAC0_REF_DIV_CLK                     */
+    UKNOWN_TYPE,                               /*!< PFEMAC1_REF_DIV_CLK                     */
+    UKNOWN_TYPE,                               /*!< PFEMAC2_REF_DIV_CLK                     */
+    UKNOWN_TYPE,                               /*!< SERDES_REF_CLK                          */
+    UKNOWN_TYPE,                               /*!< THE_LAST_PRODUCER_CLK                   */
 };
 
 const Clock_Ip_NameType Clock_Ip_aeHwPllName[CLOCK_IP_NUMBER_OF_HARDWARE_PLL] =
 {
-    PLL0_CLK,                       /* PLL0_CLK Clock */
-    PLL1_CLK,                       /* PLL1_CLK Clock */
-    CPE_PLL_CLK,                    /* CPE_PLL_CLK Clock */
+    COREPLL_CLK,                    /* COREPLL_CLK Clock */
+    PERIPHPLL_CLK,                  /* PERIPHPLL_CLK Clock */
+    DDRPLL_CLK,                     /* DDRPLL_CLK Clock */
+    ACCELPLL_CLK                    /* ACCELPLL_CLK Clock */
 };
-
 const Clock_Ip_NameType Clock_Ip_aeHwDfsName[CLOCK_IP_NUMBER_OF_HARDWARE_DFS] =
 {
-    PLL0_DFS0_CLK,                 /* PLL0_DFS0_CLK Clock */
-    PLL0_DFS1_CLK,                 /* PLL0_DFS1_CLK Clock */
-    PLL0_DFS2_CLK,                 /* PLL0_DFS2_CLK Clock */
-    PLL0_DFS3_CLK,                 /* PLL0_DFS3_CLK Clock */
+    CORE_PLL_DFS1_CLK,              /* CORE_PLL_DFS1_CLK Clock */
+    CORE_PLL_DFS2_CLK,              /* CORE_PLL_DFS2_CLK Clock */
+    CORE_PLL_DFS3_CLK,              /* CORE_PLL_DFS3_CLK Clock */
+    CORE_PLL_DFS4_CLK,              /* CORE_PLL_DFS4_CLK Clock */
+    CORE_PLL_DFS5_CLK,              /* CORE_PLL_DFS5_CLK Clock */
+    CORE_PLL_DFS6_CLK,              /* CORE_PLL_DFS6_CLK Clock */
+    PERIPH_PLL_DFS1_CLK,            /* PERIPH_PLL_DFS1_CLK Clock */
+    PERIPH_PLL_DFS2_CLK,            /* PERIPH_PLL_DFS2_CLK Clock */
+    PERIPH_PLL_DFS3_CLK,            /* PERIPH_PLL_DFS3_CLK Clock */
+    PERIPH_PLL_DFS4_CLK,            /* PERIPH_PLL_DFS4_CLK Clock */
+    PERIPH_PLL_DFS5_CLK,            /* PERIPH_PLL_DFS5_CLK Clock */
+    PERIPH_PLL_DFS6_CLK,            /* PERIPH_PLL_DFS6_CLK Clock */
 };
 
-const Clock_Ip_SelectorDividerType Clock_Ip_axSelectorsDividersTable[CLOCK_IP_SELECTOR_DIVIDER_TABLE_SIZE] = {
-/*   CLOCK_IP_SEL0_NODIV_LPE_CLK_INDEX                       */ {CLOCK_IP_SEL0_LPE_CLK_INDEX,                        CLOCK_IP_001_DIV_IDS_BITS,      CLOCK_IP_6_INSTANCE,  CLOCK_IP_SEL0_INDEX,  CLOCK_IP_DIV0_INDEX,  MC_CGM_SLC_0_CSC_SELCTL_SHIFT,       MC_CGM_SLC_0_DC_0_DIV_SHIFT,         MC_CGM_SLC_0_CSC_SELCTL_MASK,        MC_CGM_SLC_0_DC_0_DIV_MASK,          ((Clock_Ip_HwSelectorType*)0x42120300U),  ((Clock_Ip_HwPcfsType (*)[])0x42120004U)}, /*   LPE_CLK clock                   */
-/*   CLOCK_IP_SEL0_NODIV_PLT_CLK_INDEX                       */ {CLOCK_IP_SEL0_PLT_CLK_INDEX,                        CLOCK_IP_001_DIV_IDS_BITS,      CLOCK_IP_3_INSTANCE,  CLOCK_IP_SEL0_INDEX,  CLOCK_IP_DIV0_INDEX,  MC_CGM_SLC_0_CSC_SELCTL_SHIFT,       MC_CGM_SLC_0_DC_0_DIV_SHIFT,         MC_CGM_SLC_0_CSC_SELCTL_MASK,        MC_CGM_SLC_0_DC_0_DIV_MASK,          ((Clock_Ip_HwSelectorType*)0x404b8300U),  ((Clock_Ip_HwPcfsType (*)[])0x404b8004U)}, /*   PLT_CLK clock                   */
-/*   CLOCK_IP_SEL3_DIV0_CAN_PE_CLK_INDEX                     */ {CLOCK_IP_SEL3_CAN_PE_CLK_INDEX,                     CLOCK_IP_001_DIV_IDS_BITS,      CLOCK_IP_1_INSTANCE,  CLOCK_IP_SEL3_INDEX,  CLOCK_IP_DIV0_INDEX,  MC_CGM_SLC_3_CSC_SELCTL_SHIFT,       MC_CGM_SLC_3_DC_0_DIV_SHIFT,         MC_CGM_SLC_3_CSC_SELCTL_MASK,        MC_CGM_SLC_3_DC_0_DIV_MASK,          ((Clock_Ip_HwSelectorType*)0x400983c0U),  ((Clock_Ip_HwPcfsType (*)[])0x40098004U)}, /*   CAN_PE_CLK clock                */
-/*   CLOCK_IP_SEL10_DIV0_DFT_CLK_INDEX                       */ {CLOCK_IP_SEL10_DFT_CLK_INDEX,                       CLOCK_IP_001_DIV_IDS_BITS,      CLOCK_IP_3_INSTANCE,  CLOCK_IP_SEL10_INDEX, CLOCK_IP_DIV0_INDEX,  MC_CGM_SLC_10_CSC_SELCTL_SHIFT,      MC_CGM_SLC_10_DC_0_DIV_SHIFT,        MC_CGM_SLC_10_CSC_SELCTL_MASK,       MC_CGM_SLC_10_DC_0_DIV_MASK,         ((Clock_Ip_HwSelectorType*)0x404b8580U),  ((Clock_Ip_HwPcfsType (*)[])0x404b8004U)}, /*   DFT_CLK clock                   */
-/*   CLOCK_IP_SEL5_DIV0_DSPI_CLK_INDEX                       */ {CLOCK_IP_SEL5_DSPI_CLK_INDEX,                       CLOCK_IP_001_DIV_IDS_BITS,      CLOCK_IP_3_INSTANCE,  CLOCK_IP_SEL5_INDEX,  CLOCK_IP_DIV0_INDEX,  MC_CGM_SLC_5_CSC_SELCTL_SHIFT,       MC_CGM_SLC_5_DC_0_DIV_SHIFT,         MC_CGM_SLC_5_CSC_SELCTL_MASK,        MC_CGM_SLC_5_DC_0_DIV_MASK,          ((Clock_Ip_HwSelectorType*)0x404b8440U),  ((Clock_Ip_HwPcfsType (*)[])0x404b8004U)}, /*   DSPI_CLK clock                  */
-/*   CLOCK_IP_SEL13_DIV0_ETH_TS_CLK_INDEX                    */ {CLOCK_IP_SEL13_ETH_TS_CLK_INDEX,                    CLOCK_IP_001_DIV_IDS_BITS,      CLOCK_IP_3_INSTANCE,  CLOCK_IP_SEL13_INDEX, CLOCK_IP_DIV0_INDEX,  MC_CGM_SLC_13_CSC_SELCTL_SHIFT,      MC_CGM_SLC_13_DC_0_DIV_SHIFT,        MC_CGM_SLC_13_CSC_SELCTL_MASK,       MC_CGM_SLC_13_DC_0_DIV_MASK,         ((Clock_Ip_HwSelectorType*)0x404b8640U),  ((Clock_Ip_HwPcfsType (*)[])0x404b8004U)}, /*   ETH_TS_CLK clock                */
-/*   CLOCK_IP_SEL3_DIV0_ETH0_RX_CLK_INDEX                    */ {CLOCK_IP_SEL3_ETH0_RX_CLK_INDEX,                    CLOCK_IP_001_DIV_IDS_BITS,      CLOCK_IP_0_INSTANCE,  CLOCK_IP_SEL3_INDEX,  CLOCK_IP_DIV0_INDEX,  MC_CGM_SLC_3_CSC_SELCTL_SHIFT,       MC_CGM_SLC_3_DC_0_DIV_SHIFT,         MC_CGM_SLC_3_CSC_SELCTL_MASK,        MC_CGM_SLC_3_DC_0_DIV_MASK,          ((Clock_Ip_HwSelectorType*)0x400943c0U),  ((Clock_Ip_HwPcfsType (*)[])0x40094004U)}, /*   ETH0_RX_CLK clock               */
-/*   CLOCK_IP_SEL4_DIV0_ETH0_TX_CLK_INDEX                    */ {CLOCK_IP_SEL4_ETH0_TX_CLK_INDEX,                    CLOCK_IP_001_DIV_IDS_BITS,      CLOCK_IP_0_INSTANCE,  CLOCK_IP_SEL4_INDEX,  CLOCK_IP_DIV0_INDEX,  MC_CGM_SLC_4_CSC_SELCTL_SHIFT,       MC_CGM_SLC_4_DC_0_DIV_SHIFT,         MC_CGM_SLC_4_CSC_SELCTL_MASK,        MC_CGM_SLC_4_DC_0_DIV_MASK,          ((Clock_Ip_HwSelectorType*)0x40094400U),  ((Clock_Ip_HwPcfsType (*)[])0x40094004U)}, /*   ETH0_TX_CLK clock               */
-/*   CLOCK_IP_SEL5_DIV0_ETH1_RX_CLK_INDEX                    */ {CLOCK_IP_SEL5_ETH1_RX_CLK_INDEX,                    CLOCK_IP_001_DIV_IDS_BITS,      CLOCK_IP_0_INSTANCE,  CLOCK_IP_SEL5_INDEX,  CLOCK_IP_DIV0_INDEX,  MC_CGM_SLC_5_CSC_SELCTL_SHIFT,       MC_CGM_SLC_5_DC_0_DIV_SHIFT,         MC_CGM_SLC_5_CSC_SELCTL_MASK,        MC_CGM_SLC_5_DC_0_DIV_MASK,          ((Clock_Ip_HwSelectorType*)0x40094440U),  ((Clock_Ip_HwPcfsType (*)[])0x40094004U)}, /*   ETH1_RX_CLK clock               */
-/*   CLOCK_IP_SEL6_DIV0_ETH1_TX_CLK_INDEX                    */ {CLOCK_IP_SEL6_ETH1_TX_CLK_INDEX,                    CLOCK_IP_001_DIV_IDS_BITS,      CLOCK_IP_0_INSTANCE,  CLOCK_IP_SEL6_INDEX,  CLOCK_IP_DIV0_INDEX,  MC_CGM_SLC_6_CSC_SELCTL_SHIFT,       MC_CGM_SLC_6_DC_0_DIV_SHIFT,         MC_CGM_SLC_6_CSC_SELCTL_MASK,        MC_CGM_SLC_6_DC_0_DIV_MASK,          ((Clock_Ip_HwSelectorType*)0x40094480U),  ((Clock_Ip_HwPcfsType (*)[])0x40094004U)}, /*   ETH1_TX_CLK clock               */
-/*   CLOCK_IP_SEL7_DIV0_ETH2_RX_CLK_INDEX                    */ {CLOCK_IP_SEL7_ETH2_RX_CLK_INDEX,                    CLOCK_IP_001_DIV_IDS_BITS,      CLOCK_IP_0_INSTANCE,  CLOCK_IP_SEL7_INDEX,  CLOCK_IP_DIV0_INDEX,  MC_CGM_SLC_7_CSC_SELCTL_SHIFT,       MC_CGM_SLC_7_DC_0_DIV_SHIFT,         MC_CGM_SLC_7_CSC_SELCTL_MASK,        MC_CGM_SLC_7_DC_0_DIV_MASK,          ((Clock_Ip_HwSelectorType*)0x400944c0U),  ((Clock_Ip_HwPcfsType (*)[])0x40094004U)}, /*   ETH2_RX_CLK clock               */
-/*   CLOCK_IP_SEL8_DIV0_ETH2_TX_CLK_INDEX                    */ {CLOCK_IP_SEL8_ETH2_TX_CLK_INDEX,                    CLOCK_IP_001_DIV_IDS_BITS,      CLOCK_IP_0_INSTANCE,  CLOCK_IP_SEL8_INDEX,  CLOCK_IP_DIV0_INDEX,  MC_CGM_SLC_8_CSC_SELCTL_SHIFT,       MC_CGM_SLC_8_DC_0_DIV_SHIFT,         MC_CGM_SLC_8_CSC_SELCTL_MASK,        MC_CGM_SLC_8_DC_0_DIV_MASK,          ((Clock_Ip_HwSelectorType*)0x40094500U),  ((Clock_Ip_HwPcfsType (*)[])0x40094004U)}, /*   ETH2_TX_CLK clock               */
-/*   CLOCK_IP_SEL11_DIV0_ETH3_RX_CLK_INDEX                   */ {CLOCK_IP_SEL11_ETH3_RX_CLK_INDEX,                   CLOCK_IP_001_DIV_IDS_BITS,      CLOCK_IP_0_INSTANCE,  CLOCK_IP_SEL11_INDEX, CLOCK_IP_DIV0_INDEX,  MC_CGM_SLC_11_CSC_SELCTL_SHIFT,      MC_CGM_SLC_11_DC_0_DIV_SHIFT,        MC_CGM_SLC_11_CSC_SELCTL_MASK,       MC_CGM_SLC_11_DC_0_DIV_MASK,         ((Clock_Ip_HwSelectorType*)0x400945c0U),  ((Clock_Ip_HwPcfsType (*)[])0x40094004U)}, /*   ETH3_RX_CLK clock               */
-/*   CLOCK_IP_SEL12_DIV0_ETH3_TX_CLK_INDEX                   */ {CLOCK_IP_SEL12_ETH3_TX_CLK_INDEX,                   CLOCK_IP_001_DIV_IDS_BITS,      CLOCK_IP_0_INSTANCE,  CLOCK_IP_SEL12_INDEX, CLOCK_IP_DIV0_INDEX,  MC_CGM_SLC_12_CSC_SELCTL_SHIFT,      MC_CGM_SLC_12_DC_0_DIV_SHIFT,        MC_CGM_SLC_12_CSC_SELCTL_MASK,       MC_CGM_SLC_12_DC_0_DIV_MASK,         ((Clock_Ip_HwSelectorType*)0x40094600U),  ((Clock_Ip_HwPcfsType (*)[])0x40094004U)}, /*   ETH3_TX_CLK clock               */
-/*   CLOCK_IP_SEL13_DIV0_ETH4_RX_CLK_INDEX                   */ {CLOCK_IP_SEL13_ETH4_RX_CLK_INDEX,                   CLOCK_IP_001_DIV_IDS_BITS,      CLOCK_IP_0_INSTANCE,  CLOCK_IP_SEL13_INDEX, CLOCK_IP_DIV0_INDEX,  MC_CGM_SLC_13_CSC_SELCTL_SHIFT,      MC_CGM_SLC_13_DC_0_DIV_SHIFT,        MC_CGM_SLC_13_CSC_SELCTL_MASK,       MC_CGM_SLC_13_DC_0_DIV_MASK,         ((Clock_Ip_HwSelectorType*)0x40094640U),  ((Clock_Ip_HwPcfsType (*)[])0x40094004U)}, /*   ETH4_RX_CLK clock               */
-/*   CLOCK_IP_SEL14_DIV0_ETH4_TX_CLK_INDEX                   */ {CLOCK_IP_SEL14_ETH4_TX_CLK_INDEX,                   CLOCK_IP_001_DIV_IDS_BITS,      CLOCK_IP_0_INSTANCE,  CLOCK_IP_SEL14_INDEX, CLOCK_IP_DIV0_INDEX,  MC_CGM_SLC_14_CSC_SELCTL_SHIFT,      MC_CGM_SLC_14_DC_0_DIV_SHIFT,        MC_CGM_SLC_14_CSC_SELCTL_MASK,       MC_CGM_SLC_14_DC_0_DIV_MASK,         ((Clock_Ip_HwSelectorType*)0x40094680U),  ((Clock_Ip_HwPcfsType (*)[])0x40094004U)}, /*   ETH4_TX_CLK clock               */
-/*   CLOCK_IP_SEL2_DIV0_FLEXCAN_0to7_PE_CLK_INDEX            */ {CLOCK_IP_SEL2_FLEXCAN_0to7_PE_CLK_INDEX,            CLOCK_IP_001_DIV_IDS_BITS,      CLOCK_IP_3_INSTANCE,  CLOCK_IP_SEL2_INDEX,  CLOCK_IP_DIV0_INDEX,  MC_CGM_SLC_2_CSC_SELCTL_SHIFT,       MC_CGM_SLC_2_DC_0_DIV_SHIFT,         MC_CGM_SLC_2_CSC_SELCTL_MASK,        MC_CGM_SLC_2_DC_0_DIV_MASK,          ((Clock_Ip_HwSelectorType*)0x404b8380U),  ((Clock_Ip_HwPcfsType (*)[])0x404b8004U)}, /*   FLEXCAN_0to7_PE_CLK clock       */
-/*   CLOCK_IP_SEL3_DIV0_FLEXCAN_8to10_PE_CLK_INDEX           */ {CLOCK_IP_SEL3_FLEXCAN_8to10_PE_CLK_INDEX,           CLOCK_IP_001_DIV_IDS_BITS,      CLOCK_IP_3_INSTANCE,  CLOCK_IP_SEL3_INDEX,  CLOCK_IP_DIV0_INDEX,  MC_CGM_SLC_3_CSC_SELCTL_SHIFT,       MC_CGM_SLC_3_DC_0_DIV_SHIFT,         MC_CGM_SLC_3_CSC_SELCTL_MASK,        MC_CGM_SLC_3_DC_0_DIV_MASK,          ((Clock_Ip_HwSelectorType*)0x404b83c0U),  ((Clock_Ip_HwPcfsType (*)[])0x404b8004U)}, /*   FLEXCAN_8to10_PE_CLK clock      */
-/*   CLOCK_IP_SEL4_DIV0_FLEXCAN_11to16_PE_CLK_INDEX          */ {CLOCK_IP_SEL4_FLEXCAN_11to16_PE_CLK_INDEX,          CLOCK_IP_001_DIV_IDS_BITS,      CLOCK_IP_3_INSTANCE,  CLOCK_IP_SEL4_INDEX,  CLOCK_IP_DIV0_INDEX,  MC_CGM_SLC_4_CSC_SELCTL_SHIFT,       MC_CGM_SLC_4_DC_0_DIV_SHIFT,         MC_CGM_SLC_4_CSC_SELCTL_MASK,        MC_CGM_SLC_4_DC_0_DIV_MASK,          ((Clock_Ip_HwSelectorType*)0x404b8400U),  ((Clock_Ip_HwPcfsType (*)[])0x404b8004U)}, /*   FLEXCAN_11to16_PE_CLK clock     */
-/*   CLOCK_IP_SEL1_DIV0_FLEXIO_CLK_INDEX                     */ {CLOCK_IP_SEL1_FLEXIO_CLK_INDEX,                     CLOCK_IP_001_DIV_IDS_BITS,      CLOCK_IP_3_INSTANCE,  CLOCK_IP_SEL1_INDEX,  CLOCK_IP_DIV0_INDEX,  MC_CGM_SLC_1_CSC_SELCTL_SHIFT,       MC_CGM_SLC_1_DC_0_DIV_SHIFT,         MC_CGM_SLC_1_CSC_SELCTL_MASK,        MC_CGM_SLC_1_DC_0_DIV_MASK,          ((Clock_Ip_HwSelectorType*)0x404b8340U),  ((Clock_Ip_HwPcfsType (*)[])0x404b8004U)}, /*   FLEXIO_CLK clock                */
-/*   CLOCK_IP_SEL6_DIV0_LPE_CXPI_PE_CLK_INDEX                */ {CLOCK_IP_SEL6_LPE_CXPI_PE_CLK_INDEX,                CLOCK_IP_001_DIV_IDS_BITS,      CLOCK_IP_6_INSTANCE,  CLOCK_IP_SEL6_INDEX,  CLOCK_IP_DIV0_INDEX,  MC_CGM_SLC_6_CSC_SELCTL_SHIFT,       MC_CGM_SLC_6_DC_0_DIV_SHIFT,         MC_CGM_SLC_6_CSC_SELCTL_MASK,        MC_CGM_SLC_6_DC_0_DIV_MASK,          ((Clock_Ip_HwSelectorType*)0x42120480U),  ((Clock_Ip_HwPcfsType (*)[])0x42120004U)}, /*   LPE_CXPI_PE_CLK clock           */
-/*   CLOCK_IP_SEL6_DIV0_LPE_DIV1_UNGATED_CLK_INDEX           */ {CLOCK_IP_SEL6_LPE_UNGATED_CLK_INDEX,                0U,                             CLOCK_IP_6_INSTANCE,  CLOCK_IP_SEL6_INDEX,  CLOCK_IP_DIV0_INDEX,  MC_CGM_SLC_6_CSC_SELCTL_SHIFT,       MC_CGM_SLC_4_DC_0_DIV_SHIFT,         MC_CGM_SLC_6_CSC_SELCTL_MASK,        MC_CGM_SLC_4_DC_0_DIV_MASK,          ((Clock_Ip_HwSelectorType*)0x42120480U),  ((Clock_Ip_HwPcfsType (*)[])0x42120004U)}, /*   LPE_DIV1_UNGATED_CLK clock      */
-/*   CLOCK_IP_SEL6_DIV0_LPE_DIV2_UNGATED_CLK_INDEX           */ {CLOCK_IP_SEL6_LPE_UNGATED_CLK_INDEX,                0U,                             CLOCK_IP_6_INSTANCE,  CLOCK_IP_SEL6_INDEX,  CLOCK_IP_DIV0_INDEX,  MC_CGM_SLC_6_CSC_SELCTL_SHIFT,       MC_CGM_SLC_4_DC_0_DIV_SHIFT,         MC_CGM_SLC_6_CSC_SELCTL_MASK,        MC_CGM_SLC_4_DC_0_DIV_MASK,          ((Clock_Ip_HwSelectorType*)0x42120480U),  ((Clock_Ip_HwPcfsType (*)[])0x42120004U)}, /*   LPE_DIV2_UNGATED_CLK clock      */
-/*   CLOCK_IP_SEL6_DIV0_LPE_DIV3_UNGATED_CLK_INDEX           */ {CLOCK_IP_SEL6_LPE_UNGATED_CLK_INDEX,                0U,                             CLOCK_IP_6_INSTANCE,  CLOCK_IP_SEL6_INDEX,  CLOCK_IP_DIV0_INDEX,  MC_CGM_SLC_6_CSC_SELCTL_SHIFT,       MC_CGM_SLC_4_DC_0_DIV_SHIFT,         MC_CGM_SLC_6_CSC_SELCTL_MASK,        MC_CGM_SLC_4_DC_0_DIV_MASK,          ((Clock_Ip_HwSelectorType*)0x42120480U),  ((Clock_Ip_HwPcfsType (*)[])0x42120004U)}, /*   LPE_DIV3_UNGATED_CLK clock      */
-/*   CLOCK_IP_SEL6_DIV0_LPE_DIV4_UNGATED_CLK_INDEX           */ {CLOCK_IP_SEL6_LPE_UNGATED_CLK_INDEX,                0U,                             CLOCK_IP_6_INSTANCE,  CLOCK_IP_SEL6_INDEX,  CLOCK_IP_DIV0_INDEX,  MC_CGM_SLC_6_CSC_SELCTL_SHIFT,       MC_CGM_SLC_4_DC_0_DIV_SHIFT,         MC_CGM_SLC_6_CSC_SELCTL_MASK,        MC_CGM_SLC_4_DC_0_DIV_MASK,          ((Clock_Ip_HwSelectorType*)0x42120480U),  ((Clock_Ip_HwPcfsType (*)[])0x42120004U)}, /*   LPE_DIV4_UNGATED_CLK clock      */
-/*   CLOCK_IP_SEL4_DIV0_LPE_FLEXCAN_PE_CLK_INDEX             */ {CLOCK_IP_SEL4_LPE_FLEXCAN_PE_CLK_INDEX,             CLOCK_IP_001_DIV_IDS_BITS,      CLOCK_IP_6_INSTANCE,  CLOCK_IP_SEL4_INDEX,  CLOCK_IP_DIV0_INDEX,  MC_CGM_SLC_4_CSC_SELCTL_SHIFT,       MC_CGM_SLC_4_DC_0_DIV_SHIFT,         MC_CGM_SLC_4_CSC_SELCTL_MASK,        MC_CGM_SLC_4_DC_0_DIV_MASK,          ((Clock_Ip_HwSelectorType*)0x42120400U),  ((Clock_Ip_HwPcfsType (*)[])0x42120004U)}, /*   LPE_FLEXCAN_PE_CLK clock        */
-/*   CLOCK_IP_SEL3_DIV0_LPE_LPI2C_MOD_CLK_INDEX              */ {CLOCK_IP_SEL3_LPE_LPI2C_MOD_CLK_INDEX,              CLOCK_IP_001_DIV_IDS_BITS,      CLOCK_IP_6_INSTANCE,  CLOCK_IP_SEL3_INDEX,  CLOCK_IP_DIV0_INDEX,  MC_CGM_SLC_3_CSC_SELCTL_SHIFT,       MC_CGM_SLC_3_DC_0_DIV_SHIFT,         MC_CGM_SLC_3_CSC_SELCTL_MASK,        MC_CGM_SLC_3_DC_0_DIV_MASK,          ((Clock_Ip_HwSelectorType*)0x421203c0U),  ((Clock_Ip_HwPcfsType (*)[])0x42120004U)}, /*   LPE_LPI2C_MOD_CLK clock         */
-/*   CLOCK_IP_SEL1_DIV0_LPE_LPSPI_MOD_CLK_INDEX              */ {CLOCK_IP_SEL1_LPE_LPSPI_MOD_CLK_INDEX,              CLOCK_IP_001_DIV_IDS_BITS,      CLOCK_IP_6_INSTANCE,  CLOCK_IP_SEL1_INDEX,  CLOCK_IP_DIV0_INDEX,  MC_CGM_SLC_1_CSC_SELCTL_SHIFT,       MC_CGM_SLC_1_DC_0_DIV_SHIFT,         MC_CGM_SLC_1_CSC_SELCTL_MASK,        MC_CGM_SLC_1_DC_0_DIV_MASK,          ((Clock_Ip_HwSelectorType*)0x42120340U),  ((Clock_Ip_HwPcfsType (*)[])0x42120004U)}, /*   LPE_LPSPI_MOD_CLK clock         */
-/*   CLOCK_IP_SEL2_DIV0_LPE_LPUART_MOD_CLK_INDEX             */ {CLOCK_IP_SEL2_LPE_LPUART_MOD_CLK_INDEX,             CLOCK_IP_001_DIV_IDS_BITS,      CLOCK_IP_6_INSTANCE,  CLOCK_IP_SEL2_INDEX,  CLOCK_IP_DIV0_INDEX,  MC_CGM_SLC_2_CSC_SELCTL_SHIFT,       MC_CGM_SLC_2_DC_0_DIV_SHIFT,         MC_CGM_SLC_2_CSC_SELCTL_MASK,        MC_CGM_SLC_2_DC_0_DIV_MASK,          ((Clock_Ip_HwSelectorType*)0x42120380U),  ((Clock_Ip_HwPcfsType (*)[])0x42120004U)}, /*   LPE_LPUART_MOD_CLK clock        */
-/*   CLOCK_IP_SEL5_DIV0_LPE_STM_CLK_INDEX                    */ {CLOCK_IP_SEL5_LPE_STM_CLK_INDEX,                    CLOCK_IP_001_DIV_IDS_BITS,      CLOCK_IP_6_INSTANCE,  CLOCK_IP_SEL5_INDEX,  CLOCK_IP_DIV0_INDEX,  MC_CGM_SLC_5_CSC_SELCTL_SHIFT,       MC_CGM_SLC_5_DC_0_DIV_SHIFT,         MC_CGM_SLC_5_CSC_SELCTL_MASK,        MC_CGM_SLC_5_DC_0_DIV_MASK,          ((Clock_Ip_HwSelectorType*)0x42120440U),  ((Clock_Ip_HwPcfsType (*)[])0x42120004U)}, /*   LPE_STM_CLK clock               */
-/*   CLOCK_IP_SEL6_NODIV_LPE_UNGATED_CLK_INDEX               */ {CLOCK_IP_SEL6_LPE_UNGATED_CLK_INDEX,                CLOCK_IP_001_DIV_IDS_BITS,      CLOCK_IP_6_INSTANCE,  CLOCK_IP_SEL6_INDEX,  0U,                   MC_CGM_SLC_6_CSC_SELCTL_SHIFT,       0U,                                  MC_CGM_SLC_6_CSC_SELCTL_MASK,        0U,                                  ((Clock_Ip_HwSelectorType*)0x42120480U),  ((Clock_Ip_HwPcfsType (*)[])0x42120004U)}, /*   LPE_UNGATED_CLK clock           */
-/*   CLOCK_IP_SEL1_DIV0_PERI_HIGH_SPEED_REST_USDHC_CLK_INDEX */ {CLOCK_IP_SEL1_PERI_HIGH_SPEED_REST_USDHC_CLK_INDEX, CLOCK_IP_001_DIV_IDS_BITS,      CLOCK_IP_1_INSTANCE,  CLOCK_IP_SEL1_INDEX,  CLOCK_IP_DIV0_INDEX,  MC_CGM_SLC_1_CSC_SELCTL_SHIFT,       MC_CGM_SLC_1_DC_0_DIV_SHIFT,         MC_CGM_SLC_1_CSC_SELCTL_MASK,        MC_CGM_SLC_1_DC_0_DIV_MASK,          ((Clock_Ip_HwSelectorType*)0x40098340U),  ((Clock_Ip_HwPcfsType (*)[])0x40098004U)}, /*   PERI_HIGH_SPEED_REST_USDHC_CLK  */
-/*   CLOCK_IP_SEL2_DIV0_PERI_HIGH_SPEED_REST_XSPI_CLK_INDEX  */ {CLOCK_IP_SEL2_PERI_HIGH_SPEED_REST_XSPI_CLK_INDEX,  CLOCK_IP_001_DIV_IDS_BITS,      CLOCK_IP_1_INSTANCE,  CLOCK_IP_SEL2_INDEX,  CLOCK_IP_DIV0_INDEX,  MC_CGM_SLC_2_CSC_SELCTL_SHIFT,       MC_CGM_SLC_2_DC_0_DIV_SHIFT,         MC_CGM_SLC_2_CSC_SELCTL_MASK,        MC_CGM_SLC_2_DC_0_DIV_MASK,          ((Clock_Ip_HwSelectorType*)0x40098380U),  ((Clock_Ip_HwPcfsType (*)[])0x40098004U)}, /*   PERI_HIGH_SPEED_REST_XSPI_CLK   */
-/*   CLOCK_IP_SEL4_DIV0_PERI_HIGH_SPEED_TRACE_CLK_INDEX      */ {CLOCK_IP_SEL4_PERI_HIGH_SPEED_TRACE_CLK_INDEX,      CLOCK_IP_001_DIV_IDS_BITS,      CLOCK_IP_1_INSTANCE,  CLOCK_IP_SEL4_INDEX,  CLOCK_IP_DIV0_INDEX,  MC_CGM_SLC_4_CSC_SELCTL_SHIFT,       MC_CGM_SLC_4_DC_0_DIV_SHIFT,         MC_CGM_SLC_4_CSC_SELCTL_MASK,        MC_CGM_SLC_4_DC_0_DIV_MASK,          ((Clock_Ip_HwSelectorType*)0x40098400U),  ((Clock_Ip_HwPcfsType (*)[])0x40098004U)}, /*   PERI_HIGH_SPEED_TRACE_CLK       */
-/*   CLOCK_IP_SEL1_DIV0_PHY_ETH_CLK_INDEX                    */ {CLOCK_IP_SEL1_PHY_ETH_CLK_INDEX,                    CLOCK_IP_001_DIV_IDS_BITS,      CLOCK_IP_0_INSTANCE,  CLOCK_IP_SEL1_INDEX,  CLOCK_IP_DIV0_INDEX,  MC_CGM_SLC_1_CSC_SELCTL_SHIFT,       MC_CGM_SLC_1_DC_0_DIV_SHIFT,         MC_CGM_SLC_1_CSC_SELCTL_MASK,        MC_CGM_SLC_1_DC_0_DIV_MASK,          ((Clock_Ip_HwSelectorType*)0x40094340U),  ((Clock_Ip_HwPcfsType (*)[])0x40094004U)}, /*   PHY_ETH_CLK clock               */
-/*   CLOCK_IP_SEL0_NODIV_RR_RTC_CLK_INDEX                    */ {CLOCK_IP_SEL0_RR_RTC_CLK_INDEX,               CLOCK_IP_000_DIV_IDS_BITS,      CLOCK_IP_0_INSTANCE,  CLOCK_IP_SEL0_INDEX,  0U,                   RTC_RTCC_CLKSEL_SHIFT,               0U,                                  RTC_RTCC_CLKSEL_MASK,                0U,                                  ((Clock_Ip_HwSelectorType*)0x42164004U),  ((Clock_Ip_HwPcfsType (*)[])0x42164004U)}, /*   RR_RTC_CLK clock                */
-/*   CLOCK_IP_SEL0_DIV0_SAI0_MCLK_INDEX                      */ {CLOCK_IP_SEL0_SAI0_MCLK_INDEX,                      CLOCK_IP_001_DIV_IDS_BITS,      CLOCK_IP_2_INSTANCE,  CLOCK_IP_SEL0_INDEX,  CLOCK_IP_DIV0_INDEX,  MC_CGM_SLC_0_CSC_SELCTL_SHIFT,       MC_CGM_SLC_0_DC_0_DIV_SHIFT,         MC_CGM_SLC_0_CSC_SELCTL_MASK,        MC_CGM_SLC_0_DC_0_DIV_MASK,          ((Clock_Ip_HwSelectorType*)0x402fc300U),  ((Clock_Ip_HwPcfsType (*)[])0x402fc004U)}, /*   SAI0_MCLK clock                 */
-/*   CLOCK_IP_SEL0_DIV0_SAI1_MCLK_INDEX                      */ {CLOCK_IP_SEL0_SAI1_MCLK_INDEX,                      CLOCK_IP_001_DIV_IDS_BITS,      CLOCK_IP_5_INSTANCE,  CLOCK_IP_SEL0_INDEX,  CLOCK_IP_DIV0_INDEX,  MC_CGM_SLC_0_CSC_SELCTL_SHIFT,       MC_CGM_SLC_0_DC_0_DIV_SHIFT,         MC_CGM_SLC_0_CSC_SELCTL_MASK,        MC_CGM_SLC_0_DC_0_DIV_MASK,          ((Clock_Ip_HwSelectorType*)0x40b3c300U),  ((Clock_Ip_HwPcfsType (*)[])0x40b3c004U)}, /*   SAI1_MCLK clock                 */
-/*   CLOCK_IP_SEL9_DIV0_SERDES_AUX_CLK_INDEX                 */ {CLOCK_IP_SEL9_SERDES_AUX_CLK_INDEX,                 CLOCK_IP_001_DIV_IDS_BITS,      CLOCK_IP_0_INSTANCE,  CLOCK_IP_SEL9_INDEX,  CLOCK_IP_DIV0_INDEX,  MC_CGM_SLC_9_CSC_SELCTL_SHIFT,       MC_CGM_SLC_9_DC_0_DIV_SHIFT,         MC_CGM_SLC_9_CSC_SELCTL_MASK,        MC_CGM_SLC_9_DC_0_DIV_MASK,          ((Clock_Ip_HwSelectorType*)0x40094540U),  ((Clock_Ip_HwPcfsType (*)[])0x40094004U)}, /*   SERDES_AUX_CLK clock            */
-/*   CLOCK_IP_SEL10_DIV0_SERDES_REF_CLK_INDEX                */ {CLOCK_IP_SEL10_SERDES_REF_CLK_INDEX,                CLOCK_IP_001_DIV_IDS_BITS,      CLOCK_IP_0_INSTANCE,  CLOCK_IP_SEL10_INDEX, CLOCK_IP_DIV0_INDEX,  MC_CGM_SLC_10_CSC_SELCTL_SHIFT,      MC_CGM_SLC_10_DC_0_DIV_SHIFT,        MC_CGM_SLC_10_CSC_SELCTL_MASK,       MC_CGM_SLC_10_DC_0_DIV_MASK,         ((Clock_Ip_HwSelectorType*)0x40094580U),  ((Clock_Ip_HwPcfsType (*)[])0x40094004U)}, /*   SERDES_REF_CLK clock            */
-/*   CLOCK_IP_SEL6_DIV0_STM0_CLK_INDEX                       */ {CLOCK_IP_SEL6_STM0_CLK_INDEX,                       CLOCK_IP_001_DIV_IDS_BITS,      CLOCK_IP_3_INSTANCE,  CLOCK_IP_SEL6_INDEX,  CLOCK_IP_DIV0_INDEX,  MC_CGM_SLC_6_CSC_SELCTL_SHIFT,       MC_CGM_SLC_6_DC_0_DIV_SHIFT,         MC_CGM_SLC_6_CSC_SELCTL_MASK,        MC_CGM_SLC_6_DC_0_DIV_MASK,          ((Clock_Ip_HwSelectorType*)0x404b8480U),  ((Clock_Ip_HwPcfsType (*)[])0x404b8004U)}, /*   STM0_CLK clock                  */
-/*   CLOCK_IP_SEL7_DIV0_STM1_CLK_INDEX                       */ {CLOCK_IP_SEL7_STM1_CLK_INDEX,                       CLOCK_IP_001_DIV_IDS_BITS,      CLOCK_IP_3_INSTANCE,  CLOCK_IP_SEL7_INDEX,  CLOCK_IP_DIV0_INDEX,  MC_CGM_SLC_7_CSC_SELCTL_SHIFT,       MC_CGM_SLC_7_DC_0_DIV_SHIFT,         MC_CGM_SLC_7_CSC_SELCTL_MASK,        MC_CGM_SLC_7_DC_0_DIV_MASK,          ((Clock_Ip_HwSelectorType*)0x404b84c0U),  ((Clock_Ip_HwPcfsType (*)[])0x404b8004U)}, /*   STM1_CLK clock                  */
-/*   CLOCK_IP_SEL8_DIV0_STM2_CLK_INDEX                       */ {CLOCK_IP_SEL8_STM2_CLK_INDEX,                       CLOCK_IP_001_DIV_IDS_BITS,      CLOCK_IP_3_INSTANCE,  CLOCK_IP_SEL8_INDEX,  CLOCK_IP_DIV0_INDEX,  MC_CGM_SLC_8_CSC_SELCTL_SHIFT,       MC_CGM_SLC_8_DC_0_DIV_SHIFT,         MC_CGM_SLC_8_CSC_SELCTL_MASK,        MC_CGM_SLC_8_DC_0_DIV_MASK,          ((Clock_Ip_HwSelectorType*)0x404b8500U),  ((Clock_Ip_HwPcfsType (*)[])0x404b8004U)}, /*   STM2_CLK clock                  */
-/*   CLOCK_IP_SEL9_DIV0_STM3_CLK_INDEX                       */ {CLOCK_IP_SEL9_STM3_CLK_INDEX,                       CLOCK_IP_001_DIV_IDS_BITS,      CLOCK_IP_3_INSTANCE,  CLOCK_IP_SEL9_INDEX,  CLOCK_IP_DIV0_INDEX,  MC_CGM_SLC_9_CSC_SELCTL_SHIFT,       MC_CGM_SLC_9_DC_0_DIV_SHIFT,         MC_CGM_SLC_9_CSC_SELCTL_MASK,        MC_CGM_SLC_9_DC_0_DIV_MASK,          ((Clock_Ip_HwSelectorType*)0x404b8540U),  ((Clock_Ip_HwPcfsType (*)[])0x404b8004U)}, /*   STM3_CLK clock                  */
-/*   CLOCK_IP_SEL11_DIV0_TRACE_CLK_INDEX                     */ {CLOCK_IP_SEL11_TRACE_CLK_INDEX,                     CLOCK_IP_001_DIV_IDS_BITS,      CLOCK_IP_3_INSTANCE,  CLOCK_IP_SEL11_INDEX, CLOCK_IP_DIV0_INDEX,  MC_CGM_SLC_11_CSC_SELCTL_SHIFT,      MC_CGM_SLC_11_DC_0_DIV_SHIFT,        MC_CGM_SLC_11_CSC_SELCTL_MASK,       MC_CGM_SLC_11_DC_0_DIV_MASK,         ((Clock_Ip_HwSelectorType*)0x404b85c0U),  ((Clock_Ip_HwPcfsType (*)[])0x404b8004U)}, /*   TRACE_CLK clock                 */
+const Clock_Ip_ClockExtensionType Clock_Ip_axFeatureExtensions[CLOCK_IP_EXTENSIONS_SIZE] = {
+    /* Selector value mask            Selector value shift              Divider value mask             Divider value shift  */
+    {MC_CGM_MUX_0_CSC_SELCTL_MASK,    MC_CGM_MUX_0_CSC_SELCTL_SHIFT,    0U,                            0U},                             /*   CLOCK_IP_XBAR_2X_EXTENSION */
+    {MC_CGM_1_MUX_0_CSC_SELCTL_MASK,  MC_CGM_1_MUX_0_CSC_SELCTL_SHIFT,  0U,                            0U},                             /*   CLOCK_IP_A53_CORE_EXTENSION */
+    {MC_CGM_MUX_0_CSC_SELCTL_MASK,    MC_CGM_MUX_0_CSC_SELCTL_SHIFT,    0U,                            0U},                             /*   CLOCK_IP_DDR_EXTENSION */
+    {MC_CGM_2_MUX_0_CSC_SELCTL_MASK,  MC_CGM_2_MUX_0_CSC_SELCTL_SHIFT,  MC_CGM_2_MUX_0_DC_0_DIV_MASK,  MC_CGM_2_MUX_0_DC_0_DIV_SHIFT},  /*   CLOCK_IP_PFE_PE_EXTENSION  */
+    {MC_CGM_MUX_3_CSC_SELCTL_MASK,    MC_CGM_MUX_3_CSC_SELCTL_SHIFT,    MC_CGM_MUX_3_DC_0_DIV_MASK,    MC_CGM_MUX_0_DC_0_DIV_SHIFT},    /*   CLOCK_IP_PER_EXTENSION   */
+    {MC_CGM_MUX_15_CSC_SELCTL_MASK,   MC_CGM_MUX_15_CSC_SELCTL_SHIFT,   MC_CGM_MUX_15_DC_0_DIV_MASK,   MC_CGM_MUX_15_DC_0_DIV_SHIFT},   /*   CLOCK_IP_GMAC0_REF_DIV_EXTENSION    */
+    {MC_CGM_2_MUX_7_CSC_SELCTL_MASK,  MC_CGM_2_MUX_7_CSC_SELCTL_SHIFT,  MC_CGM_2_MUX_7_DC_0_DIV_MASK,  MC_CGM_2_MUX_7_DC_0_DIV_SHIFT},  /*   CLOCK_IP_PFEMAC0_REF_DIV_EXTENSION  */
+    {MC_CGM_2_MUX_8_CSC_SELCTL_MASK,  MC_CGM_2_MUX_8_CSC_SELCTL_SHIFT,  MC_CGM_2_MUX_8_DC_0_DIV_MASK,  MC_CGM_2_MUX_8_DC_0_DIV_SHIFT},  /*   CLOCK_IP_PFEMAC1_REF_DIV_EXTENSION  */
+    {MC_CGM_2_MUX_9_CSC_SELCTL_MASK,  MC_CGM_2_MUX_9_CSC_SELCTL_SHIFT,  MC_CGM_2_MUX_9_DC_0_DIV_MASK,  MC_CGM_2_MUX_9_DC_0_DIV_SHIFT},  /*   CLOCK_IP_PFEMAC2_REF_DIV_EXTENSION  */
+    {MC_CGM_MUX_1_CSC_SELCTL_MASK,    MC_CGM_MUX_1_CSC_SELCTL_SHIFT,    MC_CGM_MUX_1_DC_0_DIV_MASK,    MC_CGM_MUX_1_DC_0_DIV_SHIFT},    /*   CLOCK_IP_CLKOUT0_EXTENSION    */    
+    {MC_CGM_MUX_2_CSC_SELCTL_MASK,    MC_CGM_MUX_2_CSC_SELCTL_SHIFT,    MC_CGM_MUX_2_DC_0_DIV_MASK,    MC_CGM_MUX_2_DC_0_DIV_SHIFT},    /*   CLOCK_IP_CLKOUT1_EXTENSION    */    
+    {MC_CGM_MUX_0_CSC_SELCTL_MASK,    MC_CGM_MUX_0_CSC_SELCTL_SHIFT,    MC_CGM_MUX_0_DC_1_DIV_MASK,    MC_CGM_MUX_0_DC_1_DIV_SHIFT},    /*   CLOCK_IP_DAPB_EXTENSION    */    
+    {MC_CGM_MUX_7_CSC_SELCTL_MASK,    MC_CGM_MUX_7_CSC_SELCTL_SHIFT,    0U,                            0U},                             /*   CLOCK_IP_FLEXCAN_EXTENSION */
+    {MC_CGM_MUX_6_CSC_SELCTL_MASK,    MC_CGM_MUX_6_CSC_SELCTL_SHIFT,    MC_CGM_MUX_6_DC_0_DIV_MASK,    MC_CGM_MUX_6_DC_0_DIV_SHIFT},    /*   CLOCK_IP_FLEXRAY_EXTENSION */
+    {MC_CGM_MUX_4_CSC_SELCTL_MASK,    MC_CGM_MUX_4_CSC_SELCTL_SHIFT,    MC_CGM_MUX_4_DC_0_DIV_MASK,    MC_CGM_MUX_4_DC_0_DIV_SHIFT},    /*   CLOCK_IP_FLEXTIMERA_EXTENSION */
+    {MC_CGM_MUX_5_CSC_SELCTL_MASK,    MC_CGM_MUX_5_CSC_SELCTL_SHIFT,    MC_CGM_MUX_5_DC_0_DIV_MASK,    MC_CGM_MUX_5_DC_0_DIV_SHIFT},    /*   CLOCK_IP_FLEXTIMERB_EXTENSION */
+    {MC_CGM_MUX_9_CSC_SELCTL_MASK,    MC_CGM_MUX_9_CSC_SELCTL_SHIFT,    MC_CGM_MUX_9_DC_0_DIV_MASK,    MC_CGM_MUX_9_DC_0_DIV_SHIFT},    /*   CLOCK_IP_GMAC_TS_EXTENSION */
+    {MC_CGM_MUX_11_CSC_SELCTL_MASK,   MC_CGM_MUX_11_CSC_SELCTL_SHIFT,   0U,                            0U},                             /*   CLOCK_IP_GMAC0_RX_EXTENSION */
+    {MC_CGM_MUX_10_CSC_SELCTL_MASK,   MC_CGM_MUX_10_CSC_SELCTL_SHIFT,   MC_CGM_MUX_10_DC_0_DIV_MASK,   MC_CGM_MUX_10_DC_0_DIV_SHIFT},   /*   CLOCK_IP_GMAC0_TX_EXTENSION    */
+    {MC_CGM_MUX_0_CSC_SELCTL_MASK,    MC_CGM_MUX_0_CSC_SELCTL_SHIFT,    MC_CGM_MUX_0_DC_0_DIV_MASK,    MC_CGM_MUX_0_DC_0_DIV_SHIFT},    /*   CLOCK_IP_LBIST_EXTENSION    */      
+    {MC_CGM_MUX_8_CSC_SELCTL_MASK,    MC_CGM_MUX_8_CSC_SELCTL_SHIFT,    0U,                            0U},                             /*   CLOCK_IP_LIN_BAUD_EXTENSION */    
+    {MC_CGM_2_MUX_4_CSC_SELCTL_MASK,  MC_CGM_2_MUX_4_CSC_SELCTL_SHIFT,  0U,                            0U},                             /*   CLOCK_IP_PFEMAC0_RX_EXTENSION */
+    {MC_CGM_2_MUX_1_CSC_SELCTL_MASK,  MC_CGM_2_MUX_1_CSC_SELCTL_SHIFT,  MC_CGM_2_MUX_1_DC_0_DIV_MASK,  MC_CGM_2_MUX_1_DC_0_DIV_SHIFT},  /*   CLOCK_IP_PFEMAC0_TX_EXTENSION  */    
+    {MC_CGM_2_MUX_5_CSC_SELCTL_MASK,  MC_CGM_2_MUX_5_CSC_SELCTL_SHIFT,  0U,                            0U},                             /*   CLOCK_IP_PFEMAC1_RX_EXTENSION */
+    {MC_CGM_2_MUX_2_CSC_SELCTL_MASK,  MC_CGM_2_MUX_2_CSC_SELCTL_SHIFT,  MC_CGM_2_MUX_2_DC_0_DIV_MASK,  MC_CGM_2_MUX_2_DC_0_DIV_SHIFT},  /*   CLOCK_IP_PFEMAC1_TX_EXTENSION  */    
+    {MC_CGM_2_MUX_6_CSC_SELCTL_MASK,  MC_CGM_2_MUX_6_CSC_SELCTL_SHIFT,  0U,                            0U},                             /*   CLOCK_IP_PFEMAC2_RX_EXTENSION */
+    {MC_CGM_2_MUX_3_CSC_SELCTL_MASK,  MC_CGM_2_MUX_3_CSC_SELCTL_SHIFT,  MC_CGM_2_MUX_3_DC_0_DIV_MASK,  MC_CGM_2_MUX_3_DC_0_DIV_SHIFT},  /*   CLOCK_IP_PFEMAC2_TX_EXTENSION  */    
+    {MC_CGM_MUX_12_CSC_SELCTL_MASK,   MC_CGM_MUX_12_CSC_SELCTL_SHIFT,   MC_CGM_MUX_12_DC_0_DIV_MASK,   MC_CGM_MUX_12_DC_0_DIV_SHIFT},   /*   CLOCK_IP_QSPI_2X_EXTENSION */
+    {MC_CGM_MUX_16_CSC_SELCTL_MASK,   MC_CGM_MUX_16_CSC_SELCTL_SHIFT,   0U,                            0U},                             /*   CLOCK_IP_SPI_EXTENSION */
+    {MC_CGM_MUX_14_CSC_SELCTL_MASK,   MC_CGM_MUX_14_CSC_SELCTL_SHIFT,   MC_CGM_MUX_14_DC_0_DIV_MASK,   MC_CGM_MUX_14_DC_0_DIV_SHIFT},   /*   CLOCK_IP_SDHC_EXTENSION */
 };
+
+
+Clock_Ip_GateInfoType const Clock_Ip_axGateInfo[CLOCK_IP_GATE_INFO_SIZE] =  {
+    /* Partition value index                   Selector value index               Request value shift                  Request value mask  */
+    {CLOCK_IP_PARTITION_0_INDEX,               CLOCK_IP_COLLECTION_0_INDEX,       MC_ME_PRTN0_COFB0_CLKEN_REQ0_SHIFT,  MC_ME_PRTN0_COFB0_CLKEN_REQ0_MASK},     /*   USDHC0_CLK clock                          */ \
+    {CLOCK_IP_PARTITION_0_INDEX,               CLOCK_IP_COLLECTION_0_INDEX,       MC_ME_PRTN0_COFB0_CLKEN_REQ1_SHIFT,  MC_ME_PRTN0_COFB0_CLKEN_REQ1_MASK},     /*   DDR0_CLK clock                            */ \
+    {CLOCK_IP_PARTITION_2_INDEX,               CLOCK_IP_COLLECTION_0_INDEX,       MC_ME_PRTN2_COFB0_CLKEN_REQ0_SHIFT,  MC_ME_PRTN2_COFB0_CLKEN_REQ0_MASK},     /*   PFEMAC0_RX_CLK/PFEMAC0_TX_CLK clock       */ \
+    {CLOCK_IP_PARTITION_2_INDEX,               CLOCK_IP_COLLECTION_0_INDEX,       MC_ME_PRTN2_COFB0_CLKEN_REQ1_SHIFT,  MC_ME_PRTN2_COFB0_CLKEN_REQ1_MASK},     /*   PFEMAC1_RX_CLK/PFEMAC1_TX_CLK clock       */ \
+    {CLOCK_IP_PARTITION_2_INDEX,               CLOCK_IP_COLLECTION_0_INDEX,       MC_ME_PRTN2_COFB0_CLKEN_REQ2_SHIFT,  MC_ME_PRTN2_COFB0_CLKEN_REQ2_MASK},     /*   PFEMAC2_RX_CLK/PFEMAC2_TX_CLK clock       */ \
+    {CLOCK_IP_PARTITION_2_INDEX,               CLOCK_IP_COLLECTION_0_INDEX,       MC_ME_PRTN2_COFB0_CLKEN_REQ3_SHIFT,  MC_ME_PRTN2_COFB0_CLKEN_REQ3_MASK},     /*   GMAC0_TS_CLK clock                        */ \
+};
+
+
 
 /* Clock stop constant section data */
 #define MCU_STOP_SEC_CONST_UNSPECIFIED
@@ -2205,10 +1877,11 @@ const Clock_Ip_SelectorDividerType Clock_Ip_axSelectorsDividersTable[CLOCK_IP_SE
 ==================================================================================================*/
 
 
-
+#endif /* (CLOCK_IP_PLATFORM_SPECIFIC) */
 
 #ifdef __cplusplus
 }
 #endif
 
 /** @} */
+

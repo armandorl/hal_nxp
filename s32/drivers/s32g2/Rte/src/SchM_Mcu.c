@@ -1,16 +1,29 @@
-/*
- * Copyright 2024-2025 NXP
- *
- * SPDX-License-Identifier: BSD-3-Clause
- */
+/*==================================================================================================
+*   Project              : RTD AUTOSAR 4.4
+*   Platform             : CORTEXM
+*   Peripheral           : 
+*   Dependencies         : none
+*
+*   Autosar Version      : 4.4.0
+*   Autosar Revision     : ASR_REL_4_4_REV_0000
+*   Autosar Conf.Variant :
+*   SW Version           : 4.0.0
+*   Build Version        : S32_RTD_4_0_0_D2210_ASR_REL_4_4_REV_0000_20221031
+*
+*   (c) Copyright 2022 NXP Semiconductors
+*   All Rights Reserved.
+*
+*   NXP Confidential. This software is owned or controlled by NXP and may only be
+*   used strictly in accordance with the applicable license terms. By expressly
+*   accepting such terms or by downloading, installing, activating and/or otherwise
+*   using the software, you are agreeing that you have read, and that you agree to
+*   comply with and are bound by, such license terms. If you do not agree to be
+*   bound by the applicable license terms, then you may not retain, install,
+*   activate or otherwise use the software.
+==================================================================================================*/
 
 /**
-*   @file    SchM_Mcu.c
-*   @version 0.8.0
-*
-*   @brief   AUTOSAR Rte - module implementation
-*   @details This module implements stubs for the AUTOSAR Rte
-*            This file contains sample code only. It is not part of the production code deliverables.
+*   @file
 *
 *   @addtogroup RTE_MODULE
 *   @{
@@ -38,10 +51,10 @@ extern "C"{
 *                               SOURCE FILE VERSION INFORMATION
 ==================================================================================================*/
 #define SCHM_MCU_AR_RELEASE_MAJOR_VERSION_C     4
-#define SCHM_MCU_AR_RELEASE_MINOR_VERSION_C     9
+#define SCHM_MCU_AR_RELEASE_MINOR_VERSION_C     4
 #define SCHM_MCU_AR_RELEASE_REVISION_VERSION_C  0
-#define SCHM_MCU_SW_MAJOR_VERSION_C             0
-#define SCHM_MCU_SW_MINOR_VERSION_C             8
+#define SCHM_MCU_SW_MAJOR_VERSION_C             4
+#define SCHM_MCU_SW_MINOR_VERSION_C             0
 #define SCHM_MCU_SW_PATCH_VERSION_C             0
 
 /*==================================================================================================
@@ -58,9 +71,7 @@ extern "C"{
         #else
             #define ISR_STATE_MASK     ((uint32)0x00000001UL)   /**< @brief PRIMASK bit 0 */
         #endif
-    #endif
-#elif defined(MCAL_PLATFORM_ZENV)
-    #define ISR_STATE_MASK     ((uint32)0x00000002UL)   /**< @brief SIE bit 1 (Supervisor Interrupt Enable) */
+    #endif 
 #else
     #ifdef MCAL_PLATFORM_S12
         #define ISR_STATE_MASK     ((uint32)0x00000010UL)   /**< @brief I bit of CCR */
@@ -78,9 +89,7 @@ extern "C"{
         #define ISR_ON(msr)            (uint32)(((uint32)(msr) & (uint32)(ISR_STATE_MASK)) != (uint32)(ISR_STATE_MASK))
     #else
         #define ISR_ON(msr)            (uint32)(((uint32)(msr) & (uint32)(ISR_STATE_MASK)) == (uint32)0)
-    #endif
-#elif defined(MCAL_PLATFORM_ZENV)
-    #define ISR_ON(msr)            (uint32)(((uint32)(msr) & (uint32)(ISR_STATE_MASK)) != (uint32)0)
+    #endif    
 #else
     #ifdef MCAL_PLATFORM_S12
         #define ISR_ON(msr)            (uint32)(((uint32)(msr) & (uint32)(ISR_STATE_MASK)) == (uint32)0)
@@ -103,12 +112,12 @@ extern "C"{
 ==================================================================================================*/
 #define RTE_START_SEC_VAR_CLEARED_32_NO_CACHEABLE
 #include "Rte_MemMap.h"
-VAR_SEC_NOCACHE(msr_MCU_EXCLUSIVE_AREA_00) static volatile uint32 msr_MCU_EXCLUSIVE_AREA_00[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_MCU_EXCLUSIVE_AREA_00) static volatile uint32 reentry_guard_MCU_EXCLUSIVE_AREA_00[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_MCU_EXCLUSIVE_AREA_01) static volatile uint32 msr_MCU_EXCLUSIVE_AREA_01[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_MCU_EXCLUSIVE_AREA_01) static volatile uint32 reentry_guard_MCU_EXCLUSIVE_AREA_01[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(msr_MCU_EXCLUSIVE_AREA_02) static volatile uint32 msr_MCU_EXCLUSIVE_AREA_02[NUMBER_OF_CORES];
-VAR_SEC_NOCACHE(reentry_guard_MCU_EXCLUSIVE_AREA_02) static volatile uint32 reentry_guard_MCU_EXCLUSIVE_AREA_02[NUMBER_OF_CORES];
+static volatile uint32 msr_MCU_EXCLUSIVE_AREA_00[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_MCU_EXCLUSIVE_AREA_00[NUMBER_OF_CORES];
+static volatile uint32 msr_MCU_EXCLUSIVE_AREA_01[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_MCU_EXCLUSIVE_AREA_01[NUMBER_OF_CORES];
+static volatile uint32 msr_MCU_EXCLUSIVE_AREA_02[NUMBER_OF_CORES];
+static volatile uint32 reentry_guard_MCU_EXCLUSIVE_AREA_02[NUMBER_OF_CORES];
 
 #define RTE_STOP_SEC_VAR_CLEARED_32_NO_CACHEABLE
 #include "Rte_MemMap.h"
@@ -125,36 +134,36 @@ VAR_SEC_NOCACHE(reentry_guard_MCU_EXCLUSIVE_AREA_02) static volatile uint32 reen
 *                                   LOCAL FUNCTION PROTOTYPES
 ==================================================================================================*/
 
-#ifndef _COSMIC_C_S32G2XX_
+#ifndef _COSMIC_C_S32XX_
 /*================================================================================================*/
-/**
-* @brief   This function returns the MSR register value (32 bits).
-* @details This function returns the MSR register value (32 bits).
-*
+/** 
+* @brief   This function returns the MSR register value (32 bits). 
+* @details This function returns the MSR register value (32 bits). 
+*     
 * @param[in]     void        No input parameters
-* @return        uint32 msr  This function returns the MSR register value (32 bits).
-*
+* @return        uint32 msr  This function returns the MSR register value (32 bits). 
+* 
 * @pre  None
 * @post None
-*
+* 
 */
-uint32 Mcu_schm_read_msr(void);
-#endif /*ifndef _COSMIC_C_S32G2XX_*/
+uint32 Mcu_schm_read_msr(void); 
+#endif /*ifndef _COSMIC_C_S32XX_*/
 /*==================================================================================================
 *                                       LOCAL FUNCTIONS
 ==================================================================================================*/
 #define RTE_START_SEC_CODE
 #include "Rte_MemMap.h"
 
-#if (defined(_GREENHILLS_C_S32G2XX_) || defined(_CODEWARRIOR_C_S32G2XX_))
+#if (defined(_GREENHILLS_C_S32XX_) || defined(_CODEWARRIOR_C_S32XX_))
 /*================================================================================================*/
-/**
-* @brief   This macro returns the MSR register value (32 bits).
-* @details This macro function implementation returns the MSR register value in r3 (32 bits).
-*
+/** 
+* @brief   This macro returns the MSR register value (32 bits). 
+* @details This macro function implementation returns the MSR register value in r3 (32 bits). 
+*     
 * @pre  None
 * @post None
-*
+* 
 */
 #ifdef MCAL_PLATFORM_ARM
 #if (MCAL_PLATFORM_ARM == MCAL_ARM_AARCH64)
@@ -192,17 +201,17 @@ ASM_KEYWORD uint32 Mcu_schm_read_msr(void)
 #endif
 #endif /*#ifdef GHS||CW*/
 
-#ifdef _DIABDATA_C_S32G2XX_
-/**
-* @brief   This function returns the MSR register value (32 bits).
-* @details This function returns the MSR register value (32 bits).
-*
+#ifdef _DIABDATA_C_S32XX_
+/** 
+* @brief   This function returns the MSR register value (32 bits). 
+* @details This function returns the MSR register value (32 bits). 
+*     
 * @param[in]     void        No input parameters
-* @return        uint32 msr  This function returns the MSR register value (32 bits).
-*
+* @return        uint32 msr  This function returns the MSR register value (32 bits). 
+* 
 * @pre  None
 * @post None
-*
+* 
 */
 #ifdef MCAL_PLATFORM_ARM
 uint32 Mcu_schm_read_msr(void)
@@ -225,23 +234,23 @@ uint32 Mcu_schm_read_msr(void)
 ASM_KEYWORD uint32 Mcu_schm_read_msr(void)
 {
     mfmsr r3
-}
+}    
 #endif  /* MCAL_PLATFORM_ARM */
 
-#endif   /* _DIABDATA_C_S32G2XX_*/
+#endif   /* _DIABDATA_C_S32XX_*/
 
-#ifdef _COSMIC_C_S32G2XX_
+#ifdef _COSMIC_C_S32XX_
 /*================================================================================================*/
-/**
-* @brief   This function returns the MSR register value (32 bits).
-* @details This function returns the MSR register value (32 bits).
-*
+/** 
+* @brief   This function returns the MSR register value (32 bits). 
+* @details This function returns the MSR register value (32 bits). 
+*     
 * @param[in]     void        No input parameters
-* @return        uint32 msr  This function returns the MSR register value (32 bits).
-*
+* @return        uint32 msr  This function returns the MSR register value (32 bits). 
+* 
 * @pre  None
 * @post None
-*
+* 
 */
 
 #ifdef MCAL_PLATFORM_S12
@@ -253,18 +262,18 @@ ASM_KEYWORD uint32 Mcu_schm_read_msr(void)
 #endif  /*Cosmic compiler only*/
 
 
-#ifdef _HITECH_C_S32G2XX_
+#ifdef _HITECH_C_S32XX_
 /*================================================================================================*/
-/**
-* @brief   This function returns the MSR register value (32 bits).
-* @details This function returns the MSR register value (32 bits).
-*
+/** 
+* @brief   This function returns the MSR register value (32 bits). 
+* @details This function returns the MSR register value (32 bits). 
+*     
 * @param[in]     void        No input parameters
-* @return        uint32 msr  This function returns the MSR register value (32 bits).
-*
+* @return        uint32 msr  This function returns the MSR register value (32 bits). 
+* 
 * @pre  None
 * @post None
-*
+* 
 */
 uint32 Mcu_schm_read_msr(void)
 {
@@ -275,17 +284,17 @@ uint32 Mcu_schm_read_msr(void)
 
 #endif  /*HighTec compiler only*/
  /*================================================================================================*/
-#ifdef _GCC_C_S32G2XX_
-/**
-* @brief   This function returns the MSR register value (32 bits).
-* @details This function returns the MSR register value (32 bits).
-*
+#ifdef _LINARO_C_S32XX_
+/** 
+* @brief   This function returns the MSR register value (32 bits). 
+* @details This function returns the MSR register value (32 bits). 
+*     
 * @param[in]     void        No input parameters
-* @return        uint32 msr  This function returns the MSR register value (32 bits).
-*
+* @return        uint32 msr  This function returns the MSR register value (32 bits). 
+* 
 * @pre  None
 * @post None
-*
+* 
 */
 uint32 Mcu_schm_read_msr(void)
 {
@@ -303,20 +312,20 @@ uint32 Mcu_schm_read_msr(void)
     #endif
     return (uint32)reg_tmp;
 }
-#endif   /* _GCC_C_S32G2XX_*/
+#endif   /* _LINARO_C_S32XX_*/
 /*================================================================================================*/
 
-#ifdef _ARM_DS5_C_S32G2XX_
-/**
-* @brief   This function returns the MSR register value (32 bits).
-* @details This function returns the MSR register value (32 bits).
-*
+#ifdef _ARM_DS5_C_S32XX_
+/** 
+* @brief   This function returns the MSR register value (32 bits). 
+* @details This function returns the MSR register value (32 bits). 
+*     
 * @param[in]     void        No input parameters
-* @return        uint32 msr  This function returns the MSR register value (32 bits).
-*
+* @return        uint32 msr  This function returns the MSR register value (32 bits). 
+* 
 * @pre  None
 * @post None
-*
+* 
 */
 uint32 Mcu_schm_read_msr(void)
 {
@@ -334,91 +343,33 @@ uint32 Mcu_schm_read_msr(void)
     #endif
     return (uint32)reg_tmp;
 }
-#endif   /* _ARM_DS5_C_S32G2XX_ */
+#endif   /* _ARM_DS5_C_S32XX_ */
 
-#ifdef _IAR_C_S32G2XX_
-/**
-* @brief   This function returns the MSR register value (32 bits).
-* @details This function returns the MSR register value (32 bits).
-*
+#ifdef _IAR_C_S32XX_
+/** 
+* @brief   This function returns the MSR register value (32 bits). 
+* @details This function returns the MSR register value (32 bits). 
+*     
 * @param[in]     void        No input parameters
-* @return        uint32 msr  This function returns the MSR register value (32 bits).
-*
+* @return        uint32 msr  This function returns the MSR register value (32 bits). 
+* 
 * @pre  None
 * @post None
-*
+* 
 */
 uint32 Mcu_schm_read_msr(void)
 {
     register uint32 reg_tmp;
 
-#if (MCAL_PLATFORM_ARM == MCAL_ARM_AARCH64)
-    __asm volatile( " mrs %x0, DAIF " : "=r" (reg_tmp) );
-#elif  (MCAL_PLATFORM_ARM == MCAL_ARM_RARCH)
-    __asm volatile( " mrs %0, CPSR " : "=r" (reg_tmp) );
+#if ((defined MCAL_ENABLE_USER_MODE_SUPPORT)&&(!defined MCAL_PLATFORM_ARM_M0PLUS))
+   __asm volatile( " mrs %0, basepri " : "=r" (reg_tmp) );
 #else
-    #if ((defined MCAL_ENABLE_USER_MODE_SUPPORT)&&(!defined MCAL_PLATFORM_ARM_M0PLUS))
-    __asm volatile( " mrs %0, basepri " : "=r" (reg_tmp) );
-    #else
-    __asm volatile( " mrs %0, primask " : "=r" (reg_tmp) );
-    #endif
+   __asm volatile( " mrs %0, primask " : "=r" (reg_tmp) );
 #endif
 
     return (uint32)reg_tmp;
 }
-#endif   /* _IAR_C_S32G2XX_ */
-
-#ifdef _ARM_DS6_S32G2XX_
-/**
-* @brief   This function returns the MSR register value (32 bits).
-* @details This function returns the MSR register value (32 bits).
-*
-* @param[in]     void        No input parameters
-* @return        uint32 msr  This function returns the MSR register value (32 bits).
-*
-* @pre  None
-* @post None
-*
-*/
-uint32 Mcu_schm_read_msr(void)
-{
-    register uint32 reg_tmp;
-    #if (MCAL_PLATFORM_ARM == MCAL_ARM_AARCH64)
-        __asm volatile( " mrs %x0, DAIF " : "=r" (reg_tmp) );
-    #elif  (MCAL_PLATFORM_ARM == MCAL_ARM_RARCH)
-        __asm volatile( " mrs %0, CPSR " : "=r" (reg_tmp) );
-    #else
-        #if ((defined MCAL_ENABLE_USER_MODE_SUPPORT)&&(!defined MCAL_PLATFORM_ARM_M0PLUS))
-        __asm volatile( " mrs %0, basepri " : "=r" (reg_tmp) );
-        #else
-        __asm volatile( " mrs %0, primask " : "=r" (reg_tmp) );
-        #endif
-    #endif
-    return (uint32)reg_tmp;
-}
-#endif   /* _ARM_DS6_S32G2XX_ */
-
-#ifdef _ZEN_V_S32G2XX_
-/**
-* @brief   This function returns the MSR register value (32 bits).
-* @details This function returns the MSR register value (32 bits).
-*
-* @param[in]     void        No input parameters
-* @return        uint32 msr  This function returns the MSR register value (32 bits).
-*
-* @pre  None
-* @post None
-*
-*/
-uint32 Mcu_schm_read_msr(void)
-{
-    register uint32 reg_tmp;
-
-    __asm volatile( " csrr %0, mstatus " : "=r" (reg_tmp) );
-
-    return (uint32)reg_tmp;
-}
-#endif   /* _ZEN_V_S32G2XX_ */
+#endif   /* _IAR_C_S32XX_ */
 
 #define RTE_STOP_SEC_CODE
 #include "Rte_MemMap.h"
@@ -444,7 +395,7 @@ void SchM_Enter_Mcu_MCU_EXCLUSIVE_AREA_00(void)
         if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
         {
             OsIf_SuspendAllInterrupts();
-#ifdef _ARM_DS5_C_S32G2XX_
+#ifdef _ARM_DS5_C_S32XX_
             ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
         }
@@ -461,7 +412,7 @@ void SchM_Exit_Mcu_MCU_EXCLUSIVE_AREA_00(void)
     if ((ISR_ON(msr_MCU_EXCLUSIVE_AREA_00[u32CoreId]))&&(0UL == reentry_guard_MCU_EXCLUSIVE_AREA_00[u32CoreId]))         /*if interrupts were enabled*/
     {
         OsIf_ResumeAllInterrupts();
-#ifdef _ARM_DS5_C_S32G2XX_
+#ifdef _ARM_DS5_C_S32XX_
         ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
     }
@@ -482,7 +433,7 @@ void SchM_Enter_Mcu_MCU_EXCLUSIVE_AREA_01(void)
         if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
         {
             OsIf_SuspendAllInterrupts();
-#ifdef _ARM_DS5_C_S32G2XX_
+#ifdef _ARM_DS5_C_S32XX_
             ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
         }
@@ -499,7 +450,7 @@ void SchM_Exit_Mcu_MCU_EXCLUSIVE_AREA_01(void)
     if ((ISR_ON(msr_MCU_EXCLUSIVE_AREA_01[u32CoreId]))&&(0UL == reentry_guard_MCU_EXCLUSIVE_AREA_01[u32CoreId]))         /*if interrupts were enabled*/
     {
         OsIf_ResumeAllInterrupts();
-#ifdef _ARM_DS5_C_S32G2XX_
+#ifdef _ARM_DS5_C_S32XX_
         ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
     }
@@ -520,7 +471,7 @@ void SchM_Enter_Mcu_MCU_EXCLUSIVE_AREA_02(void)
         if (ISR_ON(msr)) /*if MSR[EE] = 0, skip calling Suspend/Resume AllInterrupts*/
         {
             OsIf_SuspendAllInterrupts();
-#ifdef _ARM_DS5_C_S32G2XX_
+#ifdef _ARM_DS5_C_S32XX_
             ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
         }
@@ -537,7 +488,7 @@ void SchM_Exit_Mcu_MCU_EXCLUSIVE_AREA_02(void)
     if ((ISR_ON(msr_MCU_EXCLUSIVE_AREA_02[u32CoreId]))&&(0UL == reentry_guard_MCU_EXCLUSIVE_AREA_02[u32CoreId]))         /*if interrupts were enabled*/
     {
         OsIf_ResumeAllInterrupts();
-#ifdef _ARM_DS5_C_S32G2XX_
+#ifdef _ARM_DS5_C_S32XX_
         ASM_KEYWORD(" nop ");/* Compiler fix - forces the CSPID instruction to be generated with -02, -Ospace are selected*/
 #endif
     }
@@ -545,20 +496,20 @@ void SchM_Exit_Mcu_MCU_EXCLUSIVE_AREA_02(void)
 
 
 #ifdef MCAL_TESTING_ENVIRONMENT
-/**
-@brief   This function checks that all entered exclusive areas were also exited.
+/** 
+@brief   This function checks that all entered exclusive areas were also exited. 
 @details This function checks that all entered exclusive areas were also exited. The check
          is done by verifying that all reentry_guard_* static variables are back to the
          zero value.
-
+    
 @param[in]     void       No input parameters
-@return        void       This function does not return a value. Test asserts are used instead.
+@return        void       This function does not return a value. Test asserts are used instead. 
 
 @pre  None
 @post None
 
-@remarks Covers
-@remarks Implements
+@remarks Covers 
+@remarks Implements 
 */
 void SchM_Check_mcu(void)
 {

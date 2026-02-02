@@ -1,11 +1,29 @@
-/*
- * Copyright 2024-2025 NXP
- *
- * SPDX-License-Identifier: BSD-3-Clause
- */
+/*==================================================================================================
+*   Project              : RTD AUTOSAR 4.4
+*   Platform             : CORTEXM
+*   Peripheral           : 
+*   Dependencies         : none
+*
+*   Autosar Version      : 4.4.0
+*   Autosar Revision     : ASR_REL_4_4_REV_0000
+*   Autosar Conf.Variant :
+*   SW Version           : 4.0.0
+*   Build Version        : S32_RTD_4_0_0_D2210_ASR_REL_4_4_REV_0000_20221031
+*
+*   (c) Copyright 2022 NXP Semiconductors
+*   All Rights Reserved.
+*
+*   NXP Confidential. This software is owned or controlled by NXP and may only be
+*   used strictly in accordance with the applicable license terms. By expressly
+*   accepting such terms or by downloading, installing, activating and/or otherwise
+*   using the software, you are agreeing that you have read, and that you agree to
+*   comply with and are bound by, such license terms. If you do not agree to be
+*   bound by the applicable license terms, then you may not retain, install,
+*   activate or otherwise use the software.
+==================================================================================================*/
 /**
 *   @file       Clock_Ip_Gate.c
-*   @version    0.8.0
+*   @version    4.0.0
 *
 *   @brief   CLOCK driver implementations.
 *   @details CLOCK driver implementations.
@@ -35,10 +53,10 @@ extern "C"{
 ==================================================================================================*/
 #define CLOCK_IP_GATE_VENDOR_ID_C                      43
 #define CLOCK_IP_GATE_AR_RELEASE_MAJOR_VERSION_C       4
-#define CLOCK_IP_GATE_AR_RELEASE_MINOR_VERSION_C       9
+#define CLOCK_IP_GATE_AR_RELEASE_MINOR_VERSION_C       4
 #define CLOCK_IP_GATE_AR_RELEASE_REVISION_VERSION_C    0
-#define CLOCK_IP_GATE_SW_MAJOR_VERSION_C               0
-#define CLOCK_IP_GATE_SW_MINOR_VERSION_C               8
+#define CLOCK_IP_GATE_SW_MAJOR_VERSION_C               4
+#define CLOCK_IP_GATE_SW_MINOR_VERSION_C               0
 #define CLOCK_IP_GATE_SW_PATCH_VERSION_C               0
 
 /*==================================================================================================
@@ -81,15 +99,6 @@ extern "C"{
 *                                         LOCAL VARIABLES
 ==================================================================================================*/
 
-/* Clock start initialized section data */
-#define MCU_START_SEC_VAR_INIT_UNSPECIFIED
-#include "Mcu_MemMap.h"
-
-static Clock_Ip_NameType Clock_Ip_GateName = RESERVED_CLK;
-
-/* Clock stop initialized section data */
-#define MCU_STOP_SEC_VAR_INIT_UNSPECIFIED
-#include "Mcu_MemMap.h"
 /*==================================================================================================
 *                                        GLOBAL CONSTANTS
 ==================================================================================================*/
@@ -105,27 +114,15 @@ static Clock_Ip_NameType Clock_Ip_GateName = RESERVED_CLK;
 #define MCU_START_SEC_CODE
 
 #include "Mcu_MemMap.h"
-
 /*==================================================================================================
 *                                    LOCAL FUNCTION PROTOTYPES
 ==================================================================================================*/
 
-
-static void Clock_Ip_CallbackGateEmptyName(Clock_Ip_NameType GateName);
-static void Clock_Ip_CallbackGateEmpty1(void);
-static void Clock_Ip_CallbackGateEmpty2(uint32);
-static ClockLLD_StatusReturnType Clock_Ip_CallbackGateEmpty3(void);
-static uint32 Clock_Ip_CallbackGateEmpty4(void);
-#ifdef CLOCK_IP_GPR_X_PCTL_MODULE_PCTL_PCTL
-static void Clock_Ip_ResetGprXPctlModulePctlPctl(void);
-static void Clock_Ip_EnableGprXPctlModulePctlPctl(void);
-static void Clock_Ip_DisableGprXPctlModulePctlPctl(void);
-static void Clock_Ip_WaitGprXPctlModulePctlPctl(void);
-static void Clock_Ip_SetStateGprXPctlModulePctlPctl(uint32 value);
-static uint32 Clock_Ip_GetStateGprXPctlModulePctlPctl(void);
-static ClockLLD_StatusReturnType Clock_Ip_GetStatusGprXPctlModulePctlPctl(void);
-static void Clock_Ip_Disable_Optimized_GprXPctlModulePctlPctl(void);
-static void Clock_Ip_Wait_Optimized_GprXPctlModulePctlPctl(void);
+static void Clock_Ip_ClockSetGateEmpty(Clock_Ip_GateConfigType const* Config);
+static void Clock_Ip_ClockUpdateGateEmpty(Clock_Ip_NameType ClockName, boolean Gate);
+#ifdef CLOCK_IP_MC_ME_PARTITION_COFB_ENABLE_REQUEST
+static void Clock_Ip_ClockSetGateMcMePartitionCollectionClockRequest(Clock_Ip_GateConfigType const* Config);
+static void Clock_Ip_ClockUpdateGateMcMePartitionCollectionClockRequest(Clock_Ip_NameType ClockName, boolean Gate);
 #endif
 
 /* Clock stop section code */
@@ -141,80 +138,112 @@ static void Clock_Ip_Wait_Optimized_GprXPctlModulePctlPctl(void);
 
 #include "Mcu_MemMap.h"
 
-static void Clock_Ip_CallbackGateEmptyName(Clock_Ip_NameType GateName)
+static void Clock_Ip_ClockSetGateEmpty(Clock_Ip_GateConfigType const* Config)
 {
-    (void)GateName;
+    (void)Config;
     /* No implementation */
 }
-static void Clock_Ip_CallbackGateEmpty1(void)
+static void Clock_Ip_ClockUpdateGateEmpty(Clock_Ip_NameType ClockName, boolean Gate)
 {
+    (void)ClockName;
+    (void)Gate;
     /* No implementation */
-}
-static void Clock_Ip_CallbackGateEmpty2(uint32 value)
-{
-    /* No implementation */
-    (void)value;
-}
-static ClockLLD_StatusReturnType Clock_Ip_CallbackGateEmpty3(void)
-{
-    /* No implementation */
-    return CLOCK_LLD_STATUS_SUCCESS;
-}
-static uint32 Clock_Ip_CallbackGateEmpty4(void)
-{
-    /* No implementation */
-    return 0U;
 }
 
-#ifdef CLOCK_IP_GPR_X_PCTL_MODULE_PCTL_PCTL
-static void Clock_Ip_SetNameGprXPctlModulePctlPctl(Clock_Ip_NameType Name)
+#ifdef CLOCK_IP_MC_ME_PARTITION_COFB_ENABLE_REQUEST
+static void Clock_Ip_ClockSetGateMcMePartitionCollectionClockRequest(Clock_Ip_GateConfigType const* Config)
 {
-    Clock_Ip_GateName = Name;
+    boolean TimeoutOccurred = FALSE;
+    uint32 StartTime;
+    uint32 ElapsedTime;
+    uint32 TimeoutTicks;
+
+    const Clock_Ip_GateInfoType * GateInformation = &Clock_Ip_axGateInfo[Clock_Ip_au8ClockFeatures[Config->Name][CLOCK_IP_GATE_INDEX]];
+    uint32 Partition      = GateInformation->PartitionValue;
+    uint32 Collection     = GateInformation->ColectionValue;
+    uint32 EnableRequest  = GateInformation->RequestValueMask;
+
+
+    if (Config->Enable != 0U)
+    {
+        /* Partition PRTN_COFB_STAT is reserved in S32G2XX and S32G3XX */
+        #ifdef CLOCK_IP_PLATFORM_SPECIFIC1
+        if (0U == (Clock_Ip_apxMcMeGetPartitions[Partition]->PRTN_COFB_STAT[Collection] & EnableRequest))
+        #else
+        if (0U == (Clock_Ip_apxMcMeSetPartitions[Partition]->PRTN_COFB_CLKEN[Collection] & EnableRequest))
+        #endif
+        {
+
+            Clock_Ip_apxMcMeSetPartitions[Partition]->PRTN_COFB_CLKEN[Collection] |= EnableRequest;
+            Clock_Ip_apxMcMeTriggerPartitions[Partition]->PRTN_PCONF  |= MC_ME_PRTN1_PCONF_PCE_MASK;
+            Clock_Ip_apxMcMeTriggerPartitions[Partition]->PRTN_PUPD   |= MC_ME_PRTN1_PUPD_PCUD_MASK;
+            Clock_Ip_McMeEnterKey();
+
+            /* Wait until clock gate is updated */
+            Clock_Ip_StartTimeout(&StartTime, &ElapsedTime, &TimeoutTicks, CLOCK_IP_TIMEOUT_VALUE_US);
+            do
+            {
+                TimeoutOccurred = Clock_Ip_TimeoutExpired(&StartTime, &ElapsedTime, TimeoutTicks);
+            }
+            while ((0U == (Clock_Ip_apxMcMeGetPartitions[Partition]->PRTN_COFB_STAT[Collection] & EnableRequest)) && (FALSE == TimeoutOccurred));
+            /* timeout notification */
+            if (TRUE == TimeoutOccurred)
+            {
+                /* Report timeout error */
+                Clock_Ip_ReportClockErrors(CLOCK_IP_REPORT_TIMEOUT_ERROR, Config->Name);
+            }
+        }
+    }
+    else
+    {
+        /* Partition PRTN_COFB_STAT is reserved in S32G2XX and S32G3XX */
+        #ifdef CLOCK_IP_PLATFORM_SPECIFIC1
+        if (0U != (Clock_Ip_apxMcMeGetPartitions[Partition]->PRTN_COFB_STAT[Collection] & EnableRequest))
+        #else
+        if (0U != (Clock_Ip_apxMcMeSetPartitions[Partition]->PRTN_COFB_CLKEN[Collection] & EnableRequest))
+        #endif
+        {
+
+            Clock_Ip_apxMcMeSetPartitions[Partition]->PRTN_COFB_CLKEN[Collection] &= (~EnableRequest);
+            Clock_Ip_apxMcMeTriggerPartitions[Partition]->PRTN_PCONF  |= MC_ME_PRTN1_PCONF_PCE_MASK;
+            Clock_Ip_apxMcMeTriggerPartitions[Partition]->PRTN_PUPD   |= MC_ME_PRTN1_PUPD_PCUD_MASK;
+            Clock_Ip_McMeEnterKey();
+
+            /* Wait until clock gate is updated */
+            Clock_Ip_StartTimeout(&StartTime, &ElapsedTime, &TimeoutTicks, CLOCK_IP_TIMEOUT_VALUE_US);
+            do
+            {
+                TimeoutOccurred = Clock_Ip_TimeoutExpired(&StartTime, &ElapsedTime, TimeoutTicks);
+            }
+            while (((Clock_Ip_apxMcMeGetPartitions[Partition]->PRTN_COFB_STAT[Collection] & EnableRequest) != 0U) && (FALSE == TimeoutOccurred));
+            /* timeout notification */
+            if (TRUE == TimeoutOccurred)
+            {
+                /* Report timeout error */
+                Clock_Ip_ReportClockErrors(CLOCK_IP_REPORT_TIMEOUT_ERROR, Config->Name);
+            }
+        }
+    }
 }
-static void Clock_Ip_ResetGprXPctlModulePctlPctl(void)
+
+static void Clock_Ip_ClockUpdateGateMcMePartitionCollectionClockRequest(Clock_Ip_NameType ClockName, boolean Gate)
 {
-    /* No implementation */
-}
-static void Clock_Ip_EnableGprXPctlModulePctlPctl(void)
-{
-    /* No implementation */
-}
-static void Clock_Ip_DisableGprXPctlModulePctlPctl(void)
-{
-    /* No implementation */
-}
-static void Clock_Ip_WaitGprXPctlModulePctlPctl(void)
-{
-    /* No implementation */
-}
-static void Clock_Ip_SetStateGprXPctlModulePctlPctl(uint32 value)
-{
-    /* No implementation */
-    (void)value;
-}
-static uint32 Clock_Ip_GetStateGprXPctlModulePctlPctl(void)
-{
-    /* No implementation */
-    return 0U;
-}
-static ClockLLD_StatusReturnType Clock_Ip_GetStatusGprXPctlModulePctlPctl(void)
-{
-    /* No implementation */
-    return CLOCK_LLD_STATUS_SUCCESS;
-}
-static void Clock_Ip_Enable_Optimized_GprXPctlModulePctlPctl(void)
-{
-    /* No implementation */
-}
-static void Clock_Ip_Disable_Optimized_GprXPctlModulePctlPctl(void)
-{
-    /* No implementation */
-}
-static void Clock_Ip_Wait_Optimized_GprXPctlModulePctlPctl(void)
-{
-    /* No implementation */
+    Clock_Ip_GateConfigType Config;
+
+    Config.Name = ClockName;
+    if (TRUE == Gate)
+    {
+        Config.Enable = 0U;
+    }
+    else
+    {
+        Config.Enable = 1U;
+    }
+    /* Write configuration to register */
+    Clock_Ip_ClockSetGateMcMePartitionCollectionClockRequest(&Config);
 }
 #endif
+
 
 /*==================================================================================================
 *                                        GLOBAL FUNCTIONS
@@ -227,7 +256,6 @@ static void Clock_Ip_Wait_Optimized_GprXPctlModulePctlPctl(void)
 /*==================================================================================================
 *                                        GLOBAL CONSTANTS
 ==================================================================================================*/
-
 /* Clock start constant section data */
 #define MCU_START_SEC_CONST_UNSPECIFIED
 
@@ -236,33 +264,16 @@ static void Clock_Ip_Wait_Optimized_GprXPctlModulePctlPctl(void)
 const Clock_Ip_GateCallbackType Clock_Ip_axGateCallbacks[CLOCK_IP_GATE_CALLBACKS_COUNT] =
 {
     {
-        &Clock_Ip_CallbackGateEmptyName,                     /* SetName */
-        &Clock_Ip_CallbackGateEmpty1,                        /* Reset */
-        &Clock_Ip_CallbackGateEmpty1,                        /* Enable */
-        &Clock_Ip_CallbackGateEmpty1,                        /* Disable */
-        &Clock_Ip_CallbackGateEmpty1,                        /* Wait */
-        &Clock_Ip_CallbackGateEmpty2,                        /* SetState */
-        &Clock_Ip_CallbackGateEmpty4,                        /* GetState */
-        &Clock_Ip_CallbackGateEmpty3,                        /* GetStatus */
-        &Clock_Ip_CallbackGateEmpty1,                        /* Enable_Optimized */
-        &Clock_Ip_CallbackGateEmpty1,                        /* Disable_Optimized */
-        &Clock_Ip_CallbackGateEmpty1,                        /* Wait_Optimized */
+        Clock_Ip_ClockSetGateEmpty,     /* Set */
+        Clock_Ip_ClockUpdateGateEmpty,  /* Update */
     },
-#ifdef CLOCK_IP_GPR_X_PCTL_MODULE_PCTL_PCTL
+#ifdef CLOCK_IP_MC_ME_PARTITION_COFB_ENABLE_REQUEST
     {
-        &Clock_Ip_SetNameGprXPctlModulePctlPctl,                            /* SetName */
-        &Clock_Ip_ResetGprXPctlModulePctlPctl,                              /* Reset */
-        &Clock_Ip_EnableGprXPctlModulePctlPctl,                             /* Enable */
-        &Clock_Ip_DisableGprXPctlModulePctlPctl,                            /* Disable */
-        &Clock_Ip_WaitGprXPctlModulePctlPctl,                               /* Wait */
-        &Clock_Ip_SetStateGprXPctlModulePctlPctl,                           /* SetState */
-        &Clock_Ip_GetStateGprXPctlModulePctlPctl,                           /* GetState */
-        &Clock_Ip_GetStatusGprXPctlModulePctlPctl,                          /* GetStatus */
-        &Clock_Ip_Enable_Optimized_GprXPctlModulePctlPctl,                  /* Enable_Optimized */
-        &Clock_Ip_Disable_Optimized_GprXPctlModulePctlPctl,                 /* Disable_Optimized */
-        &Clock_Ip_Wait_Optimized_GprXPctlModulePctlPctl,                    /* Wait_Optimized */
+        Clock_Ip_ClockSetGateMcMePartitionCollectionClockRequest,      /* Set */
+        Clock_Ip_ClockUpdateGateMcMePartitionCollectionClockRequest,   /* Update */
     },
 #endif
+
 };
 
 

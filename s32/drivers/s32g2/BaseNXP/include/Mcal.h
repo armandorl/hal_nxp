@@ -1,18 +1,36 @@
-/*
- * Copyright 2024-2025 NXP
- *
- * SPDX-License-Identifier: BSD-3-Clause
- */
+/*==================================================================================================
+* Project : RTD AUTOSAR 4.4
+* Platform : CORTEXM
+* Peripheral : S32G2XXM7
+* Dependencies : none
+*
+* Autosar Version : 4.4.0
+* Autosar Revision : ASR_REL_4_4_REV_0000
+* Autosar Conf.Variant :
+* SW Version : 4.0.0
+* Build Version : S32_RTD_4_0_0_D2210_ASR_REL_4_4_REV_0000_20221031
+*
+* (c) Copyright 2022 NXP Semiconductors
+* All Rights Reserved.
+*
+* NXP Confidential. This software is owned or controlled by NXP and may only be
+* used strictly in accordance with the applicable license terms. By expressly
+* accepting such terms or by downloading, installing, activating and/or otherwise
+* using the software, you are agreeing that you have read, and that you agree to
+* comply with and are bound by, such license terms. If you do not agree to be
+* bound by the applicable license terms, then you may not retain, install,
+* activate or otherwise use the software.
+==================================================================================================*/
 /**
 *   @file           Mcal.h
 *   @implements     Mcal.h_Artifact
-*   @version 0.8.0
+*   @version 4.0.0
 *
-*   @brief   AUTOSAR BaseNXP - SWS Compiler abstraction specific for MCAL.
+*   @brief   AUTOSAR Base - SWS Compiler abstraction specific for MCAL.
 *   @details The file Mcal.h provides MCAL specific macros used for compiler abstraction.
 *
 *
-*   @addtogroup BASENXP_COMPONENT
+*   @addtogroup BASE_COMPONENT
 *   @{
 */
 
@@ -39,9 +57,7 @@ extern "C"{
 * @file        Mcal.h
 * @brief Include standard types
 */
-#include "Std_Types.h"
-
-#include "DeviceDefinition.h"
+#include "StandardTypes.h"
 
 #include "Soc_Ips.h"
 
@@ -55,10 +71,10 @@ extern "C"{
 #define MCAL_VENDOR_ID                    43
 #define MCAL_MODULE_ID                    0
 #define MCAL_AR_RELEASE_MAJOR_VERSION     4
-#define MCAL_AR_RELEASE_MINOR_VERSION     9
+#define MCAL_AR_RELEASE_MINOR_VERSION     4
 #define MCAL_AR_RELEASE_REVISION_VERSION  0
-#define MCAL_SW_MAJOR_VERSION             0
-#define MCAL_SW_MINOR_VERSION             8
+#define MCAL_SW_MAJOR_VERSION             4
+#define MCAL_SW_MINOR_VERSION             0
 #define MCAL_SW_PATCH_VERSION             0
 
 /*==================================================================================================
@@ -73,15 +89,15 @@ extern "C"{
 #endif
 
 #ifndef DISABLE_MCAL_INTERMODULE_ASR_CHECK
-    /* Check if source file and Std_Types.h header file are of the same Autosar version */
+    /* Check if source file and StandardTypes.h header file are of the same Autosar version */
     #if ((MCAL_AR_RELEASE_MAJOR_VERSION != STD_AR_RELEASE_MAJOR_VERSION) || \
          (MCAL_AR_RELEASE_MINOR_VERSION != STD_AR_RELEASE_MINOR_VERSION))
-        #error "AutoSar Version Numbers of Mcal.h and Std_Types.h are different"
+        #error "AutoSar Version Numbers of Mcal.h and StandardTypes.h are different"
     #endif
 #endif
 
 #ifndef DISABLE_MCAL_INTERMODULE_ASR_CHECK
-    /* Check if source file and Reg_eSys.h header file are of the same Autosar version */
+    /* Check if source file and StandardTypes.h header file are of the same Autosar version */
     #if ((MCAL_AR_RELEASE_MAJOR_VERSION != REG_ESYS_AR_RELEASE_MAJOR_VERSION) || \
          (MCAL_AR_RELEASE_MINOR_VERSION != REG_ESYS_AR_RELEASE_MINOR_VERSION))
         #error "AutoSar Version Numbers of Mcal.h and Reg_eSys.h are different"
@@ -110,17 +126,51 @@ extern "C"{
 
 /*==================================================================================================
 *                                      DEFINES AND MACROS
-==================================================================================================*/
+==================================================================================================*/   
 
 /**************************************** Green Hills *********************************************/
-#ifdef _GREENHILLS_C_S32G2XX_
+#ifdef _GREENHILLS_C_S32XX_
+    /**
+    * @brief Compiler abstraction for the asm keyword.
+    */    
+    #define ASM_KEYWORD  __asm
+
+    /**
+    * @brief Compiler abstraction for the asm keyword.
+    */    
+    #define ASMV_KEYWORD  __asm volatile
 
     /**
     * @brief Compiler abstraction for the intrinsic wait instruction.
     */
-    #define EXECUTE_WAIT()  ASM_KEYWORD("  wfi");
+    #define EXECUTE_WAIT()  \
+                do  \
+                {   \
+                    OsIf_ResumeAllInterrupts();  \
+                    ASM_KEYWORD("  wfi");   \
+                    OsIf_SuspendAllInterrupts(); \
+                } while (0)
+
     /**
-     * @brief Compiler abstraction for MCAL Fault Injection tests
+    * @brief Compiler abstraction for the data alignment
+    */
+    #define ALIGNED_VARS_START(sec_name, align)
+    /**
+    * @brief Compiler abstraction for the data alignment
+    */
+    #define VAR_ALIGN(v, size) __attribute__(( aligned(size) )) v;
+    /**
+    * @brief Compiler abstraction for the data alignment
+    */
+    #define ALIGNED_VARS_STOP()
+    
+   /**
+    * @brief Compiler abstraction for the packed qualifier
+    */
+    #define PACKED __packed 
+
+    /**
+     * @brief Compiler abstraction for MCAL Fault Injection tests 
     */
     #ifdef MCAL_ENABLE_FAULT_INJECTION
 
@@ -131,18 +181,51 @@ extern "C"{
 
         #define MCAL_FAULT_INJECTION_POINT(label)
     #endif
-
-#endif /* #ifdef _GREENHILLS_C_S32G2XX_ */
+        
+#endif /* #ifdef _GREENHILLS_C_S32XX_ */
 
 /**************************************** Wind River Diab *****************************************/
-#ifdef _DIABDATA_C_S32G2XX_
+#ifdef _DIABDATA_C_S32XX_
+    /**
+    * @brief Compiler abstraction for the asm keyword.
+    */
+    #define ASM_KEYWORD  __asm
+    
+    /**
+    * @brief Compiler abstraction for the asm keyword.
+    */
+    #define ASMV_KEYWORD  __asm volatile
 
     /**
     * @brief Compiler abstraction for the intrinsic wait instruction.
     */
-    #define EXECUTE_WAIT()  ASM_KEYWORD(" wfi");
+    #define EXECUTE_WAIT()  \
+                do  \
+                {   \
+                    OsIf_ResumeAllInterrupts();              \
+                    ASM_KEYWORD(" wfi");  \
+                    OsIf_SuspendAllInterrupts();             \
+                } while (0)
     /**
-     * @brief Compiler abstraction for MCAL Fault Injection tests
+    * @brief Compiler abstraction for the data alignment
+    */
+    #define ALIGNED_VARS_START(sec_name, align)
+    /**
+    * @brief Compiler abstraction for the data alignment
+    */
+    #define VAR_ALIGN(v, size) __attribute__(( aligned(size) )) v;
+    /**
+    * @brief Compiler abstraction for the data alignment
+    */
+    #define ALIGNED_VARS_STOP()
+    
+    /**
+     * @brief Compiler abstraction for the packed qualifier
+     */
+    #define PACKED __attribute__((packed)) 
+    
+    /**
+     * @brief Compiler abstraction for MCAL Fault Injection tests 
     */
     #ifdef MCAL_ENABLE_FAULT_INJECTION
 
@@ -154,32 +237,151 @@ extern "C"{
         #define MCAL_FAULT_INJECTION_POINT(label)
     #endif
 
-#endif /* #ifdef _DIABDATA_C_S32G2XX_ */
+#endif /* #ifdef _DIABDATA_C_S32XX_ */
 
 /*************************************** CodeWarrior **********************************************/
-#ifdef _CODEWARRIOR_C_S32G2XX_
+#ifdef _CODEWARRIOR_C_S32XX_
+    /**
+    * @brief Compiler abstraction for the asm keyword.
+    */
+    #define ASM_KEYWORD  asm
 
     /**
     * @brief Compiler abstraction for the intrinsic wait instruction.
     */
-    #define EXECUTE_WAIT()  ASM_KEYWORD (" opword 0x7C00007C");
-#endif /* #ifdef _CODEWARRIOR_C_S32G2XX_ */
+    #define EXECUTE_WAIT()  \
+                do  \
+                {   \
+                    OsIf_ResumeAllInterrupts();                  \
+                    ASM_KEYWORD (" opword 0x7C00007C");     \
+                    OsIf_SuspendAllInterrupts();                 \
+                } while (0)
+    /**
+    * @brief Compiler abstraction for the data alignment
+    */
+    #define ALIGNED_VARS_START(sec_name, align)
+    /**
+    * @brief Compiler abstraction for the data alignment
+    */
+    #define VAR_ALIGN(v, size) v __attribute__(( aligned(size) ));
+    /**
+    * @brief Compiler abstraction for the data alignment
+    */
+    #define ALIGNED_VARS_STOP()
+    
+    /**
+    * @brief Compiler abstraction for the packed qualifier
+    */
+    #define PACKED __packed 
+
+#endif /* #ifdef _CODEWARRIOR_C_S32XX_ */
+
+/*************************************** Cosmic ***************************************************/
+#ifdef _COSMIC_C_S32XX_
+    /**
+    * @brief Compiler abstraction for the asm keyword.
+    */
+    #define ASM_KEYWORD  _asm
+    /**
+    * @brief Compiler abstraction for the asm keyword.
+    */
+    #define ASM_PUBLIC_LABEL(label)  _asm("\txdef\t" #label "\n" #label ":")
+
+    /**
+    * @brief Compiler abstraction for the intrinsic wait instruction.
+    */
+    #define EXECUTE_WAIT()  \
+                do  \
+                {   \
+                    OsIf_ResumeAllInterrupts();                  \
+                    ASM_KEYWORD (" dc.l 0x7C00007C");       \
+                    OsIf_SuspendAllInterrupts();                 \
+                } while (0)
+    /**
+    * @brief Compiler abstraction for the data alignment
+    */
+    #define ALIGNED_VARS_START(sec_name, align) \#pragma section [sec_name ## align]
+    /**
+    * @brief Compiler abstraction for the data alignment
+    */
+    #define VAR_ALIGN(v, size) v;
+    /**
+    * @brief Compiler abstraction for the data alignment
+    */
+    #define ALIGNED_VARS_STOP() \#pragma section []
+#endif /* #ifdef _COSMIC_C_S32XX_ */
 
 /*************************************** HighTec **********************************************/
-#ifdef _HITECH_C_S32G2XX_
+#ifdef _HITECH_C_S32XX_
+    /**
+    * @brief Compiler abstraction for the asm keyword.
+    */
+    #define ASM_KEYWORD  __asm
+
     /**
     * @brief Compiler abstraction for the intrinsic wait instruction.
     */
-    #define EXECUTE_WAIT()  ASM_KEYWORD("  wait");
-#endif /* #ifdef _HITECH_C_S32G2XX_ */
-/**************************************** GCC *********************************************/
-#ifdef _GCC_C_S32G2XX_
+    #define EXECUTE_WAIT()  \
+                do  \
+                {   \
+                    OsIf_ResumeAllInterrupts();                  \
+                    ASM_KEYWORD("  wait");                  \
+                    OsIf_SuspendAllInterrupts();                 \
+                } while (0)
+    /**
+    * @brief Compiler abstraction for the data alignment
+    */
+    #define ALIGNED_VARS_START(sec_name, align)
+    /**
+    * @brief Compiler abstraction for the data alignment
+    */
+    #define VAR_ALIGN(v, size) __attribute__(( aligned(size) )) v;
+    /**
+    * @brief Compiler abstraction for the data alignment
+    */
+    #define ALIGNED_VARS_STOP()
+#endif /* #ifdef _HITECH_C_S32XX_ */
+/**************************************** Linaro *********************************************/
+#ifdef _LINARO_C_S32XX_
+    /**
+    * @brief Compiler abstraction for the asm keyword.
+    */    
+    #define ASM_KEYWORD  __asm__
+    /**
+    * @brief Compiler abstraction for the asm keyword.
+    */    
+    #define ASMV_KEYWORD  __asm__ volatile
+
     /**
     * @brief Compiler abstraction for the intrinsic wait instruction.
     */
-    #define EXECUTE_WAIT()  ASM_KEYWORD("  wfi");
+    #define EXECUTE_WAIT()  \
+                do  \
+                {   \
+                    OsIf_ResumeAllInterrupts();                  \
+                    ASM_KEYWORD("  wfi");                   \
+                    OsIf_SuspendAllInterrupts();                 \
+                } while (0)
     /**
-     * @brief Compiler abstraction for MCAL Fault Injection tests
+    * @brief Compiler abstraction for the data alignment
+    */
+    #define ALIGNED_VARS_START(sec_name, align)
+    /**
+    * @brief Compiler abstraction for the data alignment
+    */
+    #define VAR_ALIGN(v, size) __attribute__(( aligned(size) )) v;
+    /**
+    * @brief Compiler abstraction for the data alignment
+    */
+    #define ALIGNED_VARS_STOP()
+    
+    /**
+     * @brief Compiler abstraction for the packed qualifier
+     */
+    #define PACKED __attribute__((__packed__))
+    
+    /**
+     * @brief Compiler abstraction for MCAL Fault Injection tests 
     */
     #ifdef MCAL_ENABLE_FAULT_INJECTION
 
@@ -190,17 +392,44 @@ extern "C"{
 
         #define MCAL_FAULT_INJECTION_POINT(label)
     #endif
-
-#endif /* #ifdef _GCC_C_S32G2XX_ */
+  
+#endif /* #ifdef _LINARO_C_S32XX_ */
 
 /**************************************** DS5 *********************************************/
-#ifdef _ARM_DS5_C_S32G2XX_
+#ifdef _ARM_DS5_C_S32XX_
+    /**
+    * @brief Compiler abstraction for the asm keyword.
+    */    
+    #define ASM_KEYWORD  __asm
     /**
     * @brief Compiler abstraction for the intrinsic wait instruction.
     */
-    #define EXECUTE_WAIT()  ASM_KEYWORD("  wfi");
+    #define EXECUTE_WAIT()  \
+                do  \
+                {   \
+                    OsIf_ResumeAllInterrupts();                  \
+                    ASM_KEYWORD("  wfi");                   \
+                    OsIf_SuspendAllInterrupts();                 \
+                } while (0)
     /**
-     * @brief Compiler abstraction for MCAL Fault Injection tests
+    * @brief Compiler abstraction for the data alignment
+    */
+    #define ALIGNED_VARS_START(sec_name, align)
+    /**
+    * @brief Compiler abstraction for the data alignment
+    */
+    #define VAR_ALIGN(v, size) __align(size) v;
+    /**
+    * @brief Compiler abstraction for the data alignment
+    */
+    #define ALIGNED_VARS_STOP()
+    /**
+     * @brief Compiler abstraction for the packed qualifier
+     */
+    #define PACKED __packed 
+    
+    /**
+     * @brief Compiler abstraction for MCAL Fault Injection tests 
     */
     #ifdef MCAL_ENABLE_FAULT_INJECTION
 
@@ -211,10 +440,11 @@ extern "C"{
 
         #define MCAL_FAULT_INJECTION_POINT(label)
     #endif
-
-#endif /* #ifdef _ARM_DS5_C_S32G2XX_ */
+    
+#endif /* #ifdef _ARM_DS5_C_S32XX_ */
 /**************************************** IAR *********************************************/
-#ifdef _IAR_C_S32G2XX_
+#ifdef _IAR_C_S32XX_
+    
     /**
     * @brief Compiler abstraction for the "Put in Quotes".
     */
@@ -225,11 +455,46 @@ extern "C"{
     #define MCAL_PUT_IN_QUOTES1(x) MCAL_PUT_IN_QUOTES(x)
 
     /**
+    * @brief Compiler abstraction for the asm keyword.
+    */    
+    #define ASM_KEYWORD  __asm
+    /**
+    * @brief Compiler abstraction for the asm keyword.
+    */    
+    #define ASMV_KEYWORD  __asm volatile
+
+    /**
     * @brief Compiler abstraction for the intrinsic wait instruction.
     */
-    #define EXECUTE_WAIT()  ASM_KEYWORD("  wfi");
+    #define EXECUTE_WAIT()  \
+                do  \
+                {   \
+                    OsIf_ResumeAllInterrupts();                  \
+                    ASM_KEYWORD("  wfi");                   \
+                    OsIf_SuspendAllInterrupts();                 \
+                } while (0)
+
     /**
-     * @brief Compiler abstraction for MCAL Fault Injection tests
+    * @brief Compiler abstraction for the data alignment
+    */
+    #define ALIGNED_VARS_START(sec_name, align) 
+    /**
+    * @brief Compiler abstraction for the data alignment
+    */
+    #define VAR_ALIGN(v, size)  _Pragma(MCAL_PUT_IN_QUOTES1(data_alignment=size)) \
+                                v;
+    /**
+    * @brief Compiler abstraction for the data alignment
+    */
+    #define ALIGNED_VARS_STOP() 
+    
+   /**
+    * @brief Compiler abstraction for the packed qualifier
+    */
+    #define PACKED __packed 
+        
+    /**
+     * @brief Compiler abstraction for MCAL Fault Injection tests 
     */
     #ifdef MCAL_ENABLE_FAULT_INJECTION
 
@@ -238,64 +503,20 @@ extern "C"{
 
         #define MCAL_FAULT_INJECTION_POINT(label)
     #endif
-
-#endif /* #ifdef _IAR_C_S32G2XX_ */
-
-/**************************************** ARM-DS6 *********************************************/
-#ifdef _ARM_DS6_S32G2XX_
-    /**
-    * @brief Compiler abstraction for the intrinsic wait instruction.
-    */
-    #define EXECUTE_WAIT()  ASM_KEYWORD("  wfi");
-    /**
-     * @brief Compiler abstraction for MCAL Fault Injection tests
-    */
-    #ifdef MCAL_ENABLE_FAULT_INJECTION
-
-        #define MCAL_PUT_IN_QUOTES(x) #x
-
-        #define MCAL_FAULT_INJECTION_POINT(label) ASM_KEYWORD(MCAL_PUT_IN_QUOTES(label:))
-    #else
-
-        #define MCAL_FAULT_INJECTION_POINT(label)
-    #endif
-
-#endif /* #ifdef _ARM_DS6_S32G2XX_ */
-/**************************************** ZEN-V *********************************************/
-#ifdef _ZEN_V_S32G2XX_
-    /**
-    * @brief Compiler abstraction for the intrinsic wait instruction.
-    */
-    #define EXECUTE_WAIT()  ASM_KEYWORD("  wfi");
-    /**
-     * @brief Compiler abstraction for MCAL Fault Injection tests
-    */
-    #ifdef MCAL_ENABLE_FAULT_INJECTION
-
-        #define MCAL_PUT_IN_QUOTES(x) #x
-
-        #define MCAL_FAULT_INJECTION_POINT(label) ASM_KEYWORD(MCAL_PUT_IN_QUOTES(label:))
-    #else
-
-        #define MCAL_FAULT_INJECTION_POINT(label)
-    #endif
-
-#endif /* #ifdef _ZEN_V_S32G2XX_ */
-
+        
+#endif /* #ifdef _IAR_C_S32XX_ */
 
 /* check that the compiler used is supported (otherwise some defines might not exist) */
-#ifndef _GREENHILLS_C_S32G2XX_
-    #ifndef _DIABDATA_C_S32G2XX_
-        #ifndef _CODEWARRIOR_C_S32G2XX_
-            #ifndef _HITECH_C_S32G2XX_
-                #ifndef _GCC_C_S32G2XX_
-                    #ifndef _ARM_DS5_C_S32G2XX_
-                        #ifndef _IAR_C_S32G2XX_
-                            #ifndef _ARM_DS6_S32G2XX_
-                                #ifndef _ZEN_V_S32G2XX_
-                                    #error "Unsupported compiler. Compiler abstraction needs to be updated to use this compiler."
-                                #endif
-                            #endif
+#ifndef _GREENHILLS_C_S32XX_
+    #ifndef _DIABDATA_C_S32XX_
+        #ifndef _CODEWARRIOR_C_S32XX_
+            #ifndef _COSMIC_C_S32XX_
+                #ifndef _HITECH_C_S32XX_
+                    #ifndef _LINARO_C_S32XX_
+                        #ifndef _ARM_DS5_C_S32XX_
+                            #ifndef _IAR_C_S32XX_
+                                #error "Unsupported compiler. Compiler abstraction needs to be updated to use this compiler."
+                            #endif    
                         #endif
                     #endif
                 #endif
@@ -303,8 +524,6 @@ extern "C"{
         #endif
     #endif
 #endif
-
-#ifdef MCAL_PLATFORM_ARM
 #if (MCAL_PLATFORM_ARM  == MCAL_ARM_AARCH64)
 /**
 * @brief Data Synchronization Barrier (DSB) completes when all instructions before this instruction complete
@@ -325,26 +544,16 @@ extern "C"{
 */
 #define MCAL_INSTRUCTION_SYNC_BARRIER()  ASM_KEYWORD(" ISB")
 #endif
-#endif /* #ifdef MCAL_PLATFORM_ARM */
 
-#ifdef MCAL_PLATFORM_ZENV
-/**
-* @brief Data Synchronization Barrier (DSB) completes when all instructions before this instruction complete
-*/
-#define MCAL_DATA_SYNC_BARRIER()  ASM_KEYWORD(" fence")
-
-/**
-* @brief  flushes the pipeline in the processor, so that all instructions following the ISB are fetched from cache or memory, after the ISB has been completed.
-*/
-#define MCAL_INSTRUCTION_SYNC_BARRIER()  ASM_KEYWORD(" fence")
-#endif
-
-#if !defined(USING_OS_AUTOSAROS)
-    #define EXIT_INTERRUPT()    MCAL_INSTRUCTION_SYNC_BARRIER();  \
-                                MCAL_DATA_SYNC_BARRIER()   /* ISB and DSB sy full system */
+#if defined(MCAL_PLATFORM_ARM_M4) || defined(MCAL_PLATFORM_ARM_M4F)
+    #if !defined(USING_OS_AUTOSAROS)
+        #define EXIT_INTERRUPT()  MCAL_DATA_SYNC_BARRIER()   /* DSB sy full system */
+    #else
+        #define EXIT_INTERRUPT()
+    #endif /* !defined(USING_OS_AUTOSAROS) */
 #else
     #define EXIT_INTERRUPT()
-#endif /* !defined(USING_OS_AUTOSAROS) */
+#endif
 
 /*==================================================================================================
 *                                             ENUMS
@@ -359,8 +568,8 @@ extern "C"{
 typedef struct
 {
     uint32 state;   /**< enabling/disabling the DEM error: Active=STD_ON/ Inactive=STD_OFF */
-    uint16 id ;     /**< ID of DEM error (0 if STD_OFF)*/
-}Mcal_DemErrorType;
+    uint32 id ;     /**< ID of DEM error (0 if STD_OFF)*/
+}Mcal_DemErrorType; 
 /*==================================================================================================
 *                                 GLOBAL VARIABLE DECLARATIONS
 ==================================================================================================*/

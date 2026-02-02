@@ -1,11 +1,29 @@
-/*
- * Copyright 2024-2025 NXP
- *
- * SPDX-License-Identifier: BSD-3-Clause
- */
+/*==================================================================================================
+*   Project              : RTD AUTOSAR 4.4
+*   Platform             : CORTEXM
+*   Peripheral           : 
+*   Dependencies         : none
+*
+*   Autosar Version      : 4.4.0
+*   Autosar Revision     : ASR_REL_4_4_REV_0000
+*   Autosar Conf.Variant :
+*   SW Version           : 4.0.0
+*   Build Version        : S32_RTD_4_0_0_D2210_ASR_REL_4_4_REV_0000_20221031
+*
+*   (c) Copyright 2022 NXP Semiconductors
+*   All Rights Reserved.
+*
+*   NXP Confidential. This software is owned or controlled by NXP and may only be
+*   used strictly in accordance with the applicable license terms. By expressly
+*   accepting such terms or by downloading, installing, activating and/or otherwise
+*   using the software, you are agreeing that you have read, and that you agree to
+*   comply with and are bound by, such license terms. If you do not agree to be
+*   bound by the applicable license terms, then you may not retain, install,
+*   activate or otherwise use the software.
+==================================================================================================*/
 /**
 *   @file       Clock_Ip_Irq.c
-*   @version    0.8.0
+*   @version    4.0.0
 *
 *   @brief   CLOCK driver implementations.
 *   @details CLOCK driver implementations.
@@ -31,10 +49,10 @@ extern "C"{
 ==================================================================================================*/
 #define CLOCK_IP_IRQ_VENDOR_ID_C                      43
 #define CLOCK_IP_IRQ_AR_RELEASE_MAJOR_VERSION_C       4
-#define CLOCK_IP_IRQ_AR_RELEASE_MINOR_VERSION_C       9
+#define CLOCK_IP_IRQ_AR_RELEASE_MINOR_VERSION_C       4
 #define CLOCK_IP_IRQ_AR_RELEASE_REVISION_VERSION_C    0
-#define CLOCK_IP_IRQ_SW_MAJOR_VERSION_C               0
-#define CLOCK_IP_IRQ_SW_MINOR_VERSION_C               8
+#define CLOCK_IP_IRQ_SW_MAJOR_VERSION_C               4
+#define CLOCK_IP_IRQ_SW_MINOR_VERSION_C               0
 #define CLOCK_IP_IRQ_SW_PATCH_VERSION_C               0
 
 /*==================================================================================================
@@ -77,10 +95,6 @@ extern "C"{
 ==================================================================================================*/
 
 /*==================================================================================================
-*                                    LOCAL FUNCTION PROTOTYPES
-==================================================================================================*/
-
-/*==================================================================================================
 *                                        GLOBAL CONSTANTS
 ==================================================================================================*/
 
@@ -88,9 +102,8 @@ extern "C"{
 *                                        GLOBAL VARIABLES
 ==================================================================================================*/
 
-
 /*==================================================================================================
-*                                    GLOBAL FUNCTION PROTOTYPES
+*                                    LOCAL FUNCTION PROTOTYPES
 ==================================================================================================*/
 
 /*==================================================================================================
@@ -103,6 +116,23 @@ extern "C"{
 #define MCU_START_SEC_CODE
 
 #include "Mcu_MemMap.h"
+#if CLOCK_IP_CMU_INSTANCES_ARRAY_SIZE > 0U
+ISR(Mcu_Cmu_ClockFail_IRQHandler);
+
+/**
+* @brief        This function clear the CMU interrupt flag from CMU module.
+* @details      Called by RGM ISR routine when a user notification for CMU FCCU events is configured
+*
+* @return       void
+*
+*/
+ISR(Mcu_Cmu_ClockFail_IRQHandler)
+{
+    Clock_Ip_CMU_ClockFailInt();
+    EXIT_INTERRUPT();
+}
+#endif
+
 
 #define MCU_STOP_SEC_CODE
 

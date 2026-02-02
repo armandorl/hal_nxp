@@ -1,16 +1,34 @@
-/*
- * Copyright 2024-2025 NXP
- *
- * SPDX-License-Identifier: BSD-3-Clause
- */
+/*==================================================================================================
+* Project : RTD AUTOSAR 4.4
+* Platform : CORTEXM
+* Peripheral : S32G2XXM7
+* Dependencies : none
+*
+* Autosar Version : 4.4.0
+* Autosar Revision : ASR_REL_4_4_REV_0000
+* Autosar Conf.Variant :
+* SW Version : 4.0.0
+* Build Version : S32_RTD_4_0_0_D2210_ASR_REL_4_4_REV_0000_20221031
+*
+* (c) Copyright 2022 NXP Semiconductors
+* All Rights Reserved.
+*
+* NXP Confidential. This software is owned or controlled by NXP and may only be
+* used strictly in accordance with the applicable license terms. By expressly
+* accepting such terms or by downloading, installing, activating and/or otherwise
+* using the software, you are agreeing that you have read, and that you agree to
+* comply with and are bound by, such license terms. If you do not agree to be
+* bound by the applicable license terms, then you may not retain, install,
+* activate or otherwise use the software.
+==================================================================================================*/
 /**
 *   @file    IpVersionMacros.h
-*   @version 0.8.0
+*   @version 4.0.0
 *
-*   @brief   AUTOSAR BaseNXP - IP module versions.
+*   @brief   AUTOSAR Base - IP module versions.
 *   @details Implements macros for soft and hard lock on CORTEXM hardware platform
 *
-*   @addtogroup BASENXP_COMPONENT
+*   @addtogroup BASE_COMPONENT
 *   @{
 */
 
@@ -35,10 +53,10 @@ extern "C"{
 #define IPVERSIONMACROS_VENDOR_ID                    43
 #define IPVERSIONMACROS_MODULE_ID                    0
 #define IPVERSIONMACROS_AR_RELEASE_MAJOR_VERSION     4
-#define IPVERSIONMACROS_AR_RELEASE_MINOR_VERSION     9
+#define IPVERSIONMACROS_AR_RELEASE_MINOR_VERSION     4
 #define IPVERSIONMACROS_AR_RELEASE_REVISION_VERSION  0
-#define IPVERSIONMACROS_SW_MAJOR_VERSION             0
-#define IPVERSIONMACROS_SW_MINOR_VERSION             8
+#define IPVERSIONMACROS_SW_MAJOR_VERSION             4
+#define IPVERSIONMACROS_SW_MINOR_VERSION             0
 #define IPVERSIONMACROS_SW_PATCH_VERSION             0
 
 /*==================================================================================================
@@ -68,7 +86,6 @@ extern "C"{
 #define IPV_MPC5777C_PLATFORM_U32           (0x00290000UL)
 #define IPV_S32R294_PLATFORM_U32            (0x00380000UL)
 #define IPV_S32R41_PLATFORM_U32             (0x002F0000UL)
-#define IPV_S32ZSE_PLATFORM_U32             (0x00350000UL)
 
 /* Utility IPV Macros */
 #define IPV_GET_ARCHITECTURE_U32(IP_VER)    ((IP_VER) & (0xFF000000UL))

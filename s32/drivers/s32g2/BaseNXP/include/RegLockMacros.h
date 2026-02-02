@@ -1,17 +1,35 @@
-/*
- * Copyright 2024-2025 NXP
- *
- * SPDX-License-Identifier: BSD-3-Clause
- */
+/*==================================================================================================
+* Project : RTD AUTOSAR 4.4
+* Platform : CORTEXM
+* Peripheral : S32G2XXM7
+* Dependencies : none
+*
+* Autosar Version : 4.4.0
+* Autosar Revision : ASR_REL_4_4_REV_0000
+* Autosar Conf.Variant :
+* SW Version : 4.0.0
+* Build Version : S32_RTD_4_0_0_D2210_ASR_REL_4_4_REV_0000_20221031
+*
+* (c) Copyright 2022 NXP Semiconductors
+* All Rights Reserved.
+*
+* NXP Confidential. This software is owned or controlled by NXP and may only be
+* used strictly in accordance with the applicable license terms. By expressly
+* accepting such terms or by downloading, installing, activating and/or otherwise
+* using the software, you are agreeing that you have read, and that you agree to
+* comply with and are bound by, such license terms. If you do not agree to be
+* bound by the applicable license terms, then you may not retain, install,
+* activate or otherwise use the software.
+==================================================================================================*/
 /**
 *   @file    RegLockMacros.h
+*   
+*   @version 4.0.0
 *
-*   @version 0.8.0
-*
-*   @brief   AUTOSAR BaseNXP - IP module versions.
+*   @brief   AUTOSAR Base - IP module versions.
 *   @details Implements macros for soft and hard lock on CORTEXM hardware platform
-*
-*   @addtogroup BASENXP_COMPONENT
+*	@implements     RegLockMacros.h_Artifact 
+*   @addtogroup BASE_COMPONENT
 *   @{
 */
 
@@ -38,10 +56,10 @@ extern "C"{
 #define REGLOCKMACROS_VENDOR_ID                    43
 #define REGLOCKMACROS_MODULE_ID                    0
 #define REGLOCKMACROS_AR_RELEASE_MAJOR_VERSION     4
-#define REGLOCKMACROS_AR_RELEASE_MINOR_VERSION     9
+#define REGLOCKMACROS_AR_RELEASE_MINOR_VERSION     4
 #define REGLOCKMACROS_AR_RELEASE_REVISION_VERSION  0
-#define REGLOCKMACROS_SW_MAJOR_VERSION             0
-#define REGLOCKMACROS_SW_MINOR_VERSION             8
+#define REGLOCKMACROS_SW_MAJOR_VERSION             4
+#define REGLOCKMACROS_SW_MINOR_VERSION             0
 #define REGLOCKMACROS_SW_PATCH_VERSION             0
 
 /*==================================================================================================
@@ -49,8 +67,8 @@ extern "C"{
 ==================================================================================================*/
 #ifndef DISABLE_MCAL_INTERMODULE_ASR_CHECK
     /* Check if source file and Platform_Types.h header file are of the same Autosar version */
-    #if ((REGLOCKMACROS_AR_RELEASE_MAJOR_VERSION != PLATFORM_AR_RELEASE_MAJOR_VERSION) || \
-         (REGLOCKMACROS_AR_RELEASE_MINOR_VERSION != PLATFORM_AR_RELEASE_MINOR_VERSION))
+    #if ((REGLOCKMACROS_AR_RELEASE_MAJOR_VERSION != PLATFORM_TYPES_AR_RELEASE_MAJOR_VERSION) || \
+         (REGLOCKMACROS_AR_RELEASE_MINOR_VERSION != PLATFORM_TYPES_AR_RELEASE_MINOR_VERSION))
         #error "AutoSar Version Numbers of RegLockMacros.h and Platform_Types.h are different"
     #endif
 
@@ -155,10 +173,10 @@ extern "C"{
 /*==================================================================================================
 *                                       DEFINES AND MACROS
 ==================================================================================================*/
-/* Sanity check on USER_MODE_REG_PROT_ENABLED. This define must exist and has to have one of the
+/* Sanity check on USER_MODE_REG_PROT_ENABLED. This define must exist and has to have one of the 
 following 2 values: STD_ON or STD_OFF */
 #ifndef USER_MODE_REG_PROT_ENABLED
-    #error "USER_MODE_REG_PROT_ENABLED is not defined"
+    #error "USER_MODE_REG_PROT_ENABLED is not defined" 
 #endif
 #if ((USER_MODE_REG_PROT_ENABLED != STD_ON) && (USER_MODE_REG_PROT_ENABLED != STD_OFF))
     #error "USER_MODE_REG_PROT_ENABLED has a wrong value"
@@ -219,38 +237,38 @@ following 2 values: STD_ON or STD_OFF */
 #ifdef IPV_REG_PROT
     #if (IPV_S32K2XX_PLATFORM_U32 == IPV_GET_PLATFORM_U32(IPV_REG_PROT))
         /**
-        * @brief Offset to REG_PROT mirrored registers area
+        * @brief Offset to REG_PROT mirrored registers area 
         *        of an IP module
         */
         #define MIRRORED_ADDR_OFFSET_U32          ((uint32)0x400UL)
     #elif (IPV_S32K3XX_PLATFORM_U32 == IPV_GET_PLATFORM_U32(IPV_REG_PROT))
         /**
-        * @brief Offset to REG_PROT mirrored registers area
+        * @brief Offset to REG_PROT mirrored registers area 
         *        of an IP module
         */
         #define MIRRORED_ADDR_OFFSET_U32          ((uint32)0x400UL)
     #elif (IPV_S32XX_PLATFORM_U32 == IPV_GET_PLATFORM_U32(IPV_REG_PROT))
         /**
-        * @brief Offset to REG_PROT mirrored registers area
+        * @brief Offset to REG_PROT mirrored registers area 
         *        of an IP module
         */
         #define MIRRORED_ADDR_OFFSET_U32          ((uint32)0x400UL)
     #elif (IPV_S32R41_PLATFORM_U32 == IPV_GET_PLATFORM_U32(IPV_REG_PROT))
         /**
-        * @brief Offset to REG_PROT mirrored registers area
+        * @brief Offset to REG_PROT mirrored registers area 
         *        of an IP module
         */
         #define MIRRORED_ADDR_OFFSET_U32          ((uint32)0x400UL)
     #else
         /**
-        * @brief Offset to REG_PROT mirrored registers area
+        * @brief Offset to REG_PROT mirrored registers area 
         *        of an IP module
         */
         #define MIRRORED_ADDR_OFFSET_U32          ((uint32)0x2000UL)
     #endif
 #else
     /**
-    * @brief Offset to REG_PROT mirrored registers area
+    * @brief Offset to REG_PROT mirrored registers area 
     *        of an IP module
     */
     #define MIRRORED_ADDR_OFFSET_U32          ((uint32)0x2000UL)
@@ -286,7 +304,7 @@ following 2 values: STD_ON or STD_OFF */
         * @brief Offset to baseAddress of the REG_PROT GCR register
         *        of an IP module
         */
-        #define SLBR_ADDR_OFFSET_U32              ((uint32)0x3800UL)
+        #define SLBR_ADDR_OFFSET_U32              ((uint32)0x3800UL)   
     #endif
 #else
     /**
@@ -298,7 +316,7 @@ following 2 values: STD_ON or STD_OFF */
 
 /**
 * @brief Macro for getting the address of a lockable
-*        register's corresponding SLBR register
+*        register's corresponding SLBR register 
 */
 #define SLBR_ADDR32(baseAddr, regAddr, prot_mem)  (((uint32)(baseAddr)) + ((prot_mem) * SLBR_ADDR_OFFSET_U32) +      \
                                                     ENDIANNESS((uint32)((((uint32)(regAddr)) - ((uint32)(baseAddr)))>>0x2U)))
@@ -345,7 +363,7 @@ following 2 values: STD_ON or STD_OFF */
         * @brief Offset to baseAddress of the REG_PROT GCR register
         *        of an IP module
         */
-        #define GCR_OFFSET_U32                    ((uint32)0x3FFCUL)
+        #define GCR_OFFSET_U32                    ((uint32)0x3FFCUL)   
     #endif
 #else
     /**
@@ -370,7 +388,7 @@ following 2 values: STD_ON or STD_OFF */
 
 
 /*==================================================================================================
-*                     MACROS FOR WORKING WITH SW AND HW LOCK
+*                     MACROS FOR WORKING WITH SW AND HW LOCK    
 ==================================================================================================*/
 
 
@@ -379,9 +397,9 @@ following 2 values: STD_ON or STD_OFF */
 *
 * @details    Based on the address of the register to be soft locked and on the address
 *             of the IP where the register belongs to, the corresponding soft lock bit
-*             is set
+*             is set    
 *
-* @param[in]  baseAddr - base address of the IP the register belongs to
+* @param[in]  baseAddr - base address of the IP the register belongs to 
 * @param[in]  regAddr  - address of the register to soft lock
 * @param[in]  prot_mem - protection size of the IP
 *
@@ -422,9 +440,9 @@ following 2 values: STD_ON or STD_OFF */
 *
 * @details    Based on the address of the register to be soft unlocked and on the address
 *             of the IP where the register belongs to, the corresponding soft lock bit
-*             is cleared
+*             is cleared    
 *
-* @param[in]  baseAddr - base address of the IP the register belongs to
+* @param[in]  baseAddr - base address of the IP the register belongs to 
 * @param[in]  regAddr  - address of the register to soft unlock
 * @param[in]  prot_mem - protection size of the IP
 *
@@ -463,7 +481,7 @@ following 2 values: STD_ON or STD_OFF */
 /**
 * @brief      Reads the status of the soft lock bit of a register
 *
-* @param[in]  baseAddr - base address of the IP the register belongs to
+* @param[in]  baseAddr - base address of the IP the register belongs to 
 * @param[in]  regAddr  - address of the register for which to get soft lock bit status
 * @param[in]  prot_mem - protection size of the IP
 *
@@ -501,12 +519,12 @@ following 2 values: STD_ON or STD_OFF */
 #endif /* (STD_ON == USER_MODE_REG_PROT_ENABLED) */
 
 /**
-* @brief      Sets one bit in a 8 bit register and locks the register automatically
+* @brief      Sets one bit in a 8 bit register and locks the register automatically 
 *
 * @details    Clears first the corresponding soft lock bit and writes the REG_PROT mirrored value
 *             of the register the bit belongs to, which automatically soft locks the register
 *
-* @param[in]  baseAddr - base address of the IP the bit belongs to
+* @param[in]  baseAddr - base address of the IP the bit belongs to 
 * @param[in]  regAddr  - address of the register the bit belongs to
 * @param[in]  prot_mem - protection size of the IP
 * @param[in]  mask     - 8 bit mask of the bit
@@ -527,12 +545,12 @@ following 2 values: STD_ON or STD_OFF */
 #endif /* (STD_ON == USER_MODE_REG_PROT_ENABLED) */
 
 /**
-* @brief      Sets one bit in a 16 bit register and locks the register automatically
+* @brief      Sets one bit in a 16 bit register and locks the register automatically 
 *
 * @details    Clears first the corresponding soft lock bit and writes the REG_PROT mirrored value
 *             of the register the bit belongs to, which automatically soft locks the register
 *
-* @param[in]  baseAddr - base address of the IP the bit belongs to
+* @param[in]  baseAddr - base address of the IP the bit belongs to 
 * @param[in]  regAddr  - address of the register the bit belongs to
 * @param[in]  prot_mem - protection size of the IP
 * @param[in]  mask     - 8 bit mask of the bit
@@ -545,7 +563,7 @@ following 2 values: STD_ON or STD_OFF */
         {                                                                                 \
             REG_CLR_SOFT_LOCK16((baseAddr), (regAddr), (prot_mem));                         \
             RLM_REG_BIT_SET16((regAddr) + ((prot_mem) * MIRRORED_ADDR_OFFSET_U32),(mask));    \
-        }
+        } 
 #else
 
     #define REG_BIT_SET_LOCK16(baseAddr, regAddr, prot_mem, mask)                         \
@@ -553,12 +571,12 @@ following 2 values: STD_ON or STD_OFF */
 #endif /* (STD_ON == USER_MODE_REG_PROT_ENABLED) */
 
 /**
-* @brief      Sets one bit in a 32 bit register and locks the register automatically
+* @brief      Sets one bit in a 32 bit register and locks the register automatically 
 *
 * @details    Clears first the corresponding soft lock bit and writes the REG_PROT mirrored value
 *             of the register the bit belongs to, which automatically soft locks the register
 *
-* @param[in]  baseAddr - base address of the IP the bit belongs to
+* @param[in]  baseAddr - base address of the IP the bit belongs to 
 * @param[in]  regAddr  - address of the register the bit belongs to
 * @param[in]  prot_mem - protection size of the IP
 * @param[in]  mask     - 8 bit mask of the bit
@@ -579,12 +597,12 @@ following 2 values: STD_ON or STD_OFF */
 #endif /* (STD_ON == USER_MODE_REG_PROT_ENABLED) */
 
 /**
-* @brief      Clears one bit in a 8 bit register and locks the register automatically
+* @brief      Clears one bit in a 8 bit register and locks the register automatically 
 *
 * @details    Clears first the corresponding soft lock bit and writes the REG_PROT mirrored value
 *             of the register the bit belongs to, which automatically soft locks the register
 *
-* @param[in]  baseAddr - base address of the IP the bit belongs to
+* @param[in]  baseAddr - base address of the IP the bit belongs to 
 * @param[in]  regAddr  - address of the register the bit belongs to
 * @param[in]  prot_mem - protection size of the IP
 * @param[in]  mask     - 8 bit mask of the bit
@@ -605,12 +623,12 @@ following 2 values: STD_ON or STD_OFF */
 #endif /* (STD_ON == USER_MODE_REG_PROT_ENABLED) */
 
 /**
-* @brief      Clears one bit in a 16 bit register and locks the register automatically
+* @brief      Clears one bit in a 16 bit register and locks the register automatically 
 *
 * @details    Clears first the corresponding soft lock bit and writes the REG_PROT mirrored value
 *             of the register the bit belongs to, which automatically soft locks the register
 *
-* @param[in]  baseAddr - base address of the IP the bit belongs to
+* @param[in]  baseAddr - base address of the IP the bit belongs to 
 * @param[in]  regAddr  - address of the register the bit belongs to
 * @param[in]  prot_mem - protection size of the IP
 * @param[in]  mask     - 8 bit mask of the bit
@@ -627,16 +645,16 @@ following 2 values: STD_ON or STD_OFF */
 #else
 
     #define REG_BIT_CLEAR_LOCK16(baseAddr, regAddr, prot_mem, mask)                                \
-        RLM_REG_BIT_CLEAR16((regAddr),(mask))
+        RLM_REG_BIT_CLEAR16((regAddr),(mask))                                  
 #endif /* (STD_ON == USER_MODE_REG_PROT_ENABLED) */
 
 /**
-* @brief      Clears one bit in a 32 bit register and locks the register automatically
+* @brief      Clears one bit in a 32 bit register and locks the register automatically 
 *
 * @details    Clears first the corresponding soft lock bit and writes the REG_PROT mirrored value
 *             of the register the bit belongs to, which automatically soft locks the register
 *
-* @param[in]  baseAddr - base address of the IP the bit belongs to
+* @param[in]  baseAddr - base address of the IP the bit belongs to 
 * @param[in]  regAddr  - address of the register the bit belongs to
 * @param[in]  prot_mem - protection size of the IP
 * @param[in]  mask     - 8 bit mask of the bit
@@ -657,15 +675,15 @@ following 2 values: STD_ON or STD_OFF */
 #endif /* (STD_ON == USER_MODE_REG_PROT_ENABLED) */
 
 /**
-* @brief      Writes the content of a 8 bit register and locks it automatically
+* @brief      Writes the content of a 8 bit register and locks it automatically 
 *
 * @details    Clears first the corresponding soft lock bit and writes the REG_PROT mirrored value
 *             of the register, which automatically soft locks the register
 *
-* @param[in]  baseAddr - base address of the IP the register belongs to
+* @param[in]  baseAddr - base address of the IP the register belongs to 
 * @param[in]  regAddr  - address of the register to write and soft lock
 * @param[in]  prot_mem - protection size of the IP
-* @param[in]  value    - 8 bit value the register will be written with
+* @param[in]  value    - 8 bit value the register will be written with 
 *
 * @return     void
 */
@@ -683,15 +701,15 @@ following 2 values: STD_ON or STD_OFF */
 #endif /* (STD_ON == USER_MODE_REG_PROT_ENABLED) */
 
 /**
-* @brief      Writes the content of a 16 bit register and locks it automatically
+* @brief      Writes the content of a 16 bit register and locks it automatically 
 *
 * @details    Clears first the corresponding soft lock bit and writes the REG_PROT mirrored value
 *             of the register, which automatically soft locks the register
 *
-* @param[in]  baseAddr - base address of the IP the register belongs to
+* @param[in]  baseAddr - base address of the IP the register belongs to 
 * @param[in]  regAddr  - address of the register to write and soft lock
 * @param[in]  prot_mem - protection size of the IP
-* @param[in]  value    - 16 bit value the register will be written with
+* @param[in]  value    - 16 bit value the register will be written with 
 *
 * @return     void
 */
@@ -709,15 +727,15 @@ following 2 values: STD_ON or STD_OFF */
 #endif /* (STD_ON == USER_MODE_REG_PROT_ENABLED) */
 
 /**
-* @brief      Writes the content of a 32 bit register and locks it automatically
+* @brief      Writes the content of a 32 bit register and locks it automatically 
 *
 * @details    Clears first the corresponding soft lock bit and writes the REG_PROT mirrored value
 *             of the register, which automatically soft locks the register
 *
-* @param[in]  baseAddr - base address of the IP the register belongs to
+* @param[in]  baseAddr - base address of the IP the register belongs to 
 * @param[in]  regAddr  - address of the register to write and soft lock
 * @param[in]  prot_mem - protection size of the IP
-* @param[in]  value    - 32 bit value the register will be written with
+* @param[in]  value    - 32 bit value the register will be written with 
 *
 * @return     void
 */
@@ -737,17 +755,17 @@ following 2 values: STD_ON or STD_OFF */
 
 /**
 * @brief      Clears the content of a 8 bit register, writes it with the value in
-*             'value' parameter masked with the one in 'mask' parameter and locks
-*             it automatically
+*             'value' parameter masked with the one in 'mask' parameter and locks 
+*             it automatically 
 *
-* @details    Clears first the corresponding soft lock bit and writes the REG_PROT
+* @details    Clears first the corresponding soft lock bit and writes the REG_PROT 
 *             mirrored value of the register, which automatically soft locks the register
 *
-* @param[in]  baseAddr - base address of the IP the register belongs to
+* @param[in]  baseAddr - base address of the IP the register belongs to 
 * @param[in]  regAddr  - address of the register to write and soft lock
 * @param[in]  prot_mem - protection size of the IP
-* @param[in]  mask     - 8 bit mask the register will be written with
-* @param[in]  value    - 8 bit value the register will be written with
+* @param[in]  mask     - 8 bit mask the register will be written with 
+* @param[in]  value    - 8 bit value the register will be written with 
 *
 * @return     void
 */
@@ -767,47 +785,47 @@ following 2 values: STD_ON or STD_OFF */
 
 /**
 * @brief      Clears the content of a 16 bit register, writes it with the value in
-*             'value' parameter masked with the one in 'mask' parameter and locks
-*             it automatically
+*             'value' parameter masked with the one in 'mask' parameter and locks 
+*             it automatically 
 *
-* @details    Clears first the corresponding soft lock bit and writes the REG_PROT
+* @details    Clears first the corresponding soft lock bit and writes the REG_PROT 
 *             mirrored value of the register, which automatically soft locks the register
 *
-* @param[in]  baseAddr - base address of the IP the register belongs to
+* @param[in]  baseAddr - base address of the IP the register belongs to 
 * @param[in]  regAddr  - address of the register to write and soft lock
 * @param[in]  prot_mem - protection size of the IP
-* @param[in]  mask     - 16 bit mask the register will be written with
-* @param[in]  value    - 16 bit value the register will be written with
+* @param[in]  mask     - 16 bit mask the register will be written with 
+* @param[in]  value    - 16 bit value the register will be written with 
 *
 * @return     void
 */
 
 #if (STD_ON == USER_MODE_REG_PROT_ENABLED)
-
+    
     #define REG_RMW_LOCK16(baseAddr, regAddr, prot_mem, mask, value)                         \
     {                                                                                        \
         REG_CLR_SOFT_LOCK16((baseAddr), (regAddr), (prot_mem));                                \
         RLM_REG_RMW16((regAddr) + ((prot_mem) * MIRRORED_ADDR_OFFSET_U32), (mask), (value));     \
     }
 #else
-
+    
     #define REG_RMW_LOCK16(baseAddr, regAddr, prot_mem, mask, value)                         \
         RLM_REG_RMW16((regAddr), (mask), (value))
 #endif /* (STD_ON == USER_MODE_REG_PROT_ENABLED) */
 
 /**
 * @brief      Clears the content of a 32 bit register, writes it with the value in
-*             'value' parameter masked with the one in 'mask' parameter and locks
-*             it automatically
+*             'value' parameter masked with the one in 'mask' parameter and locks 
+*             it automatically 
 *
-* @details    Clears first the corresponding soft lock bit and writes the REG_PROT
+* @details    Clears first the corresponding soft lock bit and writes the REG_PROT 
 *             mirrored value of the register, which automatically soft locks the register
 *
-* @param[in]  baseAddr - base address of the IP the register belongs to
+* @param[in]  baseAddr - base address of the IP the register belongs to 
 * @param[in]  regAddr  - address of the register to write and soft lock
 * @param[in]  prot_mem - protection size of the IP
-* @param[in]  mask     - 32 bit mask the register will be written with
-* @param[in]  value    - 32 bit value the register will be written with
+* @param[in]  mask     - 32 bit mask the register will be written with 
+* @param[in]  value    - 32 bit value the register will be written with 
 *
 * @return     void
 */
@@ -825,9 +843,9 @@ following 2 values: STD_ON or STD_OFF */
 #endif /* (STD_ON == USER_MODE_REG_PROT_ENABLED) */
 
 /**
-* @brief      Sets the hardlock bit of an IP module
+* @brief      Sets the hardlock bit of an IP module 
 *
-* @param[in]  baseAddr - base address of the IP to be hard locked
+* @param[in]  baseAddr - base address of the IP to be hard locked 
 * @param[in]  prot_mem - the protection size of the IP
 *
 * @return     void
@@ -837,9 +855,9 @@ following 2 values: STD_ON or STD_OFF */
 
 
 /**
-* @brief      Reads the Hard Lock bit of an IP module
+* @brief      Reads the Hard Lock bit of an IP module 
 *
-* @param[in]  baseAddr - base address of the IP for which hard lock status is read
+* @param[in]  baseAddr - base address of the IP for which hard lock status is read 
 * @param[in]  prot_mem - the protection size of the IP
 *
 * @return     uint8  - 1 if hard lock is enabled
@@ -849,20 +867,20 @@ following 2 values: STD_ON or STD_OFF */
         ((uint8)(RLM_REG_BIT_GET32((baseAddr) + ((prot_mem) * GCR_OFFSET_U32), REGPROT_GCR_HLB_MASK_U32) >> REGPROT_GCR_HLB_POS_U32))
 
 /**
-* @brief      Sets the User Access Allowed bit of an IP module
+* @brief      Sets the User Access Allowed bit of an IP module 
 *
-* @param[in]  baseAddr - base address of the IP for which UAA bit is set
+* @param[in]  baseAddr - base address of the IP for which UAA bit is set 
 * @param[in]  prot_mem - the protection size of the IP
 *
 * @return     void
 */
 #ifdef IPV_REG_PROT
     #if (IPV_S32S2XX_PLATFORM_U32 == IPV_GET_PLATFORM_U32(IPV_REG_PROT))
-
+    
         #define SET_USER_ACCESS_ALLOWED(baseAddr, prot_mem )  \
                 RLM_REG_BIT_SET32((baseAddr) + ((prot_mem) * (((baseAddr) >= 0x55600000UL) ? (GCR_AE_OFFSET_U32) : (GCR_OFFSET_U32))), REGPROT_GCR_UAA_MASK_U32)
     #else
-
+    
         #define SET_USER_ACCESS_ALLOWED(baseAddr, prot_mem )  \
                 RLM_REG_BIT_SET32((baseAddr) + ((prot_mem) * GCR_OFFSET_U32), REGPROT_GCR_UAA_MASK_U32)
     #endif
@@ -873,9 +891,9 @@ following 2 values: STD_ON or STD_OFF */
 #endif
 
 /**
-* @brief      Clears the User Access Allowed bit of an IP module
+* @brief      Clears the User Access Allowed bit of an IP module 
 *
-* @param[in]  baseAddr - base address of the IP for which UAA bit is cleared
+* @param[in]  baseAddr - base address of the IP for which UAA bit is cleared 
 * @param[in]  prot_mem - the protection size of the IP
 *
 * @return     void
@@ -883,11 +901,11 @@ following 2 values: STD_ON or STD_OFF */
 #ifdef IPV_REG_PROT
 
     #if (IPV_S32S2XX_PLATFORM_U32 == IPV_GET_PLATFORM_U32(IPV_REG_PROT))
-
+    
         #define CLR_USER_ACCESS_ALLOWED(baseAddr, prot_mem)  \
                 RLM_REG_BIT_CLEAR32((baseAddr) + ((prot_mem) * (((baseAddr) >= 0x55600000UL) ? (GCR_AE_OFFSET_U32) : (GCR_OFFSET_U32))), REGPROT_GCR_UAA_MASK_U32)
     #else
-
+    
         #define CLR_USER_ACCESS_ALLOWED(baseAddr, prot_mem)  \
                 RLM_REG_BIT_CLEAR32((baseAddr) + ((prot_mem) * GCR_OFFSET_U32), REGPROT_GCR_UAA_MASK_U32)
     #endif
@@ -898,9 +916,9 @@ following 2 values: STD_ON or STD_OFF */
 #endif
 
 /**
-* @brief      Reads the User Access Allowed bit of an IP module
+* @brief      Reads the User Access Allowed bit of an IP module 
 *
-* @param[in]  baseAddr - base address of the IP for which UAA is read
+* @param[in]  baseAddr - base address of the IP for which UAA is read 
 * @param[in]  prot_mem - the protection size of the IP
 *
 * @return     uint8  - 1 if User Access Allow is enabled
@@ -908,11 +926,11 @@ following 2 values: STD_ON or STD_OFF */
 */
 #ifdef IPV_REG_PROT
     #if (IPV_S32S2XX_PLATFORM_U32 == IPV_GET_PLATFORM_U32(IPV_REG_PROT))
-
+    
         #define GET_USER_ACCESS_ALLOWED(baseAddr, prot_mem)  \
                 ((uint8)(RLM_REG_BIT_GET32((baseAddr) + ((prot_mem) * (((baseAddr) >= 0x55600000UL) ? (GCR_AE_OFFSET_U32) : (GCR_OFFSET_U32))), REGPROT_GCR_UAA_MASK_U32) >> REGPROT_GCR_UAA_POS_U32))
     #else
-
+    
         #define GET_USER_ACCESS_ALLOWED(baseAddr, prot_mem)  \
                 ((uint8)(RLM_REG_BIT_GET32((baseAddr) + ((prot_mem) * GCR_OFFSET_U32), REGPROT_GCR_UAA_MASK_U32) >> REGPROT_GCR_UAA_POS_U32))
     #endif

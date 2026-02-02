@@ -1,11 +1,29 @@
-/*
- * Copyright 2024-2025 NXP
- *
- * SPDX-License-Identifier: BSD-3-Clause
- */
+/*==================================================================================================
+*   Project              : RTD AUTOSAR 4.4
+*   Platform             : CORTEXM
+*   Peripheral           : 
+*   Dependencies         : none
+*
+*   Autosar Version      : 4.4.0
+*   Autosar Revision     : ASR_REL_4_4_REV_0000
+*   Autosar Conf.Variant :
+*   SW Version           : 4.0.0
+*   Build Version        : S32_RTD_4_0_0_D2210_ASR_REL_4_4_REV_0000_20221031
+*
+*   (c) Copyright 2022 NXP Semiconductors
+*   All Rights Reserved.
+*
+*   NXP Confidential. This software is owned or controlled by NXP and may only be
+*   used strictly in accordance with the applicable license terms. By expressly
+*   accepting such terms or by downloading, installing, activating and/or otherwise
+*   using the software, you are agreeing that you have read, and that you agree to
+*   comply with and are bound by, such license terms. If you do not agree to be
+*   bound by the applicable license terms, then you may not retain, install,
+*   activate or otherwise use the software.
+==================================================================================================*/
 /**
 *   @file       Clock_Ip_FracDiv.c
-*   @version    0.8.0
+*   @version    4.0.0
 *
 *   @brief   CLOCK driver implementations.
 *   @details CLOCK driver implementations.
@@ -36,10 +54,10 @@ extern "C"{
 ==================================================================================================*/
 #define CLOCK_IP_FRACDIV_VENDOR_ID_C                      43
 #define CLOCK_IP_FRACDIV_AR_RELEASE_MAJOR_VERSION_C       4
-#define CLOCK_IP_FRACDIV_AR_RELEASE_MINOR_VERSION_C       9
+#define CLOCK_IP_FRACDIV_AR_RELEASE_MINOR_VERSION_C       4
 #define CLOCK_IP_FRACDIV_AR_RELEASE_REVISION_VERSION_C    0
-#define CLOCK_IP_FRACDIV_SW_MAJOR_VERSION_C               0
-#define CLOCK_IP_FRACDIV_SW_MINOR_VERSION_C               8
+#define CLOCK_IP_FRACDIV_SW_MAJOR_VERSION_C               4
+#define CLOCK_IP_FRACDIV_SW_MINOR_VERSION_C               0
 #define CLOCK_IP_FRACDIV_SW_PATCH_VERSION_C               0
 
 /*==================================================================================================
@@ -82,15 +100,6 @@ extern "C"{
 *                                         LOCAL VARIABLES
 ==================================================================================================*/
 
-/* Clock start initialized section data */
-#define MCU_START_SEC_VAR_INIT_UNSPECIFIED
-#include "Mcu_MemMap.h"
-
-static Clock_Ip_NameType Clock_Ip_FracDivName = RESERVED_CLK;
-
-/* Clock stop initialized section data */
-#define MCU_STOP_SEC_VAR_INIT_UNSPECIFIED
-#include "Mcu_MemMap.h"
 /*==================================================================================================
 *                                        GLOBAL CONSTANTS
 ==================================================================================================*/
@@ -100,11 +109,6 @@ static Clock_Ip_NameType Clock_Ip_FracDivName = RESERVED_CLK;
 ==================================================================================================*/
 
 /*==================================================================================================
-*                                    GLOBAL FUNCTION PROTOTYPES
-==================================================================================================*/
-
-
-/*==================================================================================================
 *                                    LOCAL FUNCTION PROTOTYPES
 ==================================================================================================*/
 /* Clock start section code */
@@ -112,20 +116,12 @@ static Clock_Ip_NameType Clock_Ip_FracDivName = RESERVED_CLK;
 
 #include "Mcu_MemMap.h"
 
-static void Clock_Ip_CallbackDfsEmptyName(Clock_Ip_NameType PllName);
-static void Clock_Ip_CallbackDfsEmpty1(void);
-static void Clock_Ip_CallbackDfsEmpty2(ClockLLD_FracDivParameterIdentifierType ParamId, uint32 Value);
-static void Clock_Ip_CallbackDfsEmpty3(float DivisionValue);
-static ClockLLD_StatusReturnType Clock_Ip_CallbackDfsEmpty4(void);
-#ifdef CLOCK_IP_DFS_BYPASS_CLKOUT_ENABLE_MFI_MFN
-static void Clock_Ip_SetNameDfsBypassClkoutEnableMfiMfn(Clock_Ip_NameType Name);
-static void Clock_Ip_ResetDfsBypassClkoutEnableMfiMfn(void);
-static void Clock_Ip_SetOptionalParameterDfsBypassClkoutEnableMfiMfn(ClockLLD_FracDivParameterIdentifierType ParamId, uint32 Value);
-static void Clock_Ip_SetDfsBypassClkoutEnableMfiMfn(float DivisionValue);
-static void Clock_Ip_EnableDfsBypassClkoutEnableMfiMfn(void);
-static void Clock_Ip_WaitDfsBypassClkoutEnableMfiMfn(void);
-static void Clock_Ip_LockDfsBypassClkoutEnableMfiMfn(float DivisionValue);
-static ClockLLD_StatusReturnType Clock_Ip_GetStatusDfsBypassClkoutEnableMfiMfn(void);
+static void Clock_Ip_CallbackFracDivEmpty(Clock_Ip_FracDivConfigType const* Config);
+static Clock_Ip_DfsStatusType Clock_Ip_CallbackFracDivEmptyComplete(Clock_Ip_NameType DfsName);
+#ifdef CLOCK_IP_DFS_MFI_MFN
+static void Clock_Ip_ResetDfsMfiMfn(Clock_Ip_FracDivConfigType const *Config);
+static void Clock_Ip_SetDfsMfiMfn(Clock_Ip_FracDivConfigType const *Config);
+static Clock_Ip_DfsStatusType Clock_Ip_CompleteDfsMfiMfn(Clock_Ip_NameType DfsName);
 #endif
 
 /* Clock stop section code */
@@ -140,497 +136,53 @@ static ClockLLD_StatusReturnType Clock_Ip_GetStatusDfsBypassClkoutEnableMfiMfn(v
 
 #include "Mcu_MemMap.h"
 
-static void Clock_Ip_CallbackDfsEmptyName(Clock_Ip_NameType DfsName)
+static void Clock_Ip_CallbackFracDivEmpty(Clock_Ip_FracDivConfigType const* Config)
+{
+    (void)Config;
+    /* No implementation */
+}
+
+static Clock_Ip_DfsStatusType Clock_Ip_CallbackFracDivEmptyComplete(Clock_Ip_NameType DfsName)
 {
     (void)DfsName;
     /* No implementation */
-}
-static void Clock_Ip_CallbackDfsEmpty1(void)
-{
-    /* No implementation */
-}
-static void Clock_Ip_CallbackDfsEmpty2(ClockLLD_FracDivParameterIdentifierType ParamId, uint32 Value)
-{
-    (void)ParamId;
-    (void)Value;
-    /* No implementation */
-}
-static void Clock_Ip_CallbackDfsEmpty3(float DivisionValue)
-{
-    (void)DivisionValue;
-    /* No implementation */
-}
-static ClockLLD_StatusReturnType Clock_Ip_CallbackDfsEmpty4(void)
-{
-    /* No implementation */
-    return CLOCK_LLD_STATUS_SUCCESS;
+    return STATUS_DFS_NOT_ENABLED;
 }
 
-#ifdef CLOCK_IP_DFS_BYPASS_CLKOUT_ENABLE_MFI_MFN
-static void Clock_Ip_SetNameDfsBypassClkoutEnableMfiMfn(Clock_Ip_NameType Name)
+#ifdef CLOCK_IP_DFS_MFI_MFN
+static void Clock_Ip_ResetDfsMfiMfn(Clock_Ip_FracDivConfigType const *Config)
 {
-    Clock_Ip_FracDivName = Name;
-}
-static void Clock_Ip_ResetDfsBypassClkoutEnableMfiMfn(void)
-{
-    switch (Clock_Ip_FracDivName)
-    {
-#if defined(CLOCK_IP_HAS_COREPLL_DFS0_CLK)
-        case COREPLL_DFS0_CLK:
-        {
-            IP_CORE_PLL->DFS_CTRL_0.RW &= ~(PLL_DFS_CTRL_0_ENABLE_MASK | PLL_DFS_CTRL_0_CLKOUT_EN_MASK);
-        }
-        break;
-#endif
-#if defined(CLOCK_IP_HAS_COREPLL_DFS1_CLK)
-        case COREPLL_DFS1_CLK:
-        {
-            IP_CORE_PLL->DFS_CTRL_1.RW &= ~(PLL_DFS_CTRL_0_ENABLE_MASK | PLL_DFS_CTRL_0_CLKOUT_EN_MASK);
-        }
-        break;
-#endif
-#if defined(CLOCK_IP_HAS_COREPLL_DFS2_CLK)
-        case COREPLL_DFS2_CLK:
-        {
-            IP_CORE_PLL->DFS_CTRL_2.RW &= ~(PLL_DFS_CTRL_0_ENABLE_MASK | PLL_DFS_CTRL_0_CLKOUT_EN_MASK);
-        }
-        break;
-#endif
-#if defined(CLOCK_IP_HAS_COREPLL_DFS3_CLK)
-        case COREPLL_DFS3_CLK:
-        {
-            IP_CORE_PLL->DFS_CTRL_3.RW &= ~(PLL_DFS_CTRL_0_ENABLE_MASK | PLL_DFS_CTRL_0_CLKOUT_EN_MASK);
-        }
-        break;
-#endif
-#if defined(CLOCK_IP_HAS_PERIPHPLL_DFS0_CLK)
-        case PERIPHPLL_DFS0_CLK:
-        {
-            IP_PERIPH_PLL->DFS_CTRL_0.RW &= ~(PLL_DFS_CTRL_0_ENABLE_MASK | PLL_DFS_CTRL_0_CLKOUT_EN_MASK);
-        }
-        break;
-#endif
-#if defined(CLOCK_IP_HAS_PERIPHPLL_DFS1_CLK)
-        case PERIPHPLL_DFS1_CLK:
-        {
-            IP_PERIPH_PLL->DFS_CTRL_1.RW &= ~(PLL_DFS_CTRL_0_ENABLE_MASK | PLL_DFS_CTRL_0_CLKOUT_EN_MASK);
-        }
-        break;
-#endif
-#if defined(CLOCK_IP_HAS_PERIPHPLL_DFS2_CLK)
-        case PERIPHPLL_DFS2_CLK:
-        {
-            IP_PERIPH_PLL->DFS_CTRL_2.RW &= ~(PLL_DFS_CTRL_0_ENABLE_MASK | PLL_DFS_CTRL_0_CLKOUT_EN_MASK);
-        }
-        break;
-#endif
-#if defined(CLOCK_IP_HAS_PERIPHPLL_DFS3_CLK)
-        case PERIPHPLL_DFS3_CLK:
-        {
-            IP_PERIPH_PLL->DFS_CTRL_3.RW &= ~(PLL_DFS_CTRL_0_ENABLE_MASK | PLL_DFS_CTRL_0_CLKOUT_EN_MASK);
-        }
-        break;
-#endif
-#if defined(CLOCK_IP_HAS_PLL0_DFS0_CLK)
-        case PLL0_DFS0_CLK:
-        {
-            IP_PLL_0->DFS_CTRL_0.RW &= ~(PLL_DFS_CTRL_0_ENABLE_MASK | PLL_DFS_CTRL_0_CLKOUT_EN_MASK);
-        }
-        break;
-#endif
-#if defined(CLOCK_IP_HAS_PLL0_DFS1_CLK)
-        case PLL0_DFS1_CLK:
-        {
-            IP_PLL_0->DFS_CTRL_1.RW &= ~(PLL_DFS_CTRL_0_ENABLE_MASK | PLL_DFS_CTRL_0_CLKOUT_EN_MASK);
-        }
-        break;
-#endif
-#if defined(CLOCK_IP_HAS_PLL0_DFS2_CLK)
-        case PLL0_DFS2_CLK:
-        {
-            IP_PLL_0->DFS_CTRL_2.RW &= ~(PLL_DFS_CTRL_0_ENABLE_MASK | PLL_DFS_CTRL_0_CLKOUT_EN_MASK);
-        }
-        break;
-#endif
-#if defined(CLOCK_IP_HAS_PLL0_DFS3_CLK)
-        case PLL0_DFS3_CLK:
-        {
-            IP_PLL_0->DFS_CTRL_3.RW &= ~(PLL_DFS_CTRL_0_ENABLE_MASK | PLL_DFS_CTRL_0_CLKOUT_EN_MASK);
-        }
-        break;
-#endif
-#if defined(CLOCK_IP_HAS_PLL1_DFS0_CLK)
-        case PLL1_DFS0_CLK:
-        {
-            IP_PLL_1->DFS_CTRL_0.RW &= ~(PLL_DFS_CTRL_0_ENABLE_MASK | PLL_DFS_CTRL_0_CLKOUT_EN_MASK);
-        }
-        break;
-#endif
-#if defined(CLOCK_IP_HAS_PLL1_DFS1_CLK)
-        case PLL1_DFS1_CLK:
-        {
-            IP_PLL_1->DFS_CTRL_1.RW &= ~(PLL_DFS_CTRL_0_ENABLE_MASK | PLL_DFS_CTRL_0_CLKOUT_EN_MASK);
-        }
-        break;
-#endif
-#if defined(CLOCK_IP_HAS_PLL1_DFS2_CLK)
-        case PLL1_DFS2_CLK:
-        {
-            IP_PLL_1->DFS_CTRL_2.RW &= ~(PLL_DFS_CTRL_0_ENABLE_MASK | PLL_DFS_CTRL_0_CLKOUT_EN_MASK);
-        }
-        break;
-#endif
-#if defined(CLOCK_IP_HAS_PLL1_DFS3_CLK)
-        case PLL1_DFS3_CLK:
-        {
-            IP_PLL_1->DFS_CTRL_3.RW &= ~(PLL_DFS_CTRL_0_ENABLE_MASK | PLL_DFS_CTRL_0_CLKOUT_EN_MASK);
-        }
-        break;
-#endif
-#if defined(CLOCK_IP_HAS_CPEPLL_DFS0_CLK)
-        case CPEPLL_DFS0_CLK:
-        {
-            IP_PLL_CPE->DFS_CTRL_0.RW &= ~(PLL_DFS_CTRL_0_ENABLE_MASK | PLL_DFS_CTRL_0_CLKOUT_EN_MASK);
-        }
-        break;
-#endif
-#if defined(CLOCK_IP_HAS_CPEPLL_DFS1_CLK)
-        case CPEPLL_DFS1_CLK:
-        {
-            IP_PLL_CPE->DFS_CTRL_1.RW &= ~(PLL_DFS_CTRL_0_ENABLE_MASK | PLL_DFS_CTRL_0_CLKOUT_EN_MASK);
-        }
-        break;
-#endif
-#if defined(CLOCK_IP_HAS_CPEPLL_DFS2_CLK)
-        case CPEPLL_DFS2_CLK:
-        {
-            IP_PLL_CPE->DFS_CTRL_2.RW &= ~(PLL_DFS_CTRL_0_ENABLE_MASK | PLL_DFS_CTRL_0_CLKOUT_EN_MASK);
-        }
-        break;
-#endif
-#if defined(CLOCK_IP_HAS_CPEPLL_DFS3_CLK)
-        case CPEPLL_DFS3_CLK:
-        {
-            IP_PLL_CPE->DFS_CTRL_3.RW &= ~(PLL_DFS_CTRL_0_ENABLE_MASK | PLL_DFS_CTRL_0_CLKOUT_EN_MASK);
-        }
-        break;
-#endif
-        default:
-        {
-            /* Not supported */
-        }
-    }
-}
-static void Clock_Ip_SetOptionalParameterDfsBypassClkoutEnableMfiMfn(ClockLLD_FracDivParameterIdentifierType ParamId, uint32 Value)
-{
-    (void)ParamId;
-    (void)Value;
-    /* No implementation */
-}
-static void Clock_Ip_SetDfsBypassClkoutEnableMfiMfn(float DivisionValue)
-{
-    uint32 IntegerValue = (uint32)DivisionValue;
-    uint32 NumeratorValue = 5U * (DivisionValue - ((float)IntegerValue));
 
-    switch (Clock_Ip_FracDivName)
-    {
-#if defined(CLOCK_IP_HAS_COREPLL_DFS0_CLK)
-        case COREPLL_DFS0_CLK:
-        {
-            IP_CORE_PLL->DFS_DIV_0.RW = PLL_DFS_DIV_0_MFI(IntegerValue) | PLL_DFS_DIV_0_MFN(NumeratorValue);
-        }
-        break;
-#endif
-#if defined(CLOCK_IP_HAS_COREPLL_DFS1_CLK)
-        case COREPLL_DFS1_CLK:
-        {
-            IP_CORE_PLL->DFS_DIV_1.RW = PLL_DFS_DIV_0_MFI(IntegerValue) | PLL_DFS_DIV_0_MFN(NumeratorValue);
-        }
-        break;
-#endif
-#if defined(CLOCK_IP_HAS_COREPLL_DFS2_CLK)
-        case COREPLL_DFS2_CLK:
-        {
-            IP_CORE_PLL->DFS_DIV_2.RW = PLL_DFS_DIV_0_MFI(IntegerValue) | PLL_DFS_DIV_0_MFN(NumeratorValue);
-        }
-        break;
-#endif
-#if defined(CLOCK_IP_HAS_COREPLL_DFS3_CLK)
-        case COREPLL_DFS3_CLK:
-        {
-            IP_CORE_PLL->DFS_DIV_3.RW = PLL_DFS_DIV_0_MFI(IntegerValue) | PLL_DFS_DIV_0_MFN(NumeratorValue);
-        }
-        break;
-#endif
-#if defined(CLOCK_IP_HAS_PERIPHPLL_DFS0_CLK)
-        case PERIPHPLL_DFS0_CLK:
-        {
-            IP_PERIPH_PLL->DFS_DIV_0.RW = PERIPH_PLL_DFS_DIV_0_MFI(IntegerValue) | PERIPH_PLL_DFS_DIV_0_MFN(NumeratorValue);
-        }
-        break;
-#endif
-#if defined(CLOCK_IP_HAS_PERIPHPLL_DFS1_CLK)
-        case PERIPHPLL_DFS1_CLK:
-        {
-            IP_PERIPH_PLL->DFS_DIV_1.RW = PERIPH_PLL_DFS_DIV_0_MFI(IntegerValue) | PERIPH_PLL_DFS_DIV_0_MFN(NumeratorValue);
-        }
-        break;
-#endif
-#if defined(CLOCK_IP_HAS_PERIPHPLL_DFS2_CLK)
-        case PERIPHPLL_DFS2_CLK:
-        {
-            IP_PERIPH_PLL->DFS_DIV_2.RW = PERIPH_PLL_DFS_DIV_0_MFI(IntegerValue) | PERIPH_PLL_DFS_DIV_0_MFN(NumeratorValue);
-        }
-        break;
-#endif
-#if defined(CLOCK_IP_HAS_PERIPHPLL_DFS3_CLK)
-        case PERIPHPLL_DFS3_CLK:
-        {
-            IP_PERIPH_PLL->DFS_DIV_3.RW = PERIPH_PLL_DFS_DIV_0_MFI(IntegerValue) | PERIPH_PLL_DFS_DIV_0_MFN(NumeratorValue);
-        }
-        break;
-#endif
-#if defined(CLOCK_IP_HAS_PLL0_DFS0_CLK)
-        case PLL0_DFS0_CLK:
-        {
-            IP_PLL_0->DFS_DIV_0.RW = PLL_DFS_DIV_0_MFI(IntegerValue) | PLL_DFS_DIV_0_MFN(NumeratorValue);
-        }
-        break;
-#endif
-#if defined(CLOCK_IP_HAS_PLL0_DFS1_CLK)
-        case PLL0_DFS1_CLK:
-        {
-            IP_PLL_0->DFS_DIV_1.RW = PLL_DFS_DIV_0_MFI(IntegerValue) | PLL_DFS_DIV_0_MFN(NumeratorValue);
-        }
-        break;
-#endif
-#if defined(CLOCK_IP_HAS_PLL0_DFS2_CLK)
-        case PLL0_DFS2_CLK:
-        {
-            IP_PLL_0->DFS_DIV_2.RW = PLL_DFS_DIV_0_MFI(IntegerValue) | PLL_DFS_DIV_0_MFN(NumeratorValue);
-        }
-        break;
-#endif
-#if defined(CLOCK_IP_HAS_PLL0_DFS3_CLK)
-        case PLL0_DFS3_CLK:
-        {
-            IP_PLL_0->DFS_DIV_3.RW = PLL_DFS_DIV_0_MFI(IntegerValue) | PLL_DFS_DIV_0_MFN(NumeratorValue);
-        }
-        break;
-#endif
-#if defined(CLOCK_IP_HAS_PLL1_DFS0_CLK)
-        case PLL1_DFS0_CLK:
-        {
-            IP_PLL_1->DFS_DIV_0.RW = PLL_DFS_DIV_0_MFI(IntegerValue) | PLL_DFS_DIV_0_MFN(NumeratorValue);
-        }
-        break;
-#endif
-#if defined(CLOCK_IP_HAS_PLL1_DFS1_CLK)
-        case PLL1_DFS1_CLK:
-        {
-            IP_PLL_1->DFS_DIV_1.RW = PLL_DFS_DIV_0_MFI(IntegerValue) | PLL_DFS_DIV_0_MFN(NumeratorValue);
-        }
-        break;
-#endif
-#if defined(CLOCK_IP_HAS_PLL1_DFS2_CLK)
-        case PLL1_DFS2_CLK:
-        {
-            IP_PLL_1->DFS_DIV_2.RW = PLL_DFS_DIV_0_MFI(IntegerValue) | PLL_DFS_DIV_0_MFN(NumeratorValue);
-        }
-        break;
-#endif
-#if defined(CLOCK_IP_HAS_PLL1_DFS3_CLK)
-        case PLL1_DFS3_CLK:
-        {
-            IP_PLL_1->DFS_DIV_3.RW = PLL_DFS_DIV_0_MFI(IntegerValue) | PLL_DFS_DIV_0_MFN(NumeratorValue);
-        }
-        break;
-#endif
-#if defined(CLOCK_IP_HAS_CPEPLL_DFS0_CLK)
-        case CPEPLL_DFS0_CLK:
-        {
-            IP_PLL_CPE->DFS_DIV_0.RW = PLL_DFS_DIV_0_MFI(IntegerValue) | PLL_DFS_DIV_0_MFN(NumeratorValue);
-        }
-        break;
-#endif
-#if defined(CLOCK_IP_HAS_CPEPLL_DFS1_CLK)
-        case CPEPLL_DFS1_CLK:
-        {
-            IP_PLL_CPE->DFS_DIV_1.RW = PLL_DFS_DIV_0_MFI(IntegerValue) | PLL_DFS_DIV_0_MFN(NumeratorValue);
-        }
-        break;
-#endif
-#if defined(CLOCK_IP_HAS_CPEPLL_DFS2_CLK)
-        case CPEPLL_DFS2_CLK:
-        {
-            IP_PLL_CPE->DFS_DIV_2.RW = PLL_DFS_DIV_0_MFI(IntegerValue) | PLL_DFS_DIV_0_MFN(NumeratorValue);
-        }
-        break;
-#endif
-#if defined(CLOCK_IP_HAS_CPEPLL_DFS3_CLK)
-        case CPEPLL_DFS3_CLK:
-        {
-            IP_PLL_CPE->DFS_DIV_3.RW = PLL_DFS_DIV_0_MFI(IntegerValue) | PLL_DFS_DIV_0_MFN(NumeratorValue);
-        }
-        break;
-#endif
-        default:
-        {
-            /* Not supported */
-        }
-    }
+    uint32 Instance      = Clock_Ip_au8ClockFeatures[Config->Name][CLOCK_IP_MODULE_INSTANCE];
+    uint32 DividerIndex  = Clock_Ip_au8ClockFeatures[Config->Name][CLOCK_IP_DIVIDER_INDEX];
+
+    /* Put this fractional divider in reset state */
+    Clock_Ip_apxDfs[Instance]->PORTRESET |= (1UL << DividerIndex);
 }
-static void Clock_Ip_EnableDfsBypassClkoutEnableMfiMfn()
+static void Clock_Ip_SetDfsMfiMfn(Clock_Ip_FracDivConfigType const *Config)
 {
-    switch (Clock_Ip_FracDivName)
+
+    uint32 Instance      = Clock_Ip_au8ClockFeatures[Config->Name][CLOCK_IP_MODULE_INSTANCE];
+    uint32 DividerIndex  = Clock_Ip_au8ClockFeatures[Config->Name][CLOCK_IP_DIVIDER_INDEX];
+
+    uint32 IntegerPart     = Config->Value[0U];          /* Integer part. */
+    uint32 FractionalPart  = Config->Value[1U];          /* Fractional part. */
+
+    uint32 Value = 0U;
+
+    /* Check whether fractional divider is enabled */
+    if (0U != Config->Enable)
     {
-#if defined(CLOCK_IP_HAS_COREPLL_DFS0_CLK)
-        case COREPLL_DFS0_CLK:
-        {
-            IP_CORE_PLL->DFS_CTRL_0.RW = (PLL_DFS_CTRL_0_ENABLE(1U) | PLL_DFS_CTRL_0_CLKOUT_EN(1U));
-        }
-        break;
-#endif
-#if defined(CLOCK_IP_HAS_COREPLL_DFS1_CLK)
-        case COREPLL_DFS1_CLK:
-        {
-            IP_CORE_PLL->DFS_CTRL_1.RW = (PLL_DFS_CTRL_0_ENABLE(1U) | PLL_DFS_CTRL_0_CLKOUT_EN(1U));
-        }
-        break;
-#endif
-#if defined(CLOCK_IP_HAS_COREPLL_DFS2_CLK)
-        case COREPLL_DFS2_CLK:
-        {
-            IP_CORE_PLL->DFS_CTRL_2.RW = (PLL_DFS_CTRL_0_ENABLE(1U) | PLL_DFS_CTRL_0_CLKOUT_EN(1U));
-        }
-        break;
-#endif
-#if defined(CLOCK_IP_HAS_COREPLL_DFS3_CLK)
-        case COREPLL_DFS3_CLK:
-        {
-            IP_CORE_PLL->DFS_CTRL_3.RW = (PLL_DFS_CTRL_0_ENABLE(1U) | PLL_DFS_CTRL_0_CLKOUT_EN(1U));
-        }
-        break;
-#endif
-#if defined(CLOCK_IP_HAS_PERIPHPLL_DFS0_CLK)
-        case PERIPHPLL_DFS0_CLK:
-        {
-            IP_PERIPH_PLL->DFS_CTRL_0.RW = (PERIPH_PLL_DFS_CTRL_0_ENABLE(1U) | PERIPH_PLL_DFS_CTRL_0_CLKOUT_EN(1U));
-        }
-        break;
-#endif
-#if defined(CLOCK_IP_HAS_PERIPHPLL_DFS1_CLK)
-        case PERIPHPLL_DFS1_CLK:
-        {
-            IP_PERIPH_PLL->DFS_CTRL_1.RW = (PERIPH_PLL_DFS_CTRL_0_ENABLE(1U) | PERIPH_PLL_DFS_CTRL_0_CLKOUT_EN(1U));
-        }
-        break;
-#endif
-#if defined(CLOCK_IP_HAS_PERIPHPLL_DFS2_CLK)
-        case PERIPHPLL_DFS2_CLK:
-        {
-            IP_PERIPH_PLL->DFS_CTRL_2.RW = (PERIPH_PLL_DFS_CTRL_0_ENABLE(1U) | PERIPH_PLL_DFS_CTRL_0_CLKOUT_EN(1U));
-        }
-        break;
-#endif
-#if defined(CLOCK_IP_HAS_PERIPHPLL_DFS3_CLK)
-        case PERIPHPLL_DFS3_CLK:
-        {
-            IP_PERIPH_PLL->DFS_CTRL_3.RW = (PERIPH_PLL_DFS_CTRL_0_ENABLE(1U) | PERIPH_PLL_DFS_CTRL_0_CLKOUT_EN(1U));
-        }
-        break;
-#endif
-#if defined(CLOCK_IP_HAS_PLL0_DFS0_CLK)
-        case PLL0_DFS0_CLK:
-        {
-            IP_PLL_0->DFS_CTRL_0.RW = (PLL_DFS_CTRL_0_ENABLE(1U) | PLL_DFS_CTRL_0_CLKOUT_EN(1U));
-        }
-        break;
-#endif
-#if defined(CLOCK_IP_HAS_PLL0_DFS1_CLK)
-        case PLL0_DFS1_CLK:
-        {
-            IP_PLL_0->DFS_CTRL_1.RW = (PLL_DFS_CTRL_0_ENABLE(1U) | PLL_DFS_CTRL_0_CLKOUT_EN(1U));
-        }
-        break;
-#endif
-#if defined(CLOCK_IP_HAS_PLL0_DFS2_CLK)
-        case PLL0_DFS2_CLK:
-        {
-            IP_PLL_0->DFS_CTRL_2.RW = (PLL_DFS_CTRL_0_ENABLE(1U) | PLL_DFS_CTRL_0_CLKOUT_EN(1U));
-        }
-        break;
-#endif
-#if defined(CLOCK_IP_HAS_PLL0_DFS3_CLK)
-        case PLL0_DFS3_CLK:
-        {
-            IP_PLL_0->DFS_CTRL_3.RW = (PLL_DFS_CTRL_0_ENABLE(1U) | PLL_DFS_CTRL_0_CLKOUT_EN(1U));
-        }
-        break;
-#endif
-#if defined(CLOCK_IP_HAS_PLL1_DFS0_CLK)
-        case PLL1_DFS0_CLK:
-        {
-            IP_PLL_1->DFS_CTRL_0.RW = (PLL_DFS_CTRL_0_ENABLE(1U) | PLL_DFS_CTRL_0_CLKOUT_EN(1U));
-        }
-        break;
-#endif
-#if defined(CLOCK_IP_HAS_PLL1_DFS1_CLK)
-        case PLL1_DFS1_CLK:
-        {
-            IP_PLL_1->DFS_CTRL_1.RW = (PLL_DFS_CTRL_0_ENABLE(1U) | PLL_DFS_CTRL_0_CLKOUT_EN(1U));
-        }
-        break;
-#endif
-#if defined(CLOCK_IP_HAS_PLL1_DFS2_CLK)
-        case PLL1_DFS2_CLK:
-        {
-            IP_PLL_1->DFS_CTRL_2.RW = (PLL_DFS_CTRL_0_ENABLE(1U) | PLL_DFS_CTRL_0_CLKOUT_EN(1U));
-        }
-        break;
-#endif
-#if defined(CLOCK_IP_HAS_PLL1_DFS3_CLK)
-        case PLL1_DFS3_CLK:
-        {
-            IP_PLL_1->DFS_CTRL_3.RW = (PLL_DFS_CTRL_0_ENABLE(1U) | PLL_DFS_CTRL_0_CLKOUT_EN(1U));
-        }
-        break;
-#endif
-#if defined(CLOCK_IP_HAS_CPEPLL_DFS0_CLK)
-        case CPEPLL_DFS0_CLK:
-        {
-            IP_PLL_CPE->DFS_CTRL_0.RW = (PLL_DFS_CTRL_0_ENABLE(1U) | PLL_DFS_CTRL_0_CLKOUT_EN(1U));
-        }
-        break;
-#endif
-#if defined(CLOCK_IP_HAS_CPEPLL_DFS1_CLK)
-        case CPEPLL_DFS1_CLK:
-        {
-            IP_PLL_CPE->DFS_CTRL_1.RW = (PLL_DFS_CTRL_0_ENABLE(1U) | PLL_DFS_CTRL_0_CLKOUT_EN(1U));
-        }
-        break;
-#endif
-#if defined(CLOCK_IP_HAS_CPEPLL_DFS2_CLK)
-        case CPEPLL_DFS2_CLK:
-        {
-            IP_PLL_CPE->DFS_CTRL_2.RW = (PLL_DFS_CTRL_0_ENABLE(1U) | PLL_DFS_CTRL_0_CLKOUT_EN(1U));
-        }
-        break;
-#endif
-#if defined(CLOCK_IP_HAS_CPEPLL_DFS3_CLK)
-        case CPEPLL_DFS3_CLK:
-        {
-            IP_PLL_CPE->DFS_CTRL_3.RW = (PLL_DFS_CTRL_0_ENABLE(1U) | PLL_DFS_CTRL_0_CLKOUT_EN(1U));
-        }
-        break;
-#endif
-        default:
-        {
-            /* Not supported */
-        }
+        /* Write the value by which input signal is divided */
+        Value |= DFS_DVPORT_MFN(FractionalPart);
+        Value |= DFS_DVPORT_MFI(IntegerPart);
+        Clock_Ip_apxDfs[Instance]->DVPORT[DividerIndex] = Value;
+
+        /* Get corresponding port out of reset state */
+        Clock_Ip_apxDfs[Instance]->PORTRESET &= ~(1UL << DividerIndex);
     }
 }
-static void Clock_Ip_WaitDfsBypassClkoutEnableMfiMfn(void)
+static Clock_Ip_DfsStatusType Clock_Ip_CompleteDfsMfiMfn(Clock_Ip_NameType DfsName)
 {
     boolean TimeoutOccurred = FALSE;
     uint32 StartTime;
@@ -638,321 +190,49 @@ static void Clock_Ip_WaitDfsBypassClkoutEnableMfiMfn(void)
     uint32 TimeoutTicks;
     uint32 DfsPortStatus;
 
-    switch (Clock_Ip_FracDivName)
+    Clock_Ip_DfsStatusType Status = STATUS_DFS_LOCKED;
+
+    uint32 Instance      = Clock_Ip_au8ClockFeatures[DfsName][CLOCK_IP_MODULE_INSTANCE];
+    uint32 DividerIndex  = Clock_Ip_au8ClockFeatures[DfsName][CLOCK_IP_DIVIDER_INDEX];
+
+    /* Check whether fractional divider is enabled */
+    if (0U == (Clock_Ip_apxDfs[Instance]->PORTRESET & (1UL << DividerIndex)))
     {
-#if defined(CLOCK_IP_HAS_COREPLL_DFS0_CLK)
-        case COREPLL_DFS0_CLK:
+        Clock_Ip_StartTimeout(&StartTime, &ElapsedTime, &TimeoutTicks, CLOCK_IP_TIMEOUT_VALUE_US);
+        /* Wait until this port is locked */
+        do
         {
-            Clock_Ip_StartTimeout(&StartTime, &ElapsedTime, &TimeoutTicks, CLOCK_IP_TIMEOUT_VALUE_US);
-            /* Wait until this port is locked */
-            do
-            {
-                DfsPortStatus = ((IP_CORE_PLL->DFS_STATUS & PLL_DFS_STATUS_DFS_OK_MASK >> PLL_DFS_STATUS_DFS_OK_SHIFT) & (1UL << 0U));
-                TimeoutOccurred = Clock_Ip_TimeoutExpired(&StartTime, &ElapsedTime, TimeoutTicks);
-            }
-            while ((0U == DfsPortStatus) && (FALSE == TimeoutOccurred));
+            DfsPortStatus = (((Clock_Ip_apxDfs[Instance]->PORTSR >> DFS_PORTSR_PORTSTAT_SHIFT) & DFS_PORTSR_PORTSTAT_MASK) & (1UL << DividerIndex));
+            TimeoutOccurred = Clock_Ip_TimeoutExpired(&StartTime, &ElapsedTime, TimeoutTicks);
         }
-        break;
-#endif
-#if defined(CLOCK_IP_HAS_COREPLL_DFS1_CLK)
-        case COREPLL_DFS1_CLK:
+        while ((0U == DfsPortStatus) && (FALSE == TimeoutOccurred));
+
+        if (FALSE != TimeoutOccurred)
         {
-            Clock_Ip_StartTimeout(&StartTime, &ElapsedTime, &TimeoutTicks, CLOCK_IP_TIMEOUT_VALUE_US);
-            /* Wait until this port is locked */
-            do
-            {
-                DfsPortStatus = ((IP_CORE_PLL->DFS_STATUS & PLL_DFS_STATUS_DFS_OK_MASK >> PLL_DFS_STATUS_DFS_OK_SHIFT) & (1UL << 1U));
-                TimeoutOccurred = Clock_Ip_TimeoutExpired(&StartTime, &ElapsedTime, TimeoutTicks);
-            }
-            while ((0U == DfsPortStatus) && (FALSE == TimeoutOccurred));
-        }
-        break;
-#endif
-#if defined(CLOCK_IP_HAS_COREPLL_DFS2_CLK)
-        case COREPLL_DFS2_CLK:
-        {
-            Clock_Ip_StartTimeout(&StartTime, &ElapsedTime, &TimeoutTicks, CLOCK_IP_TIMEOUT_VALUE_US);
-            /* Wait until this port is locked */
-            do
-            {
-                DfsPortStatus = ((IP_CORE_PLL->DFS_STATUS & PLL_DFS_STATUS_DFS_OK_MASK >> PLL_DFS_STATUS_DFS_OK_SHIFT) & (1UL << 2U));
-                TimeoutOccurred = Clock_Ip_TimeoutExpired(&StartTime, &ElapsedTime, TimeoutTicks);
-            }
-            while ((0U == DfsPortStatus) && (FALSE == TimeoutOccurred));
-        }
-        break;
-#endif
-#if defined(CLOCK_IP_HAS_COREPLL_DFS3_CLK)
-        case COREPLL_DFS3_CLK:
-        {
-            Clock_Ip_StartTimeout(&StartTime, &ElapsedTime, &TimeoutTicks, CLOCK_IP_TIMEOUT_VALUE_US);
-            /* Wait until this port is locked */
-            do
-            {
-                DfsPortStatus = ((IP_CORE_PLL->DFS_STATUS & PLL_DFS_STATUS_DFS_OK_MASK >> PLL_DFS_STATUS_DFS_OK_SHIFT) & (1UL << 3U));
-                TimeoutOccurred = Clock_Ip_TimeoutExpired(&StartTime, &ElapsedTime, TimeoutTicks);
-            }
-            while ((0U == DfsPortStatus) && (FALSE == TimeoutOccurred));
-        }
-        break;
-#endif
-#if defined(CLOCK_IP_HAS_PERIPHPLL_DFS0_CLK)
-        case PERIPHPLL_DFS0_CLK:
-        {
-            Clock_Ip_StartTimeout(&StartTime, &ElapsedTime, &TimeoutTicks, CLOCK_IP_TIMEOUT_VALUE_US);
-            /* Wait until this port is locked */
-            do
-            {
-                DfsPortStatus = ((IP_PERIPH_PLL->DFS_STATUS & PERIPH_PLL_DFS_STATUS_DFS_OK_MASK >> PERIPH_PLL_DFS_STATUS_DFS_OK_SHIFT) & (1UL << 0U));
-                TimeoutOccurred = Clock_Ip_TimeoutExpired(&StartTime, &ElapsedTime, TimeoutTicks);
-            }
-            while ((0U == DfsPortStatus) && (FALSE == TimeoutOccurred));
-        }
-        break;
-#endif
-#if defined(CLOCK_IP_HAS_PERIPHPLL_DFS1_CLK)
-        case PERIPHPLL_DFS1_CLK:
-        {
-            Clock_Ip_StartTimeout(&StartTime, &ElapsedTime, &TimeoutTicks, CLOCK_IP_TIMEOUT_VALUE_US);
-            /* Wait until this port is locked */
-            do
-            {
-                DfsPortStatus = ((IP_PERIPH_PLL->DFS_STATUS & PERIPH_PLL_DFS_STATUS_DFS_OK_MASK >> PERIPH_PLL_DFS_STATUS_DFS_OK_SHIFT) & (1UL << 1U));
-                TimeoutOccurred = Clock_Ip_TimeoutExpired(&StartTime, &ElapsedTime, TimeoutTicks);
-            }
-            while ((0U == DfsPortStatus) && (FALSE == TimeoutOccurred));
-        }
-        break;
-#endif
-#if defined(CLOCK_IP_HAS_PERIPHPLL_DFS2_CLK)
-        case PERIPHPLL_DFS2_CLK:
-        {
-            Clock_Ip_StartTimeout(&StartTime, &ElapsedTime, &TimeoutTicks, CLOCK_IP_TIMEOUT_VALUE_US);
-            /* Wait until this port is locked */
-            do
-            {
-                DfsPortStatus = ((IP_PERIPH_PLL->DFS_STATUS & PERIPH_PLL_DFS_STATUS_DFS_OK_MASK >> PERIPH_PLL_DFS_STATUS_DFS_OK_SHIFT) & (1UL << 2U));
-                TimeoutOccurred = Clock_Ip_TimeoutExpired(&StartTime, &ElapsedTime, TimeoutTicks);
-            }
-            while ((0U == DfsPortStatus) && (FALSE == TimeoutOccurred));
-        }
-        break;
-#endif
-#if defined(CLOCK_IP_HAS_PERIPHPLL_DFS3_CLK)
-        case PERIPHPLL_DFS3_CLK:
-        {
-            Clock_Ip_StartTimeout(&StartTime, &ElapsedTime, &TimeoutTicks, CLOCK_IP_TIMEOUT_VALUE_US);
-            /* Wait until this port is locked */
-            do
-            {
-                DfsPortStatus = ((IP_PERIPH_PLL->DFS_STATUS & PERIPH_PLL_DFS_STATUS_DFS_OK_MASK >> PERIPH_PLL_DFS_STATUS_DFS_OK_SHIFT) & (1UL << 3U));
-                TimeoutOccurred = Clock_Ip_TimeoutExpired(&StartTime, &ElapsedTime, TimeoutTicks);
-            }
-            while ((0U == DfsPortStatus) && (FALSE == TimeoutOccurred));
-        }
-        break;
-#endif
-#if defined(CLOCK_IP_HAS_PLL0_DFS0_CLK)
-        case PLL0_DFS0_CLK:
-        {
-            Clock_Ip_StartTimeout(&StartTime, &ElapsedTime, &TimeoutTicks, CLOCK_IP_TIMEOUT_VALUE_US);
-            /* Wait until this port is locked */
-            do
-            {
-                DfsPortStatus = ((IP_PLL_0->DFS_STATUS & PLL_DFS_STATUS_DFS_OK_MASK >> PLL_DFS_STATUS_DFS_OK_SHIFT) & (1UL << 0U));
-                TimeoutOccurred = Clock_Ip_TimeoutExpired(&StartTime, &ElapsedTime, TimeoutTicks);
-            }
-            while ((0U == DfsPortStatus) && (FALSE == TimeoutOccurred));
-        }
-        break;
-#endif
-#if defined(CLOCK_IP_HAS_PLL0_DFS1_CLK)
-        case PLL0_DFS1_CLK:
-        {
-            Clock_Ip_StartTimeout(&StartTime, &ElapsedTime, &TimeoutTicks, CLOCK_IP_TIMEOUT_VALUE_US);
-            /* Wait until this port is locked */
-            do
-            {
-                DfsPortStatus = ((IP_PLL_0->DFS_STATUS & PLL_DFS_STATUS_DFS_OK_MASK >> PLL_DFS_STATUS_DFS_OK_SHIFT) & (1UL << 1U));
-                TimeoutOccurred = Clock_Ip_TimeoutExpired(&StartTime, &ElapsedTime, TimeoutTicks);
-            }
-            while ((0U == DfsPortStatus) && (FALSE == TimeoutOccurred));
-        }
-        break;
-#endif
-#if defined(CLOCK_IP_HAS_PLL0_DFS2_CLK)
-        case PLL0_DFS2_CLK:
-        {
-            Clock_Ip_StartTimeout(&StartTime, &ElapsedTime, &TimeoutTicks, CLOCK_IP_TIMEOUT_VALUE_US);
-            /* Wait until this port is locked */
-            do
-            {
-                DfsPortStatus = ((IP_PLL_0->DFS_STATUS & PLL_DFS_STATUS_DFS_OK_MASK >> PLL_DFS_STATUS_DFS_OK_SHIFT) & (1UL << 2U));
-                TimeoutOccurred = Clock_Ip_TimeoutExpired(&StartTime, &ElapsedTime, TimeoutTicks);
-            }
-            while ((0U == DfsPortStatus) && (FALSE == TimeoutOccurred));
-        }
-        break;
-#endif
-#if defined(CLOCK_IP_HAS_PLL0_DFS3_CLK)
-        case PLL0_DFS3_CLK:
-        {
-            Clock_Ip_StartTimeout(&StartTime, &ElapsedTime, &TimeoutTicks, CLOCK_IP_TIMEOUT_VALUE_US);
-            /* Wait until this port is locked */
-            do
-            {
-                DfsPortStatus = ((IP_PLL_0->DFS_STATUS & PLL_DFS_STATUS_DFS_OK_MASK >> PLL_DFS_STATUS_DFS_OK_SHIFT) & (1UL << 3U));
-                TimeoutOccurred = Clock_Ip_TimeoutExpired(&StartTime, &ElapsedTime, TimeoutTicks);
-            }
-            while ((0U == DfsPortStatus) && (FALSE == TimeoutOccurred));
-        }
-        break;
-#endif
-#if defined(CLOCK_IP_HAS_PLL1_DFS0_CLK)
-        case PLL1_DFS0_CLK:
-        {
-            Clock_Ip_StartTimeout(&StartTime, &ElapsedTime, &TimeoutTicks, CLOCK_IP_TIMEOUT_VALUE_US);
-            /* Wait until this port is locked */
-            do
-            {
-                DfsPortStatus = ((IP_PLL_1->DFS_STATUS & PLL_DFS_STATUS_DFS_OK_MASK >> PLL_DFS_STATUS_DFS_OK_SHIFT) & (1UL << 0U));
-                TimeoutOccurred = Clock_Ip_TimeoutExpired(&StartTime, &ElapsedTime, TimeoutTicks);
-            }
-            while ((0U == DfsPortStatus) && (FALSE == TimeoutOccurred));
-        }
-        break;
-#endif
-#if defined(CLOCK_IP_HAS_PLL1_DFS1_CLK)
-        case PLL1_DFS1_CLK:
-        {
-            Clock_Ip_StartTimeout(&StartTime, &ElapsedTime, &TimeoutTicks, CLOCK_IP_TIMEOUT_VALUE_US);
-            /* Wait until this port is locked */
-            do
-            {
-                DfsPortStatus = ((IP_PLL_1->DFS_STATUS & PLL_DFS_STATUS_DFS_OK_MASK >> PLL_DFS_STATUS_DFS_OK_SHIFT) & (1UL << 1U));
-                TimeoutOccurred = Clock_Ip_TimeoutExpired(&StartTime, &ElapsedTime, TimeoutTicks);
-            }
-            while ((0U == DfsPortStatus) && (FALSE == TimeoutOccurred));
-        }
-        break;
-#endif
-#if defined(CLOCK_IP_HAS_PLL1_DFS2_CLK)
-        case PLL1_DFS2_CLK:
-        {
-            Clock_Ip_StartTimeout(&StartTime, &ElapsedTime, &TimeoutTicks, CLOCK_IP_TIMEOUT_VALUE_US);
-            /* Wait until this port is locked */
-            do
-            {
-                DfsPortStatus = ((IP_PLL_1->DFS_STATUS & PLL_DFS_STATUS_DFS_OK_MASK >> PLL_DFS_STATUS_DFS_OK_SHIFT) & (1UL << 2U));
-                TimeoutOccurred = Clock_Ip_TimeoutExpired(&StartTime, &ElapsedTime, TimeoutTicks);
-            }
-            while ((0U == DfsPortStatus) && (FALSE == TimeoutOccurred));
-        }
-        break;
-#endif
-#if defined(CLOCK_IP_HAS_PLL1_DFS3_CLK)
-        case PLL1_DFS3_CLK:
-        {
-            Clock_Ip_StartTimeout(&StartTime, &ElapsedTime, &TimeoutTicks, CLOCK_IP_TIMEOUT_VALUE_US);
-            /* Wait until this port is locked */
-            do
-            {
-                DfsPortStatus = ((IP_PLL_1->DFS_STATUS & PLL_DFS_STATUS_DFS_OK_MASK >> PLL_DFS_STATUS_DFS_OK_SHIFT) & (1UL << 3U));
-                TimeoutOccurred = Clock_Ip_TimeoutExpired(&StartTime, &ElapsedTime, TimeoutTicks);
-            }
-            while ((0U == DfsPortStatus) && (FALSE == TimeoutOccurred));
-        }
-        break;
-#endif
-#if defined(CLOCK_IP_HAS_CPEPLL_DFS0_CLK)
-        case CPEPLL_DFS0_CLK:
-        {
-            Clock_Ip_StartTimeout(&StartTime, &ElapsedTime, &TimeoutTicks, CLOCK_IP_TIMEOUT_VALUE_US);
-            /* Wait until this port is locked */
-            do
-            {
-                DfsPortStatus = ((IP_PLL_CPE->DFS_STATUS & PLL_DFS_STATUS_DFS_OK_MASK >> PLL_DFS_STATUS_DFS_OK_SHIFT) & (1UL << 0U));
-                TimeoutOccurred = Clock_Ip_TimeoutExpired(&StartTime, &ElapsedTime, TimeoutTicks);
-            }
-            while ((0U == DfsPortStatus) && (FALSE == TimeoutOccurred));
-        }
-        break;
-#endif
-#if defined(CLOCK_IP_HAS_CPEPLL_DFS1_CLK)
-        case CPEPLL_DFS1_CLK:
-        {
-            Clock_Ip_StartTimeout(&StartTime, &ElapsedTime, &TimeoutTicks, CLOCK_IP_TIMEOUT_VALUE_US);
-            /* Wait until this port is locked */
-            do
-            {
-                DfsPortStatus = ((IP_PLL_CPE->DFS_STATUS & PLL_DFS_STATUS_DFS_OK_MASK >> PLL_DFS_STATUS_DFS_OK_SHIFT) & (1UL << 1U));
-                TimeoutOccurred = Clock_Ip_TimeoutExpired(&StartTime, &ElapsedTime, TimeoutTicks);
-            }
-            while ((0U == DfsPortStatus) && (FALSE == TimeoutOccurred));
-        }
-        break;
-#endif
-#if defined(CLOCK_IP_HAS_CPEPLL_DFS2_CLK)
-        case CPEPLL_DFS2_CLK:
-        {
-            Clock_Ip_StartTimeout(&StartTime, &ElapsedTime, &TimeoutTicks, CLOCK_IP_TIMEOUT_VALUE_US);
-            /* Wait until this port is locked */
-            do
-            {
-                DfsPortStatus = ((IP_PLL_CPE->DFS_STATUS & PLL_DFS_STATUS_DFS_OK_MASK >> PLL_DFS_STATUS_DFS_OK_SHIFT) & (1UL << 2U));
-                TimeoutOccurred = Clock_Ip_TimeoutExpired(&StartTime, &ElapsedTime, TimeoutTicks);
-            }
-            while ((0U == DfsPortStatus) && (FALSE == TimeoutOccurred));
-        }
-        break;
-#endif
-#if defined(CLOCK_IP_HAS_CPEPLL_DFS3_CLK)
-        case CPEPLL_DFS3_CLK:
-        {
-            Clock_Ip_StartTimeout(&StartTime, &ElapsedTime, &TimeoutTicks, CLOCK_IP_TIMEOUT_VALUE_US);
-            /* Wait until this port is locked */
-            do
-            {
-                DfsPortStatus = ((IP_PLL_CPE->DFS_STATUS & PLL_DFS_STATUS_DFS_OK_MASK >> PLL_DFS_STATUS_DFS_OK_SHIFT) & (1UL << 3U));
-                TimeoutOccurred = Clock_Ip_TimeoutExpired(&StartTime, &ElapsedTime, TimeoutTicks);
-            }
-            while ((0U == DfsPortStatus) && (FALSE == TimeoutOccurred));
-        }
-        break;
-#endif
-        default:
-        {
-            /* Not supported */
+            Status = STATUS_DFS_UNLOCKED;
+            /* Report timeout error */
+            Clock_Ip_ReportClockErrors(CLOCK_IP_REPORT_TIMEOUT_ERROR, DfsName);
         }
     }
-}
-static void Clock_Ip_LockDfsBypassClkoutEnableMfiMfn(float DivisionValue)
-{
-    /* Set division value */
-    Clock_Ip_SetDfsBypassClkoutEnableMfiMfn(DivisionValue);
+    else
+    {
+        Status = STATUS_DFS_NOT_ENABLED;
+    }
 
-    /* Enable/start dfs channel */
-    Clock_Ip_EnableDfsBypassClkoutEnableMfiMfn();
+    return Status;
+}
 
-    /* Wait for dfs channel to lock */
-    Clock_Ip_WaitDfsBypassClkoutEnableMfiMfn();
-}
-static ClockLLD_StatusReturnType Clock_Ip_GetStatusDfsBypassClkoutEnableMfiMfn(void)
-{
-    return CLOCK_LLD_STATUS_SUCCESS;
-}
+
 #endif
-
-
-/*==================================================================================================
-*                                        GLOBAL FUNCTIONS
-==================================================================================================*/
 
 /* Clock stop section code */
 #define MCU_STOP_SEC_CODE
 
 #include "Mcu_MemMap.h"
 
+/*==================================================================================================
+*                                        GLOBAL FUNCTIONS
+==================================================================================================*/
 /*==================================================================================================
 *                                        GLOBAL CONSTANTS
 ==================================================================================================*/
@@ -964,29 +244,15 @@ static ClockLLD_StatusReturnType Clock_Ip_GetStatusDfsBypassClkoutEnableMfiMfn(v
 const Clock_Ip_FracDivCallbackType Clock_Ip_axFracDivCallbacks[CLOCK_IP_FRACTIONAL_DIVIDER_CALLBACKS_COUNT] =
 {
     {
-        &Clock_Ip_CallbackDfsEmptyName,              /* Name */
-        &Clock_Ip_CallbackDfsEmpty1,                /* Reset */
-        &Clock_Ip_CallbackDfsEmpty1,                /* Disable */
-        &Clock_Ip_CallbackDfsEmpty2, /* SetOptionalParameter */
-        &Clock_Ip_CallbackDfsEmpty3,                  /* Set */
-        &Clock_Ip_CallbackDfsEmpty1,               /* Start */
-        &Clock_Ip_CallbackDfsEmpty1,               /* Enable */
-        &Clock_Ip_CallbackDfsEmpty1,                 /* Wait */
-        &Clock_Ip_CallbackDfsEmpty3,                 /* Lock */
-        &Clock_Ip_CallbackDfsEmpty4,            /* GetStatus */
+        Clock_Ip_CallbackFracDivEmpty,            /* Reset */
+        Clock_Ip_CallbackFracDivEmpty,            /* Set */
+        Clock_Ip_CallbackFracDivEmptyComplete,    /* Complete */
     },
-#ifdef CLOCK_IP_DFS_BYPASS_CLKOUT_ENABLE_MFI_MFN
+#ifdef CLOCK_IP_DFS_MFI_MFN
     {
-        &Clock_Ip_SetNameDfsBypassClkoutEnableMfiMfn,              /* Name */
-        &Clock_Ip_ResetDfsBypassClkoutEnableMfiMfn,                /* Reset */
-        &Clock_Ip_ResetDfsBypassClkoutEnableMfiMfn,                /* Disable */
-        &Clock_Ip_SetOptionalParameterDfsBypassClkoutEnableMfiMfn, /* SetOptionalParameter */
-        &Clock_Ip_SetDfsBypassClkoutEnableMfiMfn,                  /* Set */
-        &Clock_Ip_EnableDfsBypassClkoutEnableMfiMfn,               /* Start */
-        &Clock_Ip_EnableDfsBypassClkoutEnableMfiMfn,               /* Enable */
-        &Clock_Ip_WaitDfsBypassClkoutEnableMfiMfn,                 /* Wait */
-        &Clock_Ip_LockDfsBypassClkoutEnableMfiMfn,                 /* Lock */
-        &Clock_Ip_GetStatusDfsBypassClkoutEnableMfiMfn,            /* GetStatus */
+        Clock_Ip_ResetDfsMfiMfn,                   /* Reset */
+        Clock_Ip_SetDfsMfiMfn,                     /* Set */
+        Clock_Ip_CompleteDfsMfiMfn,                /* Complete */
     },
 #endif
 };
@@ -1001,4 +267,3 @@ const Clock_Ip_FracDivCallbackType Clock_Ip_axFracDivCallbacks[CLOCK_IP_FRACTION
 #endif
 
 /** @} */
-

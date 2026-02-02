@@ -1,19 +1,37 @@
-/*
- * Copyright 2024-2025 NXP
- *
- * SPDX-License-Identifier: BSD-3-Clause
- */
+/*==================================================================================================
+* Project : RTD AUTOSAR 4.4
+* Platform : CORTEXM
+* Peripheral : S32G2XXM7
+* Dependencies : none
+*
+* Autosar Version : 4.4.0
+* Autosar Revision : ASR_REL_4_4_REV_0000
+* Autosar Conf.Variant :
+* SW Version : 4.0.0
+* Build Version : S32_RTD_4_0_0_D2210_ASR_REL_4_4_REV_0000_20221031
+*
+* (c) Copyright 2022 NXP Semiconductors
+* All Rights Reserved.
+*
+* NXP Confidential. This software is owned or controlled by NXP and may only be
+* used strictly in accordance with the applicable license terms. By expressly
+* accepting such terms or by downloading, installing, activating and/or otherwise
+* using the software, you are agreeing that you have read, and that you agree to
+* comply with and are bound by, such license terms. If you do not agree to be
+* bound by the applicable license terms, then you may not retain, install,
+* activate or otherwise use the software.
+==================================================================================================*/
 /**
 *   @file    Compiler_Cfg.h
+*   @implements     Compiler_Cfg.h_Artifact
+*   @version 4.0.0
 *
-*
-*   @version 0.8.0
-*   @brief   AUTOSAR BaseNXP - Module specific memory and pointer classes
-*   @details The file Compiler_Cfg.h contains the module specific parameters (ptrclass and
+*   @brief   AUTOSAR Base - Module specific memory and pointer classes
+*   @details The file Compiler_Cfg.h contains the module specific parameters (ptrclass and 
 *            memclass) that are passed to the macros defined in Compiler.h
 *            This file contains sample code only. It is not part of the production code deliverables
 *
-*   @addtogroup BASENXP_COMPONENT
+*   @addtogroup BASE_COMPONENT
 *   @{
 */
 #ifndef COMPILER_CFG_H
@@ -42,7 +60,7 @@ extern "C"{
 /*==================================================================================================
 *                                       DEFINES AND MACROS
 ==================================================================================================*/
-/**
+/** 
 @{
 * @brief ADC memory and pointer classes.
 */
@@ -58,7 +76,7 @@ extern "C"{
 #define ADC_VAR
 /**@}*/
 
-/**
+/** 
 @{
 * @brief CAN memory and pointer classes.
 */
@@ -74,7 +92,7 @@ extern "C"{
 #define CAN_VAR
 /**@}*/
 
-/**
+/** 
 @{
 * @brief CAN_43_LLCE memory and pointer classes.
 */
@@ -90,7 +108,7 @@ extern "C"{
 #define CAN_43_LLCE_VAR
 /**@}*/
 
-/**
+/** 
 @{
 * @brief CANIF memory and pointer classes.
 */
@@ -106,7 +124,7 @@ extern "C"{
 #define CANIF_VAR
 /**@}*/
 
-/**
+/** 
 @{
 * @brief CRCU memory and pointer classes.
 */
@@ -122,7 +140,7 @@ extern "C"{
 #define CRCU_VAR
 /**@}*/
 
-/**
+/** 
 @{
 * @brief CSEC memory and pointer classes.
 */
@@ -138,7 +156,7 @@ extern "C"{
 #define CSEC_VAR
 /**@}*/
 
-/**
+/** 
 @{
 * @brief DEM memory and pointer classes.
 */
@@ -154,7 +172,7 @@ extern "C"{
 #define DEM_VAR
 /**@}*/
 
-/**
+/** 
 @{
 * @brief DET memory and pointer classes.
 */
@@ -170,7 +188,7 @@ extern "C"{
 #define DET_VAR
 /**@}*/
 
-/**
+/** 
 @{
 * @brief DIO memory and pointer classes.
 */
@@ -186,7 +204,7 @@ extern "C"{
 #define DIO_VAR
 /**@}*/
 
-/**
+/** 
 @{
 * @brief EEP memory and pointer classes.
 */
@@ -254,7 +272,7 @@ extern "C"{
 #define ETHTRCV_VAR
 /**@}*/
 
-/**
+/** 
 @{
 * @brief FEE memory and pointer classes.
 */
@@ -270,7 +288,7 @@ extern "C"{
 #define FEE_VAR
 /**@}*/
 
-/**
+/** 
 @{
 * @brief FLS memory and pointer classes.
 */
@@ -286,7 +304,7 @@ extern "C"{
 #define FLS_VAR
 /**@}*/
 
-/**
+/** 
 @{
 * @brief FlexRay memory and pointer classes.
 */
@@ -302,7 +320,7 @@ extern "C"{
 #define FR_VAR
 /**@}*/
 
-/**
+/** 
 @{
 * @brief GPT memory and pointer classes.
 */
@@ -318,7 +336,7 @@ extern "C"{
 #define GPT_VAR
 /**@}*/
 
-/**
+/** 
 @{
 * @brief ICU memory and pointer classes.
 */
@@ -334,7 +352,7 @@ extern "C"{
 #define ICU_VAR
 /**@}*/
 
-/**
+/** 
 @{
 * @brief I2C memory and pointer classes.
 */
@@ -350,7 +368,7 @@ extern "C"{
 #define I2C_VAR
 /**@}*/
 
-/**
+/** 
 @{
 * @brief LIN memory and pointer classes.
 */
@@ -366,7 +384,7 @@ extern "C"{
 #define LIN_VAR
 /**@}*/
 
-/**
+/** 
 @{
 * @brief LIN_43_LLCE memory and pointer classes.
 */
@@ -382,7 +400,7 @@ extern "C"{
 #define LIN_43_LLCE_VAR
 /**@}*/
 
-/**
+/** 
 @{
 * @brief LIN memory and pointer classes.
 */
@@ -398,7 +416,7 @@ extern "C"{
 #define LINIF_VAR
 /**@}*/
 
-/**
+/** 
 @{
 * @brief MCEM memory and pointer classes.
 */
@@ -414,7 +432,7 @@ extern "C"{
 #define MCEM_VAR
 /**@}*/
 
-/**
+/** 
 @{
 * @brief MCL memory and pointer classes.
 */
@@ -430,7 +448,7 @@ extern "C"{
 #define MCL_VAR
 /**@}*/
 
-/**
+/** 
 @{
 * @brief MCU memory and pointer classes.
 */
@@ -446,7 +464,7 @@ extern "C"{
 #define MCU_VAR
 /**@}*/
 
-/**
+/** 
 @{
 * @brief PMIC memory and pointer classes.
 */
@@ -462,7 +480,7 @@ extern "C"{
 #define PMIC_VAR
 /**@}*/
 
-/**
+/** 
 @{
 * @brief PORT memory and pointer classes.
 */
@@ -478,7 +496,7 @@ extern "C"{
 #define PORT_VAR
 /**@}*/
 
-/**
+/** 
 @{
 * @brief PWM memory and pointer classes.
 */
@@ -495,7 +513,7 @@ extern "C"{
 /**@}*/
 
 
-/**
+/** 
 @{
 * @brief RamTST memory and pointer classes.
 */
@@ -511,7 +529,7 @@ extern "C"{
 #define RAMTST_VAR
 /**@}*/
 
-/**
+/** 
 @{
 * @brief SENT memory and pointer classes.
 */
@@ -527,7 +545,7 @@ extern "C"{
 #define SENT_VAR
 /**@}*/
 
-/**
+/** 
 @{
 * @brief SchM memory and pointer classes.
 */
@@ -543,7 +561,7 @@ extern "C"{
 #define SCHM_VAR
 /**@}*/
 
-/**
+/** 
 @{
 * @brief SPI memory and pointer classes.
 */
@@ -559,7 +577,7 @@ extern "C"{
 #define SPI_VAR
 /**@}*/
 
-/**
+/** 
 @{
 * @brief TM memory and pointer classes.
 */
@@ -575,7 +593,7 @@ extern "C"{
 #define TM_VAR
 /**@}*/
 
-/**
+/** 
 @{
 * @brief WDG memory and pointer classes.
 */
@@ -591,7 +609,7 @@ extern "C"{
 #define WDG_VAR
 /**@}*/
 
-/**
+/** 
 @{
 * @brief WDGIF memory and pointer classes.
 */
@@ -607,7 +625,7 @@ extern "C"{
 #define WDGIF_VAR
 /**@}*/
 
-/**
+/** 
 * @brief Define for ComStack Data.
 */
 #define AUTOSAR_COMSTACKDATA

@@ -1,15 +1,33 @@
-/*
- * Copyright 2024-2025 NXP
- *
- * SPDX-License-Identifier: BSD-3-Clause
- */
+/*==================================================================================================
+*   Project              : RTD AUTOSAR 4.4
+*   Platform             : CORTEXM
+*   Peripheral           : 
+*   Dependencies         : none
+*
+*   Autosar Version      : 4.4.0
+*   Autosar Revision     : ASR_REL_4_4_REV_0000
+*   Autosar Conf.Variant :
+*   SW Version           : 4.0.0
+*   Build Version        : S32_RTD_4_0_0_D2210_ASR_REL_4_4_REV_0000_20221031
+*
+*   (c) Copyright 2022 NXP Semiconductors
+*   All Rights Reserved.
+*
+*   NXP Confidential. This software is owned or controlled by NXP and may only be
+*   used strictly in accordance with the applicable license terms. By expressly
+*   accepting such terms or by downloading, installing, activating and/or otherwise
+*   using the software, you are agreeing that you have read, and that you agree to
+*   comply with and are bound by, such license terms. If you do not agree to be
+*   bound by the applicable license terms, then you may not retain, install,
+*   activate or otherwise use the software.
+==================================================================================================*/
 
 #ifndef CLOCK_IP_H
 #define CLOCK_IP_H
 
 /**
 *   @file    Clock_Ip.h
-*   @version    0.8.0
+*   @version    4.0.0
 *
 *   @brief   CLOCK IP driver header file.
 *   @details CLOCK IP driver header file.
@@ -36,10 +54,10 @@ extern "C"{
 ==================================================================================================*/
 #define CLOCK_IP_VENDOR_ID                       43
 #define CLOCK_IP_AR_RELEASE_MAJOR_VERSION        4
-#define CLOCK_IP_AR_RELEASE_MINOR_VERSION        9
+#define CLOCK_IP_AR_RELEASE_MINOR_VERSION        4
 #define CLOCK_IP_AR_RELEASE_REVISION_VERSION     0
-#define CLOCK_IP_SW_MAJOR_VERSION                0
-#define CLOCK_IP_SW_MINOR_VERSION                8
+#define CLOCK_IP_SW_MAJOR_VERSION                4
+#define CLOCK_IP_SW_MINOR_VERSION                0
 #define CLOCK_IP_SW_PATCH_VERSION                0
 
 /*==================================================================================================
@@ -106,22 +124,27 @@ extern "C"{
 *                                       FUNCTION PROTOTYPES
 ==================================================================================================*/
 
-#define MCU_START_SEC_VAR_CLEARED_BOOLEAN
-#include "Mcu_MemMap.h"
-
-extern boolean RunOptimizedVersion_for_Mcu;
-
-/* Clock stop initialized section data */
-#define MCU_STOP_SEC_VAR_CLEARED_BOOLEAN
-#include "Mcu_MemMap.h"
-
-
-
 /* Clock start section code */
 #define MCU_START_SEC_CODE
 
 #include "Mcu_MemMap.h"
 
+#if (defined(CLOCK_IP_GET_FREQUENCY_API) && (CLOCK_IP_GET_FREQUENCY_API == STD_ON))
+ /*!
+ * @brief Gets the clock frequency for a specific clock name.
+ *
+ * This function checks the current clock configurations and then calculates
+ * the clock frequency for a specific clock name defined in Clock_Ip_NameType.
+ * Clock modules must be properly configured before using this function.
+ * See features.h for supported clock names for different chip families.
+ * The returned value is in Hertz. If frequency is required for a peripheral and the
+ * module is not clocked, then 0 Hz frequency is returned.
+ *
+ * @param[in] ClockName Clock names defined in Clock_Ip_NameType
+ * @return frequency    Returned clock frequency value in Hertz
+ */
+uint32 Clock_Ip_GetClockFrequency(Clock_Ip_NameType ClockName);
+#endif
 
 /*!
  * @brief Set clock configuration according to pre-defined structure.
@@ -164,6 +187,7 @@ void Clock_Ip_InitClock(Clock_Ip_ClockConfigType const * Config);
  */
 Clock_Ip_PllStatusType Clock_Ip_GetPllStatus(void);
 
+#if (STD_OFF == CLOCK_IP_NO_PLL)
 /*!
  * @brief Activates the PLL in MCU clock distribution.
  *
@@ -183,7 +207,7 @@ Clock_Ip_PllStatusType Clock_Ip_GetPllStatus(void);
  * @return void
  */
 void Clock_Ip_DistributePll(void);
-
+#endif
 
 
 /*!
@@ -196,10 +220,31 @@ void Clock_Ip_DistributePll(void);
  * @param[in] Clock_Ip_NotificationsCallbackType  notifications callback
  *
  * @return void
- *
- * @implements Clock_Ip_InstallNotificationsCallback_Activity
  */
 void Clock_Ip_InstallNotificationsCallback(Clock_Ip_NotificationsCallbackType Callback);
+
+/*!
+ * @brief Clears status flags for a monitor clock.
+ *
+ * This function clears status flags for a monitor clock.
+ *
+ * @param[in] ClockName  Clock Name.
+ *
+ * @return void
+ */
+void Clock_Ip_ClearClockMonitorStatus(Clock_Ip_NameType ClockName);
+
+/*!
+ * @brief Returns the clock monitor status.
+ *
+ * This function returns status of the clock monitor: undefined, lower, higher, in range.
+ * This function returns undefined status if this function is called when corresponding
+ * cmu is not enabled.
+ *
+ * @return Status.  Cmu status
+ */
+Clock_Ip_CmuStatusType Clock_Ip_GetClockMonitorStatus(Clock_Ip_NameType ClockName);
+
 /*!
  * @brief Disables a clock monitor.
  *
@@ -210,6 +255,7 @@ void Clock_Ip_InstallNotificationsCallback(Clock_Ip_NotificationsCallbackType Ca
  * @return void
  */
 void Clock_Ip_DisableClockMonitor(Clock_Ip_NameType ClockName);
+
 /*!
  * @brief Disables clock for a peripheral.
  *
@@ -235,32 +281,11 @@ void Clock_Ip_EnableModuleClock(Clock_Ip_NameType ClockName);
 
 #if (defined(CLOCK_IP_ENABLE_USER_MODE_SUPPORT))
   #if (STD_ON == CLOCK_IP_ENABLE_USER_MODE_SUPPORT)
+    #if !(defined (CLOCK_IP_S32K1) || defined (CLOCK_IP_SJA11))
 void Clock_Ip_SetUserAccessAllowed(void);
+    #endif
   #endif
 #endif
-
-
-#if (defined(CLOCK_IP_GET_FREQUENCY_API))
-  #if (CLOCK_IP_GET_FREQUENCY_API == STD_ON)
-
-
- /*!
- * @brief Gets the clock frequency for a specific clock name.
- *
- * This function checks the current clock configurations and then calculates
- * the clock frequency for a specific clock name defined in Clock_Ip_NameType.
- * Clock modules must be properly configured before using this function.
- * See features.h for supported clock names for different chip families.
- * The returned value is in Hertz. If frequency is required for a peripheral and the
- * module is not clocked, then 0 Hz frequency is returned.
- *
- * @param[in] ClockName Clock names defined in Clock_Ip_NameType
- * @return frequency    Returned clock frequency value in Hertz
- */
-uint64 Clock_Ip_GetClockFrequency(Clock_Ip_NameType ClockName);
-  #endif
-#endif
-
 
 /* Clock stop section code */
 #define MCU_STOP_SEC_CODE
