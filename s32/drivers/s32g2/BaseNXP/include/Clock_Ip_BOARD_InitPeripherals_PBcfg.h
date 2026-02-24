@@ -92,7 +92,8 @@ extern "C"{
 /*==================================================================================================
                                            DEFINES AND MACROS
 ==================================================================================================*/
-extern const Clock_Ip_ClockConfigType Mcu_aClockConfigPB[];
+//extern const Clock_Ip_ClockConfigType Mcu_aClockConfigPB[];
+extern const Clock_Ip_ClockConfigType Clock_Ip_aClockConfig[];
 
 #define MCU_STOP_SEC_CONFIG_DATA_UNSPECIFIED
 #include "Mcu_MemMap.h"

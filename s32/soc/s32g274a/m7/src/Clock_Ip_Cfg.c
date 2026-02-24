@@ -3,10 +3,33 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
+/*==================================================================================================
+*   Project              : RTD AUTOSAR 4.4
+*   Platform             : CORTEXM
+*   Peripheral           : S32CC
+*   Dependencies         : none
+*
+*   Autosar Version      : 4.4.0
+*   Autosar Revision     : ASR_REL_4_4_REV_0000
+*   Autosar Conf.Variant :
+*   SW Version           : 4.0.0
+*   Build Version        : S32_RTD_D2210_ASR_REL_4_4_REV_0000_20221031
+*
+*   (c) Copyright 2020-2022 NXP Semiconductors
+*   All Rights Reserved.
+*
+*   NXP Confidential. This software is owned or controlled by NXP and may only be
+*   used strictly in accordance with the applicable license terms. By expressly
+*   accepting such terms or by downloading, installing, activating and/or otherwise
+*   using the software, you are agreeing that you have read, and that you agree to
+*   comply with and are bound by, such license terms. If you do not agree to be
+*   bound by the applicable license terms, then you may not retain, install,
+*   activate or otherwise use the software.
+==================================================================================================*/
 
 /**
 *   @file       Clock_Ip_Cfg.c
-*   @version    0.8.0
+*   @version    4.0.0
 *
 *   @brief   AUTOSAR Mcu - Post-Build(PB) configuration file code template.
 *   @details Code template for Post-Build(PB) configuration file generation.
@@ -35,10 +58,10 @@ extern "C"{
 ==================================================================================================*/
 #define CLOCK_IP_CFG_VENDOR_ID_C                      43
 #define CLOCK_IP_CFG_AR_RELEASE_MAJOR_VERSION_C       4
-#define CLOCK_IP_CFG_AR_RELEASE_MINOR_VERSION_C       9
+#define CLOCK_IP_CFG_AR_RELEASE_MINOR_VERSION_C       4
 #define CLOCK_IP_CFG_AR_RELEASE_REVISION_VERSION_C    0
-#define CLOCK_IP_CFG_SW_MAJOR_VERSION_C               0
-#define CLOCK_IP_CFG_SW_MINOR_VERSION_C               8
+#define CLOCK_IP_CFG_SW_MAJOR_VERSION_C               4
+#define CLOCK_IP_CFG_SW_MINOR_VERSION_C               0
 #define CLOCK_IP_CFG_SW_PATCH_VERSION_C               0
 
 /*==================================================================================================
@@ -102,7 +125,7 @@ extern "C"{
 #include "Mcu_MemMap.h"
 
 
-
+#if 0
 static const Clock_Ip_XoscConfigType Clock_Ip_XoscConfigurations_0[CLOCK_IP_CONFIGURED_XOSCS_0_NO] = {
 
     #if CLOCK_IP_XOSCS_COUNT > 0U
@@ -2897,8 +2920,40 @@ const Clock_Ip_ClockConfigType Clock_Ip_aClockConfig[1U] = {
          (NULL_PTR),                        /* Register value configurations */
     },
 };
+#endif
+
+const Clock_Ip_ClockConfigType Clock_Ip_aClockConfig[1U] = {
+
+    /*! @brief User Configuration structure clock_Cfg_0 */
+
+    {
+        0U,                          /* clkConfigId */
+        0U,               /* Clock Partition ID */
+
+        2U,                       /* xoscsCount */
+        0U,                       /* pllsCount */
+        4U,                       /* fracDivsCount */
+        0U,                       /* dividersCount */
+        1U,                       /* selectorsCount */
+        19U,                       /* extClksCount */
+        0U,                       /* gatesCount */
+        0U,                       /* cmusCount */
+        107U,                       /* configureFrequenciesCount */
+        7U,                       /* Registers Count */
 
 
+         (0),                  /* Pll configurations */
+         (0),                       /* Pll configurations */
+         (0),                  /* Fractional dividers configurations */
+         (NULL_PTR),                       /* dividers configurations */
+         (NULL_PTR),                                /* Selectors configurations */
+         (NULL_PTR),                    /* extClks configurations */
+         (NULL_PTR),                                 /* Gates configurations */
+         (0),                       /* cmus configurations */
+         (NULL_PTR),       /* configureFrequencies configurations */
+         (NULL_PTR),                        /* Register value configurations */
+    },
+};
 #define MCU_STOP_SEC_CONFIG_DATA_UNSPECIFIED
 #include "Mcu_MemMap.h"
 
