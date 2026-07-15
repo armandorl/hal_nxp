@@ -47,7 +47,6 @@ extern "C"{
  2) needed interfaces from external units
  3) internal and external interfaces from this unit
 ==================================================================================================*/
-#include "S32G274A_COMMON.h"
 
 /*==================================================================================================
                                SOURCE FILE VERSION INFORMATION

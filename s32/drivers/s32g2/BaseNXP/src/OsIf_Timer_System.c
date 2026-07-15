@@ -51,7 +51,7 @@ extern "C"{
 #elif defined(USING_OS_FREERTOS)
 #include "FreeRTOSConfig.h"
 #elif defined(USING_OS_ZEPHYR)
-#include "zephyr.h"
+//#include "zephyr.h"
 #else
     /* Baremetal, make sure USING_OS_BAREMETAL is defined */
 #ifndef USING_OS_BAREMETAL
@@ -289,6 +289,23 @@ extern const OsIf_ConfigType *const OsIf_apxPredefinedConfig[OSIF_MAX_COREIDX_SU
 ==================================================================================================*/
 #define BASE_START_SEC_CODE
 #include "Base_MemMap.h"
+
+uint32_t sys_clock_hw_cycles_per_sec(void) {
+    return 100000000; // example
+}
+
+static uint64_t fake_cycle_counter = 0;
+
+uint64_t k_cycle_get_64(void)
+{
+    /* Increment a software counter each time it's called */
+    return ++fake_cycle_counter;
+}
+
+
+uint32_t k_cycle_get_32(void) {
+    return (uint32_t)k_cycle_get_64();
+}
 
 void OsIf_Timer_System_Init(void)
 {

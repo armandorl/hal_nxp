@@ -92,7 +92,7 @@ extern "C"{
 * @brief            Pre-processor switch for enabling the default error detection and reporting to the DET.
 *                   The detection of default errors is configurable (ON / OFF) at pre-compile time.
 */
-#define CLOCK_IP_DEV_ERROR_DETECT         (STD_OFF)
+#define CLOCK_IP_DEV_ERROR_DETECT            (STD_OFF)
 
 #define CLOCK_IP_TIMEOUT_TYPE                (OSIF_COUNTER_DUMMY)
 

@@ -1,0 +1,127 @@
+
+Name: generate_PC/include/Uart_Cfg.h
+SignatureKeyID: Freescale
+SignatureKeyProviderID: dreisoft.tresos.launcher2.CryptoKeyProvider
+SignatureAlgorithmID: DSA
+Signature: 28964594773972170191086406130987982884797742295980331072573
+ 334806902112481743417648910330719688339364175057439732
+
+Name: generate_PB/Uart_VersionCheck_Src_PB.m
+SignatureKeyID: Freescale
+SignatureKeyProviderID: dreisoft.tresos.launcher2.CryptoKeyProvider
+SignatureAlgorithmID: DSA
+Signature: 11313377423712101752642442761847175121329958547974421201209
+ 5791626533993735002702833036098049796656623837920001
+
+Name: generate_PC/include/Linflexd_Uart_Ip_Cfg.h
+SignatureKeyID: Freescale
+SignatureKeyProviderID: dreisoft.tresos.launcher2.CryptoKeyProvider
+SignatureAlgorithmID: DSA
+Signature: 11313377420389460415859546818805369880963527344908332448617
+ 0840078373436548622527780772448147438381372488656213
+
+Name: generate_swcd/swcd/Uart_Bswmd.arxml
+SignatureKeyID: Freescale
+SignatureKeyProviderID: dreisoft.tresos.launcher2.CryptoKeyProvider
+SignatureAlgorithmID: DSA
+Signature: 11313377420342793870808024247460093980962568997216420214174
+ 3383482461471509319374279047071903322945290645706326
+
+Name: generate_PB/src/Linflexd_Uart_Ip_PBcfg.c
+SignatureKeyID: Freescale
+SignatureKeyProviderID: dreisoft.tresos.launcher2.CryptoKeyProvider
+SignatureAlgorithmID: DSA
+Signature: 11313377423439892647641625222027837319803659375822793385129
+ 9006994977712403539110685240458918454515093967097497
+
+Name: generate_PC/include/Linflexd_Uart_Ip_Defines.h
+SignatureKeyID: Freescale
+SignatureKeyProviderID: dreisoft.tresos.launcher2.CryptoKeyProvider
+SignatureAlgorithmID: DSA
+Signature: 11313377423438468384796213628573551610966682334406566652303
+ 1768957194165613185112096643784459540960160985937083
+
+Name: config/Uart.xdm
+SignatureKeyID: Freescale
+SignatureKeyProviderID: dreisoft.tresos.launcher2.CryptoKeyProvider
+SignatureAlgorithmID: DSA
+Signature: 11313377424008712096561242545205321909956387096160176823186
+ 9591602899123915359063889285458836269544987351366527
+
+Name: generate_PB/src/Uart_Ipw_PBcfg.c
+SignatureKeyID: Freescale
+SignatureKeyProviderID: dreisoft.tresos.launcher2.CryptoKeyProvider
+SignatureAlgorithmID: DSA
+Signature: 28964594773966758171310313464306065929744755374133739433367
+ 498758300641708601492179629646082250667935923987258091
+
+Name: generate_PB/src/Uart_PBcfg.c
+SignatureKeyID: Freescale
+SignatureKeyProviderID: dreisoft.tresos.launcher2.CryptoKeyProvider
+SignatureAlgorithmID: DSA
+Signature: 11313377422701986620345793358786862488650108563073761055492
+ 0698684383189657338208061942528855235470682985912845
+
+Name: generate_PB/Uart_BaudRate_Comp.m
+SignatureKeyID: Freescale
+SignatureKeyProviderID: dreisoft.tresos.launcher2.CryptoKeyProvider
+SignatureAlgorithmID: DSA
+Signature: 28964594746083713089862701210562827685262974324599070908206
+ 130803377206712170411089099452911860759262672023402679
+
+Name: generate_PC/Uart_BaudRate_Comp.m
+SignatureKeyID: Freescale
+SignatureKeyProviderID: dreisoft.tresos.launcher2.CryptoKeyProvider
+SignatureAlgorithmID: DSA
+Signature: 11313377424728994591131804269974903436367146214685574769249
+ 9727294151676869913068857765554415449735033854657519
+
+Name: generate_PC/include/Uart_Defines.h
+SignatureKeyID: Freescale
+SignatureKeyProviderID: dreisoft.tresos.launcher2.CryptoKeyProvider
+SignatureAlgorithmID: DSA
+Signature: 11313377424804495968422833487018756982377563650455653857928
+ 9887148896239374513144386011013967334394777833408475
+
+Name: generate_PB/Uart_VersionCheck_Inc_PB.m
+SignatureKeyID: Freescale
+SignatureKeyProviderID: dreisoft.tresos.launcher2.CryptoKeyProvider
+SignatureAlgorithmID: DSA
+Signature: 28964594773964503278303132998638936154764007763962332078499
+ 286614811620836955485988102802843496781423763226777079
+
+Name: generate_PC/Uart_VersionCheck_Inc.m
+SignatureKeyID: Freescale
+SignatureKeyProviderID: dreisoft.tresos.launcher2.CryptoKeyProvider
+SignatureAlgorithmID: DSA
+Signature: 28964594773967346316306767767679661073239936101479508727204
+ 216369351762440604027082062811781106946645214293384322
+
+Name: generate_PB/include/Linflexd_Uart_Ip_PBcfg.h
+SignatureKeyID: Freescale
+SignatureKeyProviderID: dreisoft.tresos.launcher2.CryptoKeyProvider
+SignatureAlgorithmID: DSA
+Signature: 28964594773966337181043804517944260418179419937320068689894
+ 408188556514001914468842411401013495460677335833982489
+
+Name: generate_PC/include/Uart_Ipw_Cfg.h
+SignatureKeyID: Freescale
+SignatureKeyProviderID: dreisoft.tresos.launcher2.CryptoKeyProvider
+SignatureAlgorithmID: DSA
+Signature: 11313377425830390825187950602524202625745784945144982442438
+ 5477609546674569005288494468867590011105514930015552
+
+Name: generate_PB/include/Uart_PBcfg.h
+SignatureKeyID: Freescale
+SignatureKeyProviderID: dreisoft.tresos.launcher2.CryptoKeyProvider
+SignatureAlgorithmID: DSA
+Signature: 11313377421458693833103400471509229862072476209895975230924
+ 6105967610385037475809223346304910762577224115829860
+
+Name: generate_PB/include/Uart_Ipw_PBcfg.h
+SignatureKeyID: Freescale
+SignatureKeyProviderID: dreisoft.tresos.launcher2.CryptoKeyProvider
+SignatureAlgorithmID: DSA
+Signature: 11313377423024235176235773794006044315032607492187606724633
+ 7836413962927927716960206922124962666927524786653426
+

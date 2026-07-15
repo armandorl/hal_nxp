@@ -117,25 +117,31 @@ typedef struct {
 } LINFLEXD_Type, *LINFLEXD_MemMapPtr;
 
 /** Number of instances of the LINFLEXD module. */
-#define LINFLEXD_INSTANCE_COUNT                  (3u)
+#define LINFLEXD_INSTANCE_COUNT                  (3)
 
 /* LINFLEXD - Peripheral instance base addresses */
 /** Peripheral LINFLEXD_0 base address */
-#define IP_LINFLEXD_0_BASE                       (0x401C8000u)
+#define IP_LINFLEX_0_BASE                       (0x401C8000u)
+#define IP_LINFLEXD_0_BASE                      IP_LINFLEX_0_BASE
 /** Peripheral LINFLEXD_0 base pointer */
-#define IP_LINFLEXD_0                            ((LINFLEXD_Type *)IP_LINFLEXD_0_BASE)
+#define IP_LINFLEX_0                            ((LINFLEXD_Type *)IP_LINFLEX_0_BASE)
+#define IP_LINFLEXD_0                           IP_LINFLEX_0
 /** Peripheral LINFLEXD_1 base address */
-#define IP_LINFLEXD_1_BASE                       (0x401CC000u)
+#define IP_LINFLEX_1_BASE                       (0x401CC000u)
+#define IP_LINFLEXD_1_BASE                      IP_LINFLEX_1_BASE
 /** Peripheral LINFLEXD_1 base pointer */
-#define IP_LINFLEXD_1                            ((LINFLEXD_Type *)IP_LINFLEXD_1_BASE)
+#define IP_LINFLEX_1                            ((LINFLEXD_Type *)IP_LINFLEX_1_BASE)
+#define IP_LINFLEXD_1                           IP_LINFLEX_1
 /** Peripheral LINFLEXD_2 base address */
-#define IP_LINFLEXD_2_BASE                       (0x402BC000u)
+#define IP_LINFLEX_2_BASE                       (0x402BC000u)
+#define IP_LINFLEXD_2_BASE                      IP_LINFLEX_2_BASE
 /** Peripheral LINFLEXD_2 base pointer */
-#define IP_LINFLEXD_2                            ((LINFLEXD_Type *)IP_LINFLEXD_2_BASE)
+#define IP_LINFLEX_2                            ((LINFLEXD_Type *)IP_LINFLEX_2_BASE)
+#define IP_LINFLEXD_2                           IP_LINFLEX_2
 /** Array initializer of LINFLEXD peripheral base addresses */
-#define IP_LINFLEXD_BASE_ADDRS                   { IP_LINFLEXD_0_BASE, IP_LINFLEXD_1_BASE, IP_LINFLEXD_2_BASE }
+#define IP_LINFLEXD_BASE_ADDRS                   { IP_LINFLEX_0_BASE, IP_LINFLEX_1_BASE, IP_LINFLEX_2_BASE }
 /** Array initializer of LINFLEXD peripheral base pointers */
-#define IP_LINFLEXD_BASE_PTRS                    { IP_LINFLEXD_0, IP_LINFLEXD_1, IP_LINFLEXD_2 }
+#define IP_LINFLEXD_BASE_PTRS                    { IP_LINFLEX_0, IP_LINFLEX_1, IP_LINFLEX_2 }
 
 /* ----------------------------------------------------------------------------
    -- LINFLEXD Register Masks

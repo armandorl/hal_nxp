@@ -1,0 +1,73 @@
+1. Example Description
+    This is a simple application which shows the usage of Uart driver.
+    1.1 The application software functionality
+            - Port_Init
+                    Initialize the pins used by the application using the Port driver.
+            - Mcu_Init()
+              Mcu_InitClock()
+              Mcu_DistributePllClock()
+              Mcu_SetMode()
+                    Initialize the clock sources for project.
+            - Platform_Init()
+              Platform_InstallIrqHandler()
+                    Initialize the interrupt for hardware channel and install handler for this interrupt vector.
+            - Uart_Init
+                    Initialize the Uart driver
+            - Uart_Deinit
+                    Deinitialize the Uart driver
+            - Uart_AsyncSend
+                    Send Uart data
+            - Uart_AsyncReceive
+                    Receive Uart data
+            - Uart_GetStatus
+                    Get status of Uart
+    1.2 The application description
+            - The welcome message is sent via UART: "This example is an simple echo using UART
+                                                     The board will greet you if you send 'Hello'
+                                                     Now you can begin typing:"
+            - User shall send "Hello" string. If the board receives the user's string, then the greeting string shall be sent to user.
+
+2. Installation steps
+    2.1 Hardware installation
+        2.1.1 Supported boards
+           - S32G-VNP-RDB2 PCB 47440 RevX2 SCH RevC1
+        2.2.2 Connections
+            No pin connections are needed for this application; it uses LINFlexD instance 1, which is internally connected to the serial-to-USB module on the board (UART1 USB port - J1).
+            A terminal interface (termite/putty etc) needs to be opened on the host computer and connected to the USB port communicating with the board.
+        2.2.3 Debugger
+            The debugger must be connected to J48 20-pin JTAG Cortex Debug connector.
+    2.2 Software installation
+        2.2.1 Importing the S32 Design Studio project
+            After opening S32 Design Studio, go to "File -> New -> S32DS Project From Example" and select this example. Then click on "Finish".
+            The project should now be copied into you current workspace.
+        2.2.2 Configure Terminal software
+            Open the terminal interface software and configure as below:
+            - Select correct COM Port
+            - Select Baudrate of 9600
+            - Select 8 data bits
+            - Select none parity checking
+            - Select 1 stop bits
+            - Select Append LF on Transmitted Text
+
+3. Generating, building and running the example application
+    3.1 Importing the project into the workspace
+        After opening S32 Design Studio, go to "File -> New -> S32DS Project From Example" and select "Uart_Example_S32G274A_M7". Then click on "Finish".
+        The project should now be copied into you current workspace.
+        Wait for the S32 Configuration was initialized and ready.
+    3.2 Generating the S32 configuration
+        The example will run without an active configuration, however if any changes are required, a configuration needs to be generated.
+        The initial configuration will have the same settings as the default example settings.
+        Right click on the current project, then click "S32 Configuration Tool" choose "Open Peripherals".
+        Pay attention to any error and warning message. If any configured value is invalid, they will be shown for user.
+        Make the desired changes (if any) then click "Update Code".
+    3.3 Building the project
+        Select the configuration to be built: RAM (Debug_RAM) by left clicking on the downward arrow corresponding to the build button in eclipse.
+        Wait for the build action to be completed before continuing to the next step. Check the compiler console for error messages; upon completion, Uart_Example_S32G274A_M7.elf binary file
+        should be created.
+    3.4 Running the project
+        Go to \b Run and select \b Debug Configurations. See in left side, left click to "Uart_Example_S32G274A_M7_Debug_RAM_S32Debug"
+        Go to tab Debugger, select "Interface" to S32 Debug Probe - USB
+        Select USB device connect to S32 Probe Debugger
+        Click "Apply" to save the configuration.
+        Click "Debug" to start debug the application.
+        Use the controls to control the program flow.

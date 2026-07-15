@@ -1,0 +1,65 @@
+1. Example Description
+    This is a simple application which shows the usage of Linflexd_Uart driver.
+    1.1 The application software functionality
+            - Clock_Ip_Init();
+                    Initialize the Clock used by the application using the Mcu driver.
+            - IntCtrl_Ip_EnableIrq();
+            - IntCtrl_Ip_InstallHandler();
+                    Install the ISR for the Uart
+            - Uart_Setup_Pins();
+                    Initialize pins
+            - Linflexd_Uart_Ip_Init();
+                    Initialize LINFlexD module for UART usage
+            - Linflexd_Uart_Ip_AsyncSend();
+                    Send Uart data using asynchronous method
+            - Linflexd_Uart_Ip_GetTransmitStatus();
+                    Get transmit status of Uart
+            - Linflexd_Uart_Ip_SyncSend();
+                    Send Uart data using synchronous method
+            - Linflexd_Uart_Ip_Deinit();
+                    Deinitialize LINFlexD module
+        The purpose of this example is to highlight the usage of UART driver implemented over LINFLEXD module on S32R45 CPU.
+            - The first welcome message is sent via UART: "Hello" using asynchronous method
+            - The first welcome message is sent via UART: "Have a nice day!" using synchronous method
+
+2. Installation steps
+    2.1 Hardware installation
+        2.1.1 Hardware preparation
+            - X-S32R45-PROC-S Daughter Card
+            - 1 Power Adapters 12V (only for validation board, EVB is powered through OpenSDA USB connection)
+            - 1 microUSB cable
+            - 1 Personal Computer
+            - 1 S32Debugger: Lauterbach
+        2.2.2 Connections
+            - No pin connections are needed for this application; it uses LINFlexD instance 0, which is internally connected to the serial-to-USB module (UART0 USB port) on the board.
+            - Connect J61.2-J61.3 and J63.2-J63.3 on board.
+            - A terminal interface (termite/putty etc) needs to be opened on the host computer and connected to the USB port communicating with the board.
+        2.2.3 Debugger
+
+    2.2 Software installation
+        2.2.1 Importing the S32 Design Studio project
+            After opening S32 Design Studio, go to "File -> New -> S32DS Project From Example" and select this example. Then click on "Finish".
+            The project should now be copied into you current workspace.
+
+3. Generating, building and running the example application
+    3.1 Importing the project into the workspace
+        After opening S32 Design Studio, go to "File -> New -> S32DS Project From Example" and select "Linflexd_Uart_Ip_Example_S32R45_M7". Then click on "Finish".
+        The project should now be copied into you current workspace.
+        Wait for the S32 Configuration was initialized and ready.
+    3.2 Generating the S32 configuration
+        The example will run without an active configuration, however if any changes are required, a configuration needs to be generated.
+        The initial configuration will have the same settings as the default example settings.
+        Right click on the current project, then click "S32 Configuration Tool" choose "Open Peripherals".
+        Pay attention to any error and warning message. If any configured value is invalid, they will be shown for user.
+        Make the desired changes (if any) then click "Update Code".
+    3.3 Building the project
+        Select the configuration to be built: RAM (Debug_RAM) by left clicking on the downward arrow corresponding to the build button in eclipse.
+        Wait for the build action to be completed before continuing to the next step. Check the compiler console for error messages; upon completion, Linflexd_Uart_Ip_Example_S32R45_M7.elf binary file
+        should be created.
+    3.4 Running the project
+        Go to \b Run and select \b Debug Configurations. See in left side, left click to "Linflexd_Uart_Ip_Example_S32R45_M7_Debug_RAM_S32Debug"
+        Go to tab Debugger, select "Interface" to S32 Debug Probe - USB
+        Select USB device connect to S32 Probe Debugger
+        Click "Apply" to save the configuration.
+        Click "Debug" to start debug the application.
+        Use the controls to control the program flow.
